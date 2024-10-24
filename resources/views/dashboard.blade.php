@@ -3,27 +3,123 @@
 @section('title', 'Dashboard')
 
 @section('content')
-<div class="header">
-    <h2>Dashboard</h2>
-    <button class="add-folder-btn btn btn-outline-secondary">Add Folder</button>
-</div>
-<div class="file-grid mt-4">
-    <div class="file-card">
-        <img src="{{ asset('images/foto-icon.png') }}" alt="Foto" class="mb-2" />
-        <p class="fw-bold">Foto</p>
-        <span class="text-muted">20Mb</span><br>
-        <span class="text-muted">20/10/2024</span>
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg" style="background-color: #d3d3d3;">
+    <div class="container-fluid align-items-center">
+        <!-- Ikon bulat dan logo -->
+        <div class="d-flex align-items-center">
+            <div style="width: 40px; height: 40px; background-color: black; border-radius: 50%; margin-right: 10px;"></div>
+            <a class="navbar-brand fw-bold" href="#">BBSPJIS File Manager</a>
+        </div>
+
+        <!-- Search Bar -->
+        <div class="mx-auto" style="width: 50%;">
+            <input type="text" class="form-control" placeholder="Search" />
+        </div>
+
+        <!-- Nama User Dropdown -->
+        <div>
+            <span class="fw-bold">Nama User</span>
+            <button class="btn btn-link dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+                <li><a class="dropdown-item" href="#">Profile</a></li>
+                <li><a class="dropdown-item" href="#">Logout</a></li>
+            </ul>
+        </div>
     </div>
-    <div class="file-card">
-        <img src="{{ asset('images/pdf-icon.png') }}" alt="File" class="mb-2" />
-        <p class="fw-bold">File</p>
-        <span class="text-muted">20Mb</span><br>
-        <span class="text-muted">20/10/2024</span>
+</nav>
+
+<!-- Layout Sidebar dan Konten -->
+<div class="main-layout">
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="profile-section text-center p-3">
+            <h3>Super Admin</h3>
+            <p>Employee</p>
+        </div>
+        <nav class="menu">
+            <ul class="list-unstyled">
+                <li><a href="#">File</a></li>
+                <li><a href="#">Media</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <!-- Konten Dashboard -->
+    <div class="dashboard-content">
+        <!-- Header -->
+        <div class="header">
+            <h2>Dashboard</h2>
+            <button class="add-folder-btn btn btn-outline-secondary">Add Folder</button>
+        </div>
+
+        <!-- File Grid -->
+        <div class="file-grid mt-4">
+            <div class="file-card">
+                <img src="{{ asset('images/foto-icon.png') }}" alt="Foto" class="mb-2" />
+                <p class="fw-bold">Foto</p>
+                <span class="text-muted">20Mb</span><br>
+                <span class="text-muted">20/10/2024</span>
+            </div>
+            <div class="file-card">
+                <img src="{{ asset('images/pdf-icon.png') }}" alt="File" class="mb-2" />
+                <p class="fw-bold">File</p>
+                <span class="text-muted">20Mb</span><br>
+                <span class="text-muted">20/10/2024</span>
+            </div>
+        </div>
     </div>
 </div>
 
-<!-- Styling khusus untuk dashboard -->
+<!-- Styling Khusus -->
 <style>
+    /* Layout Utama: Sidebar dan Konten */
+    .main-layout {
+        display: flex;
+        min-height: 100vh;
+    }
+
+    /* Sidebar */
+    .sidebar {
+        width: 250px;
+        background-color: #343a40;
+        color: white;
+        padding-top: 20px;
+    }
+
+    .sidebar h3 {
+        color: #f8f9fa;
+    }
+
+    .menu ul {
+        padding: 0;
+    }
+
+    .menu ul li {
+        list-style: none;
+        margin: 15px 0;
+    }
+
+    .menu ul li a {
+        color: #adb5bd;
+        text-decoration: none;
+        padding: 10px 20px;
+        display: block;
+    }
+
+    .menu ul li a:hover {
+        background-color: #495057;
+        color: white;
+    }
+
+    /* Konten Dashboard */
+    .dashboard-content {
+        flex: 1;
+        padding: 20px;
+        background-color: #f1f1f1;
+    }
+
     .file-grid {
         display: grid;
         grid-template-columns: repeat(2, 1fr);

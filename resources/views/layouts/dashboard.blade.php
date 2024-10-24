@@ -75,18 +75,7 @@
 
 <body>
     <!-- Sidebar -->
-    <div class="sidebar">
-        <div class="profile-section">
-            <h3>Super Admin</h3>
-            <p>Employee</p>
-        </div>
-        <nav class="menu">
-            <ul>
-                <li><a href="#">File</a></li>
-                <li><a href="#">Media</a></li>
-            </ul>
-        </nav>
-    </div>
+    
 
     <!-- Main Content -->
     <div class="main-content">
