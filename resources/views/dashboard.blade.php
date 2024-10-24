@@ -22,7 +22,6 @@
             <span class="fw-bold">Nama User</span>
             <button class="btn btn-link dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"></button>
             <ul class="dropdown-menu dropdown-menu-end">
-                <li><a class="dropdown-item" href="#">Profile</a></li>
                 <li><a class="dropdown-item" href="#">Logout</a></li>
             </ul>
         </div>
@@ -55,7 +54,7 @@
 
                 <!-- Tools for Grid & List Layout -->
                 <div class="layout-tools ms-2">
-                    <button class="btn btn-outline-secondary grid-layout active">
+                    <button class="btn grid-layout active">
                         <span class="material-symbols-outlined">
                             </span>
                     </button>
