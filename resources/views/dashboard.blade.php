@@ -23,7 +23,6 @@
             <button class="btn btn-link dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
             </button>
             <ul class="dropdown-menu dropdown-menu-end">
-                <li><a class="dropdown-item" href="#">Profile</a></li>
                 <li><a class="dropdown-item" href="#">Logout</a></li>
             </ul>
         </div>
@@ -89,8 +88,8 @@
     /* Layout Utama: Sidebar dan Konten */
     .main-layout {
         display: flex;
-        width: 100vw;
-        height: 100vh;
+        width: 100%;
+        height: 100%;
     }
 
     /* Sidebar */
