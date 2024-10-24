@@ -74,10 +74,23 @@
 
 <!-- Styling Khusus -->
 <style>
+    /* Atur margin dan padding seluruh elemen agar hilang */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    html, body {
+        height: 100%;
+        overflow: hidden; /* Mencegah scroll */
+    }
+
     /* Layout Utama: Sidebar dan Konten */
     .main-layout {
         display: flex;
-        min-height: 100vh;
+        width: 100vw;
+        height: 100vh;
     }
 
     /* Sidebar */
@@ -85,7 +98,10 @@
         width: 250px;
         background-color: #343a40;
         color: white;
-        padding-top: 20px;
+    }
+
+    .profile-section {
+        padding: 20px;
     }
 
     .sidebar h3 {
@@ -116,8 +132,9 @@
     /* Konten Dashboard */
     .dashboard-content {
         flex: 1;
-        padding: 20px;
         background-color: #f1f1f1;
+        padding: 20px;
+        overflow-y: auto; /* Jika konten lebih panjang dari layar, aktifkan scroll hanya untuk konten */
     }
 
     .file-grid {
