@@ -8,8 +8,7 @@
     <div class="container-fluid align-items-center">
         <!-- Ikon bulat dan logo -->
         <div class="d-flex align-items-center">
-            <div style="width: 40px; height: 40px; background-color: black; border-radius: 50%; margin-right: 10px;">
-            </div>
+            <div style="width: 40px; height: 40px; background-color: black; border-radius: 50%; margin-right: 10px;"></div>
             <a class="navbar-brand fw-bold" href="#">BBSPJIS File Manager</a>
         </div>
 
@@ -21,9 +20,9 @@
         <!-- Nama User Dropdown -->
         <div>
             <span class="fw-bold">Nama User</span>
-            <button class="btn btn-link dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-            </button>
+            <button class="btn btn-link dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"></button>
             <ul class="dropdown-menu dropdown-menu-end">
+                <li><a class="dropdown-item" href="#">Profile</a></li>
                 <li><a class="dropdown-item" href="#">Logout</a></li>
             </ul>
         </div>
@@ -51,7 +50,22 @@
         <!-- Header -->
         <div class="header">
             <h2>Dashboard</h2>
-            <button class="add-folder-btn btn btn-outline-secondary">Add Folder</button>
+            <div class="tools">
+                <button class="add-folder-btn btn btn-outline-secondary">Add Folder</button>
+
+                <!-- Tools for Grid & List Layout -->
+                <div class="layout-tools ms-2">
+                    <button class="btn btn-outline-secondary grid-layout active">
+                        <span class="material-symbols-outlined">
+                            </span>
+                    </button>
+                    <button class="btn btn-outline-secondary list-layout">
+                        <span class="material-symbols-outlined">
+                            view_list
+                            </span>
+                    </button>
+                </div>
+            </div>
         </div>
 
         <!-- File Grid -->
@@ -74,25 +88,19 @@
 
 <!-- Styling Khusus -->
 <style>
-    /* Menghapus margin dan padding global */
+    /* Reset margin dan padding */
     * {
         margin: 0;
         padding: 0;
         box-sizing: border-box;
     }
 
-    html,
-    body {
+    html, body {
         height: 100%;
         overflow: hidden;
-        /* Menjaga konten tetap dalam layar tanpa scroll kecuali pada konten utama */
     }
 
-    body {
-        font-family: 'Poppins', sans-serif;
-    }
-
-    /* Layout Utama: Sidebar dan Konten */
+    /* Layout utama */
     .main-layout {
         display: flex;
         width: 100vw;
@@ -104,15 +112,10 @@
         width: 250px;
         background-color: #343a40;
         color: white;
-        height: 100%;
     }
 
     .profile-section {
         padding: 20px;
-    }
-
-    .sidebar h3 {
-        color: #f8f9fa;
     }
 
     .menu ul {
@@ -138,18 +141,43 @@
 
     /* Konten Dashboard */
     .dashboard-content {
-        flex-grow: 1;
+        flex: 1;
         background-color: #f1f1f1;
         padding: 20px;
         overflow-y: auto;
-        /* Scroll hanya pada konten jika lebih panjang dari viewport */
+    }
+
+    .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .tools {
+        display: flex;
+        align-items: center;
+    }
+
+    .layout-tools button {
+        border-radius: 0;
+        margin-left: 5px;
+        padding: 5px;
+    }
+
+    .layout-tools img {
+        display: block;
+    }
+
+    .layout-tools .active {
+        background-color: #6c757d;
+        color: white;
     }
 
     .file-grid {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
         gap: 20px;
-        margin-top: 20px;
     }
 
     .file-card {
@@ -165,13 +193,20 @@
         height: auto;
         margin-bottom: 10px;
     }
+</style>
 
-    .header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 20px;
-    }
-</style>
-</style>
+<!-- JavaScript untuk Toggle Layout -->
+<script>
+    document.querySelector('.grid-layout').addEventListener('click', function () {
+        document.querySelector('.file-grid').style.display = 'grid';
+        this.classList.add('active');
+        document.querySelector('.list-layout').classList.remove('active');
+    });
+
+    document.querySelector('.list-layout').addEventListener('click', function () {
+        document.querySelector('.file-grid').style.display = 'block';
+        this.classList.add('active');
+        document.querySelector('.grid-layout').classList.remove('active');
+    });
+</script>
 @endsection
