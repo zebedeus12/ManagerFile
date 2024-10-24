@@ -8,7 +8,8 @@
     <div class="container-fluid align-items-center">
         <!-- Ikon bulat dan logo -->
         <div class="d-flex align-items-center">
-            <div style="width: 40px; height: 40px; background-color: black; border-radius: 50%; margin-right: 10px;"></div>
+            <div style="width: 40px; height: 40px; background-color: black; border-radius: 50%; margin-right: 10px;">
+            </div>
             <a class="navbar-brand fw-bold" href="#">BBSPJIS File Manager</a>
         </div>
 
@@ -74,16 +75,22 @@
 
 <!-- Styling Khusus -->
 <style>
-    /* Atur margin dan padding seluruh elemen agar hilang */
+    /* Menghapus margin dan padding global */
     * {
         margin: 0;
         padding: 0;
         box-sizing: border-box;
     }
 
-    html, body {
+    html,
+    body {
         height: 100%;
-        overflow: hidden; /* Mencegah scroll */
+        overflow: hidden;
+        /* Menjaga konten tetap dalam layar tanpa scroll kecuali pada konten utama */
+    }
+
+    body {
+        font-family: 'Poppins', sans-serif;
     }
 
     /* Layout Utama: Sidebar dan Konten */
@@ -91,6 +98,7 @@
         display: flex;
         width: 100vw;
         height: 100vh;
+        overflow: hidden;
     }
 
     /* Sidebar */
@@ -98,6 +106,7 @@
         width: 250px;
         background-color: #343a40;
         color: white;
+        height: 100%;
     }
 
     .profile-section {
@@ -131,10 +140,11 @@
 
     /* Konten Dashboard */
     .dashboard-content {
-        flex: 1;
+        flex-grow: 1;
         background-color: #f1f1f1;
         padding: 20px;
-        overflow-y: auto; /* Jika konten lebih panjang dari layar, aktifkan scroll hanya untuk konten */
+        overflow-y: auto;
+        /* Scroll hanya pada konten jika lebih panjang dari viewport */
     }
 
     .file-grid {
@@ -164,5 +174,6 @@
         align-items: center;
         margin-bottom: 20px;
     }
+</style>
 </style>
 @endsection

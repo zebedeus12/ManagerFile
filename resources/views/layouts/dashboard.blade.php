@@ -55,7 +55,6 @@
         /* Main content styling */
         .main-content {
             flex-grow: 1;
-            padding: 20px;
             background-color: #ffffff;
         }
 
@@ -75,7 +74,7 @@
 
 <body>
     <!-- Sidebar -->
-    
+
 
     <!-- Main Content -->
     <div class="main-content">
