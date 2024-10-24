@@ -8,7 +8,8 @@
     <div class="container-fluid align-items-center">
         <!-- Ikon bulat dan logo -->
         <div class="d-flex align-items-center">
-            <div style="width: 40px; height: 40px; background-color: black; border-radius: 50%; margin-right: 10px;"></div>
+            <div style="width: 40px; height: 40px; background-color: black; border-radius: 50%; margin-right: 10px;">
+            </div>
             <a class="navbar-brand fw-bold" href="#">BBSPJIS File Manager</a>
         </div>
 
@@ -20,7 +21,8 @@
         <!-- Nama User Dropdown -->
         <div>
             <span class="fw-bold">Nama User</span>
-            <button class="btn btn-link dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"></button>
+            <button class="btn btn-link dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                aria-expanded="false"></button>
             <ul class="dropdown-menu dropdown-menu-end">
                 <li><a class="dropdown-item" href="#">Profile</a></li>
                 <li><a class="dropdown-item" href="#">Logout</a></li>
@@ -51,19 +53,22 @@
         <div class="header">
             <h2>Dashboard</h2>
             <div class="tools">
-                <button class="add-folder-btn btn btn-outline-secondary">Add Folder</button>
+                <div class="tools d-flex align-items-center">
+                    <!-- Tombol Add Folder -->
+                    <button class="add-folder-btn btn btn-outline-secondary">Add Folder</button>
 
-                <!-- Tools for Grid & List Layout -->
-                <div class="layout-tools ms-2">
-                    <button class="btn btn-outline-secondary grid-layout active">
-                        <span class="material-symbols-outlined">
-                            </span>
-                    </button>
-                    <button class="btn btn-outline-secondary list-layout">
-                        <span class="material-symbols-outlined">
-                            view_list
-                            </span>
-                    </button>
+                    <!-- Tools untuk Grid & List Layout -->
+                    <div class="layout-tools ms-3 d-flex align-items-center">
+                        <!-- Tombol Grid Layout -->
+                        <button class="btn btn-outline-secondary grid-layout active" title="Grid Layout">
+                            <span class="material-icons">grid_view</span> <!-- Icon Grid -->
+                        </button>
+
+                        <!-- Tombol List Layout -->
+                        <button class="btn btn-outline-secondary list-layout ms-2" title="List Layout">
+                            <span class="material-icons">view_list</span> <!-- Icon List -->
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -95,7 +100,8 @@
         box-sizing: border-box;
     }
 
-    html, body {
+    html,
+    body {
         height: 100%;
         overflow: hidden;
     }
@@ -152,26 +158,6 @@
         justify-content: space-between;
         align-items: center;
         margin-bottom: 20px;
-    }
-
-    .tools {
-        display: flex;
-        align-items: center;
-    }
-
-    .layout-tools button {
-        border-radius: 0;
-        margin-left: 5px;
-        padding: 5px;
-    }
-
-    .layout-tools img {
-        display: block;
-    }
-
-    .layout-tools .active {
-        background-color: #6c757d;
-        color: white;
     }
 
     .file-grid {
