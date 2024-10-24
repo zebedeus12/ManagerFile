@@ -6,6 +6,18 @@
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg" style="background-color: #d3d3d3;">
     <div class="container-fluid align-items-center">
+
+        <!-- Ikon menu -->
+        <label class="hamburger">
+            <input type="checkbox">
+            <svg viewBox="0 0 32 32">
+                <path class="line line-top-bottom"
+                    d="M27 10 13 10C10.8 10 9 8.2 9 6 9 3.5 10.8 2 13 2 15.2 2 17 3.8 17 6L17 26C17 28.2 18.8 30 21 30 23.2 30 25 28.2 25 26 25 23.8 23.2 22 21 22L7 22">
+                </path>
+                <path class="line" d="M7 16 27 16"></path>
+            </svg>
+        </label>
+
         <!-- Ikon bulat dan logo -->
         <div class="d-flex align-items-center">
             <div style="width: 40px; height: 40px; background-color: black; border-radius: 50%; margin-right: 10px;">
@@ -34,80 +46,80 @@
 <div class="main-layout">
     <!-- Sidebar -->
     <div class="sidebar">
-<div class="menu">
-  <div class="item">
-    <a href="#" class="link">
-      <span> Super Admin </span>
-      <svg viewBox="0 0 360 360" xml:space="preserve">
-        <g id="SVGRepo_iconCarrier">
-          <path
-            id="XMLID_225_"
-            d="M325.607,79.393c-5.857-5.857-15.355-5.858-21.213,0.001l-139.39,139.393L25.607,79.393 c-5.857-5.857-15.355-5.858-21.213,0.001c-5.858,5.858-5.858,15.355,0,21.213l150.004,150c2.813,2.813,6.628,4.393,10.606,4.393 s7.794-1.581,10.606-4.394l149.996-150C331.465,94.749,331.465,85.251,325.607,79.393z"
-          ></path>
-        </g>
-      </svg>
-    </a>
-    <div class="submenu">
-      <div class="submenu-item">
-        <a href="#" class="submenu-link"> Employee</a>
-      </div>
-    </div>
-  </div>
-</div>
-
-            {{-- <h3>Super Admin</h3> --}}
-            {{-- <p>Employee</p> --}}
-        {{-- </div> --}}
-        <nav class="menu">
-            <ul class="list-unstyled">
-                <li><a href="#">File</a></li>
-                <li><a href="#">Media</a></li>
-            </ul>
-        </nav>
-    </div>
-
-    <!-- Konten Dashboard -->
-    <div class="dashboard-content">
-        <!-- Header -->
-        <div class="header">
-            <h2>Dashboard</h2>
-            <div class="tools">
-                <div class="tools d-flex align-items-center">
-                    <!-- Tombol Add Folder -->
-                    <button class="add-folder-btn btn btn-outline-secondary">Add Folder</button>
-                    
-                    <!-- Tools untuk Grid & List Layout -->
-                    <div class="layout-tools ms-3 d-flex align-items-center">
-                        <!-- Tombol Grid Layout -->
-                        <button class="btn btn-outline-secondary grid-layout active" title="Grid Layout">
-                            <span class="material-icons">grid_view</span> <!-- Icon Grid -->
-                        </button>
-                        
-                        <!-- Tombol List Layout -->
-                        <button class="btn btn-outline-secondary list-layout ms-2" title="List Layout">
-                            <span class="material-icons">view_list</span> <!-- Icon List -->
-                        </button>
+        <div class="menu">
+            <div class="item">
+                <a href="#" class="link">
+                    <span> Super Admin </span>
+                    <svg viewBox="0 0 360 360" xml:space="preserve">
+                        <g id="SVGRepo_iconCarrier">
+                            <path id="XMLID_225_"
+                                d="M325.607,79.393c-5.857-5.857-15.355-5.858-21.213,0.001l-139.39,139.393L25.607,79.393 c-5.857-5.857-15.355-5.858-21.213,0.001c-5.858,5.858-5.858,15.355,0,21.213l150.004,150c2.813,2.813,6.628,4.393,10.606,4.393 s7.794-1.581,10.606-4.394l149.996-150C331.465,94.749,331.465,85.251,325.607,79.393z">
+                            </path>
+                        </g>
+                    </svg>
+                </a>
+                <div class="submenu">
+                    <div class="submenu-item">
+                        <a href="#" class="submenu-link"> Employee</a>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- File Grid -->
-        <div class="file-grid mt-4">
-            <div class="file-card">
-                <img src="{{ asset('images/foto-icon.png') }}" alt="Foto" class="mb-2" />
-                <p class="fw-bold">Foto</p>
-                <span class="text-muted">20Mb</span><br>
-                <span class="text-muted">20/10/2024</span>
-            </div>
-            <div class="file-card">
-                <img src="{{ asset('images/pdf-icon.png') }}" alt="File" class="mb-2" />
-                <p class="fw-bold">File</p>
-                <span class="text-muted">20Mb</span><br>
-                <span class="text-muted">20/10/2024</span>
+        {{-- <h3>Super Admin</h3> --}}
+        {{-- <p>Employee</p> --}}
+        {{--
+    </div> --}}
+    <nav class="menu">
+        <ul class="list-unstyled">
+            <li><a href="#">File</a></li>
+            <li><a href="#">Media</a></li>
+        </ul>
+    </nav>
+</div>
+
+<!-- Konten Dashboard -->
+<div class="dashboard-content">
+    <!-- Header -->
+    <div class="header">
+        <h2>Dashboard</h2>
+        <div class="tools">
+            <div class="tools d-flex align-items-center">
+                <!-- Tombol Add Folder -->
+                <button class="add-folder-btn btn btn-outline-secondary">Add Folder</button>
+
+                <!-- Tools untuk Grid & List Layout -->
+                <div class="layout-tools ms-3 d-flex align-items-center">
+                    <!-- Tombol Grid Layout -->
+                    <button class="btn btn-outline-secondary grid-layout active" title="Grid Layout">
+                        <span class="material-icons">grid_view</span> <!-- Icon Grid -->
+                    </button>
+
+                    <!-- Tombol List Layout -->
+                    <button class="btn btn-outline-secondary list-layout ms-2" title="List Layout">
+                        <span class="material-icons">view_list</span> <!-- Icon List -->
+                    </button>
+                </div>
             </div>
         </div>
     </div>
+
+    <!-- File Grid -->
+    <div class="file-grid mt-4">
+        <div class="file-card">
+            <img src="{{ asset('images/foto-icon.png') }}" alt="Foto" class="mb-2" />
+            <p class="fw-bold">Foto</p>
+            <span class="text-muted">20Mb</span><br>
+            <span class="text-muted">20/10/2024</span>
+        </div>
+        <div class="file-card">
+            <img src="{{ asset('images/pdf-icon.png') }}" alt="File" class="mb-2" />
+            <p class="fw-bold">File</p>
+            <span class="text-muted">20Mb</span><br>
+            <span class="text-muted">20/10/2024</span>
+        </div>
+    </div>
+</div>
 </div>
 
 <!-- Styling Khusus -->
