@@ -4,22 +4,16 @@
 
 @section('content')
 <!-- Navbar -->
-<nav class="navbar navbar-expand-lg" style="background-color: #d3d3d3;">
+<nav class="navbar navbar-expand-lg">
     <div class="container-fluid align-items-center">
-
-        <!-- Ikon bulat dan logo -->
         <div class="d-flex align-items-center">
-            <div style="width: 40px; height: 40px; background-color: black; border-radius: 50%; margin-right: 10px;">
+            <div style="width: 50px; height: 50px; background-color: black; border-radius: 50%; margin-right: 15px;">
             </div>
             <a class="navbar-brand fw-bold" href="#">BBSPJIS File Manager</a>
         </div>
-
-        <!-- Search Bar -->
         <div class="mx-auto" style="width: 50%;">
             <input type="text" class="form-control" placeholder="Search" />
         </div>
-
-        <!-- Nama User Dropdown -->
         <div>
             <span class="fw-bold">Nama User</span>
             <button class="btn btn-link dropdown-toggle" type="button" data-bs-toggle="dropdown"
@@ -28,6 +22,7 @@
                 <li><a class="dropdown-item" href="#">Logout</a></li>
             </ul>
         </div>
+           
     </div>
 </nav>
 

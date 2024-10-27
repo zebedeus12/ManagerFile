@@ -30,6 +30,55 @@
             display: flex;
         }
 
+        /*navbar*/
+        .navbar {
+            background: linear-gradient(135deg, #31511E 0%, #4CAF50 100%);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            padding: 15px 20px;
+            /* Perbesar padding untuk ukuran navbar */
+            position: relative;
+        }
+
+        .navbar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.1);
+            pointer-events: none;
+            filter: blur(8px);
+            opacity: 0.4;
+            z-index: 0;
+            /* Pastikan ini di belakang elemen navbar */
+        }
+
+        .navbar-brand {
+            color: white;
+            font-size: 1.5rem;
+            /* Besarkan ukuran font logo */
+        }
+
+        .navbar a {
+            color: #E0E0E0;
+            font-size: 1.1rem;
+            /* Besarkan ukuran font link */
+        }
+
+        .navbar a:hover {
+            color: white;
+        }
+
+        .navbar .dropdown-item {
+            color: #E0E0E0;
+        }
+
+        .navbar .dropdown-item:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            /* Tambahkan efek hover untuk item dropdown */
+        }
+
         /* Sidebar styling */
         .sidebar {
             width: 250px;
