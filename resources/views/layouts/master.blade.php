@@ -17,22 +17,42 @@
     <style>
         body {
             font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #31511E, #91BC55, #A4C639);
-            /* Warna gradasi */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
             margin: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .background-half-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 50%;
+            height: 100%;
+            background-image: url('/img/Selulosa.png');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .background-half-color {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(135deg, #31511E, #91BC55, #A4C639);
         }
 
         .container {
+            position: relative;
+            z-index: 1;
             display: flex;
             justify-content: flex-end;
-            /* Memindahkan card ke kanan */
             width: 100%;
             padding-right: 50px;
-            /* Beri jarak pada sisi kanan */
         }
 
         .card {
@@ -48,7 +68,6 @@
             font-size: 1.5rem;
             font-weight: 600;
             color: #31511E;
-            /* Warna hijau tua */
             padding: 20px;
             border-bottom: none;
         }
@@ -60,7 +79,6 @@
 
         .btn-primary {
             background-color: #31511E;
-            /* Warna hijau tua */
             border: none;
             border-radius: 10px;
             padding: 10px 15px;
@@ -70,7 +88,6 @@
 
         .btn-primary:hover {
             background-color: #264011;
-            /* Warna lebih gelap saat di-hover */
         }
 
         .form-group {
@@ -94,6 +111,9 @@
 </head>
 
 <body>
+
+    <div class="background-half-image"></div>
+    <div class="background-half-color"></div>
 
     <div class="container">
         @yield('content')
