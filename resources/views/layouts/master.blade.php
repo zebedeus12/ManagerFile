@@ -17,42 +17,34 @@
     <style>
         body {
             font-family: 'Poppins', sans-serif;
-            margin: 0;
-            min-height: 100vh;
-            display: flex;
-            justify-content: flex-end;
-            align-items: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .background-half-image {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 50%;
-            height: 100%;
-            background-image: url('/img/Selulosa.png');
+            background-image: url('{{ asset('img/Selulosa.png') }}');
+            /* Set your background image */
             background-size: cover;
+            /* Cover the entire area */
             background-position: center;
-        }
-
-        .background-half-color {
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 50%;
-            height: 100%;
-            background: linear-gradient(135deg, #31511E, #91BC55, #A4C639);
+            /* Center the image */
+            background-repeat: no-repeat;
+            /* Prevent repeating the image */
+            min-height: 100vh;
+            /* Ensure the body takes full height */
+            margin: 0;
+            display: flex;
+            /* Center the container */
+            justify-content: center;
+            align-items: center;
         }
 
         .container {
-            position: relative;
-            z-index: 1;
             display: flex;
             justify-content: flex-end;
+            /* Move the card to the right */
             width: 100%;
             padding-right: 50px;
+            /* Add space on the right side */
+            position: relative;
+            /* For positioning the card */
+            z-index: 1;
+            /* Ensure the container is above the image */
         }
 
         .card {
@@ -60,6 +52,10 @@
             border-radius: 15px;
             box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.1);
             background-color: #ffffff;
+            position: relative;
+            /* For positioning the card */
+            z-index: 2;
+            /* Ensure the card is above the container */
         }
 
         .card-header {
@@ -68,6 +64,7 @@
             font-size: 1.5rem;
             font-weight: 600;
             color: #31511E;
+            /* Dark green color */
             padding: 20px;
             border-bottom: none;
         }
@@ -79,6 +76,7 @@
 
         .btn-primary {
             background-color: #31511E;
+            /* Dark green color */
             border: none;
             border-radius: 10px;
             padding: 10px 15px;
@@ -88,6 +86,7 @@
 
         .btn-primary:hover {
             background-color: #264011;
+            /* Darker color on hover */
         }
 
         .form-group {
@@ -111,9 +110,6 @@
 </head>
 
 <body>
-
-    <div class="background-half-image"></div>
-    <div class="background-half-color"></div>
 
     <div class="container">
         @yield('content')
