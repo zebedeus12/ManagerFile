@@ -131,7 +131,7 @@
     /* Sidebar */
     .sidebar {
         width: 250px;
-        background-color: #343a40;
+        background-color: white;
         color: white;
     }
 

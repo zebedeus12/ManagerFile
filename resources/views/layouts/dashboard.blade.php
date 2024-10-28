@@ -32,7 +32,7 @@
 
         /*navbar*/
         .navbar {
-            background: linear-gradient(135deg, #31511E 0%, #4CAF50 100%);
+            background-color: white;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
             padding: 15px 20px;
             /* Perbesar padding untuk ukuran navbar */
@@ -61,21 +61,21 @@
         }
 
         .navbar a {
-            color: #E0E0E0;
+            color: #31511E;
             font-size: 1.1rem;
             /* Besarkan ukuran font link */
         }
 
         .navbar a:hover {
-            color: white;
+            color: #4CAF50;
         }
 
         .navbar .dropdown-item {
-            color: #E0E0E0;
+            color: #31511E;
         }
 
         .navbar .dropdown-item:hover {
-            background-color: rgba(255, 255, 255, 0.1);
+            background-color: rgba(49, 81, 30, 0.1);
             /* Tambahkan efek hover untuk item dropdown */
         }
 
