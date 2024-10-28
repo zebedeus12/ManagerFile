@@ -63,7 +63,7 @@
             text-align: center;
             font-size: 1.5rem;
             font-weight: 600;
-            color: #31511E;
+            color: #188A98;
             /* Dark green color */
             padding: 20px;
             border-bottom: none;
@@ -75,8 +75,7 @@
         }
 
         .btn-primary {
-            background-color: #31511E;
-            /* Dark green color */
+            background-color: #188A98;
             border: none;
             border-radius: 10px;
             padding: 10px 15px;
@@ -85,7 +84,7 @@
         }
 
         .btn-primary:hover {
-            background-color: #264011;
+            background-color: #146B75;
             /* Darker color on hover */
         }
 
