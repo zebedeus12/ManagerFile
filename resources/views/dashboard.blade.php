@@ -11,9 +11,6 @@
                 style="width: 50px; height: 50px; border-radius: 50%; margin-right: 15px;">
             <a class="navbar-brand fw-bold" href="#">BBSPJIS File Manager</a>
         </div>
-        <div class="mx-auto" style="width: 50%;">
-            <input type="text" class="form-control" placeholder="Search" />
-        </div>
         <div>
             <span class="fw-bold">Nama User</span>
             <button class="btn btn-link dropdown-toggle" type="button" data-bs-toggle="dropdown"
@@ -24,6 +21,7 @@
         </div>
     </div>
 </nav>
+
 
 <!-- Layout Sidebar dan Konten -->
 <div class="main-layout">
