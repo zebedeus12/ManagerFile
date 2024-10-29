@@ -7,8 +7,8 @@
 <nav class="navbar navbar-expand-lg">
     <div class="container-fluid align-items-center">
         <div class="d-flex align-items-center">
-            <div style="width: 50px; height: 50px; background-color: black; border-radius: 50%; margin-right: 15px;">
-            </div>
+            <img src="{{ asset('img/logo.png') }}" alt="Logo"
+                style="width: 50px; height: 50px; border-radius: 50%; margin-right: 15px;">
             <a class="navbar-brand fw-bold" href="#">BBSPJIS File Manager</a>
         </div>
         <div class="mx-auto" style="width: 50%;">
@@ -22,7 +22,6 @@
                 <li><a class="dropdown-item" href="#">Logout</a></li>
             </ul>
         </div>
-           
     </div>
 </nav>
 
