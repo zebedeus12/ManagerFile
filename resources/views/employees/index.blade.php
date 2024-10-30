@@ -1,8 +1,8 @@
-@extends('layouts.dashboard')
+@extends('dashboard') <!-- Extends the dashboard template with navbar and sidebar -->
 
 @section('title', 'Employees')
 
-@section('content')
+@section('content') <!-- Replaces only the content section -->
 <div class="container mt-4">
     <h2 class="mb-4">Employee List</h2>
     <a href="{{ route('employees.create') }}" class="btn btn-primary mb-3">Add Employee</a>
