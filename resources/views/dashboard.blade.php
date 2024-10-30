@@ -31,11 +31,11 @@
             <ul class="list-unstyled">
                 <li>
                     <li>
-                        <a href="{{ route('employees.index') }}" class="icon-link">
-                            <span class="material-icons">admin_panel_settings</span>
-                        </a>
-                    </li>
-                    
+    <a href="{{ route('employees.index') }}" class="icon-link">
+        <span class="material-icons">admin_panel_settings</span>
+    </a>
+</li>
+
                 </li>
                 <li>
                     <a href="#" class="icon-link">
