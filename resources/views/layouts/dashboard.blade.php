@@ -91,13 +91,13 @@
             color: #adb5bd;
             display: flex;
             justify-content: center;
-            padding: 15px 0;
+            padding: 15px 15px;
             font-size: 24px;
             /* Adjust icon size */
         }
 
         .menu ul li a:hover {
-            background-color: #495057;
+            background-color: #1CAAB8;
             color: white;
         }
 
