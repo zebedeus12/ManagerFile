@@ -81,31 +81,24 @@
 
         /* Sidebar styling */
         .sidebar {
-            width: 250px;
-            background-color: #f8f9fa;
-            padding: 20px;
-            height: 100vh;
+            width: 70px;
+            /* Reduced width for icon-only sidebar */
+            background-color: white;
         }
 
-        .sidebar h3 {
-            text-align: center;
-            font-weight: 600;
-            margin-bottom: 30px;
-        }
-
-        .menu ul {
-            list-style-type: none;
-            padding: 0;
-        }
-
-        .menu ul li {
-            margin-bottom: 15px;
-        }
-
+        /* Center and style icons */
         .menu ul li a {
-            text-decoration: none;
-            font-weight: 600;
-            color: #31511E;
+            color: #adb5bd;
+            display: flex;
+            justify-content: center;
+            padding: 15px 0;
+            font-size: 24px;
+            /* Adjust icon size */
+        }
+
+        .menu ul li a:hover {
+            background-color: #495057;
+            color: white;
         }
 
         /* Main content styling */
