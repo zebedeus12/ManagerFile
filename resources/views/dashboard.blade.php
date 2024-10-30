@@ -27,61 +27,57 @@
 <div class="main-layout">
     <!-- Sidebar -->
     <div class="sidebar">
-        {{-- <h3>Super Admin</h3> --}}
-        {{-- <p>Employee</p> --}}
-        {{--
-    </div> --}}
-    <nav class="menu">
-        <ul class="list-unstyled">
-            <li><a href="#">Super Admin</a></li>
-            <li><a href="#">File</a></li>
-            <li><a href="#">Media</a></li>
-        </ul>
-    </nav>
-</div>
+        <nav class="menu">
+            <ul class="list-unstyled">
+                <li><a href="#"><span class="material-icons">admin_panel_settings</span></a></li>
+                <li><a href="#"><span class="material-icons">folder</span></a></li>
+                <li><a href="#"><span class="material-icons">perm_media</span></a></li>
+            </ul>
+        </nav>
+    </div>
 
-<!-- Konten Dashboard -->
-<div class="dashboard-content">
-    <!-- Header -->
-    <div class="header">
-        <h2>Dashboard</h2>
-        <div class="tools">
-            <div class="tools d-flex align-items-center">
-                <!-- Tombol Add Folder -->
-                <button class="add-folder-btn btn btn-outline-secondary">Add Folder</button>
+    <!-- Konten Dashboard -->
+    <div class="dashboard-content">
+        <!-- Header -->
+        <div class="header">
+            <h2>Dashboard</h2>
+            <div class="tools">
+                <div class="tools d-flex align-items-center">
+                    <!-- Tombol Add Folder -->
+                    <button class="add-folder-btn btn btn-outline-secondary">Add Folder</button>
 
-                <!-- Tools untuk Grid & List Layout -->
-                <div class="layout-tools ms-3 d-flex align-items-center">
-                    <!-- Tombol Grid Layout -->
-                    <button class="btn btn-outline-secondary grid-layout active" title="Grid Layout">
-                        <span class="material-icons">grid_view</span> <!-- Icon Grid -->
-                    </button>
+                    <!-- Tools untuk Grid & List Layout -->
+                    <div class="layout-tools ms-3 d-flex align-items-center">
+                        <!-- Tombol Grid Layout -->
+                        <button class="btn btn-outline-secondary grid-layout active" title="Grid Layout">
+                            <span class="material-icons">grid_view</span> <!-- Icon Grid -->
+                        </button>
 
-                    <!-- Tombol List Layout -->
-                    <button class="btn btn-outline-secondary list-layout ms-2" title="List Layout">
-                        <span class="material-icons">view_list</span> <!-- Icon List -->
-                    </button>
+                        <!-- Tombol List Layout -->
+                        <button class="btn btn-outline-secondary list-layout ms-2" title="List Layout">
+                            <span class="material-icons">view_list</span> <!-- Icon List -->
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- File Grid -->
-    <div class="file-grid mt-4">
-        <div class="file-card">
-            <img src="{{ asset('images/foto-icon.png') }}" alt="Foto" class="mb-2" />
-            <p class="fw-bold">Foto</p>
-            <span class="text-muted">20Mb</span><br>
-            <span class="text-muted">20/10/2024</span>
-        </div>
-        <div class="file-card">
-            <img src="{{ asset('images/pdf-icon.png') }}" alt="File" class="mb-2" />
-            <p class="fw-bold">File</p>
-            <span class="text-muted">20Mb</span><br>
-            <span class="text-muted">20/10/2024</span>
+        <!-- File Grid -->
+        <div class="file-grid mt-4">
+            <div class="file-card">
+                <img src="{{ asset('images/foto-icon.png') }}" alt="Foto" class="mb-2" />
+                <p class="fw-bold">Foto</p>
+                <span class="text-muted">20Mb</span><br>
+                <span class="text-muted">20/10/2024</span>
+            </div>
+            <div class="file-card">
+                <img src="{{ asset('images/pdf-icon.png') }}" alt="File" class="mb-2" />
+                <p class="fw-bold">File</p>
+                <span class="text-muted">20Mb</span><br>
+                <span class="text-muted">20/10/2024</span>
+            </div>
         </div>
     </div>
-</div>
 </div>
 
 <!-- Styling Khusus -->
