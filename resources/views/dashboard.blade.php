@@ -33,6 +33,7 @@
     </div> --}}
     <nav class="menu">
         <ul class="list-unstyled">
+            <li><a href="#">Super Admin</a></li>
             <li><a href="#">File</a></li>
             <li><a href="#">Media</a></li>
         </ul>
