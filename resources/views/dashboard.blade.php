@@ -29,35 +29,38 @@
     <div class="sidebar">
         <nav class="menu">
             <ul class="list-unstyled">
-                <li><a href="#"><span class="material-icons">admin_panel_settings</span></a></li>
-                <li><a href="#"><span class="material-icons">folder</span></a></li>
-                <li><a href="#"><span class="material-icons">perm_media</span></a></li>
+                <li>
+                    <a href="#" class="icon-link">
+                        <span class="material-icons">admin_panel_settings</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="icon-link">
+                        <span class="material-icons">folder</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="icon-link">
+                        <span class="material-icons">perm_media</span>
+                    </a>
+                </li>
             </ul>
         </nav>
     </div>
 
     <!-- Konten Dashboard -->
     <div class="dashboard-content">
-        <!-- Header -->
         <div class="header">
             <h2>Dashboard</h2>
-            <div class="tools">
-                <div class="tools d-flex align-items-center">
-                    <!-- Tombol Add Folder -->
-                    <button class="add-folder-btn btn btn-outline-secondary">Add Folder</button>
-
-                    <!-- Tools untuk Grid & List Layout -->
-                    <div class="layout-tools ms-3 d-flex align-items-center">
-                        <!-- Tombol Grid Layout -->
-                        <button class="btn btn-outline-secondary grid-layout active" title="Grid Layout">
-                            <span class="material-icons">grid_view</span> <!-- Icon Grid -->
-                        </button>
-
-                        <!-- Tombol List Layout -->
-                        <button class="btn btn-outline-secondary list-layout ms-2" title="List Layout">
-                            <span class="material-icons">view_list</span> <!-- Icon List -->
-                        </button>
-                    </div>
+            <div class="tools d-flex align-items-center">
+                <button class="add-folder-btn btn btn-outline-secondary">Add Folder</button>
+                <div class="layout-tools ms-3 d-flex align-items-center">
+                    <button class="btn btn-outline-secondary grid-layout active" title="Grid Layout">
+                        <span class="material-icons">grid_view</span>
+                    </button>
+                    <button class="btn btn-outline-secondary list-layout ms-2" title="List Layout">
+                        <span class="material-icons">view_list</span>
+                    </button>
                 </div>
             </div>
         </div>
@@ -82,20 +85,17 @@
 
 <!-- Styling Khusus -->
 <style>
-    /* Reset margin dan padding */
     * {
         margin: 0;
         padding: 0;
         box-sizing: border-box;
     }
 
-    html,
-    body {
+    html, body {
         height: 100%;
         overflow: hidden;
     }
 
-    /* Layout utama */
     .main-layout {
         display: flex;
         width: 100vw;
@@ -104,35 +104,52 @@
 
     /* Sidebar */
     .sidebar {
-        width: 250px;
-        background-color: white;
-        color: white;
+    width: 80px; /* Lebar sidebar ramping */
+    height: 100vh; /* Membuat sidebar penuh vertikal */
+    background: linear-gradient(180deg, #188A98, #0F6B75); /* Gradasi lembut */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 20px;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* Tambahan shadow agar terlihat elegan */
+    border-right: 1px solid #e0e0e0;
+}
+
+.icon-link {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 60px;
+    text-decoration: none;
+    color: white;
+    font-size: 28px; /* Ukuran ikon */
+}
+
+.icon-link:hover {
+    background: none; /* Tidak ada efek hover */
+}
+
+
+    .material-icons {
+        font-size: 28px;
     }
 
-    .profile-section {
-        padding: 20px;
-    }
 
     .menu ul {
+        width: 100%;
         padding: 0;
+        list-style: none;
     }
 
     .menu ul li {
-        list-style: none;
-        margin: 15px 0;
+        margin: 20px 0;
     }
 
-    .menu ul li a {
-        color: #adb5bd;
-        text-decoration: none;
-        padding: 10px 20px;
-        display: block;
+    .icon-link:hover {
+        background-color: #145d65;
     }
 
-    .menu ul li a:hover {
-        background-color: #495057;
-        color: white;
-    }
 
     /* Konten Dashboard */
     .dashboard-content {
@@ -169,6 +186,7 @@
         margin-bottom: 10px;
     }
 </style>
+
 
 <!-- JavaScript untuk Toggle Layout -->
 <script>
