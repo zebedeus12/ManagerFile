@@ -120,8 +120,6 @@
         .tools {
             display: flex;
             align-items: center;
-            justify-content: flex-start;
-            margin-top: 20px;
         }
 
         .tools .add-folder-btn {
@@ -130,6 +128,7 @@
             border-radius: 8px;
             padding: 8px 15px;
             transition: background-color 0.3s;
+            margin-right: 10px;
         }
 
         .tools .add-folder-btn:hover {
@@ -149,6 +148,7 @@
             height: 40px;
             border-radius: 8px;
             transition: background-color 0.3s, transform 0.2s;
+            margin-right: 5px;
         }
 
         .layout-tools .btn .material-icons {
@@ -173,6 +173,11 @@
 
         .tools .layout-tools .btn:hover .material-icons {
             color: #495057;
+        }
+
+        .layout-tools .btn:last-child {
+            margin-right: 0;
+            /* Menghapus margin kanan pada tombol terakhir */
         }
     </style>
 

@@ -50,15 +50,15 @@
 
     <!-- Konten Dashboard -->
     <div class="dashboard-content">
-        <div class="header">
-            <h2>Dashboard</h2>
+        <div class="header d-flex align-items-center justify-content-between">
+            <h2 class="mb-0">Dashboard</h2>
             <div class="tools d-flex align-items-center">
-                <button class="add-folder-btn btn btn-outline-secondary">Add Folder</button>
-                <div class="layout-tools ms-3 d-flex align-items-center">
-                    <button class="btn btn-outline-secondary grid-layout active" title="Grid Layout">
+                <button class="add-folder-btn btn btn-outline-secondary me-3">Add Folder</button>
+                <div class="layout-tools d-flex align-items-center">
+                    <button class="btn btn-outline-secondary grid-layout active me-2" title="Grid Layout">
                         <span class="material-icons">grid_view</span>
                     </button>
-                    <button class="btn btn-outline-secondary list-layout ms-2" title="List Layout">
+                    <button class="btn btn-outline-secondary list-layout" title="List Layout">
                         <span class="material-icons">view_list</span>
                     </button>
                 </div>
