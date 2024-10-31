@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\LoginController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\MediaController;
 
 Route::get('/', function () {
     return view('/auth.login');
@@ -23,3 +24,6 @@ Route::get('/dashboard', function () {
 
 //employees
 Route::resource('employees', EmployeeController::class);
+
+//media
+Route::resource('media', MediaController::class);
