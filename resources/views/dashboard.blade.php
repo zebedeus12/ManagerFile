@@ -109,17 +109,13 @@
     /* Sidebar */
     .sidebar {
         width: 80px;
-        /* Lebar sidebar ramping */
         height: 100vh;
-        /* Membuat sidebar penuh vertikal */
         background: linear-gradient(180deg, #188A98, #5CCED1);
-        /* Gradasi lembut */
         display: flex;
         flex-direction: column;
         align-items: center;
         padding-top: 20px;
         box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-        /* Tambahan shadow agar terlihat elegan */
         border-right: 1px solid #e0e0e0;
     }
 

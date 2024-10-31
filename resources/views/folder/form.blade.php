@@ -54,6 +54,24 @@
 </div>
 
 <style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    html,
+    body {
+        height: 100%;
+        overflow: hidden;
+    }
+
+    .main-layout {
+        display: flex;
+        width: 100vw;
+        height: 100vh;
+    }
+
     .logo {
         width: 50px;
         height: 50px;
@@ -83,6 +101,7 @@
         align-items: center;
         width: 100%;
         height: 60px;
+        text-decoration: none;
         color: white;
         font-size: 28px;
     }
@@ -91,15 +110,31 @@
         background-color: #145d65;
     }
 
-    .employee-content {
-        flex: 1;
-        padding: 20px;
-        overflow-y: auto;
+    .material-icons {
+        font-size: 28px;
     }
 
-    .table th,
-    .table td {
-        vertical-align: middle;
+
+    .menu ul {
+        width: 100%;
+        padding: 0;
+        list-style: none;
+    }
+
+    .menu ul li {
+        margin: 20px 0;
+    }
+
+    .icon-link:hover {
+        background-color: #145d65;
+    }
+
+    /*container*/
+    .container {
+        flex: 1;
+        background-color: #f1f1f1;
+        padding: 20px;
+        overflow-y: auto;
     }
 </style>
 @endsection

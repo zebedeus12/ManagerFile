@@ -98,6 +98,7 @@
         align-items: center;
         padding-top: 20px;
         box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+        border-right: 1px solid #e0e0e0;
     }
 
     .icon-link {
@@ -106,8 +107,28 @@
         align-items: center;
         width: 100%;
         height: 60px;
+        text-decoration: none;
         color: white;
         font-size: 28px;
+    }
+
+    .icon-link:hover {
+        background: none;
+        /* Tidak ada efek hover */
+    }
+
+    .material-icons {
+        font-size: 28px;
+    }
+
+    .menu ul {
+        width: 100%;
+        padding: 0;
+        list-style: none;
+    }
+
+    .menu ul li {
+        margin: 20px 0;
     }
 
     .icon-link:hover {
