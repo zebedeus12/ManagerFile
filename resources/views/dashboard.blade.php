@@ -38,7 +38,7 @@
 
                 </li>
                 <li>
-                    <a href="#" class="icon-link">
+                    <a href="{{ route('folder.form') }}" class="icon-link">
                         <span class="material-icons">folder</span>
                     </a>
                 </li>

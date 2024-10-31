@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\LoginController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\FolderController;
 
 
 Route::get('/', function () {
@@ -24,6 +25,12 @@ Route::get('/dashboard', function () {
 })->middleware('auth');
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-
 //employees
 Route::resource('employees', EmployeeController::class);
+
+//folder
+Route::resource('folders', FolderController::class);
+Route::get('/folder/form', [FolderController::class, 'showForm'])->name('folder.form');
+Route::post('/folder/store', [FolderController::class, 'store'])->name('folder.store');
+
+
