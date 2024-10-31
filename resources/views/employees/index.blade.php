@@ -26,7 +26,11 @@
             <ul class="list-unstyled">
                 <li><a href="{{ route('employees.index') }}" class="icon-link"><span
                             class="material-icons">admin_panel_settings</span></a></li>
-                <li><a href="#" class="icon-link"><span class="material-icons">folder</span></a></li>
+                <li>
+                    <a href="{{ route('folder.form') }}" class="icon-link">
+                        <span class="material-icons">folder</span>
+                    </a>
+                </li>
                 <li><a href="#" class="icon-link"><span class="material-icons">perm_media</span></a></li>
             </ul>
         </nav>
