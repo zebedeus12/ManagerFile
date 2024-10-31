@@ -7,11 +7,12 @@
     <div class="container-fluid align-items-center">
         <div class="d-flex align-items-center">
             <img src="{{ asset('img/logo.png') }}" alt="Logo" class="logo">
-            <a class="navbar-brand fw-bold" href="#">BBSPJIS File Manager</a>
+            <a class="navbar-brand fw-bold" href="{{ route('dashboard') }}">BBSPJIS File Manager</a>
         </div>
         <div>
             <span class="fw-bold">Nama User</span>
-            <button class="btn btn-link dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"></button>
+            <button class="btn btn-link dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                aria-expanded="false"></button>
             <ul class="dropdown-menu dropdown-menu-end">
                 <li><a class="dropdown-item" href="#">Logout</a></li>
             </ul>
@@ -23,7 +24,8 @@
     <div class="sidebar">
         <nav class="menu">
             <ul class="list-unstyled">
-                <li><a href="{{ route('employees.index') }}" class="icon-link"><span class="material-icons">admin_panel_settings</span></a></li>
+                <li><a href="{{ route('employees.index') }}" class="icon-link"><span
+                            class="material-icons">admin_panel_settings</span></a></li>
                 <li><a href="#" class="icon-link"><span class="material-icons">folder</span></a></li>
                 <li><a href="#" class="icon-link"><span class="material-icons">perm_media</span></a></li>
             </ul>
@@ -55,10 +57,12 @@
                         <td>{{ $employee->email }}</td>
                         <td>
                             <a href="{{ route('employees.edit', $employee) }}" class="btn btn-warning btn-sm">Edit</a>
-                            <form action="{{ route('employees.destroy', $employee) }}" method="POST" style="display:inline;">
+                            <form action="{{ route('employees.destroy', $employee) }}" method="POST"
+                                style="display:inline;">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')">Delete</button>
+                                <button type="submit" class="btn btn-danger btn-sm"
+                                    onclick="return confirm('Are you sure?')">Delete</button>
                             </form>
                         </td>
                     </tr>
@@ -112,7 +116,8 @@
         overflow-y: auto;
     }
 
-    .table th, .table td {
+    .table th,
+    .table td {
         vertical-align: middle;
     }
 </style>

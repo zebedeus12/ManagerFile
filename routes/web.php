@@ -2,7 +2,9 @@
 
 use App\Http\Controllers\Auth\LoginController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EmployeeController;
+
 
 Route::get('/', function () {
     return view('/auth.login');
@@ -20,6 +22,8 @@ Route::get('/home', function () {
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware('auth');
+Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
 
 //employees
 Route::resource('employees', EmployeeController::class);
