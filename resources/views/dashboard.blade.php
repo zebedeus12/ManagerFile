@@ -43,7 +43,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="#" class="icon-link">
+                    <a href="{{ route('media.index') }}" class="icon-link">
                         <span class="material-icons">perm_media</span>
                     </a>
                 </li>
