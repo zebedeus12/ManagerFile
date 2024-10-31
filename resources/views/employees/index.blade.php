@@ -3,39 +3,179 @@
 @section('title', 'Employees')
 
 @section('content') <!-- Replaces only the content section -->
-<div class="container mt-4">
-    <h2 class="mb-4">Employee List</h2>
-    <a href="{{ route('employees.create') }}" class="btn btn-primary mb-3">Add Employee</a>
+<nav class="navbar navbar-expand-lg">
+    <div class="container-fluid align-items-center">
+        <div class="d-flex align-items-center">
+            <img src="{{ asset('img/logo.png') }}" alt="Logo"
+                style="width: 50px; height: 50px; border-radius: 50%; margin-right: 15px;">
+            <a class="navbar-brand fw-bold" href="#">BBSPJIS File Manager</a>
+        </div>
+        <div>
+            <span class="fw-bold">Nama User</span>
+            <button class="btn btn-link dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                aria-expanded="false"></button>
+            <ul class="dropdown-menu dropdown-menu-end">
+                <li><a class="dropdown-item" href="#">Logout</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
 
-    @if (session('success'))
-        <div class="alert alert-success">{{ session('success') }}</div>
-    @endif
 
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach ($employees as $employee)
-                <tr>
-                    <td>{{ $employee->name }}</td>
-                    <td>{{ $employee->email }}</td>
-                    <td>
-                        <a href="{{ route('employees.edit', $employee) }}" class="btn btn-warning btn-sm">Edit</a>
-                        <form action="{{ route('employees.destroy', $employee) }}" method="POST" style="display:inline;">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-danger btn-sm"
-                                onclick="return confirm('Are you sure?')">Delete</button>
-                        </form>
-                    </td>
-                </tr>
-            @endforeach
-        </tbody>
-    </table>
+<!-- Layout Sidebar dan Konten -->
+<div class="main-layout">
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <nav class="menu">
+            <ul class="list-unstyled">
+                <li>
+                <li>
+                    <a href="{{ route('employees.index') }}" class="icon-link">
+                        <span class="material-icons">admin_panel_settings</span>
+                    </a>
+                </li>
+
+                </li>
+                <li>
+                    <a href="#" class="icon-link">
+                        <span class="material-icons">folder</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="icon-link">
+                        <span class="material-icons">perm_media</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
+    <div class="employee-content">
+        <div class="header d-flex align-items-center justify-content-between">
+            <h2 class="mb-4">Employee List</h2>
+            <a href="{{ route('employees.create') }}" class="btn btn-primary mb-3">Add Employee</a>
+
+            @if (session('success'))
+                <div class="alert alert-success">{{ session('success') }}</div>
+            @endif
+
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($employees as $employee)
+                        <tr>
+                            <td>{{ $employee->name }}</td>
+                            <td>{{ $employee->email }}</td>
+                            <td>
+                                <a href="{{ route('employees.edit', $employee) }}" class="btn btn-warning btn-sm">Edit</a>
+                                <form action="{{ route('employees.destroy', $employee) }}" method="POST"
+                                    style="display:inline;">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-danger btn-sm"
+                                        onclick="return confirm('Are you sure?')">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
+
+<!-- Style Khusus -->
+<style>
+    <style>* {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    html,
+    body {
+        height: 100%;
+        overflow: hidden;
+    }
+
+    .main-layout {
+        display: flex;
+        width: 100vw;
+        height: 100vh;
+    }
+
+    /* Sidebar */
+    .sidebar {
+        width: 80px;
+        /* Lebar sidebar ramping */
+        height: 100vh;
+        /* Membuat sidebar penuh vertikal */
+        background: linear-gradient(180deg, #188A98, #5CCED1);
+        /* Gradasi lembut */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding-top: 20px;
+        box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+        /* Tambahan shadow agar terlihat elegan */
+        border-right: 1px solid #e0e0e0;
+    }
+
+    .icon-link {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 60px;
+        text-decoration: none;
+        color: white;
+        font-size: 28px;
+        /* Ukuran ikon */
+    }
+
+    .icon-link:hover {
+        background: none;
+        /* Tidak ada efek hover */
+    }
+
+
+    .material-icons {
+        font-size: 28px;
+    }
+
+
+    .menu ul {
+        width: 100%;
+        padding: 0;
+        list-style: none;
+    }
+
+    .menu ul li {
+        margin: 20px 0;
+    }
+
+    .icon-link:hover {
+        background-color: #145d65;
+    }
+</style>
+
+<script>
+    document.querySelector('.grid-layout').addEventListener('click', function () {
+        document.querySelector('.file-grid').style.display = 'grid';
+        this.classList.add('active');
+        document.querySelector('.list-layout').classList.remove('active');
+    });
+
+    document.querySelector('.list-layout').addEventListener('click', function () {
+        document.querySelector('.file-grid').style.display = 'block';
+        this.classList.add('active');
+        document.querySelector('.grid-layout').classList.remove('active');
+    });
+</script>
 @endsection
