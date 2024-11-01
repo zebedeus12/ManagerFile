@@ -31,7 +31,7 @@ Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard
 Route::resource('employees', EmployeeController::class);
 
 //folder
-Route::get('/files', [FileController::class, 'index'])->name('files.index');
+Route::get('/file', [FileController::class, 'index'])->name('file.index');
 Route::get('/files/create', [FileController::class, 'create'])->name('files.create');
 Route::post('/files', [FileController::class, 'store'])->name('files.store');
 Route::get('/folder/form', [FolderController::class, 'showForm'])->name('folder.form');
