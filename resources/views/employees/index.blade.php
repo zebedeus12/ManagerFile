@@ -31,8 +31,7 @@
                         <span class="material-icons">folder</span>
                     </a>
                 </li>
-                <li><a href="{{ route('media.index') }}" class="icon-link"><span
-                            class="material-icons">perm_media</span></a></li>
+                <li><a href="{{ route('media.index') }}" class="icon-link"><span class="material-icons">perm_media</span></a></li>
             </ul>
         </nav>
     </div>

@@ -37,13 +37,13 @@
 
                 </li>
                 <li>
-                    <a href="#" class="icon-link">
-                        <span class="material-icons">folder</span>
+                    <a href="{{ route('file.index') }}" class="icon-link"><span class="material-icons">folder</span></a>
+                </li>
                     </a>
                 </li>
                 <li>
-                    <a href="#" class="icon-link">
-                        <span class="material-icons">perm_media</span>
+                    <a href="{{ route('media.index') }}" class="icon-link"><span
+                            class="material-icons">perm_media</span></a></li>
                     </a>
                 </li>
             </ul>
