@@ -24,11 +24,6 @@
     <div class="sidebar">
         <nav class="menu">
             <ul class="list-unstyled">
-<<<<<<< HEAD
-                <li><a href="{{ route('employees.index') }}" class="icon-link"><span class="material-icons">admin_panel_settings</span></a></li>
-                <li><a href="#" class="icon-link"><span class="material-icons">folder</span></a></li>
-                <li><a href="{{ route('media.index') }}" class="icon-link"><span class="material-icons">perm_media</span></a></li>
-=======
                 <li><a href="{{ route('employees.index') }}" class="icon-link"><span
                             class="material-icons">admin_panel_settings</span></a></li>
                 <li>
@@ -36,8 +31,8 @@
                         <span class="material-icons">folder</span>
                     </a>
                 </li>
-                <li><a href="#" class="icon-link"><span class="material-icons">perm_media</span></a></li>
->>>>>>> 5935abcbd3bb4c872ca9f72d8cfb41dd417357db
+                <li><a href="{{ route('media.index') }}" class="icon-link"><span
+                            class="material-icons">perm_media</span></a></li>
             </ul>
         </nav>
     </div>
