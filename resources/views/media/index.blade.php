@@ -24,34 +24,37 @@
         <nav class="menu">
             <ul class="list-unstyled">
                 <li><a href="{{ route('employees.index') }}" class="icon-link"><span class="material-icons">admin_panel_settings</span></a></li>
-                <li><a href="{{ route('media.index') }} class="icon-link"><span class="material-icons">perm_media</span></a></li>
-                <li><a href="#" class="icon-link"><span class="material-icons">perm_media</span></a></li>
+                <li><a href="#" class="icon-link"><span class="material-icons">folder</span></a></li>
+                <li><a href="{{ route('media.index') }}" class="icon-link"><span class="material-icons">perm_media</span></a></li>
             </ul>
         </nav>
     </div>
 
-<div class="dashboard-content">
-    <h2>Media Manager</h2>
-    <a href="{{ route('media.create') }}" class="btn btn-primary mb-4">Add Media</a>
-
-    <div class="file-grid mt-4">
-        @foreach($mediaItems as $media)
-            <div class="file-card">
-                <img src="{{ asset($media->path) }}" alt="{{ $media->name }}" class="mb-2" />
-                <p class="fw-bold">{{ $media->name }}</p>
-                <span class="text-muted">{{ $media->type }}</span>
-                <div class="d-flex mt-2">
-                    <a href="{{ route('media.edit', $media->id) }}" class="btn btn-warning btn-sm me-2">Edit</a>
-                    <form action="{{ route('media.destroy', $media->id) }}" method="POST">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                    </form>
+    <div class="employee-content p-4">
+        <div class="header d-flex align-items-center justify-content-between mb-4">
+            <h2>Media Manager</h2>
+            <a href="{{ route('media.create') }}" class="btn btn-primary">Add Media</a>
+        </div>
+    
+        <div class="file-grid mt-4">
+            @foreach($mediaItems as $media)
+                <div class="file-card">
+                    <img src="{{ asset($media->path) }}" alt="{{ $media->name }}" class="mb-2" />
+                    <p class="fw-bold">{{ $media->name }}</p>
+                    <span class="text-muted">{{ $media->type }}</span>
+                    <div class="d-flex mt-2">
+                        <a href="{{ route('media.edit', $media->id) }}" class="btn btn-warning btn-sm me-2">Edit</a>
+                        <form action="{{ route('media.destroy', $media->id) }}" method="POST">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                        </form>
+                    </div>
                 </div>
-            </div>
-        @endforeach
+            @endforeach
+        </div>
     </div>
-</div>
+    
 <style>
     .logo {
         width: 50px;
