@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Media;
+use Illuminate\Support\Facades\Storage;
+
 class MediaController extends Controller
 {
     /**
@@ -30,7 +32,7 @@ class MediaController extends Controller
     {
         $request->validate([
             'name' => 'required',
-            'file' => 'required|file|mimes:jpg,jpeg,png,mp3,mp4,pdf',
+            'file' => 'required|file|mimes:jpg,jpeg,png,mp3,mp4,pdf|max:20480',
             'type' => 'required',
         ]);
 
@@ -42,24 +44,16 @@ class MediaController extends Controller
             'type' => $request->type,
         ]);
 
-        session()->flash('success', 'Media berhasil ditambahkan.');
-        return redirect()->route('media.index');
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
+        return redirect()->route('media.index')->with('success', 'Media berhasil ditambahkan.');
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Media $media)
+    public function edit($id)
     {
-        return view('media.edit', compact('media'));
+        $media = Media::findOrFail($id);
+    return view('media.edit', compact('media'));
     }
 
     /**
@@ -74,6 +68,12 @@ class MediaController extends Controller
         ]);
 
         if ($request->hasFile('file')) {
+            // Hapus file lama
+            if ($media->path) {
+                Storage::delete($media->path);
+            }
+
+            // Simpan file baru
             $filePath = $request->file('file')->store('uploads/media');
             $media->path = $filePath;
         }
@@ -82,8 +82,7 @@ class MediaController extends Controller
         $media->type = $request->type;
         $media->save();
 
-        session()->flash('success', 'Media berhasil diupdate.');
-        return redirect()->route('media.index');
+        return redirect()->route('media.index')->with('success', 'Media berhasil diupdate.');
     }
 
     /**
@@ -91,8 +90,13 @@ class MediaController extends Controller
      */
     public function destroy(Media $media)
     {
+        // Hapus file dari storage
+        if ($media->path) {
+            Storage::delete($media->path);
+        }
+
         $media->delete();
-        session()->flash('success', 'Media berhasil dihapus.');
-        return redirect()->route('media.index');
+
+        return redirect()->route('media.index')->with('success', 'Media berhasil dihapus.');
     }
 }

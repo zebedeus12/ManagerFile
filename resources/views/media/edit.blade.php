@@ -29,16 +29,13 @@
         <nav class="menu">
             <ul class="list-unstyled">
                 <li>
-                <li>
                     <a href="{{ route('employees.index') }}" class="icon-link">
                         <span class="material-icons">admin_panel_settings</span>
                     </a>
                 </li>
-
-                </li>
                 <li>
-                    <a href="{{ route('file.index') }}" class="icon-link"><span class="material-icons">folder</span></a>
-                </li>
+                    <a href="{{ route('file.index') }}" class="icon-link">
+                        <span class="material-icons">folder</span>
                     </a>
                 </li>
                 <li>
@@ -46,14 +43,14 @@
                         <span class="material-icons">perm_media</span>
                     </a>
                 </li>
-            </ul>
+            </ul>            
         </nav>
     </div>
 
 <div class="container mt-4">
     <h2 class="mb-4">Edit Media</h2>
     
-    <form action="{{ route('media.update', ['media' => $media->id]) }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('media.update', ['medium' => $media->id]) }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT')
         <div class="mb-3">
