@@ -24,9 +24,20 @@
     <div class="sidebar">
         <nav class="menu">
             <ul class="list-unstyled">
+<<<<<<< HEAD
                 <li><a href="{{ route('employees.index') }}" class="icon-link"><span class="material-icons">admin_panel_settings</span></a></li>
                 <li><a href="#" class="icon-link"><span class="material-icons">folder</span></a></li>
                 <li><a href="{{ route('media.index') }}" class="icon-link"><span class="material-icons">perm_media</span></a></li>
+=======
+                <li><a href="{{ route('employees.index') }}" class="icon-link"><span
+                            class="material-icons">admin_panel_settings</span></a></li>
+                <li>
+                    <a href="{{ route('folder.form') }}" class="icon-link">
+                        <span class="material-icons">folder</span>
+                    </a>
+                </li>
+                <li><a href="#" class="icon-link"><span class="material-icons">perm_media</span></a></li>
+>>>>>>> 5935abcbd3bb4c872ca9f72d8cfb41dd417357db
             </ul>
         </nav>
     </div>
@@ -93,6 +104,7 @@
         align-items: center;
         padding-top: 20px;
         box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+        border-right: 1px solid #e0e0e0;
     }
 
     .icon-link {
@@ -101,8 +113,28 @@
         align-items: center;
         width: 100%;
         height: 60px;
+        text-decoration: none;
         color: white;
         font-size: 28px;
+    }
+
+    .icon-link:hover {
+        background: none;
+        /* Tidak ada efek hover */
+    }
+
+    .material-icons {
+        font-size: 28px;
+    }
+
+    .menu ul {
+        width: 100%;
+        padding: 0;
+        list-style: none;
+    }
+
+    .menu ul li {
+        margin: 20px 0;
     }
 
     .icon-link:hover {
