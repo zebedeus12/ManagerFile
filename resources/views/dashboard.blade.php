@@ -38,7 +38,7 @@
 
                 </li>
                 <li>
-                    <a href="{{ route('folder.form') }}" class="icon-link">
+                    <a href="{{ route('file.index') }}" class=" icon-link">
                         <span class="material-icons">folder</span>
                     </a>
                 </li>

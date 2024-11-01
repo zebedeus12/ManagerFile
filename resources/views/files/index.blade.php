@@ -1,6 +1,6 @@
 @extends('dashboard')
 
-@section('title', 'Employees')
+@section('title', 'File Manager')
 
 @section('content')
 <nav class="navbar navbar-expand-lg bg-light">
@@ -26,56 +26,39 @@
             <ul class="list-unstyled">
                 <li><a href="{{ route('employees.index') }}" class="icon-link"><span
                             class="material-icons">admin_panel_settings</span></a></li>
-                <li>
-                    <a href="{{ route('file.index') }}" class="icon-link">
-                        <span class="material-icons">folder</span>
-                    </a>
+                <li><a href="{{ route('file.index') }}" class="icon-link"><span class="material-icons">folder</span></a>
                 </li>
                 <li><a href="#" class="icon-link"><span class="material-icons">perm_media</span></a></li>
             </ul>
         </nav>
     </div>
-
-    <div class="employee-content p-4">
-        <div class="header d-flex align-items-center justify-content-between mb-4">
-            <h2>Employee List</h2>
-            <a href="{{ route('employees.create') }}" class="btn btn-primary">Add Employee</a>
+    <div class="container">
+        <div class="header">
+            <h1>File</h1>
+            <div class="buttons">
+                <button class="add-file" onclick="location.href='{{ route('files.create') }}'">Add File</button>
+                <button class="add-folder" onclick="location.href='{{ route('folder.form') }}'">Add Folder</button>
+            </div>
         </div>
-
-        @if (session('success'))
-            <div class="alert alert-success">{{ session('success') }}</div>
-        @endif
-
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($employees as $employee)
-                    <tr>
-                        <td>{{ $employee->name }}</td>
-                        <td>{{ $employee->email }}</td>
-                        <td>
-                            <a href="{{ route('employees.edit', $employee) }}" class="btn btn-warning btn-sm">Edit</a>
-                            <form action="{{ route('employees.destroy', $employee) }}" method="POST"
-                                style="display:inline;">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-danger btn-sm"
-                                    onclick="return confirm('Are you sure?')">Delete</button>
-                            </form>
-                        </td>
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
+        <p>Terdapat {{ $folders->count() }} Folders, {{ $files->count() }} File,
+            {{ $files->whereIn('type', ['jpg', 'png', 'gif'])->count() }} Media.
+        </p>
+        <div class="grid">
+            @foreach ($folders as $folder)
+                <div class="item">
+                    <span class="material-icons">folder</span>
+                    <span>{{ $folder->name }}</span>
+                </div>
+            @endforeach
+            @foreach ($files as $file)
+                <div class="item">
+                    <img src="{{ asset('icons/' . $file->type . '.png') }}" alt="{{ $file->type }} icon">
+                    <span>{{ $file->name }}</span>
+                </div>
+            @endforeach
+        </div>
     </div>
 </div>
-
 <style>
     .logo {
         width: 50px;
@@ -133,17 +116,6 @@
 
     .icon-link:hover {
         background-color: #145d65;
-    }
-
-    .employee-content {
-        flex: 1;
-        padding: 20px;
-        overflow-y: auto;
-    }
-
-    .table th,
-    .table td {
-        vertical-align: middle;
     }
 </style>
 @endsection

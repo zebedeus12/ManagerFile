@@ -6,6 +6,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\MediaController;
 use App\Http\Controllers\FolderController;
+use App\Http\Controllers\FileController;
 
 
 Route::get('/', function () {
@@ -30,9 +31,13 @@ Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard
 Route::resource('employees', EmployeeController::class);
 
 //folder
-Route::resource('folders', FolderController::class);
+Route::get('/files', [FileController::class, 'index'])->name('files.index');
+Route::get('/files/create', [FileController::class, 'create'])->name('files.create');
+Route::post('/files', [FileController::class, 'store'])->name('files.store');
 Route::get('/folder/form', [FolderController::class, 'showForm'])->name('folder.form');
 Route::post('/folder/store', [FolderController::class, 'store'])->name('folder.store');
+
+
 
 //media
 Route::resource('media', MediaController::class);
