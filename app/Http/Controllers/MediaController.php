@@ -29,9 +29,9 @@ class MediaController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'file' => 'required|mimes:jpeg,png,jpg,gif,mp3,mp4,mkv|max:20480',
-            'name' => 'required|string',
-            'type' => 'required|string',
+            'name' => 'required',
+            'file' => 'required|file|mimes:jpg,jpeg,png,mp3,mp4,pdf',
+            'type' => 'required',
         ]);
 
         $filePath = $request->file('file')->store('uploads/media');
@@ -42,6 +42,7 @@ class MediaController extends Controller
             'type' => $request->type,
         ]);
 
+        session()->flash('success', 'Media berhasil ditambahkan.');
         return redirect()->route('media.index');
     }
 
@@ -81,6 +82,7 @@ class MediaController extends Controller
         $media->type = $request->type;
         $media->save();
 
+        session()->flash('success', 'Media berhasil diupdate.');
         return redirect()->route('media.index');
     }
 
@@ -90,6 +92,7 @@ class MediaController extends Controller
     public function destroy(Media $media)
     {
         $media->delete();
+        session()->flash('success', 'Media berhasil dihapus.');
         return redirect()->route('media.index');
     }
 }
