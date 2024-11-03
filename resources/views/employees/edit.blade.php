@@ -39,122 +39,138 @@
                 <li>
                     <a href="{{ route('file.index') }}" class="icon-link"><span class="material-icons">folder</span></a>
                 </li>
-                    </a>
+                </a>
                 </li>
                 <li>
-                    <a href="{{ route('media.index') }}" class="icon-link"><span class="material-icons">perm_media</span></a></li>
-                    </a>
+                    <a href="{{ route('media.index') }}" class="icon-link"><span
+                            class="material-icons">perm_media</span></a>
+                </li>
+                </a>
                 </li>
             </ul>
         </nav>
     </div>
 
     <!-- Konten Dashboard -->
-<div class="container mt-4">
-    <h2 class="mb-4">Edit Employee</h2>
+    <div class="container mt-4">
+        <h2 class="mb-4">Edit Employee</h2>
 
-    <form action="{{ route('employees.update', $employee) }}" method="POST">
-        @csrf
-        @method('PUT')
-        <div class="mb-3">
-            <label for="name" class="form-label">Name</label>
-            <input type="text" name="name" class="form-control" value="{{ $employee->name }}" required>
-        </div>
-        <div class="mb-3">
-            <label for="email" class="form-label">Email</label>
-            <input type="email" name="email" class="form-control" value="{{ $employee->email }}" required>
-        </div>
-        <button type="submit" class="btn btn-success">Update</button>
-        <a href="{{ route('employees.index') }}" class="btn btn-secondary">Cancel</a>
-    </form>
-</div>
+        <form action="{{ route('employees.update', $employee) }}" method="POST">
+            @csrf
+            @method('PUT')
+            <div class="mb-3">
+                <label for="name" class="form-label">Name</label>
+                <input type="text" name="name" class="form-control" value="{{ $employee->name }}" required>
+            </div>
+            <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" name="email" class="form-control" value="{{ $employee->email }}" required>
+            </div>
+            <div class="mb-3">
+                <label for="role" class="form-label">Role</label>
+                <select name="role" class="form-control" required>
+                    <option value="user" {{ $employee->role == 'user' ? 'selected' : '' }}>User</option>
+                    <option value="admin" {{ $employee->role == 'admin' ? 'selected' : '' }}>Admin</option>
+                    <option value="super_admin" {{ $employee->role == 'super_admin' ? 'selected' : '' }}>Super Admin
+                    </option>
+                </select>
+            </div>
 
-<!-- Style Khusus -->
-<style>
-    <style>* {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-    }
+            <div class="mb-3">
+                <label for="phone" class="form-label">Phone</label>
+                <input type="text" name="phone" class="form-control" value="{{ $employee->phone }}">
+            </div>
+            <button type="submit" class="btn btn-success">Update</button>
+            <a href="{{ route('employees.index') }}" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
 
-    html,
-    body {
-        height: 100%;
-        overflow: hidden;
-    }
+    <!-- Style Khusus -->
+    <style>
+        <style>* {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    .main-layout {
-        display: flex;
-        width: 100vw;
-        height: 100vh;
-    }
+        html,
+        body {
+            height: 100%;
+            overflow: hidden;
+        }
 
-    /* Sidebar */
-    .sidebar {
-        width: 80px;
-        /* Lebar sidebar ramping */
-        height: 100vh;
-        /* Membuat sidebar penuh vertikal */
-        background: linear-gradient(180deg, #188A98, #5CCED1);
-        /* Gradasi lembut */
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        padding-top: 20px;
-        box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-        /* Tambahan shadow agar terlihat elegan */
-        border-right: 1px solid #e0e0e0;
-    }
+        .main-layout {
+            display: flex;
+            width: 100vw;
+            height: 100vh;
+        }
 
-    .icon-link {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 100%;
-        height: 60px;
-        text-decoration: none;
-        color: white;
-        font-size: 28px;
-        /* Ukuran ikon */
-    }
+        /* Sidebar */
+        .sidebar {
+            width: 80px;
+            /* Lebar sidebar ramping */
+            height: 100vh;
+            /* Membuat sidebar penuh vertikal */
+            background: linear-gradient(180deg, #188A98, #5CCED1);
+            /* Gradasi lembut */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 20px;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+            /* Tambahan shadow agar terlihat elegan */
+            border-right: 1px solid #e0e0e0;
+        }
 
-    .icon-link:hover {
-        background: none;
-        /* Tidak ada efek hover */
-    }
+        .icon-link {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 60px;
+            text-decoration: none;
+            color: white;
+            font-size: 28px;
+            /* Ukuran ikon */
+        }
+
+        .icon-link:hover {
+            background: none;
+            /* Tidak ada efek hover */
+        }
 
 
-    .material-icons {
-        font-size: 28px;
-    }
+        .material-icons {
+            font-size: 28px;
+        }
 
 
-    .menu ul {
-        width: 100%;
-        padding: 0;
-        list-style: none;
-    }
+        .menu ul {
+            width: 100%;
+            padding: 0;
+            list-style: none;
+        }
 
-    .menu ul li {
-        margin: 20px 0;
-    }
+        .menu ul li {
+            margin: 20px 0;
+        }
 
-    .icon-link:hover {
-        background-color: #145d65;
-    }
-</style>
+        .icon-link:hover {
+            background-color: #145d65;
+        }
+    </style>
 
-<script>
-    document.querySelector('.grid-layout').addEventListener('click', function () {
-        document.querySelector('.file-grid').style.display = 'grid';
-        this.classList.add('active');
-        document.querySelector('.list-layout').classList.remove('active');
-    });
+    <script>
+        document.querySelector('.grid-layout').addEventListener('click', function () {
+            document.querySelector('.file-grid').style.display = 'grid';
+            this.classList.add('active');
+            document.querySelector('.list-layout').classList.remove('active');
+        });
 
-    document.querySelector('.list-layout').addEventListener('click', function () {
-        document.querySelector('.file-grid').style.display = 'block';
-        this.classList.add('active');
-        document.querySelector('.grid-layout').classList.remove('active');
-    });
-</script>
-@endsection
+        document.querySelector('.list-layout').addEventListener('click', function () {
+            document.querySelector('.file-grid').style.display = 'block';
+            this.classList.add('active');
+            document.querySelector('.grid-layout').classList.remove('active');
+        });
+    </script>
+    @endsection
