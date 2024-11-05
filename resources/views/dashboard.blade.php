@@ -56,7 +56,6 @@
         <div class="header d-flex align-items-center justify-content-between">
             <h2 class="mb-0">Dashboard</h2>
             <div class="tools d-flex align-items-center">
-                <button class="add-folder-btn btn btn-outline-secondary me-3">Add Folder</button>
                 <div class="layout-tools d-flex align-items-center">
                     <button class="btn btn-outline-secondary grid-layout active me-2" title="Grid Layout">
                         <span class="material-icons">grid_view</span>
