@@ -5,11 +5,9 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Validation\ValidationException;
 
 class LoginController extends Controller
 {
-    protected $redirectTo = '/dashboard';
     public function showLoginForm()
     {
         return view('auth.login');
@@ -18,17 +16,17 @@ class LoginController extends Controller
     public function login(Request $request)
     {
         $credentials = $request->validate([
-            'email' => ['required', 'email'],
-            'password' => ['required'],
+            'login' => 'required|string',
+            'password' => 'required|string',
         ]);
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-            return redirect()->intended($this->redirectTo);
+            return redirect()->intended('dashboard');
         }
 
-        throw ValidationException::withMessages([
-            'email' => __('auth.failed'),
+        return back()->withErrors([
+            'login' => 'Login atau password salah.',
         ]);
     }
 
@@ -37,7 +35,6 @@ class LoginController extends Controller
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-
         return redirect('/login');
     }
 }
