@@ -41,3 +41,7 @@ Route::post('/folder/store', [FolderController::class, 'store'])->name('folder.s
 
 //media
 Route::resource('media', MediaController::class);
+Route::delete('/media/{media}', [MediaController::class, 'destroy'])->name('media.destroy');
+Route::get('/media/{media}/edit', [MediaController::class, 'edit'])->name('media.edit');
+
+

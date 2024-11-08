@@ -9,5 +9,5 @@ class Media extends Model
 {
     protected $connection = 'mysql_second';
     use HasFactory;
-    protected $fillable = ['name', 'path', 'type'];
+    protected $fillable = ['name', 'path'];
 }

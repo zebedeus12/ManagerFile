@@ -33,17 +33,17 @@ class MediaController extends Controller
         $request->validate([
             'name' => 'required',
             'file' => 'required|file|mimes:jpg,jpeg,png,mp3,mp4,pdf|max:20480',
-            'type' => 'required',
+            'type' => 'required|string',
         ]);
-
+    
         $filePath = $request->file('file')->store('uploads/media');
-
+    
         Media::create([
             'name' => $request->name,
             'path' => $filePath,
             'type' => $request->type,
         ]);
-
+    
         return redirect()->route('media.index')->with('success', 'Media berhasil ditambahkan.');
     }
 
@@ -61,27 +61,26 @@ class MediaController extends Controller
      */
     public function update(Request $request, Media $media)
     {
+        $media = Media::findOrFail($media);
         $request->validate([
             'file' => 'mimes:jpeg,png,jpg,gif,mp3,mp4,mkv|max:20480',
             'name' => 'required|string',
             'type' => 'required|string',
         ]);
-
+    
         if ($request->hasFile('file')) {
-            // Hapus file lama
             if ($media->path) {
                 Storage::delete($media->path);
             }
-
-            // Simpan file baru
+    
             $filePath = $request->file('file')->store('uploads/media');
             $media->path = $filePath;
         }
-
+    
         $media->name = $request->name;
         $media->type = $request->type;
         $media->save();
-
+    
         return redirect()->route('media.index')->with('success', 'Media berhasil diupdate.');
     }
 
@@ -90,13 +89,9 @@ class MediaController extends Controller
      */
     public function destroy(Media $media)
     {
-        // Hapus file dari storage
-        if ($media->path) {
-            Storage::delete($media->path);
-        }
-
+        $media = Media::findOrFail($media); // Temukan media berdasarkan ID
         $media->delete();
-
-        return redirect()->route('media.index')->with('success', 'Media berhasil dihapus.');
+    
+        return response()->json(['success' => 'Media berhasil dihapus']);
     }
 }

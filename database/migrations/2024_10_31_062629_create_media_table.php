@@ -11,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::connection('mysql_second')->create('media', function (Blueprint $table) {
+        Schema::create('media', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->string('path');
-            $table->string('type'); // 'image', 'audio', 'video'
+            $table->enum('type', ['image', 'audio', 'video']);
             $table->timestamps();
         });
     }
@@ -25,6 +25,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::connection('mysql_second')->dropIfExists('media');
+        Schema::connection('mysql_second')->table('users', function (Blueprint $table) {
+            $table->dropColumn('role');
+        });
     }
 };
