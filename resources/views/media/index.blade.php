@@ -11,7 +11,8 @@
         </div>
         <div>
             <span class="fw-bold">Nama User</span>
-            <button class="btn btn-link dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"></button>
+            <button class="btn btn-link dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                aria-expanded="false"></button>
             <ul class="dropdown-menu dropdown-menu-end">
                 <li><a class="dropdown-item" href="#">Logout</a></li>
             </ul>
@@ -23,9 +24,12 @@
     <div class="sidebar">
         <nav class="menu">
             <ul class="list-unstyled">
-                <li><a href="{{ route('employees.index') }}" class="icon-link"><span class="material-icons">admin_panel_settings</span></a></li>
-                <li><a href="{{ route('file.index') }}" class="icon-link"><span class="material-icons">folder</span></a></li>
-                <li><a href="{{ route('media.index') }}" class="icon-link"><span class="material-icons">perm_media</span></a></li>
+                <li><a href="{{ route('employees.index') }}" class="icon-link"><span
+                            class="material-icons">admin_panel_settings</span></a></li>
+                <li><a href="{{ route('file.index') }}" class="icon-link"><span class="material-icons">folder</span></a>
+                </li>
+                <li><a href="{{ route('media.index') }}" class="icon-link"><span
+                            class="material-icons">perm_media</span></a></li>
             </ul>
         </nav>
     </div>
@@ -49,7 +53,8 @@
                         <a href="{{ route('media.edit', $media->id) }}" class="btn btn-warning btn-sm me-2">Edit</a>
 
                         <!-- Tombol Delete dengan AJAX -->
-                        <button type="button" class="delete-button btn btn-danger btn-sm" data-url="{{ route('media.destroy', $media->id) }}">Delete</button>
+                        <button type="button" class="delete-button btn btn-danger btn-sm"
+                            data-url="{{ route('media.destroy', ['media' => $media->id]) }}">Delete</button>
                     </div>
                 </div>
             @endforeach
@@ -79,11 +84,11 @@
                 data: {
                     "_token": "{{ csrf_token() }}"
                 },
-                success: function(response) {
+                success: function (response) {
                     card.remove(); // Menghapus elemen dari tampilan setelah berhasil dihapus
                     alert('Media berhasil dihapus');
                 },
-                error: function(xhr) {
+                error: function (xhr) {
                     console.error('Error:', xhr);
                     alert('Gagal menghapus media');
                 }

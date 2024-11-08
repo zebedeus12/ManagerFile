@@ -43,13 +43,13 @@
                         <span class="material-icons">perm_media</span>
                     </a>
                 </li>
-            </ul>            
+            </ul>
         </nav>
     </div>
 
     <div class="container mt-4">
         <h2 class="mb-4">Edit Media</h2>
-    
+
         <form action="{{ route('media.update', ['medium' => $media->id]) }}" method="POST">
             @csrf
             @method('PUT')
@@ -57,97 +57,99 @@
                 <label for="name" class="form-label">Media Name</label>
                 <input type="text" name="name" class="form-control" value="{{ $media->name }}" required>
             </div>
-            
+
             <button type="submit" class="btn btn-primary">Update Media</button>
         </form>
-    
-        <form action="{{ route('media.destroy', ['medium' => $media->id]) }}" method="POST" class="mt-2">
+
+        <form action="{{ route('media.destroy', ['media' => $media->id]) }}" method="POST" class="mt-2">
             @csrf
             @method('DELETE')
-            <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this media?')">Delete Media</button>
+            <button type="submit" class="btn btn-danger"
+                onclick="return confirm('Are you sure you want to delete this media?')">Delete Media</button>
         </form>
-</div>
 
-<!-- Style Khusus -->
-<style>
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-    }
+    </div>
 
-    html,
-    body {
-        height: 100%;
-        overflow: hidden;
-    }
+    <!-- Style Khusus -->
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    .main-layout {
-        display: flex;
-        width: 100vw;
-        height: 100vh;
-    }
+        html,
+        body {
+            height: 100%;
+            overflow: hidden;
+        }
 
-    /* Sidebar */
-    .sidebar {
-        width: 80px;
-        /* Lebar sidebar ramping */
-        height: 100vh;
-        /* Membuat sidebar penuh vertikal */
-        background: linear-gradient(180deg, #188A98, #5CCED1);
-        /* Gradasi lembut */
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        padding-top: 20px;
-        box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-        /* Tambahan shadow agar terlihat elegan */
-        border-right: 1px solid #e0e0e0;
-    }
+        .main-layout {
+            display: flex;
+            width: 100vw;
+            height: 100vh;
+        }
 
-    .icon-link {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 100%;
-        height: 60px;
-        text-decoration: none;
-        color: white;
-        font-size: 28px;
-        /* Ukuran ikon */
-    }
+        /* Sidebar */
+        .sidebar {
+            width: 80px;
+            /* Lebar sidebar ramping */
+            height: 100vh;
+            /* Membuat sidebar penuh vertikal */
+            background: linear-gradient(180deg, #188A98, #5CCED1);
+            /* Gradasi lembut */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 20px;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+            /* Tambahan shadow agar terlihat elegan */
+            border-right: 1px solid #e0e0e0;
+        }
 
-    .icon-link:hover {
-        background-color: #145d65;
-    }
+        .icon-link {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 60px;
+            text-decoration: none;
+            color: white;
+            font-size: 28px;
+            /* Ukuran ikon */
+        }
 
-    .material-icons {
-        font-size: 28px;
-    }
+        .icon-link:hover {
+            background-color: #145d65;
+        }
 
-    .menu ul {
-        width: 100%;
-        padding: 0;
-        list-style: none;
-    }
+        .material-icons {
+            font-size: 28px;
+        }
 
-    .menu ul li {
-        margin: 20px 0;
-    }
-</style>
+        .menu ul {
+            width: 100%;
+            padding: 0;
+            list-style: none;
+        }
+
+        .menu ul li {
+            margin: 20px 0;
+        }
+    </style>
 
 
-<script>
-    document.querySelector('.grid-layout').addEventListener('click', function () {
-        document.querySelector('.file-grid').style.display = 'grid';
-        this.classList.add('active');
-        document.querySelector('.list-layout').classList.remove('active');
-    });
+    <script>
+        document.querySelector('.grid-layout').addEventListener('click', function () {
+            document.querySelector('.file-grid').style.display = 'grid';
+            this.classList.add('active');
+            document.querySelector('.list-layout').classList.remove('active');
+        });
 
-    document.querySelector('.list-layout').addEventListener('click', function () {
-        document.querySelector('.file-grid').style.display = 'block';
-        this.classList.add('active');
-        document.querySelector('.grid-layout').classList.remove('active');
-    });
-</script>
-@endsection
+        document.querySelector('.list-layout').addEventListener('click', function () {
+            document.querySelector('.file-grid').style.display = 'block';
+            this.classList.add('active');
+            document.querySelector('.grid-layout').classList.remove('active');
+        });
+    </script>
+    @endsection

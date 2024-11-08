@@ -25,8 +25,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::connection('mysql_second')->table('users', function (Blueprint $table) {
-            $table->dropColumn('role');
+        Schema::table('users', function (Blueprint $table) {
+            $table->enum('role', ['user', 'admin', 'super_admin'])->default('user')->after('password');
         });
+        
     }
 };
