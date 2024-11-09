@@ -18,6 +18,17 @@ class MediaController extends Controller
     }
 
     /**
+     * Search media by name.
+     */
+    public function search(Request $request)
+    {
+        $query = $request->input('query');
+        $mediaItems = Media::where('name', 'LIKE', "%$query%")->get();
+        
+        return view('media.index', compact('mediaItems'));
+    }
+
+    /**
      * Show the form for creating a new resource.
      */
     public function create()
@@ -53,7 +64,7 @@ class MediaController extends Controller
     public function edit($id)
     {
         $media = Media::findOrFail($id);
-    return view('media.edit', compact('media'));
+        return view('media.edit', compact('media'));
     }
 
     /**
@@ -61,7 +72,7 @@ class MediaController extends Controller
      */
     public function update(Request $request, Media $media)
     {
-        $media = Media::findOrFail($media);
+        $media = Media::findOrFail($media->id);
         $request->validate([
             'file' => 'mimes:jpeg,png,jpg,gif,mp3,mp4,mkv|max:20480',
             'name' => 'required|string',
@@ -89,7 +100,12 @@ class MediaController extends Controller
      */
     public function destroy(Media $media)
     {
-        $media = Media::findOrFail($media); // Temukan media berdasarkan ID
+        $media = Media::findOrFail($media->id);
+        
+        if ($media->path) {
+            Storage::delete($media->path);
+        }
+
         $media->delete();
     
         return response()->json(['success' => 'Media berhasil dihapus']);
