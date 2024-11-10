@@ -12,11 +12,6 @@
         </div>
         <div>
             <span class="fw-bold">Nama User</span>
-            <button class="btn btn-link dropdown-toggle" type="button" data-bs-toggle="dropdown"
-                aria-expanded="false"></button>
-            <ul class="dropdown-menu dropdown-menu-end">
-                <li><a class="dropdown-item" href="#">Logout</a></li>
-            </ul>
         </div>
     </div>
 </nav>
@@ -36,6 +31,15 @@
                 <li>
                     <a href="{{ route('media.index') }}" class="icon-link"><span
                             class="material-icons">perm_media</span></a>
+                </li>
+                <li>
+                    <!-- Tambahkan Logout Button di Sidebar -->
+                    <form action="{{ route('logout') }}" method="POST" class="d-flex justify-content-center mt-3">
+                        @csrf
+                        <button type="submit" class="btn btn-link icon-link" title="Logout">
+                            <span class="material-icons">logout</span>
+                        </button>
+                    </form>
                 </li>
             </ul>
         </nav>
