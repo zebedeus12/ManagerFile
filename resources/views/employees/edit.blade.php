@@ -11,7 +11,13 @@
             <a class="navbar-brand fw-bold" href="#">BBSPJIS File Manager</a>
         </div>
         <div>
-            <span class="fw-bold">Nama User</span>
+            @if(Auth::check())
+                <span class="fw-bold">{{ Auth::user()->nama_user }}</span>
+                <span class="text-muted d-block margin-left">{{ Auth::user()->role }}</span>
+            @else
+                <span class="fw-bold">Guest</span>
+            @endif
+
         </div>
     </div>
 </nav>
