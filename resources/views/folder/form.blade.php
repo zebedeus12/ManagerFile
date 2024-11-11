@@ -1,4 +1,4 @@
-@extends('dashboard')
+@extends('layouts.dashboard')
 
 @section('title', 'Tambah Folder')
 
@@ -10,12 +10,13 @@
             <a class="navbar-brand fw-bold" href="{{ route('dashboard') }}">BBSPJIS File Manager</a>
         </div>
         <div>
-            <span class="fw-bold">Nama User</span>
-            <button class="btn btn-link dropdown-toggle" type="button" data-bs-toggle="dropdown"
-                aria-expanded="false"></button>
-            <ul class="dropdown-menu dropdown-menu-end">
-                <li><a class="dropdown-item" href="#">Logout</a></li>
-            </ul>
+            @if(Auth::check())
+                <span class="fw-bold">{{ Auth::user()->nama_user }}</span>
+                <span class="text-muted d-block margin-left">{{ Auth::user()->role }}</span>
+            @else
+                <span class="fw-bold">Guest</span>
+            @endif
+
         </div>
     </div>
 </nav>
@@ -28,7 +29,17 @@
                             class="material-icons">admin_panel_settings</span></a></li>
                 <li><a href="{{ route('file.index') }}" class="icon-link"><span class="material-icons">folder</span></a>
                 </li>
-                <li><a href="{{ route('media.index') }}" class="icon-link"><span class="material-icons">perm_media</span></a></li>
+                <li><a href="{{ route('media.index') }}" class="icon-link"><span
+                            class="material-icons">perm_media</span></a></li>
+                <li>
+                    <!-- Tambahkan Logout Button di Sidebar -->
+                    <form action="{{ route('logout') }}" method="POST" class="d-flex justify-content-center mt-3">
+                        @csrf
+                        <button type="submit" class="btn btn-link icon-link" title="Logout">
+                            <span class="material-icons">logout</span>
+                        </button>
+                    </form>
+                </li>
             </ul>
         </nav>
     </div>
