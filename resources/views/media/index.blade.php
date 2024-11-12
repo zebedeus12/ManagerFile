@@ -16,7 +16,6 @@
             @else
                 <span class="fw-bold">Guest</span>
             @endif
-
         </div>
     </div>
 </nav>
@@ -25,14 +24,10 @@
     <div class="sidebar">
         <nav class="menu">
             <ul class="list-unstyled">
-                <li><a href="{{ route('employees.index') }}" class="icon-link"><span
-                            class="material-icons">admin_panel_settings</span></a></li>
-                <li><a href="{{ route('file.index') }}" class="icon-link"><span class="material-icons">folder</span></a>
-                </li>
-                <li><a href="{{ route('media.index') }}" class="icon-link"><span
-                            class="material-icons">perm_media</span></a></li>
+                <li><a href="{{ route('employees.index') }}" class="icon-link"><span class="material-icons">admin_panel_settings</span></a></li>
+                <li><a href="{{ route('file.index') }}" class="icon-link"><span class="material-icons">folder</span></a></li>
+                <li><a href="{{ route('media.index') }}" class="icon-link"><span class="material-icons">perm_media</span></a></li>
                 <li>
-                    <!-- Tambahkan Logout Button di Sidebar -->
                     <form action="{{ route('logout') }}" method="POST" class="d-flex justify-content-center mt-3">
                         @csrf
                         <button type="submit" class="btn btn-link icon-link" title="Logout">
@@ -52,43 +47,33 @@
                 <button type="submit" class="btn btn-outline-primary">Search</button>
             </form>
             <a href="{{ route('media.create') }}" class="btn btn-primary">Add Folder</a>
-            <a href="{{ route('media.create') }}" class="btn btn-primary">Add Media</a>
+            <a href="{{ route('media.create') }}" class="btn btn-primary">Create Media</a>
         </div>
 
         <!-- Filter and View Options -->
         <div class="filter-options mb-3 d-flex align-items-center justify-content-between">
             <div class="filter-buttons d-flex align-items-center">
-                <button class="btn btn-filter" data-filter="all">All items</button>
+                <button class="btn btn-filter active" data-filter="all">All items</button>
                 <button class="btn btn-filter" data-filter="photo">Photo</button>
                 <button class="btn btn-filter" data-filter="video">Video</button>
             </div>
 
-
             <div class="zoom-slider-container d-flex align-items-center">
-                <!-- Zoom Out Button -->
                 <button class="zoom-slider-button" id="zoom-out">
                     <span class="zoom-icon">
-                        <svg viewBox="0 0 24 24" fill="none" width="24" height="24" aria-hidden="true">
-                            <path fill-rule="evenodd" clip-rule="evenodd"
-                                d="M11.75 4C6.535 4 4 6.535 4 11.75s2.535 7.75 7.75 7.75 7.75-2.535 7.75-7.75S16.965 4 11.75 4Zm0 14c-4.322 0-6.25-1.927-6.25-6.25 0-4.322 1.928-6.25 6.25-6.25 4.323 0 6.25 1.928 6.25 6.25 0 4.323-1.927 6.25-6.25 6.25Z"
-                                fill="currentColor"></path>
-                            <path d="M9 11h5.5v1.5H9V11Z" fill="currentColor"></path>
+                        <!-- SVG for zoom out -->
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M20 12H4" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>
                     </span>
                 </button>
-
-                <!-- Zoom Slider -->
-                <input aria-label="Photo Zoom Slider" id="zoom-slider" class="zoom-slider" type="range" min="100"
-                    max="200" value="100">
-
-                <!-- Zoom In Button -->
+                <input aria-label="Photo Zoom Slider" id="zoom-slider" class="zoom-slider" type="range" min="100" max="200" value="100">
                 <button class="zoom-slider-button" id="zoom-in">
                     <span class="zoom-icon">
-                        <svg viewBox="0 0 24 24" fill="none" width="24" height="24" aria-hidden="true">
-                            <path
-                                d="M11.75 4C6.535 4 4 6.535 4 11.75s2.535 7.75 7.75 7.75 7.75-2.535 7.75-7.75S16.965 4 11.75 4Zm0 14c-4.322 0-6.25-1.927-6.25-6.25 0-4.322 1.928-6.25 6.25-6.25 4.323 0 6.25 1.928 6.25 6.25 0 4.323-1.927 6.25-6.25 6.25Z"
-                                fill="currentColor"></path>
-                            <path d="M12.5 9H11v2H9v1.5h2v2h1.5v-2h2V11h-2V9Z" fill="currentColor"></path>
+                        <!-- SVG for zoom in -->
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 5V19" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M5 12H19" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>
                     </span>
                 </button>
@@ -98,7 +83,7 @@
         <!-- Media Grid Display -->
         <div class="file-grid mt-4" id="media-container">
             @foreach($mediaItems as $media)
-                <div class="file-card">
+                <div class="file-card" data-type="{{ $media->type }}">
                     <img src="{{ asset('storage/' . $media->path) }}" alt="{{ $media->name }}" class="media-preview mb-2" />
                     <div class="file-info">
                         <p class="fw-bold">{{ $media->name }}</p>
@@ -123,6 +108,23 @@
 
 <script>
     $(document).ready(function () {
+        // Filter media items
+        $('.btn-filter').on('click', function () {
+            const filter = $(this).data('filter');
+            $('.btn-filter').removeClass('active');
+            $(this).addClass('active');
+
+            $('.file-card').each(function () {
+                const type = $(this).data('type');
+                if (filter === 'all' || type === filter) {
+                    $(this).show();
+                } else {
+                    $(this).hide();
+                }
+            });
+        });
+
+        // Zoom and other existing code
         const zoomSlider = $('#zoom-slider');
         const mediaContainer = $('#media-container');
 
@@ -130,22 +132,21 @@
         zoomSlider.on('input', function () {
             const zoomLevel = $(this).val() / 100;
             mediaContainer.find('.file-card').css({
-                'transform': `scale(${zoomLevel})`
+                'transform': `scale(${zoomLevel})`,
+                'transition': 'transform 0.3s ease' // Smooth transition
             });
         });
 
-        // Zoom out button
         $('#zoom-out').on('click', function () {
             let currentValue = parseInt(zoomSlider.val());
-            if (currentValue > 100) {
+            if (currentValue > zoomSlider.attr('min')) {
                 zoomSlider.val(currentValue - 10).trigger('input');
             }
         });
 
-        // Zoom in button
         $('#zoom-in').on('click', function () {
             let currentValue = parseInt(zoomSlider.val());
-            if (currentValue < 200) {
+            if (currentValue < zoomSlider.attr('max')) {
                 zoomSlider.val(currentValue + 10).trigger('input');
             }
         });
@@ -240,26 +241,22 @@
 
     .file-card {
         background-color: #fff;
-        border: 1px solid #ddd;
-        border-radius: 10px;
+        border-radius: 5px;
         padding: 10px;
-        width: 200px;
+        width: 150px;
         text-align: center;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease;
     }
 
-    .media-preview {
+    .file-card img {
         width: 100%;
-        border-radius: 8px;
-        max-height: 150px;
-        object-fit: cover;
+        height: auto;
+        border-radius: 5px;
     }
 
-    .file-actions {
+    .file-actions .btn {
         margin-top: 10px;
-    }
-
-    .delete-button {
-        background-color: #e74c3c;
     }
 </style>
 @endsection
