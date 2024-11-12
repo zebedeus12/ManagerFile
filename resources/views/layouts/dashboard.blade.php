@@ -179,6 +179,44 @@
             margin-right: 0;
             /* Menghapus margin kanan pada tombol terakhir */
         }
+
+        /* notifikasi */
+        .user-info-notification {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            /* Mengatur jarak antara nama pengguna dan notifikasi */
+        }
+
+        .user-info {
+            text-align: right;
+        }
+
+
+        .notification-link {
+            position: relative;
+            color: #333;
+            font-size: 24px;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .notification-link:hover {
+            color: #188A98;
+        }
+
+        .notification-count {
+            position: absolute;
+            top: -5px;
+            right: -10px;
+            background-color: #ff5e5e;
+            color: white;
+            font-size: 12px;
+            border-radius: 50%;
+            padding: 2px 6px;
+            font-weight: bold;
+        }
     </style>
 
     @stack('styles')

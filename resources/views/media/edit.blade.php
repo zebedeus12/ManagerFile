@@ -9,13 +9,13 @@
             <img src="{{ asset('img/logo.png') }}" alt="Logo" style="width: 50px; height: 50px; border-radius: 50%; margin-right: 15px;">
             <a class="navbar-brand fw-bold" href="#">BBSPJIS File Manager</a>
         </div>
-        <div>
+        <div class="d-flex align-items-center user-info-notification">
             @if(Auth::check())
                 <span class="fw-bold">{{ Auth::user()->nama_user }}</span>
-                <span class="text-muted d-block margin-left">{{ Auth::user()->role }}</span>
             @else
                 <span class="fw-bold">Guest</span>
             @endif
+
         </div>
     </div>
 </nav>
