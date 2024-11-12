@@ -15,13 +15,10 @@
             @else
                 <span class="fw-bold">Guest</span>
             @endif
-<<<<<<< HEAD
-=======
             <a href="#" class="notification-link me-3" title="Notifications">
                 <span class="material-icons">notifications</span>
                 <span class="notification-count">3</span> <!-- Bisa diubah sesuai jumlah notifikasi -->
             </a>
->>>>>>> d15d33a3e0f3ac52dba6aed291361c3db91595db
         </div>
     </div>
 </nav>
