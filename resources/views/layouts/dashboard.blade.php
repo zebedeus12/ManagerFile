@@ -181,6 +181,19 @@
         }
 
         /* notifikasi */
+        .user-info-notification {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            /* Mengatur jarak antara nama pengguna dan notifikasi */
+        }
+
+        .user-info {
+            text-align: right;
+        }
+
+
         .notification-link {
             position: relative;
             color: #333;

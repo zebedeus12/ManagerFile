@@ -9,18 +9,16 @@
             <img src="{{ asset('img/logo.png') }}" alt="Logo" class="logo">
             <a class="navbar-brand fw-bold" href="{{ route('dashboard') }}">BBSPJIS File Manager</a>
         </div>
-        <div>
+        <div class="d-flex align-items-center user-info-notification">
+            @if(Auth::check())
+                <span class="fw-bold">{{ Auth::user()->nama_user }}</span>
+            @else
+                <span class="fw-bold">Guest</span>
+            @endif
             <a href="#" class="notification-link me-3" title="Notifications">
                 <span class="material-icons">notifications</span>
                 <span class="notification-count">3</span> <!-- Bisa diubah sesuai jumlah notifikasi -->
             </a>
-            @if(Auth::check())
-                <span class="fw-bold">{{ Auth::user()->nama_user }}</span>
-                <span class="text-muted d-block margin-left">{{ Auth::user()->role }}</span>
-            @else
-                <span class="fw-bold">Guest</span>
-            @endif
-
         </div>
     </div>
 </nav>
