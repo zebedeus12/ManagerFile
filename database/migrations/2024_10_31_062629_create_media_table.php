@@ -25,9 +25,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->enum('role', ['user', 'admin', 'super_admin'])->default('user')->after('password');
-        });
-        
+        // Menghapus tabel media saat migrasi dibatalkan
+        Schema::dropIfExists('media');
     }
 };
