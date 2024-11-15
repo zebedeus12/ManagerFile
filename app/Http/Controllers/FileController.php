@@ -8,13 +8,17 @@ use Illuminate\Http\Request;
 
 class FileController extends Controller
 {
+    // FileController.php
+
     public function index()
     {
-        $folders = Folder::all();
-        $files = File::all();
+        $folders = Folder::whereNull('parent_id')->get(); // Hanya ambil folder utama
+        $files = File::all(); // Ambil semua file di root
 
         return view('files.index', compact('folders', 'files'));
     }
+
+
     public function create()
     {
         return view('files.create');

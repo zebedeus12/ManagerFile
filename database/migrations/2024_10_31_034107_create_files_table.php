@@ -13,8 +13,10 @@ return new class extends Migration {
         Schema::connection('mysql_second')->create('files', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->foreignId('folder_id')->constrained('folders');
-            $table->foreignId('created_by')->constrained('users');
+            $table->unsignedBigInteger('size'); // Ukuran file
+            $table->string('type'); // Jenis file (contoh: pdf, jpg)
+            $table->foreignId('folder_id')->constrained('folders')->onDelete('cascade');
+            $table->foreignId('created_by')->constrained('users')->onDelete('cascade');
             $table->timestamps();
         });
     }

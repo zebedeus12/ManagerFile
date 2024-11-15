@@ -1,24 +1,24 @@
-<!-- resources/views/files/create.blade.php -->
+@extends('layouts.dashboard')
 
-<!DOCTYPE html>
-<html>
+@section('title', 'Upload File')
 
-<head>
-    <title>Upload File</title>
-</head>
-
-<body>
-    <h1>Upload File</h1>
+@section('content')
+<div class="container mt-5">
+    <h1 class="mb-4">Upload File</h1>
 
     @if (session('success'))
-    <p>{{ session('success') }}</p>
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
     @endif
 
     <form action="{{ route('files.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
-        <input type="file" name="file" required>
-        <button type="submit">Upload</button>
+        <div class="mb-3">
+            <label for="file" class="form-label">Pilih File</label>
+            <input type="file" class="form-control" id="file" name="file" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Upload</button>
     </form>
-</body>
-
-</html>
+</div>
+@endsection

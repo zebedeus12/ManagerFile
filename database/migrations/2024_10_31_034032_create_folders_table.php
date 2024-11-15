@@ -14,6 +14,8 @@ return new class extends Migration {
             $table->id();
             $table->string('name');
             $table->enum('accessibility', ['public', 'private']);
+            $table->foreignId('parent_id')->nullable()->constrained('folders');
+
             $table->timestamps();
         });
     }

@@ -9,11 +9,11 @@
             <img src="{{ asset('img/logo.png') }}" alt="Logo" class="logo">
             <a class="navbar-brand fw-bold" href="{{ route('dashboard') }}">BBSPJIS File Manager</a>
         </div>
-        <div class="d-flex align-items-center user-info-notification">
+        <div class="d-flex align-items-center user-info-notification ms-auto">
             @if(Auth::check())
-                <span class="fw-bold">{{ Auth::user()->nama_user }}</span>
+                <span class="fw-bold me-3">{{ Auth::user()->nama_user }}</span>
             @else
-                <span class="fw-bold">Guest</span>
+                <span class="fw-bold me-3">Guest</span>
             @endif
             <a href="#" class="notification-link me-3" title="Notifications">
                 <span class="material-icons">notifications</span>
@@ -45,90 +45,165 @@
             </ul>
         </nav>
     </div>
-    <div class="container">
-        <div class="header">
-            <h1>File</h1>
-            <div class="buttons">
-                <button class="add-file" onclick="location.href='{{ route('files.create') }}'">Add File</button>
-                <button class="add-folder" onclick="location.href='{{ route('folder.form') }}'">Add Folder</button>
-            </div>
+    <div class="container content-container">
+        <div class="header d-flex align-items-center justify-content-between mb-4">
+            <h1 class="mb-0">File Manager</h1>
+            <button class="add-folder ms-auto" onclick="location.href='{{ route('folder.create') }}'">Add
+                Folder</button>
         </div>
-        <p>Terdapat {{ $folders->count() }} Folders, {{ $files->count() }} File,
-            {{ $files->whereIn('type', ['jpg', 'png', 'gif'])->count() }} Media.
+        <p class="text-muted">Terdapat {{ $folders->count() }} Folders, {{ $files->count() }} File.
         </p>
-        <div class="grid">
+        <div class="row">
+            {{-- resources/views/files/index.blade.php --}}
             @foreach ($folders as $folder)
-                <div class="item">
-                    <span class="material-icons">folder</span>
-                    <span>{{ $folder->name }}</span>
-                </div>
-            @endforeach
-            @foreach ($files as $file)
-                <div class="item">
-                    <img src="{{ asset('icons/' . $file->type . '.png') }}" alt="{{ $file->type }} icon">
-                    <span>{{ $file->name }}</span>
+                <div class="file-card">
+                    <a href="{{ route('folder.show', $folder->id) }}" class="folder-link">
+                        <div class="icon-container">
+                            <span class="material-icons folder-icon">folder</span>
+                        </div>
+                        <div class="file-info">
+                            <span class="fw-bold">{{ $folder->name }}</span>
+                            <span class="text-muted">Updated at: {{ $folder->updated_at->format('d/m/Y') }}</span>
+                        </div>
+                    </a>
                 </div>
             @endforeach
         </div>
     </div>
-</div>
-<style>
-    .logo {
-        width: 50px;
-        height: 50px;
-        border-radius: 50%;
-        margin-right: 15px;
-    }
 
-    .main-layout {
-        display: flex;
-        height: 100vh;
-    }
+    <style>
+        .logo {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 15px;
+        }
 
-    .sidebar {
-        width: 80px;
-        height: 100vh;
-        background: linear-gradient(180deg, #188A98, #5CCED1);
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        padding-top: 20px;
-        box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-        border-right: 1px solid #e0e0e0;
-    }
+        .navbar {
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
 
-    .icon-link {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 100%;
-        height: 60px;
-        text-decoration: none;
-        color: white;
-        font-size: 28px;
-    }
+        .notification-link {
+            position: relative;
+            color: #333;
+            font-size: 24px;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
 
-    .icon-link:hover {
-        background: none;
-        /* Tidak ada efek hover */
-    }
+        .notification-link:hover {
+            color: #188A98;
+        }
 
-    .material-icons {
-        font-size: 28px;
-    }
+        .notification-count {
+            position: absolute;
+            top: -5px;
+            right: -10px;
+            background-color: #ff5e5e;
+            color: white;
+            font-size: 12px;
+            border-radius: 50%;
+            padding: 2px 6px;
+            font-weight: bold;
+        }
 
-    .menu ul {
-        width: 100%;
-        padding: 0;
-        list-style: none;
-    }
+        .main-layout {
+            display: flex;
+            height: 100vh;
+        }
 
-    .menu ul li {
-        margin: 20px 0;
-    }
+        /* Sidebar */
+        .sidebar {
+            width: 80px;
+            height: 100vh;
+            background: linear-gradient(180deg, #188A98, #5CCED1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 20px;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+            border-right: 1px solid #e0e0e0;
+        }
 
-    .icon-link:hover {
-        background-color: #145d65;
-    }
-</style>
-@endsection
+        .icon-link {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 60px;
+            text-decoration: none;
+            color: white;
+            font-size: 28px;
+        }
+
+        .icon-link:hover {
+            background: none;
+            /* Tidak ada efek hover */
+        }
+
+        .material-icons {
+            font-size: 28px;
+        }
+
+        .menu ul {
+            width: 100%;
+            padding: 0;
+            list-style: none;
+        }
+
+        .menu ul li {
+            margin: 20px 0;
+        }
+
+        .icon-link:hover {
+            background-color: #145d65;
+        }
+
+        /* File Manager Grid */
+        .content-container {
+            padding: 30px;
+            background-color: #f8f9fa;
+        }
+
+        .file-card {
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .file-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.15);
+        }
+
+        .icon-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .folder-icon {
+            font-size: 48px;
+            color: #FFB400;
+        }
+
+        .file-icon {
+            width: 50px;
+            height: 50px;
+        }
+
+        .add-folder {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .add-folder:hover {
+            background-color: #0056b3;
+        }
+    </style>
+    @endsection
