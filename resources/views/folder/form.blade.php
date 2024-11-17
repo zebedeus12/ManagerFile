@@ -48,7 +48,10 @@
 
     <div class="container">
         <h2>Buat Folder Baru</h2>
-        <form action="{{ route('folder.store', ['parentId' => $folder->id ?? null]) }}" method="POST">
+        @if (isset($parentFolder))
+            <p>Menambahkan sub-folder di dalam: <strong>{{ $parentFolder->name }}</strong></p>
+        @endif
+        <form action="{{ route('folder.store', ['parentId' => $parentFolder->id ?? null]) }}" method="POST">
             @csrf
             <div class="mb-3">
                 <label for="folder_name" class="form-label">Nama Folder</label>
@@ -63,7 +66,6 @@
             </div>
             <button type="submit" class="btn btn-primary">Simpan Folder</button>
         </form>
-
     </div>
 </div>
 

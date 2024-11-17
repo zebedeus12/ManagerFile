@@ -46,10 +46,25 @@
     </div>
     <div class="container content-container">
         <div class="header d-flex align-items-center justify-content-between mb-4">
-            <h1 class="mb-0">{{ $folder->name }}</h1>
+            <div>
+                <h1 class="mb-0">{{ $folder->name }}</h1>
+
+                <!-- Breadcrumb untuk jalur folder -->
+                <div class="breadcrumb mt-2">
+                    <a href="{{ route('file.index') }}">Root</a>
+                    @php
+                        $current = $folder;
+                        while ($current->parent) {
+                            echo ' / <a href="' . route('folder.show', $current->parent->id) . '">' . $current->parent->name . '</a>';
+                            $current = $current->parent;
+                        }
+                    @endphp
+                    <span> / {{ $folder->name }}</span>
+                </div>
+            </div>
             <div class="buttons">
-                <button class="add-folder ms-auto" onclick="location.href='{{ route('folder.create') }}'">Add
-                    Folder</button>
+                <button class="add-folder ms-auto"
+                    onclick="location.href='{{ route('folder.create', $folder->id) }}'">Add Folder</button>
                 <button class="add-file ms-2" onclick="location.href='{{ route('files.store', $folder->id) }}'">Add
                     File</button>
             </div>

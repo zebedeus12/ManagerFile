@@ -37,10 +37,9 @@ Route::post('/files', [FileController::class, 'store'])->name('files.store'); //
 Route::post('/folder/{folder}/add-file', [FileController::class, 'store'])->name('folder.files.store'); // Menyimpan file baru di dalam folder tertentu
 
 // Mengelola folder
-Route::get('/folder/create/{parentId?}', [FolderController::class, 'showForm'])->name('folder.create');
-Route::get('/folder/form/{parentFolderId?}', [FolderController::class, 'showForm'])->name('folder.form');
-Route::post('/folder/store/{parentFolderId?}', [FolderController::class, 'store'])->name('folder.store');
-Route::get('/folder/{folder}', [FolderController::class, 'show'])->name('folder.show');
+Route::get('/folder/create/{parentId?}', [FolderController::class, 'showForm'])->name('folder.create'); // Form tambah folder
+Route::post('/folder/store/{parentId?}', [FolderController::class, 'store'])->name('folder.store'); // Simpan folder baru
+Route::get('/folder/{folder}', [FolderController::class, 'show'])->name('folder.show'); // Tampilkan folder tertentu
 
 //media
 Route::resource('media', MediaController::class);

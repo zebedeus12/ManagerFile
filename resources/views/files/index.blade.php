@@ -54,7 +54,28 @@
         <p class="text-muted">Terdapat {{ $folders->count() }} Folders, {{ $files->count() }} File.
         </p>
         <div class="row">
-            {{-- resources/views/files/index.blade.php --}}
+            {{-- Hierarki Folder --}}
+            <div class="folder-hierarchy mb-4">
+                <h3>Hierarki Folder</h3>
+                @php
+                    function renderFolderTree($folders)
+                    {
+                        echo '<ul>';
+                        foreach ($folders as $folder) {
+                            echo '<li>';
+                            echo '<a href="' . route('folder.show', $folder->id) . '">' . $folder->name . '</a>';
+                            if ($folder->children->isNotEmpty()) {
+                                renderFolderTree($folder->children); // Rekursif untuk sub-folder
+                            }
+                            echo '</li>';
+                        }
+                        echo '</ul>';
+                    }
+                @endphp
+                {!! renderFolderTree($folders) !!}
+            </div>
+
+            {{-- Grid Folders --}}
             @foreach ($folders as $folder)
                 <div class="file-card">
                     <a href="{{ route('folder.show', $folder->id) }}" class="folder-link">
@@ -69,141 +90,140 @@
                 </div>
             @endforeach
         </div>
-    </div>
 
-    <style>
-        .logo {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            margin-right: 15px;
-        }
+        <style>
+            .logo {
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                margin-right: 15px;
+            }
 
-        .navbar {
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-        }
+            .navbar {
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            }
 
-        .notification-link {
-            position: relative;
-            color: #333;
-            font-size: 24px;
-            text-decoration: none;
-            transition: color 0.3s;
-        }
+            .notification-link {
+                position: relative;
+                color: #333;
+                font-size: 24px;
+                text-decoration: none;
+                transition: color 0.3s;
+            }
 
-        .notification-link:hover {
-            color: #188A98;
-        }
+            .notification-link:hover {
+                color: #188A98;
+            }
 
-        .notification-count {
-            position: absolute;
-            top: -5px;
-            right: -10px;
-            background-color: #ff5e5e;
-            color: white;
-            font-size: 12px;
-            border-radius: 50%;
-            padding: 2px 6px;
-            font-weight: bold;
-        }
+            .notification-count {
+                position: absolute;
+                top: -5px;
+                right: -10px;
+                background-color: #ff5e5e;
+                color: white;
+                font-size: 12px;
+                border-radius: 50%;
+                padding: 2px 6px;
+                font-weight: bold;
+            }
 
-        .main-layout {
-            display: flex;
-            height: 100vh;
-        }
+            .main-layout {
+                display: flex;
+                height: 100vh;
+            }
 
-        /* Sidebar */
-        .sidebar {
-            width: 80px;
-            height: 100vh;
-            background: linear-gradient(180deg, #188A98, #5CCED1);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding-top: 20px;
-            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-            border-right: 1px solid #e0e0e0;
-        }
+            /* Sidebar */
+            .sidebar {
+                width: 80px;
+                height: 100vh;
+                background: linear-gradient(180deg, #188A98, #5CCED1);
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                padding-top: 20px;
+                box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+                border-right: 1px solid #e0e0e0;
+            }
 
-        .icon-link {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 100%;
-            height: 60px;
-            text-decoration: none;
-            color: white;
-            font-size: 28px;
-        }
+            .icon-link {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: 100%;
+                height: 60px;
+                text-decoration: none;
+                color: white;
+                font-size: 28px;
+            }
 
-        .icon-link:hover {
-            background: none;
-            /* Tidak ada efek hover */
-        }
+            .icon-link:hover {
+                background: none;
+                /* Tidak ada efek hover */
+            }
 
-        .material-icons {
-            font-size: 28px;
-        }
+            .material-icons {
+                font-size: 28px;
+            }
 
-        .menu ul {
-            width: 100%;
-            padding: 0;
-            list-style: none;
-        }
+            .menu ul {
+                width: 100%;
+                padding: 0;
+                list-style: none;
+            }
 
-        .menu ul li {
-            margin: 20px 0;
-        }
+            .menu ul li {
+                margin: 20px 0;
+            }
 
-        .icon-link:hover {
-            background-color: #145d65;
-        }
+            .icon-link:hover {
+                background-color: #145d65;
+            }
 
-        /* File Manager Grid */
-        .content-container {
-            padding: 30px;
-            background-color: #f8f9fa;
-        }
+            /* File Manager Grid */
+            .content-container {
+                padding: 30px;
+                background-color: #f8f9fa;
+            }
 
-        .file-card {
-            background-color: #ffffff;
-            border-radius: 8px;
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
+            .file-card {
+                background-color: #ffffff;
+                border-radius: 8px;
+                box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+                transition: transform 0.3s, box-shadow 0.3s;
+            }
 
-        .file-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.15);
-        }
+            .file-card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.15);
+            }
 
-        .icon-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
+            .icon-container {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
 
-        .folder-icon {
-            font-size: 48px;
-            color: #FFB400;
-        }
+            .folder-icon {
+                font-size: 48px;
+                color: #FFB400;
+            }
 
-        .file-icon {
-            width: 50px;
-            height: 50px;
-        }
+            .file-icon {
+                width: 50px;
+                height: 50px;
+            }
 
-        .add-folder {
-            background-color: #007bff;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            transition: background-color 0.3s;
-        }
+            .add-folder {
+                background-color: #007bff;
+                color: white;
+                border: none;
+                padding: 10px 20px;
+                border-radius: 5px;
+                transition: background-color 0.3s;
+            }
 
-        .add-folder:hover {
-            background-color: #0056b3;
-        }
-    </style>
-    @endsection
+            .add-folder:hover {
+                background-color: #0056b3;
+            }
+        </style>
+        @endsection
