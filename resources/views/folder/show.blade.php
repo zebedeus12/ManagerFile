@@ -51,7 +51,7 @@
 
                 <!-- Breadcrumb untuk jalur folder -->
                 <div class="breadcrumb mt-2">
-                    <a href="{{ route('file.index') }}">Root</a>
+                    <a href="{{ route('file.index') }}">File Manager</a>
                     @php
                         $current = $folder;
                         while ($current->parent) {
@@ -65,8 +65,11 @@
             <div class="buttons">
                 <button class="add-folder ms-auto"
                     onclick="location.href='{{ route('folder.create', $folder->id) }}'">Add Folder</button>
-                <button class="add-file ms-2" onclick="location.href='{{ route('files.store', $folder->id) }}'">Add
-                    File</button>
+                <button class="add-file ms-2"
+                    onclick="location.href='{{ route('files.create', ['folder' => $folder->id]) }}'">
+                    Add File
+                </button>
+
             </div>
         </div>
         <p class="text-muted">
@@ -75,6 +78,7 @@
         </p>
 
         <div class="file-grid">
+            {{-- Tampilkan subfolder --}}
             @foreach ($subFolders as $subFolder)
                 <div class="sub-folder-card">
                     <a href="{{ route('folder.show', $subFolder->id) }}">
@@ -88,6 +92,8 @@
                     </a>
                 </div>
             @endforeach
+
+            {{-- Tampilkan file --}}
             @foreach ($files as $file)
                 <div class="file-card">
                     <div class="icon-container">
@@ -96,11 +102,12 @@
                     </div>
                     <div class="file-info">
                         <span class="fw-bold">{{ $file->name }}</span>
-                        <span class="text-muted">{{ $file->size }} MB</span>
+                        <span class="text-muted">{{ $file->size }} KB</span>
                     </div>
                 </div>
             @endforeach
         </div>
+
     </div>
 </div>
 <style>

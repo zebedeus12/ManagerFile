@@ -12,31 +12,54 @@ class FileController extends Controller
 
     public function index()
     {
-        $folders = Folder::whereNull('parent_id')->get(); // Hanya ambil folder utama
+        $folders = Folder::whereNull('parent_id')->get(); // Ambil folder utama
         $files = File::all(); // Ambil semua file di root
 
         return view('files.index', compact('folders', 'files'));
     }
 
-
-    public function create()
+    public function create($folder = null)
     {
-        return view('files.create');
+        $folder = $folder ? Folder::findOrFail($folder) : null; // Temukan folder atau null jika root
+        return view('files.create', compact('folder'));
     }
 
-    public function store(Request $request)
+    public function store(Request $request, $folder = null)
     {
-        Log::info('Memulai proses upload file.');
         $request->validate([
             'file' => 'required|file|max:2048',
         ]);
 
         if ($request->hasFile('file')) {
-            Log::info('File terdeteksi.');
-            $filePath = $request->file('file')->store('uploads', 'public');
-            Log::info('File berhasil di-upload ke: ' . $filePath);
+            $uploadedFile = $request->file('file');
+            $filePath = $uploadedFile->store('uploads', 'public');
+
+            // Simpan metadata file ke database
+            $file = new File([
+                'name' => $uploadedFile->getClientOriginalName(),
+                'size' => $uploadedFile->getSize() / 1024, // dalam KB
+                'type' => $uploadedFile->extension(),
+                'folder_id' => $folder, // Hubungkan file ke folder jika ada
+                'created_by' => auth()->id(),
+            ]);
+            $file->save();
         }
 
-        return redirect()->route('files.create')->with('success', 'File berhasil diunggah.');
+        // Jika folder null, arahkan ke file index
+        if ($folder === null) {
+            return redirect()->route('file.index')->with('success', 'File berhasil diunggah.');
+        }
+
+        // Jika folder ada, arahkan ke folder tersebut
+        return redirect()->route('folder.show', ['folder' => $folder])->with('success', 'File berhasil diunggah.');
+    }
+
+    public function show($folderId)
+    {
+        $folder = Folder::findOrFail($folderId); // Temukan folder berdasarkan ID
+        $subFolders = $folder->children; // Subfolder di dalam folder ini
+        $files = $folder->files; // File di dalam folder ini
+
+        return view('folder.show', compact('folder', 'subFolders', 'files'));
     }
 }
