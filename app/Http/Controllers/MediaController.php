@@ -42,9 +42,9 @@ class MediaController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required',
+            'name' => 'required|string|max:255',
             'file' => 'required|file|mimes:jpg,jpeg,png,mp3,mp4,pdf|max:20480',
-            'type' => 'required|string',
+            'type' => 'required|string|max:255',
         ]);
     
         $filePath = $request->file('file')->store('uploads/media');
@@ -72,25 +72,28 @@ class MediaController extends Controller
      */
     public function update(Request $request, Media $media)
     {
+        // Validasi data
         $request->validate([
             'file' => 'nullable|file|mimes:jpeg,png,jpg,gif,mp3,mp4,mkv|max:20480',
-            'name' => 'required|string',
-            'type' => 'required|string',
+            'name' => 'required|string|max:255',
+            'type' => 'required|string|max:255',
         ]);
-    
+
+        // Perbarui file jika ada file baru
         if ($request->hasFile('file')) {
-            if ($media->path) {
+            if ($media->path && Storage::exists($media->path)) {
                 Storage::delete($media->path);
             }
-    
+
             $filePath = $request->file('file')->store('uploads/media');
             $media->path = $filePath;
         }
-    
+
+        // Perbarui data lainnya
         $media->name = $request->name;
         $media->type = $request->type;
         $media->save();
-    
+
         return redirect()->route('media.index')->with('success', 'Media berhasil diupdate.');
     }
 
@@ -99,7 +102,7 @@ class MediaController extends Controller
      */
     public function destroy(Media $media)
     {
-        if ($media->path) {
+        if ($media->path && Storage::exists($media->path)) {
             Storage::delete($media->path);
         }
 

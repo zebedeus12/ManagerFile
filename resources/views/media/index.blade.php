@@ -49,7 +49,6 @@
                 <input type="text" name="query" class="form-control me-2" placeholder="Search media..." required>
                 <button type="submit" class="btn btn-outline-primary">Search</button>
             </form>
-            <a href="{{ route('media.create') }}" class="btn btn-primary">Add Folder</a>
             <a href="{{ route('media.create') }}" class="btn btn-primary">Create Media</a>
         </div>
 
