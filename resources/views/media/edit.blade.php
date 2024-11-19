@@ -64,15 +64,8 @@
             <!-- Input Nama Media -->
             <div class="mb-3">
                 <label for="name" class="form-label">Media Name</label>
-                <input type="text" name="name" class="form-control" value="{{ $media->name }}" required>
+                <input type="text" name="name" value="{{ $media->name }}" required>
             </div>
-
-            <!-- Input File Media (File baru jika diubah) -->
-            <div class="mb-3">
-                <label for="file" class="form-label">Media File</label>
-                <input type="file" name="file" class="form-control">
-            </div>
-
             <button type="submit" class="btn btn-primary">Update Media</button>
         </form>
 
