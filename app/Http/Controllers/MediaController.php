@@ -50,18 +50,15 @@ class MediaController extends Controller
             'file' => 'required|file|mimes:jpg,jpeg,png,mp3,mp4,pdf|max:20480',
             'type' => 'required|string|max:255',
         ]);
-
-        // Simpan file ke storage
+    
         $filePath = $request->file('file')->store('uploads/media');
-
-        // Buat data baru di database
+    
         Media::create([
             'name' => $request->name,
             'path' => $filePath,
             'type' => $request->type,
         ]);
-
-        // Redirect dengan pesan sukses
+    
         return redirect()->route('media.index')->with('success', 'Media berhasil ditambahkan.');
     }
 
@@ -124,8 +121,7 @@ class MediaController extends Controller
 
         // Hapus data dari database
         $media->delete();
-
-        // Redirect dengan pesan sukses
+    
         return redirect()->route('media.index')->with('success', 'Media berhasil dihapus.');
     }
 }

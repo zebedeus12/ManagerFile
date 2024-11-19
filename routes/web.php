@@ -52,4 +52,3 @@ Route::delete('/media/{media}', [MediaController::class, 'destroy'])->name('medi
 Route::get('/media/search', [MediaController::class, 'search'])->name('media.search');
 
 
-
