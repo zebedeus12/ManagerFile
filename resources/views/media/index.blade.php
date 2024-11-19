@@ -27,9 +27,12 @@
     <div class="sidebar">
         <nav class="menu">
             <ul class="list-unstyled">
-                <li><a href="{{ route('employees.index') }}" class="icon-link"><span class="material-icons">admin_panel_settings</span></a></li>
-                <li><a href="{{ route('file.index') }}" class="icon-link"><span class="material-icons">folder</span></a></li>
-                <li><a href="{{ route('media.index') }}" class="icon-link"><span class="material-icons">perm_media</span></a></li>
+                <li><a href="{{ route('employees.index') }}" class="icon-link"><span
+                            class="material-icons">admin_panel_settings</span></a></li>
+                <li><a href="{{ route('file.index') }}" class="icon-link"><span class="material-icons">folder</span></a>
+                </li>
+                <li><a href="{{ route('media.index') }}" class="icon-link"><span
+                            class="material-icons">perm_media</span></a></li>
                 <li>
                     <form action="{{ route('logout') }}" method="POST" class="d-flex justify-content-center mt-3">
                         @csrf
@@ -65,17 +68,21 @@
                     <span class="zoom-icon">
                         <!-- SVG for zoom out -->
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M20 12H4" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M20 12H4" stroke="black" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" />
                         </svg>
                     </span>
                 </button>
-                <input aria-label="Photo Zoom Slider" id="zoom-slider" class="zoom-slider" type="range" min="100" max="200" value="100">
+                <input aria-label="Photo Zoom Slider" id="zoom-slider" class="zoom-slider" type="range" min="100"
+                    max="200" value="100">
                 <button class="zoom-slider-button" id="zoom-in">
                     <span class="zoom-icon">
                         <!-- SVG for zoom in -->
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M12 5V19" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            <path d="M5 12H19" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M12 5V19" stroke="black" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" />
+                            <path d="M5 12H19" stroke="black" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" />
                         </svg>
                     </span>
                 </button>
@@ -134,7 +141,7 @@
         zoomSlider.on('input', function () {
             const zoomLevel = $(this).val() / 100;
             mediaContainer.find('.file-card').css({
-                'transform': `scale(${zoomLevel})`,
+                'transform': scale(${ zoomLevel }),
                 'transition': 'transform 0.3s ease' // Smooth transition
             });
         });

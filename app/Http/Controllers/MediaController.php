@@ -24,7 +24,7 @@ class MediaController extends Controller
     {
         $query = $request->input('query');
         $mediaItems = Media::where('name', 'LIKE', "%$query%")->get();
-        
+
         return view('media.index', compact('mediaItems'));
     }
 
@@ -46,15 +46,15 @@ class MediaController extends Controller
             'file' => 'required|file|mimes:jpg,jpeg,png,mp3,mp4,pdf|max:20480',
             'type' => 'required|string|max:255',
         ]);
-    
+
         $filePath = $request->file('file')->store('uploads/media');
-    
+
         Media::create([
             'name' => $request->name,
             'path' => $filePath,
             'type' => $request->type,
         ]);
-    
+
         return redirect()->route('media.index')->with('success', 'Media berhasil ditambahkan.');
     }
 
@@ -107,7 +107,7 @@ class MediaController extends Controller
         }
 
         $media->delete();
-    
+
         return redirect()->route('media.index')->with('success', 'Media berhasil dihapus.');
     }
 }
