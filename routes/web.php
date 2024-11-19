@@ -46,7 +46,6 @@ Route::resource('media', MediaController::class);
 Route::delete('/media/{media}', [MediaController::class, 'destroy'])->name('media.destroy');
 Route::get('/media/{media}/edit', [MediaController::class, 'edit'])->name('media.edit');
 Route::get('/media/search', [MediaController::class, 'search'])->name('media.search');
-Route::put('/media/{medium}', [MediaController::class, 'update'])->name('media.update');
-Route::delete('/media/{media}', [MediaController::class, 'destroy'])->name('media.destroy');
+Route::put('/media/{media}', [MediaController::class, 'update'])->name('media.update');
 
 
