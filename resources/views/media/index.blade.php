@@ -141,9 +141,9 @@
         zoomSlider.on('input', function () {
             const zoomLevel = $(this).val() / 100;
             mediaContainer.find('.file-card').css({
-                'transform': scale(${ zoomLevel }),
-                'transition': 'transform 0.3s ease' // Smooth transition
-            });
+            'transform': `scale(${zoomLevel})`,
+            'transition': 'transform 0.3s ease' // Smooth transition
+        });
         });
 
         $('#zoom-out').on('click', function () {

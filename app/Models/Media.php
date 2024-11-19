@@ -8,5 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class Media extends Model
 {
     protected $connection = 'mysql_second';
-    protected $fillable = ['name', 'path', 'type'];
+    protected $fillable = ['name', 'path', 'type', 'file'];
 }
