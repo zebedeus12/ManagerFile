@@ -31,10 +31,10 @@ Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard
 Route::resource('employees', EmployeeController::class);
 
 // Mengelola file
-Route::get('/file', [FileController::class, 'index'])->name('file.index'); // Menampilkan halaman utama file manager
-Route::get('/files/create', [FileController::class, 'create'])->name('files.create'); // Form upload file baru
-Route::post('/files', [FileController::class, 'store'])->name('files.store'); // Menyimpan file baru
-Route::post('/folder/{folder}/add-file', [FileController::class, 'store'])->name('folder.files.store'); // Menyimpan file baru di dalam folder tertentu
+Route::get('/files', [FileController::class, 'index'])->name('file.index'); // Menampilkan halaman utama file manager
+Route::get('/files/create/{folder?}', [FileController::class, 'create'])->name('files.create'); // Form upload file
+Route::get('/files/{id}', [FileController::class, 'show'])->name('files.show'); // Detail file
+Route::post('/files/{folder?}', [FileController::class, 'store'])->name('files.store');
 
 // Mengelola folder
 Route::get('/folder/create/{parentId?}', [FolderController::class, 'showForm'])->name('folder.create'); // Form tambah folder
