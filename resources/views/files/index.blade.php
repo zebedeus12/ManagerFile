@@ -54,27 +54,6 @@
         <p class="text-muted">Terdapat {{ $folders->count() }} Folders, {{ $files->count() }} File.
         </p>
         <div class="row">
-            {{-- Hierarki Folder --}}
-            <div class="folder-hierarchy mb-4">
-                <h3>Hierarki Folder</h3>
-                @php
-                    function renderFolderTree($folders)
-                    {
-                        echo '<ul>';
-                        foreach ($folders as $folder) {
-                            echo '<li>';
-                            echo '<a href="' . route('folder.show', $folder->id) . '">' . $folder->name . '</a>';
-                            if ($folder->children->isNotEmpty()) {
-                                renderFolderTree($folder->children); // Rekursif untuk sub-folder
-                            }
-                            echo '</li>';
-                        }
-                        echo '</ul>';
-                    }
-                @endphp
-                {!! renderFolderTree($folders) !!}
-            </div>
-
             {{-- Grid Folders --}}
             @foreach ($folders as $folder)
                 <div class="file-card">
