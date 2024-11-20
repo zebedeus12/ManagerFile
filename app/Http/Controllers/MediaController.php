@@ -77,11 +77,12 @@ class MediaController extends Controller
      */
     public function update(Request $request, Media $media)
     {
+        // dd($request);
         // Validasi input
         $request->validate([
             'name' => 'required|string|max:255',
             'type' => 'required|string|max:255',
-            'file' => 'nullable|file|mimes:jpeg,png,jpg,gif,mp3,mp4,mkv|max:20480',
+            'file' => 'nullable|file|mimes:jpeg,png,jpg,gif,mp3,mp4,mkv',
         ]);
 
         // Periksa apakah ada file baru yang diunggah
