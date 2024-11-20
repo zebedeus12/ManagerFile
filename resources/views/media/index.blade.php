@@ -116,23 +116,6 @@
 </div>
 
 <script>
-    $(document).ready(function () {
-        // Filter media items
-        $('.btn-filter').on('click', function () {
-            const filter = $(this).data('filter');
-            $('.btn-filter').removeClass('active');
-            $(this).addClass('active');
-
-            $('.file-card').each(function () {
-                const type = $(this).data('type');
-                if (filter === 'all' || type === filter) {
-                    $(this).show();
-                } else {
-                    $(this).hide();
-                }
-            });
-        });
-
         // Zoom and other existing code
         const zoomSlider = $('#zoom-slider');
         const mediaContainer = $('#media-container');

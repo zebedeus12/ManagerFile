@@ -141,18 +141,5 @@
         }
     </style>
 
-    <script>
-        document.querySelector('.grid-layout').addEventListener('click', function () {
-            document.querySelector('.file-grid').style.display = 'grid';
-            this.classList.add('active');
-            document.querySelector('.list-layout').classList.remove('active');
-        });
-
-        document.querySelector('.list-layout').addEventListener('click', function () {
-            document.querySelector('.file-grid').style.display = 'block';
-            this.classList.add('active');
-            document.querySelector('.grid-layout').classList.remove('active');
-        });
-    </script>
 
 @endsection
