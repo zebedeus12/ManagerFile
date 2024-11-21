@@ -65,6 +65,7 @@
             <div class="mb-3">
                 <label for="name" class="form-label">Media Name</label>
                 <input type="text" name="name" value="{{ $media->name }}" required>
+                <input type="hidden" value="{{ $media->type }}" name="type">
             </div>
             <button type="submit" class="btn btn-primary">Update Media</button>
         </form>

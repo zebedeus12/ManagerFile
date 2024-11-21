@@ -116,23 +116,6 @@
 </div>
 
 <script>
-    $(document).ready(function () {
-        // Filter media items
-        $('.btn-filter').on('click', function () {
-            const filter = $(this).data('filter');
-            $('.btn-filter').removeClass('active');
-            $(this).addClass('active');
-
-            $('.file-card').each(function () {
-                const type = $(this).data('type');
-                if (filter === 'all' || type === filter) {
-                    $(this).show();
-                } else {
-                    $(this).hide();
-                }
-            });
-        });
-
         // Zoom and other existing code
         const zoomSlider = $('#zoom-slider');
         const mediaContainer = $('#media-container');
@@ -141,9 +124,9 @@
         zoomSlider.on('input', function () {
             const zoomLevel = $(this).val() / 100;
             mediaContainer.find('.file-card').css({
-                'transform': scale(${ zoomLevel }),
-                'transition': 'transform 0.3s ease' // Smooth transition
-            });
+            'transform': `scale(${zoomLevel})`,
+            'transition': 'transform 0.3s ease' // Smooth transition
+        });
         });
 
         $('#zoom-out').on('click', function () {
