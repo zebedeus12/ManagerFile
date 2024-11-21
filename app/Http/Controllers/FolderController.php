@@ -63,4 +63,42 @@ class FolderController extends Controller
 
         return view('folder.show', compact('folder', 'subFolders', 'files'));
     }
+
+    public function rename(Request $request, $id)
+    {
+        $request->validate(['name' => 'required|string|max:255']);
+        $folder = Folder::findOrFail($id);
+        $folder->name = $request->input('name');
+        $folder->save();
+
+        return redirect()->route('file.index')->with('success', 'Folder berhasil diubah namanya.');
+    }
+
+    public function share($id)
+    {
+        $folder = Folder::findOrFail($id);
+        $folder->shared = true; // Asumsi kolom `shared` ada di tabel
+        $folder->save();
+
+        return redirect()->route('file.index')->with('success', 'Folder berhasil dibagikan.');
+    }
+
+    public function destroy($id)
+    {
+        $folder = Folder::findOrFail($id);
+        $folder->delete();
+
+        return redirect()->route('file.index')->with('success', 'Folder berhasil dihapus.');
+    }
+
+    public function copy($id)
+    {
+        $folder = Folder::findOrFail($id);
+        $newFolder = $folder->replicate();
+        $newFolder->name = $folder->name . ' (Copy)';
+        $newFolder->save();
+
+        return redirect()->route('file.index')->with('success', 'Folder berhasil disalin.');
+    }
+
 }

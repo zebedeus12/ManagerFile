@@ -40,6 +40,11 @@ Route::post('/files/{folder?}', [FileController::class, 'store'])->name('files.s
 Route::get('/folder/create/{parentId?}', [FolderController::class, 'showForm'])->name('folder.create'); // Form tambah folder
 Route::post('/folder/store/{parentId?}', [FolderController::class, 'store'])->name('folder.store'); // Simpan folder baru
 Route::get('/folder/{folder}', [FolderController::class, 'show'])->name('folder.show'); // Tampilkan folder tertentu
+Route::post('/folder/rename/{id}', [FolderController::class, 'rename'])->name('folder.rename');
+Route::post('/folder/share/{id}', [FolderController::class, 'share'])->name('folder.share');
+Route::delete('/folder/{id}', [FolderController::class, 'destroy'])->name('folder.destroy');
+Route::post('/folder/copy/{id}', [FolderController::class, 'copy'])->name('folder.copy');
+
 
 //media
 Route::get('/media', [MediaController::class, 'index'])->name('media.index');

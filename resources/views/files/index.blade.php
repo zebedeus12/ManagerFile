@@ -53,7 +53,7 @@
         </div>
         <p class="text-muted">Terdapat {{ $folders->count() }} Folders, {{ $files->count() }} File.
         </p>
-        <div class="row">
+        <div class="file-grid">
             {{-- Grid Folders --}}
             @foreach ($folders as $folder)
                 <div class="file-card">
@@ -66,6 +66,19 @@
                             <span class="text-muted">Updated at: {{ $folder->updated_at->format('d/m/Y') }}</span>
                         </div>
                     </a>
+                    <!-- Tombol titik tiga -->
+                    <div class="dropdown">
+                        <button class="dropdown-toggle" onclick="toggleDropdown(this)">
+                            <span class="material-icons">more_vert</span>
+                        </button>
+                        <!-- Menu Pop-Up -->
+                        <div class="dropdown-menu">
+                            <button onclick="renameFolder({{ $folder->id }})">Rename</button>
+                            <button onclick="shareFolder({{ $folder->id }})">Share</button>
+                            <button onclick="deleteFolder({{ $folder->id }})">Delete</button>
+                            <button onclick="copyFolder({{ $folder->id }})">Copy</button>
+                        </div>
+                    </div>
                 </div>
             @endforeach
         </div>
@@ -205,5 +218,108 @@
     .add-folder:hover {
         background-color: #0056b3;
     }
+
+    /* Dropdown Container */
+    .dropdown {
+        position: relative;
+        display: inline-block;
+    }
+
+    /* Tombol Titik Tiga */
+    .dropdown-toggle {
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 24px;
+        appearance: none;
+        /* Untuk menghapus segitiga di browser modern */
+        -webkit-appearance: none;
+        /* Untuk browser berbasis WebKit */
+        -moz-appearance: none;
+        /* Untuk Firefox */
+        padding: 0;
+    }
+
+    /* Gaya Menu Dropdown */
+    .dropdown-menu {
+        display: none;
+        /* Tersembunyi secara default */
+        position: absolute;
+        top: 30px;
+        right: 0;
+        background-color: white;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 4px;
+        z-index: 1000;
+        padding: 10px 0;
+        width: 150px;
+    }
+
+    .dropdown-menu button {
+        background: none;
+        border: none;
+        width: 100%;
+        text-align: left;
+        padding: 8px 15px;
+        font-size: 14px;
+        cursor: pointer;
+    }
+
+    .dropdown-menu button:hover {
+        background-color: #f5f5f5;
+    }
+
+    /* Tampilkan Dropdown saat Tombol Diklik */
+    .dropdown:hover .dropdown-menu {
+        display: block;
+    }
 </style>
+<script>
+    function toggleDropdown(button) {
+        const dropdownMenu = button.nextElementSibling;
+        // Tampilkan atau sembunyikan dropdown
+        if (dropdownMenu.style.display === 'block') {
+            dropdownMenu.style.display = 'none';
+        } else {
+            dropdownMenu.style.display = 'block';
+        }
+    }
+
+    function renameFolder(folderId) {
+        // Logika rename folder
+        alert(`Rename folder dengan ID: ${folderId}`);
+        // Tambahkan modal atau redirect ke halaman rename
+    }
+
+    function shareFolder(folderId) {
+        // Logika share folder
+        alert(`Share folder dengan ID: ${folderId}`);
+        // Implementasikan logika share
+    }
+
+    function deleteFolder(folderId) {
+        // Konfirmasi sebelum menghapus
+        if (confirm('Apakah Anda yakin ingin menghapus folder ini?')) {
+            alert(`Folder dengan ID ${folderId} akan dihapus.`);
+            // Implementasikan logika penghapusan (AJAX atau redirect ke controller)
+        }
+    }
+
+    function copyFolder(folderId) {
+        // Logika copy folder
+        alert(`Copy folder dengan ID: ${folderId}`);
+        // Implementasikan logika copy
+    }
+
+    // Tutup dropdown saat klik di luar area
+    window.addEventListener('click', function (e) {
+        const dropdowns = document.querySelectorAll('.dropdown-menu');
+        dropdowns.forEach(menu => {
+            if (!menu.parentElement.contains(e.target)) {
+                menu.style.display = 'none';
+            }
+        });
+    });
+</script>
+
 @endsection
