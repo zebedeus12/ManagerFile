@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>@yield('title') - File Manager</title>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Google Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=grid_view" />
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=view_list" />
+
+    <!-- Custom CSS -->
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body,
+        html {
+            height: 100%;
+            overflow: hidden;
+            font-family: 'Poppins', sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+
+        .main-layout {
+            display: flex;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        /* Sidebar styling */
+        .sidebar {
+            width: 70px;
+            background-color: white;
+        }
+
+        /*container*/
+        .container {
+            flex: 1;
+            background-color: #f1f1f1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        /* File Manager Grid */
+        .content-container {
+            flex-grow: 1;
+            padding: 20px;
+            background-color: #ffffff;
+            margin-left: 50px;
+            min-height: 100vh;
+        }
+
+        .file-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .file-card {
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 15px;
+            text-align: center;
+            transition: transform 0.2s;
+        }
+
+        .file-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .icon-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .folder-icon {
+            font-size: 48px;
+            color: #FFB400;
+        }
+
+        .file-icon {
+            width: 40px;
+            height: 40px;
+        }
+
+        .file-info {
+            font-size: 14px;
+            color: #6c757d;
+        }
+
+        .add-folder,
+        .add-file {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            transition: background-color 0.3s;
+        }
+
+        .add-folder:hover,
+        .add-file:hover {
+            background-color: #0056b3;
+        }
+
+        .header .buttons {
+            margin-left: auto;
+            /* Menarik tombol Add Folder ke kanan */
+        }
+
+        /* Dropdown Container */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        /* Tombol Titik Tiga */
+        .dropdown-toggle {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 24px;
+            appearance: none;
+            /* Untuk menghapus segitiga di browser modern */
+            -webkit-appearance: none;
+            /* Untuk browser berbasis WebKit */
+            -moz-appearance: none;
+            /* Untuk Firefox */
+            padding: 0;
+        }
+
+        /* Gaya Menu Dropdown */
+        .dropdown-menu {
+            display: none;
+            /* Tersembunyi secara default */
+            position: absolute;
+            top: 30px;
+            right: 0;
+            background-color: white;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 4px;
+            z-index: 1000;
+            padding: 10px 0;
+            width: 150px;
+        }
+
+        .dropdown-menu button {
+            background: none;
+            border: none;
+            width: 100%;
+            text-align: left;
+            padding: 8px 15px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .dropdown-menu button:hover {
+            background-color: #f5f5f5;
+        }
+
+        /* Tampilkan Dropdown saat Tombol Diklik */
+        .dropdown:hover .dropdown-menu {
+            display: block;
+        }
+    </style>
+    @stack('styles')
+</head>
+
+<body>
+    <!-- Main Content -->
+    <div class="main-content">
+        @yield('content')
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+
+    @stack('scripts')
+</body>
+
+</html>

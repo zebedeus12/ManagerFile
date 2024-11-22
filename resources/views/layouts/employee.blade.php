@@ -39,6 +39,17 @@
             display: flex;
         }
 
+        .main-content {
+            flex-grow: 1;
+            background-color: #ffffff;
+        }
+
+        .main-layout {
+            display: flex;
+            width: 100vw;
+            height: 100vh;
+        }
+
         /* Sidebar styling */
         .sidebar {
             width: 70px;
