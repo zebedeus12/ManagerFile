@@ -62,11 +62,9 @@
         /* Tidak ada efek hover */
     }
 
-
     .material-icons {
         font-size: 28px;
     }
-
 
     .menu ul {
         width: 100%;

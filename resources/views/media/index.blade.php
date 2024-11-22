@@ -3,48 +3,11 @@
 @section('title', 'Media')
 
 @section('content')
-<nav class="navbar navbar-expand-lg bg-light">
-    <div class="container-fluid align-items-center">
-        <div class="d-flex align-items-center">
-            <img src="{{ asset('img/logo.png') }}" alt="Logo" class="logo">
-            <a class="navbar-brand fw-bold" href="{{ route('dashboard') }}">BBSPJIS File Manager</a>
-        </div>
-        <div class="d-flex align-items-center user-info-notification">
-            @if(Auth::check())
-                <span class="fw-bold">{{ Auth::user()->nama_user }}</span>
-            @else
-                <span class="fw-bold">Guest</span>
-            @endif
-            <a href="#" class="notification-link me-3" title="Notifications">
-                <span class="material-icons">notifications</span>
-                <span class="notification-count">3</span> <!-- Bisa diubah sesuai jumlah notifikasi -->
-            </a>
-        </div>
-    </div>
-</nav>
+<!-- Navbar -->
+@include('layouts.navbar')
 
 <div class="main-layout">
-    <div class="sidebar">
-        <nav class="menu">
-            <ul class="list-unstyled">
-                <li><a href="{{ route('employees.index') }}" class="icon-link"><span
-                            class="material-icons">admin_panel_settings</span></a></li>
-                <li><a href="{{ route('file.index') }}" class="icon-link"><span class="material-icons">folder</span></a>
-                </li>
-                <li><a href="{{ route('media.index') }}" class="icon-link"><span
-                            class="material-icons">perm_media</span></a></li>
-                <li>
-                    <form action="{{ route('logout') }}" method="POST" class="d-flex justify-content-center mt-3">
-                        @csrf
-                        <button type="submit" class="btn btn-link icon-link" title="Logout">
-                            <span class="material-icons">logout</span>
-                        </button>
-                    </form>
-                </li>
-            </ul>
-        </nav>
-    </div>
-
+    @include('layouts.sidebar')
     <div class="employee-content p-4">
         <div class="header d-flex align-items-center justify-content-between mb-4">
             <h2>Media Manager</h2>
@@ -116,32 +79,32 @@
 </div>
 
 <script>
-        // Zoom and other existing code
-        const zoomSlider = $('#zoom-slider');
-        const mediaContainer = $('#media-container');
+    // Zoom and other existing code
+    const zoomSlider = $('#zoom-slider');
+    const mediaContainer = $('#media-container');
 
-        // Adjust zoom level on slider input
-        zoomSlider.on('input', function () {
-            const zoomLevel = $(this).val() / 100;
-            mediaContainer.find('.file-card').css({
+    // Adjust zoom level on slider input
+    zoomSlider.on('input', function () {
+        const zoomLevel = $(this).val() / 100;
+        mediaContainer.find('.file-card').css({
             'transform': `scale(${zoomLevel})`,
             'transition': 'transform 0.3s ease' // Smooth transition
         });
-        });
+    });
 
-        $('#zoom-out').on('click', function () {
-            let currentValue = parseInt(zoomSlider.val());
-            if (currentValue > zoomSlider.attr('min')) {
-                zoomSlider.val(currentValue - 10).trigger('input');
-            }
-        });
+    $('#zoom-out').on('click', function () {
+        let currentValue = parseInt(zoomSlider.val());
+        if (currentValue > zoomSlider.attr('min')) {
+            zoomSlider.val(currentValue - 10).trigger('input');
+        }
+    });
 
-        $('#zoom-in').on('click', function () {
-            let currentValue = parseInt(zoomSlider.val());
-            if (currentValue < zoomSlider.attr('max')) {
-                zoomSlider.val(currentValue + 10).trigger('input');
-            }
-        });
+    $('#zoom-in').on('click', function () {
+        let currentValue = parseInt(zoomSlider.val());
+        if (currentValue < zoomSlider.attr('max')) {
+            zoomSlider.val(currentValue + 10).trigger('input');
+        }
+    });
     });
 </script>
 

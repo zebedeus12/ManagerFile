@@ -3,55 +3,12 @@
 @section('title', 'Edit Media')
 
 @section('content')
-<nav class="navbar navbar-expand-lg">
-    <div class="container-fluid align-items-center">
-        <div class="d-flex align-items-center">
-            <img src="{{ asset('img/logo.png') }}" alt="Logo" style="width: 50px; height: 50px; border-radius: 50%; margin-right: 15px;">
-            <a class="navbar-brand fw-bold" href="#">BBSPJIS File Manager</a>
-        </div>
-        <div class="d-flex align-items-center user-info-notification">
-            @if(Auth::check())
-                <span class="fw-bold">{{ Auth::user()->nama_user }}</span>
-            @else
-                <span class="fw-bold">Guest</span>
-            @endif
-        </div>
-    </div>
-</nav>
-
+<!-- Navbar -->
+@include('layouts.navbar')
 <!-- Layout Sidebar dan Konten -->
 <div class="main-layout">
     <!-- Sidebar -->
-    <div class="sidebar">
-        <nav class="menu">
-            <ul class="list-unstyled">
-                <li>
-                    <a href="{{ route('employees.index') }}" class="icon-link">
-                        <span class="material-icons">admin_panel_settings</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ route('file.index') }}" class="icon-link">
-                        <span class="material-icons">folder</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ route('media.index') }}" class="icon-link">
-                        <span class="material-icons">perm_media</span>
-                    </a>
-                </li>
-                <li>
-                    <form action="{{ route('logout') }}" method="POST" class="d-flex justify-content-center mt-3">
-                        @csrf
-                        <button type="submit" class="btn btn-link icon-link" title="Logout">
-                            <span class="material-icons">logout</span>
-                        </button>
-                    </form>
-                </li>
-            </ul>
-        </nav>
-    </div>
-
+    @include('layouts.sidebar')
     <!-- Konten Utama -->
     <div class="container mt-4">
         <h2 class="mb-4">Edit Media</h2>
@@ -77,7 +34,7 @@
             <button type="submit" class="btn btn-danger"
                 onclick="return confirm('Are you sure you want to delete this media?')">Delete Media</button>
         </form>
-        
+
         <!-- Notifikasi Sukses -->
         @if(session('success'))
             <div class="alert alert-success mt-3">
@@ -93,15 +50,19 @@
             padding: 0;
             box-sizing: border-box;
         }
-        html, body {
+
+        html,
+        body {
             height: 100%;
             overflow: hidden;
         }
+
         .main-layout {
             display: flex;
             width: 100vw;
             height: 100vh;
         }
+
         .sidebar {
             width: 80px;
             height: 100vh;
@@ -113,6 +74,7 @@
             box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
             border-right: 1px solid #e0e0e0;
         }
+
         .icon-link {
             display: flex;
             justify-content: center;
@@ -123,17 +85,21 @@
             color: white;
             font-size: 28px;
         }
+
         .icon-link:hover {
             background-color: #145d65;
         }
+
         .material-icons {
             font-size: 28px;
         }
+
         .menu ul {
             width: 100%;
             padding: 0;
             list-style: none;
         }
+
         .menu ul li {
             margin: 20px 0;
         }
@@ -152,4 +118,4 @@
             document.querySelector('.grid-layout').classList.remove('active');
         });
     </script>
-@endsection
+    @endsection

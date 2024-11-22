@@ -3,143 +3,108 @@
 @section('title', 'Add Media')
 
 @section('content')
-
-<nav class="navbar navbar-expand-lg">
-    <div class="container-fluid align-items-center">
-        <div class="d-flex align-items-center">
-            <img src="{{ asset('img/logo.png') }}" alt="Logo" style="width: 50px; height: 50px; border-radius: 50%; margin-right: 15px;">
-            <a class="navbar-brand fw-bold" href="#">BBSPJIS File Manager</a>
-        </div>
-        <div>
-            @if(Auth::check())
-                <span class="fw-bold">{{ Auth::user()->nama_user }}</span>
-                <span class="text-muted d-block margin-left">{{ Auth::user()->role }}</span>
-            @else
-                <span class="fw-bold">Guest</span>
-            @endif
-        </div>
-    </div>
-</nav>
+<!-- Navbar -->
+@include('layouts.navbar')
 
 <!-- Layout Sidebar dan Konten -->
 <div class="main-layout">
-    <!-- Sidebar -->
-    <div class="sidebar">
-        <nav class="menu">
-            <ul class="list-unstyled">
-                <li>
-                    <a href="{{ route('employees.index') }}" class="icon-link">
-                        <span class="material-icons">admin_panel_settings</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ route('file.index') }}" class="icon-link">
-                        <span class="material-icons">folder</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ route('media.index') }}" class="icon-link">
-                        <span class="material-icons">perm_media</span>
-                    </a>
-                </li>
-                <li>
-                    <form action="{{ route('logout') }}" method="POST" class="d-flex justify-content-center mt-3">
-                        @csrf
-                        <button type="submit" class="btn btn-link icon-link" title="Logout">
-                            <span class="material-icons">logout</span>
-                        </button>
-                    </form>
-                </li>
-            </ul>
-        </nav>
+    @include('layouts.sidebar')
+
+    <!-- Konten Dashboard -->
+    <div class="container mt-4">
+        <h2 class="mb-4">Add New Media</h2>
+
+        <form action="{{ route('media.store') }}" method="POST" enctype="multipart/form-data">
+            @csrf
+            <div class="mb-3">
+                <label for="name" class="form-label">Media Name</label>
+                <input type="text" name="name" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="file" class="form-label">Media File</label>
+                <input type="file" name="file" class="form-control" accept="image/*,audio/*,video/*" required>
+            </div>
+            <div class="mb-3">
+                <label for="type" class="form-label">Media Type</label>
+                <select name="type" class="form-select" required>
+                    <option value="image">Image</option>
+                    <option value="audio">Audio</option>
+                    <option value="video">Video</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Add Media</button>
+        </form>
     </div>
 
-<!-- Konten Dashboard -->
-<div class="container mt-4">
-    <h2 class="mb-4">Add New Media</h2>
-
-    <form action="{{ route('media.store') }}" method="POST" enctype="multipart/form-data">
-        @csrf
-        <div class="mb-3">
-            <label for="name" class="form-label">Media Name</label>
-            <input type="text" name="name" class="form-control" required>
+    <!-- Notifikasi Sukses -->
+    @if(session('success'))
+        <div class="alert alert-success mt-3">
+            {{ session('success') }}
         </div>
-        <div class="mb-3">
-            <label for="file" class="form-label">Media File</label>
-            <input type="file" name="file" class="form-control" accept="image/*,audio/*,video/*" required>
-        </div>
-        <div class="mb-3">
-            <label for="type" class="form-label">Media Type</label>
-            <select name="type" class="form-select" required>
-                <option value="image">Image</option>
-                <option value="audio">Audio</option>
-                <option value="video">Video</option>
-            </select>
-        </div>
-        <button type="submit" class="btn btn-primary">Add Media</button>
-    </form>
+    @endif
 </div>
 
-        <!-- Notifikasi Sukses -->
-        @if(session('success'))
-            <div class="alert alert-success mt-3">
-                {{ session('success') }}
-            </div>
-        @endif
-    </div>
+<!-- Style Khusus -->
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
 
-    <!-- Style Khusus -->
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        html, body {
-            height: 100%;
-            overflow: hidden;
-        }
-        .main-layout {
-            display: flex;
-            width: 100vw;
-            height: 100vh;
-        }
-        .sidebar {
-            width: 80px;
-            height: 100vh;
-            background: linear-gradient(180deg, #188A98, #5CCED1);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding-top: 20px;
-            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-            border-right: 1px solid #e0e0e0;
-        }
-        .icon-link {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 100%;
-            height: 60px;
-            text-decoration: none;
-            color: white;
-            font-size: 28px;
-        }
-        .icon-link:hover {
-            background-color: #145d65;
-        }
-        .material-icons {
-            font-size: 28px;
-        }
-        .menu ul {
-            width: 100%;
-            padding: 0;
-            list-style: none;
-        }
-        .menu ul li {
-            margin: 20px 0;
-        }
-    </style>
+    html,
+    body {
+        height: 100%;
+        overflow: hidden;
+    }
+
+    .main-layout {
+        display: flex;
+        width: 100vw;
+        height: 100vh;
+    }
+
+    .sidebar {
+        width: 80px;
+        height: 100vh;
+        background: linear-gradient(180deg, #188A98, #5CCED1);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding-top: 20px;
+        box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+        border-right: 1px solid #e0e0e0;
+    }
+
+    .icon-link {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 60px;
+        text-decoration: none;
+        color: white;
+        font-size: 28px;
+    }
+
+    .icon-link:hover {
+        background-color: #145d65;
+    }
+
+    .material-icons {
+        font-size: 28px;
+    }
+
+    .menu ul {
+        width: 100%;
+        padding: 0;
+        list-style: none;
+    }
+
+    .menu ul li {
+        margin: 20px 0;
+    }
+</style>
 
 
 @endsection

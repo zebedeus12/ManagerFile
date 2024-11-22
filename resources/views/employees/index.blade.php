@@ -3,52 +3,10 @@
 @section('title', 'Employees')
 
 @section('content')
-<nav class="navbar navbar-expand-lg bg-light">
-    <div class="container-fluid align-items-center">
-        <div class="d-flex align-items-center">
-            <img src="{{ asset('img/logo.png') }}" alt="Logo" class="logo">
-            <a class="navbar-brand fw-bold" href="{{ route('dashboard') }}">BBSPJIS File Manager</a>
-        </div>
-        <div class="d-flex align-items-center user-info-notification">
-            @if(Auth::check())
-                <span class="fw-bold">{{ Auth::user()->nama_user }}</span>
-            @else
-                <span class="fw-bold">Guest</span>
-            @endif
-            <a href="#" class="notification-link me-3" title="Notifications">
-                <span class="material-icons">notifications</span>
-                <span class="notification-count">3</span> <!-- Bisa diubah sesuai jumlah notifikasi -->
-            </a>
-        </div>
-    </div>
-</nav>
-
+<!-- Navbar -->
+@include('layouts.navbar')
 <div class="main-layout">
-    <div class="sidebar">
-        <nav class="menu">
-            <ul class="list-unstyled">
-                <li><a href="{{ route('employees.index') }}" class="icon-link"><span
-                            class="material-icons">admin_panel_settings</span></a></li>
-                <li>
-                    <a href="{{ route('file.index') }}" class="icon-link">
-                        <span class="material-icons">folder</span>
-                    </a>
-                </li>
-                <li><a href="{{ route('media.index') }}" class="icon-link"><span
-                            class="material-icons">perm_media</span></a></li>
-                <li>
-                    <!-- Tambahkan Logout Button di Sidebar -->
-                    <form action="{{ route('logout') }}" method="POST" class="d-flex justify-content-center mt-3">
-                        @csrf
-                        <button type="submit" class="btn btn-link icon-link" title="Logout">
-                            <span class="material-icons">logout</span>
-                        </button>
-                    </form>
-                </li>
-            </ul>
-        </nav>
-    </div>
-
+    @include('layouts.sidebar')
     <div class="employee-content p-4">
         <div class="header d-flex align-items-center justify-content-between mb-4">
             <h2>Employee List</h2>
