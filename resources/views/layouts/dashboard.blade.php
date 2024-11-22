@@ -22,7 +22,16 @@
 
     <!-- Custom CSS -->
     <style>
-        body {
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body,
+        html {
+            height: 100%;
+            overflow: hidden;
             font-family: 'Poppins', sans-serif;
             background-color: #f5f5f5;
             margin: 0;
@@ -30,75 +39,10 @@
             display: flex;
         }
 
-        /*navbar*/
-        .navbar {
-            background-color: white;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-            padding: 15px 20px;
-            /* Perbesar padding untuk ukuran navbar */
-            position: relative;
-        }
-
-        .navbar::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(255, 255, 255, 0.1);
-            pointer-events: none;
-            filter: blur(8px);
-            opacity: 0.4;
-            z-index: 0;
-            /* Pastikan ini di belakang elemen navbar */
-        }
-
-        .navbar-brand {
-            color: white;
-            font-size: 1.5rem;
-            /* Besarkan ukuran font logo */
-        }
-
-        .navbar a {
-            color: #31511E;
-            font-size: 1.1rem;
-            /* Besarkan ukuran font link */
-        }
-
-        .navbar a:hover {
-            color: #4CAF50;
-        }
-
-        .navbar .dropdown-item {
-            color: #31511E;
-        }
-
-        .navbar .dropdown-item:hover {
-            background-color: rgba(49, 81, 30, 0.1);
-            /* Tambahkan efek hover untuk item dropdown */
-        }
-
         /* Sidebar styling */
         .sidebar {
             width: 70px;
-            /* Reduced width for icon-only sidebar */
             background-color: white;
-        }
-
-        /* Center and style icons */
-        .menu ul li a {
-            color: #adb5bd;
-            display: flex;
-            justify-content: center;
-            padding: 15px 15px;
-            font-size: 24px;
-            /* Adjust icon size */
-        }
-
-        .menu ul li a:hover {
-            background-color: #1CAAB8;
-            color: white;
         }
 
         /* Main content styling */
@@ -178,44 +122,6 @@
         .layout-tools .btn:last-child {
             margin-right: 0;
             /* Menghapus margin kanan pada tombol terakhir */
-        }
-
-        /* notifikasi */
-        .user-info-notification {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 20px;
-            /* Mengatur jarak antara nama pengguna dan notifikasi */
-        }
-
-        .user-info {
-            text-align: right;
-        }
-
-
-        .notification-link {
-            position: relative;
-            color: #333;
-            font-size: 24px;
-            text-decoration: none;
-            transition: color 0.3s;
-        }
-
-        .notification-link:hover {
-            color: #188A98;
-        }
-
-        .notification-count {
-            position: absolute;
-            top: -5px;
-            right: -10px;
-            background-color: #ff5e5e;
-            color: white;
-            font-size: 12px;
-            border-radius: 50%;
-            padding: 2px 6px;
-            font-weight: bold;
         }
     </style>
 
