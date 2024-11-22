@@ -74,5 +74,51 @@
 
     </div>
 </div>
+<script>
+    function toggleDropdown(button) {
+        const dropdownMenu = button.nextElementSibling;
+        // Tampilkan atau sembunyikan dropdown
+        if (dropdownMenu.style.display === 'block') {
+            dropdownMenu.style.display = 'none';
+        } else {
+            dropdownMenu.style.display = 'block';
+        }
+    }
 
+    function renameFolder(folderId) {
+        // Logika rename folder
+        alert(`Rename folder dengan ID: ${folderId}`);
+        // Tambahkan modal atau redirect ke halaman rename
+    }
+
+    function shareFolder(folderId) {
+        // Logika share folder
+        alert(`Share folder dengan ID: ${folderId}`);
+        // Implementasikan logika share
+    }
+
+    function deleteFolder(folderId) {
+        // Konfirmasi sebelum menghapus
+        if (confirm('Apakah Anda yakin ingin menghapus folder ini?')) {
+            alert(`Folder dengan ID ${folderId} akan dihapus.`);
+            // Implementasikan logika penghapusan (AJAX atau redirect ke controller)
+        }
+    }
+
+    function copyFolder(folderId) {
+        // Logika copy folder
+        alert(`Copy folder dengan ID: ${folderId}`);
+        // Implementasikan logika copy
+    }
+
+    // Tutup dropdown saat klik di luar area
+    window.addEventListener('click', function (e) {
+        const dropdowns = document.querySelectorAll('.dropdown-menu');
+        dropdowns.forEach(menu => {
+            if (!menu.parentElement.contains(e.target)) {
+                menu.style.display = 'none';
+            }
+        });
+    });
+</script>
 @endsection
