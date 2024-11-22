@@ -1,4 +1,4 @@
-@extends('layouts.dashboard')
+@extends('layouts.employee')
 
 @section('title', 'Edit Employee')
 
@@ -45,38 +45,4 @@
         </form>
     </div>
 </div>
-
-<style>
-    .main-layout {
-        display: flex;
-        height: 100vh;
-    }
-
-    .sidebar {
-        width: 80px;
-        height: 100vh;
-        background: linear-gradient(180deg, #188A98, #5CCED1);
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        padding-top: 20px;
-        box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-        border-right: 1px solid #e0e0e0;
-    }
-
-    .icon-link {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 100%;
-        height: 60px;
-        text-decoration: none;
-        color: white;
-        font-size: 28px;
-    }
-
-    .icon-link:hover {
-        background-color: #145d65;
-    }
-</style>
 @endsection
