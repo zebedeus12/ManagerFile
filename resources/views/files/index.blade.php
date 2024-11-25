@@ -20,6 +20,19 @@
             {{-- Grid Folders --}}
             @foreach ($folders as $folder)
                 <div class="file-card">
+                    <!-- Dropdown Tombol -->
+                    <div class="dropdown">
+                        <button class="dropdown-toggle custom-toggle" onclick="toggleDropdown(this)">⋮</button>
+                        <!-- Menu Dropdown -->
+                        <div class="dropdown-menu">
+                            <button onclick="renameFolder({{ $folder->id }})">Rename</button>
+                            <button onclick="shareFolder({{ $folder->id }})">Share</button>
+                            <button onclick="deleteFolder({{ $folder->id }})">Delete</button>
+                            <button onclick="copyFolder({{ $folder->id }})">Copy</button>
+                        </div>
+                    </div>
+
+                    <!-- Ikon dan Info Folder -->
                     <a href="{{ route('folder.show', $folder->id) }}" class="folder-link">
                         <div class="icon-container">
                             <span class="material-icons folder-icon">folder</span>
@@ -29,19 +42,6 @@
                             <span class="text-muted">Updated at: {{ $folder->updated_at->format('d/m/Y') }}</span>
                         </div>
                     </a>
-                    <!-- Tombol titik tiga -->
-                    <div class="dropdown">
-                        <button class="dropdown-toggle" onclick="toggleDropdown(this)">
-                            <span class="material-icons">more_vert</span>
-                        </button>
-                        <!-- Menu Pop-Up -->
-                        <div class="dropdown-menu">
-                            <button onclick="renameFolder({{ $folder->id }})">Rename</button>
-                            <button onclick="shareFolder({{ $folder->id }})">Share</button>
-                            <button onclick="deleteFolder({{ $folder->id }})">Delete</button>
-                            <button onclick="copyFolder({{ $folder->id }})">Copy</button>
-                        </div>
-                    </div>
                 </div>
             @endforeach
         </div>
@@ -50,13 +50,22 @@
 <script>
     function toggleDropdown(button) {
         const dropdownMenu = button.nextElementSibling;
-        // Tampilkan atau sembunyikan dropdown
+
+        document.querySelectorAll('.dropdown-menu').forEach(menu => {
+            if (menu !== dropdownMenu) {
+                menu.style.display = 'none';
+            }
+        });
+
         if (dropdownMenu.style.display === 'block') {
             dropdownMenu.style.display = 'none';
         } else {
             dropdownMenu.style.display = 'block';
         }
+
+        event.stopPropagation();
     }
+
 
     function renameFolder(folderId) {
         // Logika rename folder
@@ -85,14 +94,12 @@
     }
 
     // Tutup dropdown saat klik di luar area
-    window.addEventListener('click', function (e) {
-        const dropdowns = document.querySelectorAll('.dropdown-menu');
-        dropdowns.forEach(menu => {
-            if (!menu.parentElement.contains(e.target)) {
-                menu.style.display = 'none';
-            }
+    window.addEventListener('click', function () {
+        document.querySelectorAll('.dropdown-menu').forEach(menu => {
+            menu.style.display = 'none';
         });
     });
+
 </script>
 
 @endsection

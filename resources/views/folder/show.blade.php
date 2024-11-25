@@ -45,6 +45,16 @@
             {{-- Tampilkan subfolder --}}
             @foreach ($subFolders as $subFolder)
                 <div class="sub-folder-card">
+                    <!-- Tombol titik tiga -->
+                    <div class="dropdown">
+                        <button class="dropdown-toggle custom-toggle" onclick="toggleDropdown(this)">⋮</button>
+                        <div class="dropdown-menu">
+                            <button onclick="renameFolder({{ $folder->id }})">Rename</button>
+                            <button onclick="shareFolder({{ $folder->id }})">Share</button>
+                            <button onclick="deleteFolder({{ $folder->id }})">Delete</button>
+                            <button onclick="copyFolder({{ $folder->id }})">Copy</button>
+                        </div>
+                    </div>
                     <a href="{{ route('folder.show', $subFolder->id) }}">
                         <div class="icon-container">
                             <span class="material-icons folder-icon">folder</span>
