@@ -28,8 +28,8 @@
                             <button onclick="openRenameModal({{ $folder->id }}, '{{ $folder->name }}')">Rename</button>
                             <button
                                 onclick="openShareModal({{ $folder->id }}, '{{ url('/folder/' . $folder->id . '/share') }}')">Share</button>
-                            <button onclick="deleteFolder({{ $folder->id }})">Delete</button>
-                            <button onclick="copyFolder({{ $folder->id }})">Copy</button>
+                            <button onclick="openDeleteModal({{ $folder->id }})">Delete</button>
+                            <button onclick="openCopyModal({{ $folder->id }})">Copy</button>
                         </div>
                     </div>
 
@@ -63,19 +63,17 @@
             </div>
         </div>
 
-        <!-- Share Folder-->
-        <div id="shareFolderModal" class="modal" style="display: none;">
+        <!-- Delete -->
+        <div id="deleteModal" class="modal" style="display: none;">
             <div class="modal-content">
-                <span class="close" onclick="closeShareModal()">&times;</span>
-                <h2>Share Folder</h2>
-                <form id="shareFolderForm">
+                <span class="close" onclick="closeDeleteModal()">&times;</span>
+                <h2>Delete?</h2>
+                <p>Anda yakin ingin menghapus folder tersebut?</p>
+                <form id="deleteForm" method="POST">
                     @csrf
-                    <input type="hidden" id="folderIdToShare" name="folder_id">
-                    <div class="form-group">
-                        <label for="folderLink">With Link:</label>
-                        <input type="text" id="folderLink" class="form-control" readonly>
-                        <button type="button" onclick="copyToClipboard('folderLink')" class="btn btn-link">Copy</button>
-                    </div>
+                    @method('DELETE')
+                    <button type="button" class="btn btn-secondary" onclick="closeDeleteModal()">Cancel</button>
+                    <button type="submit" class="btn btn-danger">Delete</button>
                 </form>
             </div>
         </div>

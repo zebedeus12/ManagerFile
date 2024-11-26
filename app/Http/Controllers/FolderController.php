@@ -93,12 +93,49 @@ class FolderController extends Controller
 
     public function copy($id)
     {
-        $folder = Folder::findOrFail($id);
-        $newFolder = $folder->replicate();
+        $folder = Folder::with('children', 'files')->findOrFail($id); // Mengambil folder beserta anak-anaknya
+        $newFolder = $folder->replicate(); // Salin folder
         $newFolder->name = $folder->name . ' (Copy)';
         $newFolder->save();
 
+        // Rekursif: Salin sub-folder
+        if ($folder->children->isNotEmpty()) {
+            foreach ($folder->children as $child) {
+                $this->copySubFolder($child, $newFolder->id);
+            }
+        }
+
+        // Salin file di folder
+        foreach ($folder->files as $file) {
+            $newFile = $file->replicate();
+            $newFile->folder_id = $newFolder->id;
+            $newFile->save();
+        }
+
         return redirect()->route('file.index')->with('success', 'Folder berhasil disalin.');
     }
+
+    protected function copySubFolder($folder, $newParentId)
+    {
+        $newFolder = $folder->replicate();
+        $newFolder->parent_id = $newParentId;
+        $newFolder->name = $folder->name . ' (Copy)';
+        $newFolder->save();
+
+        // Rekursif untuk sub-folder
+        if ($folder->children->isNotEmpty()) {
+            foreach ($folder->children as $child) {
+                $this->copySubFolder($child, $newFolder->id);
+            }
+        }
+
+        // Salin file di dalam folder
+        foreach ($folder->files as $file) {
+            $newFile = $file->replicate();
+            $newFile->folder_id = $newFolder->id;
+            $newFile->save();
+        }
+    }
+
 
 }
