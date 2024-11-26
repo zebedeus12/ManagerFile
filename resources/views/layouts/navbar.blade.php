@@ -12,10 +12,13 @@
             @else
                 <span class="fw-bold">Guest</span>
             @endif
-            <a href="#" class="notification-link me-3" title="Notifications">
+            <a href="#" class="notification-link me-3" title="Notifications" onclick="fetchNotifications()">
                 <span class="material-icons">notifications</span>
-                <span class="notification-count">3</span> <!-- Bisa diubah sesuai jumlah notifikasi -->
+                <span class="notification-count" id="notificationCount">0</span>
             </a>
+            <div id="notificationDropdown" class="dropdown-menu" style="display: none; position: absolute; right: 0;">
+                <div id="notificationList"></div>
+            </div>
         </div>
     </div>
 </nav>
@@ -107,4 +110,69 @@
         padding: 2px 6px;
         font-weight: bold;
     }
+
+    #notificationDropdown {
+        background: white;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        padding: 10px;
+        max-height: 200px;
+        overflow-y: auto;
+        width: 300px;
+        z-index: 1000;
+        position: absolute;
+    }
+
+    #notificationDropdown .dropdown-item {
+        padding: 10px;
+        border-bottom: 1px solid #f0f0f0;
+        font-size: 14px;
+        color: #333;
+    }
+
+    #notificationDropdown .dropdown-item:last-child {
+        border-bottom: none;
+    }
+
+    #notificationDropdown .dropdown-item:hover {
+        background: #f5f5f5;
+    }
 </style>
+<script>
+    function fetchNotifications() {
+        const dropdown = document.getElementById('notificationDropdown');
+        const notificationList = document.getElementById('notificationList');
+
+        // Tampilkan dropdown
+        dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+
+        // Ambil notifikasi dari server
+        fetch('{{ route('notifications.get') }}')
+            .then(response => response.json())
+            .then(notifications => {
+                notificationList.innerHTML = ''; // Hapus notifikasi lama
+                if (notifications.length > 0) {
+                    notifications.forEach(notification => {
+                        const item = document.createElement('div');
+                        item.classList.add('dropdown-item');
+                        item.textContent = notification.message;
+                        notificationList.appendChild(item);
+                    });
+                } else {
+                    notificationList.innerHTML = '<div class="dropdown-item">Tidak ada notifikasi</div>';
+                }
+
+                // Update jumlah notifikasi
+                document.getElementById('notificationCount').textContent = notifications.length;
+            })
+            .catch(error => console.error('Error fetching notifications:', error));
+    }
+
+    // Tutup dropdown jika klik di luar
+    window.addEventListener('click', function (e) {
+        const dropdown = document.getElementById('notificationDropdown');
+        if (!dropdown.contains(e.target)) {
+            dropdown.style.display = 'none';
+        }
+    });
+</script>

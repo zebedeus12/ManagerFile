@@ -1,12 +1,14 @@
 <?php
 
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\NotificationController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\MediaController;
 use App\Http\Controllers\FolderController;
 use App\Http\Controllers\FileController;
+use App\Models\Notification;
 
 
 Route::get('/', function () {
@@ -20,6 +22,11 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 Route::get('/home', function () {
     return view('home');
 })->middleware('auth');
+
+//navbar
+Route::get('/notifications', [NotificationController::class, 'getNotifications'])->name('notifications.get');
+
+
 
 //dashboard
 Route::get('/dashboard', function () {
