@@ -63,23 +63,7 @@
             </div>
         </div>
 
-        <!-- Share Folder-->
-        <div id="shareFolderModal" class="modal" style="display: none;">
-            <div class="modal-content">
-                <span class="close" onclick="closeShareModal()">&times;</span>
-                <h2>Share Folder</h2>
-                <form id="shareFolderForm">
-                    @csrf
-                    <input type="hidden" id="folderIdToShare" name="folder_id">
-                    <div class="form-group">
-                        <label for="folderLink">With Link:</label>
-                        <input type="text" id="folderLink" class="form-control" readonly>
-                        <button type="button" onclick="copyToClipboard('folderLink')" class="btn btn-link">Copy</button>
-                    </div>
-                </form>
-            </div>
         </div>
-    </div>
 </div>
 <script>
     function toggleDropdown(button) {

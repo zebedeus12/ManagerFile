@@ -15,8 +15,8 @@
                 <input type="text" name="query" class="form-control me-2" placeholder="Search media..." required>
                 <button type="submit" class="btn btn-outline-primary">Search</button>
             </form>
-            <button class="add-folder ms-auto" onclick="location.href='{{ route('folder.create') }}'">Add
-                Folder</button>
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addFolderModal">Add Folder</button>
+            <a href="{{ route('media.create') }}" class="btn btn-primary">Create Media</a>
         </div>
 
         <!-- Filter and View Options -->
@@ -80,6 +80,37 @@
                 {{ session('success') }}
             </div>
         @endif
+
+        <div class="modal fade" id="addFolderModal" tabindex="-1" aria-labelledby="addFolderModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addFolderModalLabel">Create New Folder</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form id="createFolderForm">
+                        <div class="modal-body">
+                            @csrf
+                            <div class="form-group">
+                                <label for="folderName">Folder Name</label>
+                                <input type="text" id="folderName" name="folder_name" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="accessibility">Accessibility</label>
+                                <select id="accessibility" name="accessibility" class="form-control" required>
+                                    <option value="public">Public</option>
+                                    <option value="private">Private</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-primary">Create</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -109,6 +140,49 @@
         if (currentValue < zoomSlider.attr('max')) {
             zoomSlider.val(currentValue + 10).trigger('input');
         }
+    });
+
+    $(document).ready(function () {
+        $('#createFolderForm').on('submit', function (e) {
+            e.preventDefault();
+
+            const formData = $(this).serialize();
+
+            $.ajax({
+                url: '{{ route("folder.store") }}',
+                type: 'POST',
+                data: formData,
+                success: function (response) {
+                    if (response.success) {
+                        const folder = response.folder;
+
+                        // Tambahkan folder ke grid
+                        $('#media-container').prepend(`
+                            <div class="file-card" data-type="folder">
+                                <a href="/folder/${folder.id}">
+                                    <div class="icon-container">
+                                        <span class="material-icons folder-icon">folder</span>
+                                    </div>
+                                    <div class="file-info">
+                                        <p class="fw-bold">${folder.name}</p>
+                                        <span class="text-muted">Folder</span>
+                                    </div>
+                                </a>
+                            </div>
+                        `);
+
+                        // Tutup modal dan reset form
+                        $('#addFolderModal').modal('hide');
+                        $('#createFolderForm')[0].reset();
+
+                        alert('Folder berhasil dibuat!');
+                    }
+                },
+                error: function () {
+                    alert('Terjadi kesalahan saat membuat folder.');
+                }
+            });
+        });
     });
 </script>
 @endsection

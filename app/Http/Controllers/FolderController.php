@@ -41,19 +41,23 @@ class FolderController extends Controller
         $folder->name = $request->input('folder_name');
         $folder->accessibility = $request->input('accessibility');
 
-        // Jika parentId ada, set parent_id
         if ($parentId) {
             $folder->parent_id = $parentId;
         }
 
         $folder->save();
 
-        if ($parentId) {
-            return redirect()->route('folder.show', $parentId)->with('success', 'Sub-folder berhasil dibuat');
+        if ($request->ajax()) {
+            // Jika permintaan adalah AJAX, kembalikan response JSON
+            return response()->json([
+                'success' => true,
+                'folder' => $folder
+            ]);
         }
 
         return redirect()->route('file.index')->with('success', 'Folder berhasil dibuat');
     }
+
 
     public function show(Folder $folder)
     {
@@ -100,5 +104,4 @@ class FolderController extends Controller
 
         return redirect()->route('file.index')->with('success', 'Folder berhasil disalin.');
     }
-
 }
