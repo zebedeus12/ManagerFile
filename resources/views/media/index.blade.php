@@ -63,8 +63,12 @@
                     </div>
                     <div class="file-actions">
                         <a href="{{ route('media.edit', $media->id) }}" class="btn btn-warning btn-sm me-2">Edit</a>
-                        <button type="button" class="delete-button btn btn-danger btn-sm"
-                            data-url="{{ route('media.destroy', ['media' => $media->id]) }}">Delete</button>
+                        <form action="{{ route('media.destroy', ['media' => $media->id]) }}" method="POST" class="mt-2">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="delete-button btn btn-danger btn-sm"
+                                onclick="return confirm('Are you sure you want to delete this media?')">Delete Media</button>
+                        </form>
                     </div>
                 </div>
             @endforeach
