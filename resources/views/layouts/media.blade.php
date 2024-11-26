@@ -22,95 +22,171 @@
 
     <!-- Custom CSS -->
     <style>
+        /* Global reset */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-
+    
         body,
         html {
             height: 100%;
             overflow: hidden;
             font-family: 'Poppins', sans-serif;
             background-color: #f5f5f5;
-            margin: 0;
-            padding: 0;
             display: flex;
         }
-
+    
         .main-layout {
             display: flex;
             width: 100vw;
             height: 100vh;
         }
-
+    
         /* Sidebar styling */
         .sidebar {
             width: 70px;
             background-color: white;
         }
-
-        /*container*/
-        .container {
-            flex: 1;
-            background-color: #f1f1f1;
-            padding: 20px;
-            overflow-y: auto;
-        }
-
+    
+        /* Main content area */
         .employee-content {
             flex: 1;
             padding: 20px;
             overflow-y: auto;
         }
-
+    
+        /* Filter buttons styling */
         .filter-buttons .btn-filter {
             margin-right: 10px;
+            background-color: #f8f9fa;
+            border: 1px solid #ced4da;
+            color: #495057;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
         }
-
-        .zoom-slider-container {
-            display: flex;
-            align-items: center;
+    
+        .filter-buttons .btn-filter.active {
+            background-color: #007bff;
+            color: #fff;
         }
-
-        .zoom-slider-button {
-            background: none;
-            border: none;
-            margin: 0 5px;
-        }
-
-        .zoom-slider {
-            width: 100px;
-            margin: 0 10px;
-        }
-
+    
+        /* File grid layout */
         .file-grid {
             display: flex;
             flex-wrap: wrap;
             gap: 20px;
         }
-
+    
+        /* File card container */
         .file-card {
+            position: relative;
+            border: 1px solid #ddd;
+            border-radius: 8px;
             background-color: #fff;
-            border-radius: 5px;
-            padding: 10px;
-            width: 150px;
-            text-align: center;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
             transition: transform 0.3s ease;
+            width: 200px;
         }
-
-        .file-card img {
+    
+        .file-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+    
+        /* Image container for media preview */
+        .image-container {
             width: 100%;
-            height: auto;
-            border-radius: 5px;
+            aspect-ratio: 4 / 3; /* Set aspect ratio for consistent display */
+            overflow: hidden;
         }
+    
+        .media-preview {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    
+/* Dropdown item styling */
+.dropdown-item {
+    font-size: 14px; /* Ukuran font seragam */
+    font-weight: normal; /* Berat font seragam */
+    color: black; /* Warna default */
+    padding: 5px 10px; /* Jarak padding seragam */
+    cursor: pointer;
+}
 
-        .file-actions .btn {
-            margin-top: 10px;
+/* Khusus untuk tombol Delete */
+.dropdown-item.delete {
+    color: red; /* Warna teks merah */
+    font-weight: bold; /* Berat font khusus */
+}
+
+/* Hover styling */
+.dropdown-item:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+}
+
+
+/* Tombol tiga titik */
+.action-menu button {
+    padding: 15;
+    border: none;
+    background: none;
+    cursor: pointer;
+    color: white; /* Warna ikon */
+    font-size: 15px; /* Ukuran ikon */
+    display: flex;
+    align-items: center;
+    justify: center;
+}
+
+/* Menghilangkan tanda panah bawaan */
+.action-menu button::after {
+    display: none; /* Hilangkan tanda panah dropdown */
+}
+    
+        /* File info section */
+        .file-info {
+            padding: 10px;
+            text-align: center;
+        }
+    
+        .file-info p {
+            font-size: 14px;
+            font-weight: bold;
+            color: #333;
+            margin: 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    
+        /* Zoom slider container */
+        .zoom-slider-container {
+            display: flex;
+            align-items: center;
+        }
+    
+        .zoom-slider-button {
+            background: none;
+            border: none;
+            margin: 0 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    
+        .zoom-slider {
+            width: 100px;
+            margin: 0 10px;
         }
     </style>
+    
+
     @stack('styles')
 </head>
 

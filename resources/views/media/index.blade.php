@@ -1,6 +1,6 @@
 @extends('layouts.media')
 
-@section('title', 'Media')
+@section('title', 'Media Manager')
 
 @section('content')
 <!-- Navbar -->
@@ -26,50 +26,39 @@
                 <button class="btn btn-filter" data-filter="photo">Photo</button>
                 <button class="btn btn-filter" data-filter="video">Video</button>
             </div>
-
-            <div class="zoom-slider-container d-flex align-items-center">
-                <button class="zoom-slider-button" id="zoom-out">
-                    <span class="zoom-icon">
-                        <!-- SVG for zoom out -->
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M20 12H4" stroke="black" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round" />
-                        </svg>
-                    </span>
-                </button>
-                <input aria-label="Photo Zoom Slider" id="zoom-slider" class="zoom-slider" type="range" min="100"
-                    max="200" value="100">
-                <button class="zoom-slider-button" id="zoom-in">
-                    <span class="zoom-icon">
-                        <!-- SVG for zoom in -->
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M12 5V19" stroke="black" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round" />
-                            <path d="M5 12H19" stroke="black" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round" />
-                        </svg>
-                    </span>
-                </button>
-            </div>
         </div>
 
         <!-- Media Grid Display -->
         <div class="file-grid mt-4" id="media-container">
             @foreach($mediaItems as $media)
-                <div class="file-card" data-type="{{ $media->type }}">
-                    <img src="{{ asset('storage/' . $media->path) }}" alt="{{ $media->name }}" class="media-preview mb-2" />
-                    <div class="file-info">
-                        <p class="fw-bold">{{ $media->name }}</p>
-                        <span class="text-muted">{{ ucfirst($media->type) }}</span>
+                <div class="file-card position-relative" data-type="{{ $media->type }}">
+                    <!-- Dropdown Menu (Three Dots) -->
+                    <div class="dropdown action-menu position-absolute">
+                        <button class="btn btn-light btn-sm dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                            <span class="material-icons">more_vert</span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu">
+                            <li>
+                                <a href="{{ route('media.edit', $media->id) }}" class="dropdown-item">Edit</a>
+                            </li>
+                            <li>
+                                <form action="{{ route('media.destroy', ['media' => $media->id]) }}" method="POST" class="d-inline">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="dropdown-item text-danger" onclick="return confirm('Are you sure you want to delete this media?')">Delete</button>
+                                </form>
+                            </li>
+                        </ul>
                     </div>
-                    <div class="file-actions">
-                        <a href="{{ route('media.edit', $media->id) }}" class="btn btn-warning btn-sm me-2">Edit</a>
-                        <form action="{{ route('media.destroy', ['media' => $media->id]) }}" method="POST" class="mt-2">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="delete-button btn btn-danger btn-sm"
-                                onclick="return confirm('Are you sure you want to delete this media?')">Delete Media</button>
-                        </form>
+
+                    <!-- Image Container -->
+                    <div class="image-container">
+                        <img src="{{ asset('storage/' . $media->path) }}" alt="{{ $media->name }}" class="media-preview" />
+                    </div>
+
+                    <!-- File Info -->
+                    <div class="file-info">
+                        <p class="fw-bold text-truncate">{{ $media->name }}</p>
                     </div>
                 </div>
             @endforeach
@@ -80,109 +69,73 @@
                 {{ session('success') }}
             </div>
         @endif
-
-        <div class="modal fade" id="addFolderModal" tabindex="-1" aria-labelledby="addFolderModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="addFolderModalLabel">Create New Folder</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <form id="createFolderForm">
-                        <div class="modal-body">
-                            @csrf
-                            <div class="form-group">
-                                <label for="folderName">Folder Name</label>
-                                <input type="text" id="folderName" name="folder_name" class="form-control" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="accessibility">Accessibility</label>
-                                <select id="accessibility" name="accessibility" class="form-control" required>
-                                    <option value="public">Public</option>
-                                    <option value="private">Private</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                            <button type="submit" class="btn btn-primary">Create</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
     </div>
 </div>
 
-<script>
-    // Zoom and other existing code
-    const zoomSlider = $('#zoom-slider');
-    const mediaContainer = $('#media-container');
+@endsection
 
-    // Adjust zoom level on slider input
-    zoomSlider.on('input', function () {
-        const zoomLevel = $(this).val() / 100;
-        mediaContainer.find('.file-card').css({
-            'transform': `scale(${zoomLevel})`,
-            'transition': 'transform 0.3s ease' // Smooth transition
-        });
-    });
+@section('styles')
+<style>
+/* Style utama untuk media card */
+.file-card {
+    position: relative;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fff;
+    padding: 0; /* Hilangkan padding agar gambar memenuhi container */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
 
-    $('#zoom-out').on('click', function () {
-        let currentValue = parseInt(zoomSlider.val());
-        if (currentValue > zoomSlider.attr('min')) {
-            zoomSlider.val(currentValue - 10).trigger('input');
-        }
-    });
+/* Atur ukuran gambar */
+.image-container {
+    width: 100%;
+    aspect-ratio: 4 / 3; /* Rasio aspek gambar (4:3 atau sesuaikan kebutuhan) */
+    overflow: hidden;
+}
 
-    $('#zoom-in').on('click', function () {
-        let currentValue = parseInt(zoomSlider.val());
-        if (currentValue < zoomSlider.attr('max')) {
-            zoomSlider.val(currentValue + 10).trigger('input');
-        }
-    });
+.media-preview {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Gambar memenuhi area tanpa distorsi */
+    display: block;
+}
 
-    $(document).ready(function () {
-        $('#createFolderForm').on('submit', function (e) {
-            e.preventDefault();
+/* Posisi ikon tiga titik di luar gambar */
+.action-menu {
+    top: 8px;
+    right: 8px;
+    z-index: 10;
+}
 
-            const formData = $(this).serialize();
+/* Dropdown button styling */
+.action-menu button {
+    padding: 4px;
+    background-color: rgba(255, 255, 255, 0.8);
+    border: none;
+    border-radius: 50%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
 
-            $.ajax({
-                url: '{{ route("folder.store") }}',
-                type: 'POST',
-                data: formData,
-                success: function (response) {
-                    if (response.success) {
-                        const folder = response.folder;
+/* Informasi file */
+.file-info {
+    text-align: center;
+    padding: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+}
 
-                        // Tambahkan folder ke grid
-                        $('#media-container').prepend(`
-                            <div class="file-card" data-type="folder">
-                                <a href="/folder/${folder.id}">
-                                    <div class="icon-container">
-                                        <span class="material-icons folder-icon">folder</span>
-                                    </div>
-                                    <div class="file-info">
-                                        <p class="fw-bold">${folder.name}</p>
-                                        <span class="text-muted">Folder</span>
-                                    </div>
-                                </a>
-                            </div>
-                        `);
+/* Hilangkan teks "Image" */
+.file-info span {
+    display: none;
+}
 
-                        // Tutup modal dan reset form
-                        $('#addFolderModal').modal('hide');
-                        $('#createFolderForm')[0].reset();
-
-                        alert('Folder berhasil dibuat!');
-                    }
-                },
-                error: function () {
-                    alert('Terjadi kesalahan saat membuat folder.');
-                }
-            });
-        });
-    });
-</script>
+/* Efek hover pada card */
+.file-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease;
+}
+</style>
 @endsection
