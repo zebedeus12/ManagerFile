@@ -228,6 +228,23 @@
             cursor: pointer;
             font-size: 20px;
         }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .btn-secondary {
+            background-color: #ccc;
+            margin-right: 10px;
+        }
+
+        .btn-danger {
+            background-color: #d9534f;
+            color: white;
+        }
     </style>
     @stack('styles')
 </head>
@@ -262,6 +279,35 @@
         modal.style.display = "none";
     }
 
+    //DELETE
+    function openDeleteModal(folderId) {
+        const modal = document.getElementById("deleteModal");
+        modal.style.display = "block";
+
+        // Set form action untuk menghapus folder
+        const deleteForm = document.getElementById("deleteForm");
+        deleteForm.action = `/folder/delete/${folderId}`;
+    }
+
+    function closeDeleteModal() {
+        const modal = document.getElementById("deleteModal");
+        modal.style.display = "none";
+    }
+
+    //COPY
+    function openCopyModal(folderId) {
+        const modal = document.getElementById("copyModal");
+        modal.style.display = "block";
+
+        // Set form action untuk copy folder
+        const copyForm = document.getElementById("copyForm");
+        copyForm.action = `/folder/copy/${folderId}`;
+    }
+
+    function closeCopyModal() {
+        const modal = document.getElementById("copyModal");
+        modal.style.display = "none";
+    }
 </script>
 
 </html>

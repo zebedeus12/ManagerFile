@@ -52,8 +52,8 @@
                             <button onclick="openRenameModal({{ $folder->id }}, '{{ $folder->name }}')">Rename</button>
                             <button
                                 onclick="openShareModal({{ $folder->id }}, '{{ url('/folder/' . $folder->id . '/share') }}')">Share</button>
-                            <button onclick="deleteFolder({{ $folder->id }})">Delete</button>
-                            <button onclick="copyFolder({{ $folder->id }})">Copy</button>
+                            <button onclick="openDeleteModal({{ $folder->id }})">Delete</button>
+                            <button onclick="openCopyModal({{ $folder->id }})">Copy</button>
                         </div>
                     </div>
                     <a href="{{ route('folder.show', $subFolder->id) }}">
@@ -95,6 +95,35 @@
                         <input type="text" id="newFolderName" name="name" class="form-control" required>
                     </div>
                     <button type="submit" class="btn btn-primary">Save</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Delete -->
+        <div id="deleteModal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <span class="close" onclick="closeDeleteModal()">&times;</span>
+                <h2>Delete?</h2>
+                <p>Anda yakin ingin menghapus folder tersebut?</p>
+                <form id="deleteForm" method="POST">
+                    @csrf
+                    @method('DELETE')
+                    <button type="button" class="btn btn-secondary" onclick="closeDeleteModal()">Cancel</button>
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Copy -->
+        <div id="copyModal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <span class="close" onclick="closeCopyModal()">&times;</span>
+                <h2>Copy Folder?</h2>
+                <p>Apakah Anda yakin ingin menyalin folder ini?</p>
+                <form id="copyForm" method="POST">
+                    @csrf
+                    <button type="button" class="btn btn-secondary" onclick="closeCopyModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Copy</button>
                 </form>
             </div>
         </div>

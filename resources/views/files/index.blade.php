@@ -28,8 +28,8 @@
                             <button onclick="openRenameModal({{ $folder->id }}, '{{ $folder->name }}')">Rename</button>
                             <button
                                 onclick="openShareModal({{ $folder->id }}, '{{ url('/folder/' . $folder->id . '/share') }}')">Share</button>
-                            <button onclick="deleteFolder({{ $folder->id }})">Delete</button>
-                            <button onclick="copyFolder({{ $folder->id }})">Copy</button>
+                            <button onclick="openDeleteModal({{ $folder->id }})">Delete</button>
+                            <button onclick="openCopyModal({{ $folder->id }})">Copy</button>
                         </div>
                     </div>
 
@@ -63,7 +63,21 @@
             </div>
         </div>
 
+        <!-- Delete -->
+        <div id="deleteModal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <span class="close" onclick="closeDeleteModal()">&times;</span>
+                <h2>Delete?</h2>
+                <p>Anda yakin ingin menghapus folder tersebut?</p>
+                <form id="deleteForm" method="POST">
+                    @csrf
+                    @method('DELETE')
+                    <button type="button" class="btn btn-secondary" onclick="closeDeleteModal()">Cancel</button>
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+            </div>
         </div>
+    </div>
 </div>
 <script>
     function toggleDropdown(button) {
@@ -82,26 +96,6 @@
         }
 
         event.stopPropagation();
-    }
-
-    function shareFolder(folderId) {
-        // Logika share folder
-        alert(`Share folder dengan ID: ${folderId}`);
-        // Implementasikan logika share
-    }
-
-    function deleteFolder(folderId) {
-        // Konfirmasi sebelum menghapus
-        if (confirm('Apakah Anda yakin ingin menghapus folder ini?')) {
-            alert(`Folder dengan ID ${folderId} akan dihapus.`);
-            // Implementasikan logika penghapusan (AJAX atau redirect ke controller)
-        }
-    }
-
-    function copyFolder(folderId) {
-        // Logika copy folder
-        alert(`Copy folder dengan ID: ${folderId}`);
-        // Implementasikan logika copy
     }
 
     // Tutup dropdown saat klik di luar area

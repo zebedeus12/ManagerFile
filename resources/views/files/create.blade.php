@@ -22,9 +22,11 @@
         @endif
         <div class="mb-3">
             <label for="file" class="form-label">Pilih File</label>
-            <input type="file" class="form-control" id="file" name="file" required>
+            <input type="file" class="form-control" id="file" name="file" required
+                accept=".pdf, .doc, .docx, .xls, .xlsx, .ppt, .pptx">
         </div>
         <button type="submit" class="btn btn-primary">Upload</button>
     </form>
+
 </div>
 @endsection
