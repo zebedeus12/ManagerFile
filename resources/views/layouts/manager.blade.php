@@ -75,7 +75,9 @@
             margin-top: 20px;
         }
 
-        .file-card {
+        .file-card,
+        .sub-folder-card {
+            position: relative;
             background-color: #ffffff;
             border-radius: 8px;
             box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
@@ -84,7 +86,8 @@
             transition: transform 0.2s;
         }
 
-        .file-card:hover {
+        .file-card:hover,
+        .sub-folder-card:hover {
             transform: translateY(-5px);
         }
 
@@ -93,6 +96,7 @@
             justify-content: center;
             align-items: center;
             margin-bottom: 10px;
+            text-decoration: none;
         }
 
         .folder-icon {
@@ -132,38 +136,50 @@
 
         /* Dropdown Container */
         .dropdown {
-            position: relative;
+            position: absolute;
             display: inline-block;
+            top: 10px;
+            right: 10px;
         }
 
         /* Tombol Titik Tiga */
-        .dropdown-toggle {
+        .dropdown-toggle::before {
+            display: none;
+            content: none;
+        }
+
+        .dropdown-toggle::after {
+            display: none !important;
+            content: none !important;
+        }
+
+        .custom-toggle {
             background: none;
             border: none;
             cursor: pointer;
-            font-size: 24px;
-            appearance: none;
-            /* Untuk menghapus segitiga di browser modern */
-            -webkit-appearance: none;
-            /* Untuk browser berbasis WebKit */
-            -moz-appearance: none;
-            /* Untuk Firefox */
+            font-size: 20px;
+            color: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             padding: 0;
+            width: 40px;
+            height: 40px;
         }
 
         /* Gaya Menu Dropdown */
         .dropdown-menu {
-            display: none;
-            /* Tersembunyi secara default */
+            z-index: 1050;
             position: absolute;
-            top: 30px;
+            display: none;
+            top: 40px;
             right: 0;
             background-color: white;
             box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
             border-radius: 4px;
-            z-index: 1000;
             padding: 10px 0;
             width: 150px;
+            pointer-events: auto;
         }
 
         .dropdown-menu button {
