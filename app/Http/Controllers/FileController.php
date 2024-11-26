@@ -27,7 +27,7 @@ class FileController extends Controller
     public function store(Request $request, $folder = null)
     {
         $request->validate([
-            'file' => 'required|file|max:2048',
+            'file' => 'required|file|max:2048|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx',
         ]);
 
         if ($request->hasFile('file')) {
