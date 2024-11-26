@@ -196,9 +196,37 @@
             background-color: #f5f5f5;
         }
 
-        /* Tampilkan Dropdown saat Tombol Diklik */
         .dropdown:hover .dropdown-menu {
             display: block;
+        }
+
+        /* style  */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            width: 400px;
+            position: relative;
+        }
+
+        .close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+            font-size: 20px;
         }
     </style>
     @stack('styles')
@@ -215,5 +243,25 @@
 
     @stack('scripts')
 </body>
+<script>
+    //RENAME
+    function openRenameModal(folderId, currentName) {
+        const modal = document.getElementById("renameFolderModal");
+        modal.style.display = "block";
+
+        // Set action pada form
+        const form = document.getElementById("renameFolderForm");
+        form.action = `/folder/rename/${folderId}`;
+
+        // Isi input dengan nama folder saat ini
+        document.getElementById("newFolderName").value = currentName;
+    }
+
+    function closeRenameModal() {
+        const modal = document.getElementById("renameFolderModal");
+        modal.style.display = "none";
+    }
+
+</script>
 
 </html>
