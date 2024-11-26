@@ -46,6 +46,8 @@ Route::delete('/folder/{id}', [FolderController::class, 'destroy'])->name('folde
 Route::post('/folder/copy/{id}', [FolderController::class, 'copy'])->name('folder.copy');
 
 
+
+
 //media
 Route::get('/media', [MediaController::class, 'index'])->name('media.index');
 Route::get('/media/create', [MediaController::class, 'create'])->name('media.create');

@@ -49,8 +49,9 @@
                     <div class="dropdown">
                         <button class="dropdown-toggle custom-toggle" onclick="toggleDropdown(this)">⋮</button>
                         <div class="dropdown-menu">
-                            <button onclick="renameFolder({{ $folder->id }})">Rename</button>
-                            <button onclick="shareFolder({{ $folder->id }})">Share</button>
+                            <button onclick="openRenameModal({{ $folder->id }}, '{{ $folder->name }}')">Rename</button>
+                            <button
+                                onclick="openShareModal({{ $folder->id }}, '{{ url('/folder/' . $folder->id . '/share') }}')">Share</button>
                             <button onclick="deleteFolder({{ $folder->id }})">Delete</button>
                             <button onclick="copyFolder({{ $folder->id }})">Copy</button>
                         </div>
@@ -82,6 +83,21 @@
             @endforeach
         </div>
 
+        <!-- Rename Folder-->
+        <div id="renameFolderModal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <span class="close" onclick="closeRenameModal()">&times;</span>
+                <h2>Rename Folder</h2>
+                <form id="renameFolderForm" method="POST">
+                    @csrf
+                    <div class="form-group">
+                        <label for="newFolderName">Nama Folder Baru</label>
+                        <input type="text" id="newFolderName" name="name" class="form-control" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </form>
+            </div>
+        </div>
     </div>
 </div>
 <script>
