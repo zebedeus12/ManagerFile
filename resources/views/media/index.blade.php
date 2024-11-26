@@ -15,7 +15,8 @@
                 <input type="text" name="query" class="form-control me-2" placeholder="Search media..." required>
                 <button type="submit" class="btn btn-outline-primary">Search</button>
             </form>
-            <a href="{{ route('media.create') }}" class="btn btn-primary">Create Media</a>
+            <button class="add-folder ms-auto" onclick="location.href='{{ route('folder.create') }}'">Add
+                Folder</button>
         </div>
 
         <!-- Filter and View Options -->
