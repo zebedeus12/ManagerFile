@@ -127,6 +127,16 @@
                 </form>
             </div>
         </div>
+
+        <!-- Share -->
+        <div id="shareModal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <span class="close" onclick="closeShareModal()">&times;</span>
+                <h2>Share Folder Link</h2>
+                <input type="text" id="shareUrlInput" class="form-control" readonly>
+                <button id="copyLinkButton" class="btn btn-primary mt-2">Copy Link</button>
+            </div>
+        </div>
     </div>
 </div>
 <script>
@@ -140,32 +150,6 @@
         }
     }
 
-    function renameFolder(folderId) {
-        // Logika rename folder
-        alert(`Rename folder dengan ID: ${folderId}`);
-        // Tambahkan modal atau redirect ke halaman rename
-    }
-
-    function shareFolder(folderId) {
-        // Logika share folder
-        alert(`Share folder dengan ID: ${folderId}`);
-        // Implementasikan logika share
-    }
-
-    function deleteFolder(folderId) {
-        // Konfirmasi sebelum menghapus
-        if (confirm('Apakah Anda yakin ingin menghapus folder ini?')) {
-            alert(`Folder dengan ID ${folderId} akan dihapus.`);
-            // Implementasikan logika penghapusan (AJAX atau redirect ke controller)
-        }
-    }
-
-    function copyFolder(folderId) {
-        // Logika copy folder
-        alert(`Copy folder dengan ID: ${folderId}`);
-        // Implementasikan logika copy
-    }
-
     // Tutup dropdown saat klik di luar area
     window.addEventListener('click', function (e) {
         const dropdowns = document.querySelectorAll('.dropdown-menu');
@@ -175,5 +159,11 @@
             }
         });
     });
+
+    //SHARE
+    function closeShareModal() {
+        const modal = document.getElementById("shareModal");
+        modal.style.display = "none";
+    }
 </script>
 @endsection

@@ -308,6 +308,33 @@
         const modal = document.getElementById("copyModal");
         modal.style.display = "none";
     }
+
+    //SHARE
+    function openShareModal(folderId, shareUrl) {
+        // Show the modal (if you have a modal to show the share URL)
+        const modal = document.getElementById("shareModal");
+        modal.style.display = "block";
+
+        // Show the URL in the modal (optional)
+        const shareUrlInput = document.getElementById("shareUrlInput");
+        shareUrlInput.value = shareUrl;
+
+        // Add an event listener for the "Copy Link" button
+        const copyButton = document.getElementById("copyLinkButton");
+        copyButton.addEventListener('click', function () {
+            copyToClipboard(shareUrlInput.value);
+        });
+    }
+
+    // Function to copy text to clipboard
+    function copyToClipboard(text) {
+        navigator.clipboard.writeText(text).then(function () {
+            alert('Link copied to clipboard!');
+        }, function (err) {
+            alert('Failed to copy the link: ' + err);
+        });
+    }
+
 </script>
 
 </html>

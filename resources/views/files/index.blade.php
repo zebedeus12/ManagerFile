@@ -14,7 +14,7 @@
             <button class="add-folder ms-auto" onclick="location.href='{{ route('folder.create') }}'">Add
                 Folder</button>
         </div>
-        <p class="text-muted">Terdapat {{ $folders->count() }} Folders, {{ $files->count() }} File.
+        <p class="text-muted">Terdapat {{ $folders->count() }} Folders.
         </p>
         <div class="file-grid">
             {{-- Grid Folders --}}
@@ -29,7 +29,6 @@
                             <button
                                 onclick="openShareModal({{ $folder->id }}, '{{ url('/folder/' . $folder->id . '/share') }}')">Share</button>
                             <button onclick="openDeleteModal({{ $folder->id }})">Delete</button>
-                            <button onclick="openCopyModal({{ $folder->id }})">Copy</button>
                         </div>
                     </div>
 
@@ -77,6 +76,16 @@
                 </form>
             </div>
         </div>
+
+        <!-- Share -->
+        <div id="shareModal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <span class="close" onclick="closeShareModal()">&times;</span>
+                <h2>Share Folder Link</h2>
+                <input type="text" id="shareUrlInput" class="form-control" readonly>
+                <button id="copyLinkButton" class="btn btn-primary mt-2">Copy Link</button>
+            </div>
+        </div>
     </div>
 </div>
 <script>
@@ -105,6 +114,11 @@
         });
     });
 
+    //SHARE
+    function closeShareModal() {
+        const modal = document.getElementById("shareModal");
+        modal.style.display = "none";
+    }
 </script>
 
 @endsection
