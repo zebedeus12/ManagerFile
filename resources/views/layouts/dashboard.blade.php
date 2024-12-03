@@ -123,6 +123,81 @@
             margin-right: 0;
             /* Menghapus margin kanan pada tombol terakhir */
         }
+
+        .folder-date-group {
+            margin-bottom: 30px;
+        }
+
+        .folder-date-group h4 {
+            margin-bottom: 20px;
+            font-size: 18px;
+        }
+
+        .file-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .file-card,
+        .sub-folder-card {
+            position: relative;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 15px;
+            text-align: center;
+            transition: transform 0.2s;
+        }
+
+        .file-card:hover,
+        .sub-folder-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .icon-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 10px;
+            text-decoration: none;
+        }
+
+        .folder-icon {
+            font-size: 48px;
+            color: #FFB400;
+        }
+
+        .file-icon {
+            width: 40px;
+            height: 40px;
+        }
+
+        .file-info {
+            font-size: 14px;
+            color: #6c757d;
+        }
+
+        .add-folder,
+        .add-file {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            transition: background-color 0.3s;
+        }
+
+        .add-folder:hover,
+        .add-file:hover {
+            background-color: #0056b3;
+        }
+
+        .header .buttons {
+            margin-left: auto;
+            /* Menarik tombol Add Folder ke kanan */
+        }
     </style>
 
     @stack('styles')
@@ -140,5 +215,20 @@
 
     @stack('scripts')
 </body>
+<script>
+    document.querySelector('.grid-layout').addEventListener('click', function () {
+        document.querySelector('.file-grid').style.display = 'grid';
+        this.classList.add('active');
+        document.querySelector('.list-layout').classList.remove('active');
+    });
+
+    document.querySelector('.list-layout').addEventListener('click', function () {
+        document.querySelector('.file-grid').style.display = 'block';
+        this.classList.add('active');
+        document.querySelector('.grid-layout').classList.remove('active');
+    });
+
+
+</script>
 
 </html>
