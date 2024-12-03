@@ -36,6 +36,14 @@
 
             </div>
         </div>
+
+        <!-- Tampilkan notifikasi jika ada -->
+        @if (session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+        @endif
+
         <p class="text-muted">
             Terdapat {{ $subFolders ? $subFolders->count() : 0 }} Folders,
             {{ $files ? $files->count() : 0 }} File.
@@ -114,20 +122,6 @@
             </div>
         </div>
 
-        <!-- Copy -->
-        <div id="copyModal" class="modal" style="display: none;">
-            <div class="modal-content">
-                <span class="close" onclick="closeCopyModal()">&times;</span>
-                <h2>Copy Folder?</h2>
-                <p>Apakah Anda yakin ingin menyalin folder ini?</p>
-                <form id="copyForm" method="POST">
-                    @csrf
-                    <button type="button" class="btn btn-secondary" onclick="closeCopyModal()">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Copy</button>
-                </form>
-            </div>
-        </div>
-
         <!-- Share -->
         <div id="shareModal" class="modal" style="display: none;">
             <div class="modal-content">
@@ -135,6 +129,31 @@
                 <h2>Share Folder Link</h2>
                 <input type="text" id="shareUrlInput" class="form-control" readonly>
                 <button id="copyLinkButton" class="btn btn-primary mt-2">Copy Link</button>
+            </div>
+        </div>
+
+        <!-- Copy -->
+        <div id="copyModal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <span class="close" onclick="closeCopyModal()">&times;</span>
+                <h2>Copy Folder</h2>
+                <p>Apakah Anda yakin ingin menyalin folder ini?</p>
+                <form id="copyForm" method="POST" action="{{ route('folder.copy', $folder->id) }}">
+                    @csrf
+                    <div class="form-group">
+                        <label for="destination_folder_id">Pilih Folder Tujuan</label>
+                        <select id="destination_folder_id" name="destination_folder_id" class="form-control">
+                            <option value="">Pilih Folder Tujuan</option>
+                            @foreach($allFolders as $folderOption)
+                                <option value="{{ $folderOption->id }}" @if($folderOption->id == $folder->id) selected @endif>
+                                    {{ $folderOption->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <button type="button" class="btn btn-secondary" onclick="closeCopyModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Copy</button>
+                </form>
             </div>
         </div>
     </div>
