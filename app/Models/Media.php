@@ -9,4 +9,10 @@ class Media extends Model
 {
     protected $connection = 'mysql_second';
     protected $fillable = ['name', 'path', 'type', 'file'];
+
+    public function folder()
+    {
+        return $this->belongsTo(MediaFolder::class, 'folder_id');
+    }
+
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\MediaFolder;
 use App\Models\Media;
 use Illuminate\Support\Facades\Storage;
 
@@ -15,7 +16,10 @@ class MediaController extends Controller
     {
         // Ambil semua media
         $mediaItems = Media::all();
-        return view('media.index', compact('mediaItems'));
+        // Ambil semua folder
+        $folders = MediaFolder::all();
+
+        return view('media.index', compact('mediaItems', 'folders'));
     }
 
     /**
@@ -33,33 +37,34 @@ class MediaController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create($parentId = null)
     {
-        // Tampilkan form untuk menambahkan media baru
-        return view('media.create');
+        // Logika untuk menampilkan form untuk membuat folder baru.
+        return view('media.create', compact('parentId'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request, $parentId = null)
     {
         // Validasi input
         $request->validate([
             'name' => 'required|string|max:255',
-            'file' => 'required|file|mimes:jpg,jpeg,png,mp3,mp4,pdf|max:20480',
-            'type' => 'required|string|max:255',
         ]);
 
-        $filePath = $request->file('file')->store('uploads/media', 'public');
+        // Logika untuk menyimpan folder baru
+        $folder = new MediaFolder();
+        $folder->name = $request->name;
 
-        Media::create([
-            'name' => $request->name,
-            'path' => $filePath,
-            'type' => $request->type,
-        ]);
+        // Jika ada parentId, set parent folder
+        if ($parentId) {
+            $folder->parent_id = $parentId;
+        }
 
-        return redirect()->route('media.index')->with('success', 'Media berhasil ditambahkan.');
+        $folder->save();
+
+        return redirect()->route('media.index')->with('success', 'Folder created successfully!');
     }
 
     /**
@@ -125,4 +130,6 @@ class MediaController extends Controller
 
         return redirect()->route('media.index')->with('success', 'Media berhasil dihapus.');
     }
+
+
 }
