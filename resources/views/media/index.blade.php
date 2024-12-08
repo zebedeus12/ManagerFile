@@ -53,6 +53,8 @@
                         <div class="folder-name">{{ $folder->name }}</div>
                     </a>
                 </div>
+
+                <!-- Menampilkan Subfolder jika ada -->
                 @foreach($folder->subfolders as $subfolder)
                     <div class="folder-card ms-4">
                         <a href="{{ route('media.folder.show', $subfolder->id) }}" class="folder-link">
@@ -99,6 +101,7 @@
                 </div>
             @endforeach
         </div>
+
 
         @if(session('success'))
             <div class="alert alert-success">

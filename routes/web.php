@@ -60,7 +60,8 @@ Route::put('/media/{media}', [MediaController::class, 'update'])->name('media.up
 Route::delete('/media/{media}', [MediaController::class, 'destroy'])->name('media.destroy');
 Route::get('/media/search', [MediaController::class, 'search'])->name('media.search');
 Route::get('/media/folder/create/{parentId?}', [MediaFolderController::class, 'create'])->name('media.folder.create');
+Route::post('/media/folder/store/{parentId?}', [MediaFolderController::class, 'store'])->name('media.folder.store');
 Route::get('media/folder/{id}', [MediaFolderController::class, 'show'])->name('media.folder.show');
-Route::post('/media/folder/create/{parentId?}', [MediaFolderController::class, 'store'])->name('media.folder.store');
+
 
 

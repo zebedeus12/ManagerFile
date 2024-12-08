@@ -46,26 +46,27 @@ class MediaController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request, $parentId = null)
+    public function store(Request $request)
     {
-        // Validasi input
         $request->validate([
             'name' => 'required|string|max:255',
+            'file' => 'required|file',
+            'folder_id' => 'nullable|exists:media_folders,id',
         ]);
 
-        // Logika untuk menyimpan folder baru
-        $folder = new MediaFolder();
-        $folder->name = $request->name;
+        $filePath = $request->file('file')->store('media', 'public');
 
-        // Jika ada parentId, set parent folder
-        if ($parentId) {
-            $folder->parent_id = $parentId;
-        }
+        Media::create([
+            'name' => $request->name,
+            'path' => $filePath,
+            'type' => $request->file('file')->getMimeType(),
+            'folder_id' => $request->folder_id,
+        ]);
 
-        $folder->save();
-
-        return redirect()->route('media.index')->with('success', 'Folder created successfully!');
+        return redirect()->route('media.folder.show', ['id' => $request->folder_id])
+            ->with('success', 'Media created successfully!');
     }
+
 
     /**
      * Show the form for editing the specified resource.

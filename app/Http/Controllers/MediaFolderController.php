@@ -37,6 +37,35 @@ class MediaFolderController extends Controller
         return redirect()->route('media.index')->with('success', 'Folder created successfully!');
     }
 
+    // Menambahkan fungsi untuk membuat media baru di dalam folder
+    public function createMedia($folderId)
+    {
+        $folder = MediaFolder::findOrFail($folderId);
+        return view('media.createMedia', compact('folder'));
+    }
+
+    public function storeMedia(Request $request, $folderId)
+    {
+        $request->validate([
+            'file' => 'required|file|mimes:jpg,jpeg,png,pdf,docx|max:10240',
+            'name' => 'required|string|max:255',
+        ]);
+
+        // Proses upload file
+        $path = $request->file('file')->store('media', 'public');
+
+        // Menyimpan media baru
+        Media::create([
+            'name' => $request->name,
+            'path' => $path,
+            'type' => $request->file('file')->getClientMimeType(),
+            'folder_id' => $folderId,
+        ]);
+
+        return redirect()->route('media.folder.show', $folderId)->with('success', 'Media uploaded successfully!');
+    }
+
+
     public function show($id)
     {
         $folder = MediaFolder::with(['subfolders', 'mediaItems'])->findOrFail($id);
