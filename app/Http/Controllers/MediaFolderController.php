@@ -1,6 +1,6 @@
 <?php
-
 namespace App\Http\Controllers;
+
 use App\Models\Media;
 use App\Models\MediaFolder;
 use Illuminate\Http\Request;
@@ -9,16 +9,16 @@ class MediaFolderController extends Controller
 {
     public function index()
     {
-        // Ambil semua media
+        // Ambil semua folder dan media
+        $folders = MediaFolder::with('subfolders')->get();
         $mediaItems = Media::all();
-        // Ambil semua folder
-        $folders = MediaFolder::all();
 
         return view('media.index', compact('mediaItems', 'folders'));
     }
+
     public function create($parentId = null)
     {
-        // Menampilkan form untuk membuat folder
+        // Menampilkan form untuk membuat folder, bisa subfolder atau folder utama
         return view('media.createFolder', compact('parentId'));
     }
 
@@ -28,10 +28,10 @@ class MediaFolderController extends Controller
             'name' => 'required|string|max:255',
         ]);
 
-        // Membuat folder baru
+        // Jika $parentId null, maka folder ini adalah folder utama
         MediaFolder::create([
             'name' => $request->name,
-            'parent_id' => $parentId, // Menetapkan parent ID jika ada
+            'parent_id' => $parentId, // Jika null, maka parent_id juga null
         ]);
 
         return redirect()->route('media.index')->with('success', 'Folder created successfully!');
@@ -39,7 +39,8 @@ class MediaFolderController extends Controller
 
     public function show($id)
     {
-        $folder = MediaFolder::findOrFail($id);
+        $folder = MediaFolder::with(['subfolders', 'mediaItems'])->findOrFail($id);
         return view('media.folder.show', compact('folder'));
     }
+
 }

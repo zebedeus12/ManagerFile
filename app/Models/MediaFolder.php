@@ -8,9 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class MediaFolder extends Model
 {
     use HasFactory;
+
     protected $connection = 'mysql_second';
     protected $fillable = ['name', 'parent_id'];
 
+    // Relasi ke subfolder (self-referencing)
     // Relasi ke subfolder (self-referencing)
     public function subfolders()
     {

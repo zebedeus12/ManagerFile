@@ -20,7 +20,6 @@
             <a href="{{ route('media.create') }}" class="btn btn-primary">Create Media</a>
         </div>
 
-
         <!-- Modal untuk Add Folder -->
         <div class="modal fade" id="addFolderModal" tabindex="-1" aria-labelledby="addFolderModalLabel"
             aria-hidden="true">
@@ -46,17 +45,24 @@
             </div>
         </div>
 
-        <!-- Filter and View Options -->
-        <div class="filter-options mb-3 d-flex align-items-center justify-content-between">
-            <div class="filter-buttons d-flex align-items-center">
-                <button class="btn btn-filter active" data-filter="all">All items</button>
-                <button class="btn btn-filter" data-filter="photo">Photo</button>
-                <button class="btn btn-filter" data-filter="video">Video</button>
-            </div>
-        </div>
-
         <!-- Media Grid Display -->
         <div class="file-grid mt-4" id="media-container">
+            @foreach($folders as $folder)
+                <div class="folder-card">
+                    <a href="{{ route('media.folder.show', $folder->id) }}" class="folder-link">
+                        <div class="folder-name">{{ $folder->name }}</div>
+                    </a>
+                </div>
+                @foreach($folder->subfolders as $subfolder)
+                    <div class="folder-card ms-4">
+                        <a href="{{ route('media.folder.show', $subfolder->id) }}" class="folder-link">
+                            <div class="folder-name">{{ $subfolder->name }}</div>
+                        </a>
+                    </div>
+                @endforeach
+            @endforeach
+
+            <!-- Media Items -->
             @foreach($mediaItems as $media)
                 <div class="file-card position-relative" data-type="{{ $media->type }}">
                     <!-- Dropdown Menu (Three Dots) -->
@@ -91,20 +97,6 @@
                         <p class="fw-bold text-truncate">{{ $media->name }}</p>
                     </div>
                 </div>
-
-                <!-- Folder -->
-                <div class="folder-list">
-                    @foreach($folders as $folder)
-                        <div class="folder-card">
-                            <a href="{{ route('media.folder.show', $folder->id) }}" class="folder-link">
-                                <div class="folder-icon">
-                                    <!-- Ikon folder atau gambar -->
-                                </div>
-                                <div class="folder-name">{{ $folder->name }}</div>
-                            </a>
-                        </div>
-                    @endforeach
-                </div>
             @endforeach
         </div>
 
@@ -119,70 +111,4 @@
 @endsection
 
 @section('styles')
-<style>
-    /* Style utama untuk media card */
-    .file-card {
-        position: relative;
-        border: 1px solid #ddd;
-        border-radius: 8px;
-        background-color: #fff;
-        padding: 0;
-        /* Hilangkan padding agar gambar memenuhi container */
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        overflow: hidden;
-    }
-
-    /* Atur ukuran gambar */
-    .image-container {
-        width: 100%;
-        aspect-ratio: 4 / 3;
-        /* Rasio aspek gambar (4:3 atau sesuaikan kebutuhan) */
-        overflow: hidden;
-    }
-
-    .media-preview {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        /* Gambar memenuhi area tanpa distorsi */
-        display: block;
-    }
-
-    /* Posisi ikon tiga titik di luar gambar */
-    .action-menu {
-        top: 8px;
-        right: 8px;
-        z-index: 10;
-    }
-
-    /* Dropdown button styling */
-    .action-menu button {
-        padding: 4px;
-        background-color: rgba(255, 255, 255, 0.8);
-        border: none;
-        border-radius: 50%;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    }
-
-    /* Informasi file */
-    .file-info {
-        text-align: center;
-        padding: 8px;
-        font-size: 14px;
-        font-weight: 500;
-        color: #333;
-    }
-
-    /* Hilangkan teks "Image" */
-    .file-info span {
-        display: none;
-    }
-
-    /* Efek hover pada card */
-    .file-card:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-        transition: all 0.3s ease;
-    }
-</style>
 @endsection
