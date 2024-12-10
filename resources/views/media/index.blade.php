@@ -17,7 +17,6 @@
             </form>
             <!-- Button untuk Add Folder -->
             <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addFolderModal">Add Folder</button>
-            <a href="{{ route('media.create') }}" class="btn btn-primary">Create Media</a>
         </div>
 
         <!-- Modal untuk Add Folder -->
@@ -63,43 +62,6 @@
                     </div>
                 @endforeach
             @endforeach
-
-            <!-- Media Items -->
-            @foreach($mediaItems as $media)
-                <div class="file-card position-relative" data-type="{{ $media->type }}">
-                    <!-- Dropdown Menu (Three Dots) -->
-                    <div class="dropdown action-menu position-absolute">
-                        <button class="btn btn-light btn-sm dropdown-toggle" data-bs-toggle="dropdown"
-                            aria-expanded="false">
-                            <span class="material-icons">more_vert</span>
-                        </button>
-                        <ul class="dropdown-menu dropdown-menu">
-                            <li>
-                                <a href="{{ route('media.edit', $media->id) }}" class="dropdown-item">Edit</a>
-                            </li>
-                            <li>
-                                <form action="{{ route('media.destroy', ['media' => $media->id]) }}" method="POST"
-                                    class="d-inline">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="dropdown-item text-danger"
-                                        onclick="return confirm('Are you sure you want to delete this media?')">Delete</button>
-                                </form>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <!-- Image Container -->
-                    <div class="image-container">
-                        <img src="{{ asset('storage/' . $media->path) }}" alt="{{ $media->name }}" class="media-preview" />
-                    </div>
-
-                    <!-- File Info -->
-                    <div class="file-info">
-                        <p class="fw-bold text-truncate">{{ $media->name }}</p>
-                    </div>
-                </div>
-            @endforeach
         </div>
 
 
@@ -111,7 +73,4 @@
     </div>
 </div>
 
-@endsection
-
-@section('styles')
 @endsection
