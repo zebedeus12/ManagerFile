@@ -99,8 +99,7 @@ class FolderController extends Controller
 
     public function copy(Request $request, $id)
     {
-        // Debugging
-        dd($id, $request->all());
+        
         // Ambil folder yang ingin disalin
         $folder = Folder::with('children', 'files')->findOrFail($id);
 
