@@ -3,7 +3,12 @@
 @section('title', 'Upload File')
 
 @section('content')
+<!-- Navbar -->
+@include('layouts.navbar')
+<div class="main-layout">
+    @include('layouts.sidebar')
 <div class="container mt-5">
+    
     <h1 class="mb-4">Upload File</h1>
 
     @if (session('success'))
