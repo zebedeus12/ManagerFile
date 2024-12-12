@@ -337,6 +337,13 @@
             margin-top: 5px;
         }
 
+        .media-preview {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+
         .media-item {
             display: flex;
             flex-direction: column;
@@ -365,28 +372,52 @@
     @stack('scripts')
 </body>
 <script>
-    function toggleMenu(button) {
-        const menu = button.nextElementSibling;
-        menu.classList.toggle('show');
-    }
-
     function renameFolder(folderId) {
-        alert(`Rename folder with ID: ${folderId}`);
-        // Tambahkan logika rename di sini
+        // Dapatkan elemen form
+        const form = document.getElementById('renameFolderForm');
+
+        // Atur action URL form sesuai folder yang akan di-rename
+        form.action = `/media/folder/${folderId}/rename`; // Endpoint untuk rename
+
+        // Tampilkan modal rename folder
+        const renameModal = new bootstrap.Modal(document.getElementById('renameFolderModal'));
+        renameModal.show();
     }
 
     function shareFolder(folderId) {
-        alert(`Share folder with ID: ${folderId}`);
-        // Tambahkan logika share di sini
+        // Set URL share folder (sesuaikan endpoint Anda)
+        const link = `${window.location.origin}/folder/${folderId}/share`;
+
+        // Set link ke input di modal
+        document.getElementById('shareFolderLink').value = link;
+
+        // Tampilkan modal
+        const shareModal = new bootstrap.Modal(document.getElementById('shareFolderModal'));
+        shareModal.show();
+    }
+
+    function copyToClipboard() {
+        // Salin teks dari input ke clipboard
+        const linkInput = document.getElementById('shareFolderLink');
+        linkInput.select();
+        linkInput.setSelectionRange(0, 99999); // Untuk perangkat seluler
+        navigator.clipboard.writeText(linkInput.value);
+
+        // Beri notifikasi
+        alert('Link copied to clipboard!');
     }
 
     function deleteFolder(folderId) {
-        if (confirm("Are you sure you want to delete this folder?")) {
-            alert(`Delete folder with ID: ${folderId}`);
-            // Tambahkan logika delete di sini
-        }
-    }
+        // Dapatkan elemen form
+        const form = document.getElementById('deleteFolderForm');
 
+        // Atur action URL form sesuai folder yang akan dihapus
+        form.action = `/media/folder/${folderId}/delete`; // Endpoint untuk delete
+
+        // Tampilkan modal delete folder
+        const deleteModal = new bootstrap.Modal(document.getElementById('deleteFolderModal'));
+        deleteModal.show();
+    }
 </script>
 
 </html>

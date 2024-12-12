@@ -66,3 +66,6 @@ Route::get('/media/search', [MediaController::class, 'search'])->name('media.sea
 Route::get('/media/folder/create/{parentId?}', [MediaFolderController::class, 'create'])->name('media.folder.create');
 Route::post('/media/folder/store/{parentId?}', [MediaFolderController::class, 'store'])->name('media.folder.store');
 Route::get('media/folder/{id}', [MediaFolderController::class, 'show'])->name('media.folder.show');
+Route::put('/media/folder/{id}/rename', [MediaFolderController::class, 'rename'])->name('media.folder.rename');
+Route::get('/folder/{id}/share', [MediaFolderController::class, 'share'])->name('media.folder.share');
+Route::delete('/media/folder/{id}/delete', [MediaFolderController::class, 'destroy'])->name('media.folder.destroy');

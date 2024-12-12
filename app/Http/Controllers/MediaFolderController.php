@@ -73,4 +73,48 @@ class MediaFolderController extends Controller
         return view('media.folder.show', compact('folder'));
     }
 
+    public function rename(Request $request, $id)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+        ]);
+
+        // Cari folder berdasarkan ID
+        $folder = MediaFolder::findOrFail($id);
+
+        // Update nama folder
+        $folder->name = $request->name;
+        $folder->save();
+
+        // Redirect ke halaman media manager dengan pesan sukses
+        return redirect()->route('media.index')->with('success', 'Folder renamed successfully!');
+    }
+
+    public function share($id)
+    {
+        $folder = MediaFolder::findOrFail($id);
+
+        // Anda bisa menambahkan logika di sini untuk memvalidasi atau membuat link share
+
+        // Redirect ke halaman folder atau tampilkan halaman share
+        return response()->json([
+            'share_url' => route('media.folder.share', ['id' => $folder->id]),
+        ]);
+    }
+
+    public function destroy($id)
+    {
+        $folder = MediaFolder::findOrFail($id);
+
+        // Logika tambahan (opsional): Hapus semua media dan subfolder jika ada
+        $folder->mediaItems()->delete(); // Jika folder memiliki media
+        $folder->subfolders()->delete(); // Jika folder memiliki subfolder
+
+        // Hapus folder
+        $folder->delete();
+
+        return redirect()->route('media.index')->with('success', 'Folder deleted successfully!');
+    }
+
+
 }
