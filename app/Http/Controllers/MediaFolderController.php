@@ -73,4 +73,21 @@ class MediaFolderController extends Controller
         return view('media.folder.show', compact('folder'));
     }
 
+    public function rename(Request $request, $id)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+        ]);
+
+        // Cari folder berdasarkan ID
+        $folder = MediaFolder::findOrFail($id);
+
+        // Update nama folder
+        $folder->name = $request->name;
+        $folder->save();
+
+        // Redirect ke halaman media manager dengan pesan sukses
+        return redirect()->route('media.index')->with('success', 'Folder renamed successfully!');
+    }
+
 }

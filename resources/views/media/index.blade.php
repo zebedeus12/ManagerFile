@@ -70,6 +70,33 @@
             @endforeach
         </div>
 
+        <!-- Modal untuk Rename Folder -->
+        <div class="modal fade" id="renameFolderModal" tabindex="-1" aria-labelledby="renameFolderModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="renameFolderModalLabel">Rename Folder</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="renameFolderForm" action="" method="POST">
+                            @csrf
+                            @method('PUT')
+                            <div class="form-group">
+                                <label for="folderNewName">Nama Folder Baru</label>
+                                <input type="text" class="form-control" id="folderNewName" name="name"
+                                    placeholder="Nama Folder Baru" required>
+                            </div>
+                            <div class="form-group mt-3">
+                                <button type="submit" class="btn btn-primary">Save</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         @if(session('success'))
             <div class="alert alert-success">
                 {{ session('success') }}
@@ -77,5 +104,28 @@
         @endif
     </div>
 </div>
+<script>
+    function toggleMenu(button) {
+        // Tutup semua dropdown lainnya
+        document.querySelectorAll('.dropdown-menu').forEach(menu => {
+            if (menu !== button.nextElementSibling) {
+                menu.classList.remove('show');
+            }
+        });
+
+        // Toggle dropdown saat ini
+        const menu = button.nextElementSibling;
+        menu.classList.toggle('show');
+    }
+
+    // Tutup dropdown saat klik di luar
+    document.addEventListener('click', function (event) {
+        if (!event.target.closest('.dropdown')) {
+            document.querySelectorAll('.dropdown-menu').forEach(menu => {
+                menu.classList.remove('show');
+            });
+        }
+    });
+</script>
 
 @endsection

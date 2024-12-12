@@ -365,14 +365,16 @@
     @stack('scripts')
 </body>
 <script>
-    function toggleMenu(button) {
-        const menu = button.nextElementSibling;
-        menu.classList.toggle('show');
-    }
-
     function renameFolder(folderId) {
-        alert(`Rename folder with ID: ${folderId}`);
-        // Tambahkan logika rename di sini
+        // Dapatkan elemen form
+        const form = document.getElementById('renameFolderForm');
+
+        // Atur action URL form sesuai folder yang akan di-rename
+        form.action = `/media/folder/${folderId}/rename`; // Endpoint untuk rename
+
+        // Tampilkan modal rename folder
+        const renameModal = new bootstrap.Modal(document.getElementById('renameFolderModal'));
+        renameModal.show();
     }
 
     function shareFolder(folderId) {
