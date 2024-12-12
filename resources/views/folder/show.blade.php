@@ -79,10 +79,32 @@
             {{-- Tampilkan file --}}
             @foreach ($files as $file)
                 <div class="file-card">
-                    <div class="icon-container">
+                    {{-- <div class="icon-container">
                         <img src="{{ asset('icons/' . $file->type . '.png') }}" alt="{{ $file->type }} icon"
                             class="file-icon">
+                    </div> --}}
+                    <div class="icon-container">
+                        @switch($file->type)
+                            @case('pdf')
+                                <i class="fas fa-file-pdf fa-3x" style="color: #E74C3C;"></i>
+                                @break
+                            @case('doc')
+                            @case('docx')
+                                <i class="fas fa-file-word fa-3x" style="color: #3498DB;"></i>
+                                @break
+                            @case('xls')
+                            @case('xlsx')
+                                <i class="fas fa-file-excel fa-3x" style="color: #28A745;"></i>
+                                @break
+                            @case('ppt')
+                            @case('pptx')
+                                <i class="fas fa-file-powerpoint fa-3x" style="color: #FF5733;"></i>
+                                @break
+                            @default
+                                <i class="fas fa-file fa-3x" style="color: #BDC3C7;"></i>
+                        @endswitch
                     </div>
+                    
                     <div class="file-info">
                         <span class="fw-bold">{{ $file->name }}</span>
                         <span class="text-muted">{{ $file->size }} KB</span>

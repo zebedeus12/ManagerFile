@@ -7,6 +7,9 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>@yield('title') - File Manager</title>
 
+    {{-- tampilan icon file --}}
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 
@@ -245,6 +248,16 @@
             background-color: #d9534f;
             color: white;
         }
+
+        .file-icon {
+    font-size: 48px;
+    color: #4CAF50; /* Warna ikon */
+}
+.icon-container {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
     </style>
     @stack('styles')
 </head>
