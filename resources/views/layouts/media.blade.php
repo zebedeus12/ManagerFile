@@ -94,9 +94,10 @@
 
         /* File grid layout */
         .file-grid {
-            display: flex;
-            flex-wrap: wrap;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
             gap: 20px;
+            padding: 20px;
         }
 
         /* File card container */
@@ -241,11 +242,31 @@
 
         /* Menambahkan gaya untuk folder */
         .folder-card {
-            margin-bottom: 20px;
-            background-color: #f8f9fa;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
+            width: 150px;
+            height: 150px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            margin: 10px;
+        }
+
+        .folder-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .folder-icon {
+            font-size: 50px;
+            color: #ffc107;
+            /* Warna kuning untuk folder */
+            margin-bottom: 10px;
         }
 
         .folder-link {
@@ -254,7 +275,10 @@
         }
 
         .folder-name {
-            font-weight: bold;
+            font-weight: 600;
+            font-size: 14px;
+            color: #333;
+            word-wrap: break-word;
         }
 
         /* Modal Styling */

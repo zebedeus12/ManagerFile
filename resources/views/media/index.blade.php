@@ -49,21 +49,14 @@
             @foreach($folders as $folder)
                 <div class="folder-card">
                     <a href="{{ route('media.folder.show', $folder->id) }}" class="folder-link">
-                        <div class="folder-name">{{ $folder->name }}</div>
+                        <div class="folder-icon">
+                            <span class="material-icons">folder</span>
+                        </div>
+                        <div class="folder-name text-center">{{ $folder->name }}</div>
                     </a>
                 </div>
-
-                <!-- Menampilkan Subfolder jika ada -->
-                @foreach($folder->subfolders as $subfolder)
-                    <div class="folder-card ms-4">
-                        <a href="{{ route('media.folder.show', $subfolder->id) }}" class="folder-link">
-                            <div class="folder-name">{{ $subfolder->name }}</div>
-                        </a>
-                    </div>
-                @endforeach
             @endforeach
         </div>
-
 
         @if(session('success'))
             <div class="alert alert-success">
