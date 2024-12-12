@@ -7,8 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class Media extends Model
 {
+    use HasFactory;
     protected $connection = 'mysql_second';
-    protected $fillable = ['name', 'path', 'type', 'file', 'folder_id']; // Pastikan ada folder_id
+    protected $table = 'media';
+    protected $primaryKey = 'id'; // Pastikan primary key adalah `id`
+    public $timestamps = true; // Kolom `created_at` dan `updated_at`
+
+    protected $fillable = ['name', 'path', 'type', 'folder_id']; // Pastikan ada folder_id
 
     public function folder()
     {

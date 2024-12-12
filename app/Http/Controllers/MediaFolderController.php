@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Models\Media;
 use App\Models\MediaFolder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class MediaFolderController extends Controller
 {
@@ -34,7 +35,8 @@ class MediaFolderController extends Controller
             'parent_id' => $parentId, // Jika null, maka parent_id juga null
         ]);
 
-        return redirect()->route('media.index')->with('success', 'Folder created successfully!');
+        return redirect()->route('media.folder.show', ['id' => $parentId ?? MediaFolder::latest()->first()->id])
+            ->with('success', 'Folder created successfully!');
     }
 
     // Menambahkan fungsi untuk membuat media baru di dalam folder
@@ -54,17 +56,16 @@ class MediaFolderController extends Controller
         // Proses upload file
         $path = $request->file('file')->store('media', 'public');
 
-        // Menyimpan media baru
+        // Simpan media ke folder yang dipilih
         Media::create([
             'name' => $request->name,
             'path' => $path,
-            'type' => $request->file('file')->getClientMimeType(),
             'folder_id' => $folderId,
         ]);
 
-        return redirect()->route('media.folder.show', $folderId)->with('success', 'Media uploaded successfully!');
+        return redirect()->route('media.folder.show', $folderId)
+            ->with('success', 'Media uploaded successfully!');
     }
-
 
     public function show($id)
     {

@@ -37,10 +37,10 @@ class MediaController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create($parentId = null)
+    public function create(Request $request)
     {
-        // Logika untuk menampilkan form untuk membuat folder baru.
-        return view('media.create', compact('parentId'));
+        $folderId = $request->input('folder_id'); // Ambil folder_id dari request
+        return view('media.create', compact('folderId'));
     }
 
     /**
@@ -50,23 +50,25 @@ class MediaController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'file' => 'required|file',
-            'folder_id' => 'nullable|exists:media_folders,id',
+            'file' => 'required|file|mimes:jpeg,png,jpg,gif,mp3,mp4,mkv|max:10240',
+            'folder_id' => 'nullable|exists:mysql_second.media_folders,id',
         ]);
 
-        $filePath = $request->file('file')->store('media', 'public');
+        // Simpan file ke storage
+        $filePath = $request->file('file')->store('public', 'media');
+        dd($filePath);
 
+        // Buat media baru di folder yang sesuai
         Media::create([
             'name' => $request->name,
             'path' => $filePath,
             'type' => $request->file('file')->getMimeType(),
-            'folder_id' => $request->folder_id,
+            'folder_id' => $request->folder_id, // Folder induk
         ]);
 
         return redirect()->route('media.folder.show', ['id' => $request->folder_id])
-            ->with('success', 'Media created successfully!');
+            ->with('success', 'Media berhasil ditambahkan ke folder!');
     }
-
 
     /**
      * Show the form for editing the specified resource.

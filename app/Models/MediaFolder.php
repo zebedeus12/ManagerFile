@@ -8,11 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class MediaFolder extends Model
 {
     use HasFactory;
-
     protected $connection = 'mysql_second';
+    protected $table = 'media_folders';
+    protected $primaryKey = 'id'; // Pastikan primary key adalah `id`
+    public $timestamps = true; // Pastikan Laravel menggunakan kolom `created_at` dan `updated_at`
     protected $fillable = ['name', 'parent_id'];
 
-    // Relasi ke subfolder (self-referencing)
     // Relasi ke subfolder (self-referencing)
     public function subfolders()
     {

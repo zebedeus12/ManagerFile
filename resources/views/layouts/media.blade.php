@@ -20,6 +20,9 @@
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=view_list" />
 
+    <!-- Tambahkan di dalam <head> jika belum ada -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
     <!-- Custom CSS -->
     <style>
         /* Global reset */
@@ -36,6 +39,13 @@
             font-family: 'Poppins', sans-serif;
             background-color: #f5f5f5;
             display: flex;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
         }
 
         .main-layout {
@@ -58,6 +68,15 @@
         }
 
         /* Filter buttons styling */
+        .btn {
+            margin-right: 10px;
+        }
+
+        .btn-primary,
+        .btn-success {
+            font-size: 16px;
+        }
+
         .filter-buttons .btn-filter {
             margin-right: 10px;
             background-color: #f8f9fa;
@@ -75,26 +94,36 @@
 
         /* File grid layout */
         .file-grid {
-            display: flex;
-            flex-wrap: wrap;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
             gap: 20px;
+            padding: 20px;
         }
 
         /* File card container */
         .file-card {
-            position: relative;
-            border: 1px solid #ddd;
+            width: 150px;
+            background-color: white;
             border-radius: 8px;
-            background-color: #fff;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
             overflow: hidden;
+            text-align: center;
             transition: transform 0.3s ease;
-            width: 200px;
         }
 
         .file-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+            transform: scale(1.05);
+        }
+
+        .file-info {
+            padding: 10px;
+        }
+
+        .media-preview {
+            width: 100%;
+            height: auto;
+            max-height: 120px;
+            object-fit: cover;
         }
 
         /* Image container for media preview */
@@ -111,54 +140,58 @@
             object-fit: cover;
         }
 
-        /* Dropdown item styling */
-        .dropdown-item {
-            font-size: 14px;
-            /* Ukuran font seragam */
-            font-weight: normal;
-            /* Berat font seragam */
-            color: black;
-            /* Warna default */
-            padding: 5px 10px;
-            /* Jarak padding seragam */
-            cursor: pointer;
-        }
-
-        /* Khusus untuk tombol Delete */
-        .dropdown-item.delete {
-            color: red;
-            /* Warna teks merah */
-            font-weight: bold;
-            /* Berat font khusus */
-        }
-
-        /* Hover styling */
-        .dropdown-item:hover {
-            background-color: rgba(0, 0, 0, 0.1);
-            border-radius: 4px;
-        }
-
-
-        /* Tombol tiga titik */
-        .action-menu button {
-            padding: 15;
-            border: none;
+        /* Dropdown Container */
+        .custom-toggle {
             background: none;
+            border: none;
             cursor: pointer;
-            color: white;
-            /* Warna ikon */
-            font-size: 15px;
-            /* Ukuran ikon */
+            font-size: 20px;
+            color: #888;
             display: flex;
             align-items: center;
-            justify: center;
+            justify-content: center;
         }
 
-        /* Menghilangkan tanda panah bawaan */
-        .action-menu button::after {
+        .dropdown-menu {
             display: none;
-            /* Hilangkan tanda panah dropdown */
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background-color: white;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 4px;
+            padding: 10px 0;
+            z-index: 20;
+            min-width: 150px;
         }
+
+        .dropdown-menu button {
+            background: none;
+            border: none;
+            width: 100%;
+            text-align: left;
+            padding: 8px 15px;
+            font-size: 14px;
+            cursor: pointer;
+            color: #333;
+        }
+
+        .dropdown-menu button:hover {
+            background-color: #f5f5f5;
+        }
+
+        .dropdown-menu.show {
+            display: block;
+        }
+
+        .folder-card .dropdown {
+            position: absolute;
+            top: 5px;
+            /* Sesuaikan dengan kebutuhan */
+            right: 5px;
+            z-index: 10;
+        }
+
 
         /* File info section */
         .file-info {
@@ -197,15 +230,122 @@
 
         /* Menambahkan gaya untuk folder */
         .folder-card {
-            margin-bottom: 20px;
-            background-color: #f8f9fa;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
+            width: 150px;
+            height: 150px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            margin: 10px;
+            position: relative;
+            /* Menjadikan posisi dropdown mengikuti card */
+        }
+
+        .folder-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .folder-icon {
+            font-size: 50px;
+            color: #ffc107;
+            /* Warna kuning untuk folder */
+            margin-bottom: 10px;
+        }
+
+        .folder-link {
+            text-decoration: none;
+            color: inherit;
         }
 
         .folder-name {
+            font-weight: 600;
+            font-size: 14px;
+            color: #333;
+            word-wrap: break-word;
+        }
+
+        /* Modal Styling */
+        .modal-content {
+            border-radius: 8px;
+        }
+
+        .modal-header {
+            background-color: #f8f9fa;
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        /* Subfolder List */
+        .subfolder-list {
+            margin-top: 20px;
+        }
+
+        .subfolder-list a {
+            font-size: 16px;
+            text-decoration: none;
+            color: #007bff;
+        }
+
+        .subfolder-list a:hover {
+            text-decoration: underline;
+        }
+
+        /* File List */
+        .file-list {
+            margin-top: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .file-list div {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            padding: 10px;
+            width: 200px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .file-list div:hover {
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .file-icon {
+            font-size: 48px;
+            color: #888;
+        }
+
+        /* Form Styling */
+        .form-group label {
+            font-size: 14px;
             font-weight: bold;
+        }
+
+        .form-control {
+            font-size: 14px;
+            padding: 10px;
+            margin-top: 5px;
+        }
+
+        .media-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .media-item img {
+            border: 1px solid #ccc;
+            border-radius: 5px;
         }
     </style>
 
@@ -224,5 +364,29 @@
 
     @stack('scripts')
 </body>
+<script>
+    function toggleMenu(button) {
+        const menu = button.nextElementSibling;
+        menu.classList.toggle('show');
+    }
+
+    function renameFolder(folderId) {
+        alert(`Rename folder with ID: ${folderId}`);
+        // Tambahkan logika rename di sini
+    }
+
+    function shareFolder(folderId) {
+        alert(`Share folder with ID: ${folderId}`);
+        // Tambahkan logika share di sini
+    }
+
+    function deleteFolder(folderId) {
+        if (confirm("Are you sure you want to delete this folder?")) {
+            alert(`Delete folder with ID: ${folderId}`);
+            // Tambahkan logika delete di sini
+        }
+    }
+
+</script>
 
 </html>

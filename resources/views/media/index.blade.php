@@ -17,7 +17,6 @@
             </form>
             <!-- Button untuk Add Folder -->
             <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addFolderModal">Add Folder</button>
-            <a href="{{ route('media.create') }}" class="btn btn-primary">Create Media</a>
         </div>
 
         <!-- Modal untuk Add Folder -->
@@ -48,60 +47,28 @@
         <!-- Media Grid Display -->
         <div class="file-grid mt-4" id="media-container">
             @foreach($folders as $folder)
-                <div class="folder-card">
+                <div class="folder-card position-relative">
                     <a href="{{ route('media.folder.show', $folder->id) }}" class="folder-link">
-                        <div class="folder-name">{{ $folder->name }}</div>
+                        <div class="folder-icon">
+                            <span class="material-icons">folder</span>
+                        </div>
+                        <div class="folder-name text-center">{{ $folder->name }}</div>
                     </a>
-                </div>
 
-                <!-- Menampilkan Subfolder jika ada -->
-                @foreach($folder->subfolders as $subfolder)
-                    <div class="folder-card ms-4">
-                        <a href="{{ route('media.folder.show', $subfolder->id) }}" class="folder-link">
-                            <div class="folder-name">{{ $subfolder->name }}</div>
-                        </a>
-                    </div>
-                @endforeach
-            @endforeach
-
-            <!-- Media Items -->
-            @foreach($mediaItems as $media)
-                <div class="file-card position-relative" data-type="{{ $media->type }}">
-                    <!-- Dropdown Menu (Three Dots) -->
-                    <div class="dropdown action-menu position-absolute">
-                        <button class="btn btn-light btn-sm dropdown-toggle" data-bs-toggle="dropdown"
-                            aria-expanded="false">
+                    <!-- Tombol Titik Tiga -->
+                    <div class="dropdown position-absolute top-0 end-0 m-2">
+                        <button class="custom-toggle" onclick="toggleMenu(this)">
                             <span class="material-icons">more_vert</span>
                         </button>
-                        <ul class="dropdown-menu dropdown-menu">
-                            <li>
-                                <a href="{{ route('media.edit', $media->id) }}" class="dropdown-item">Edit</a>
-                            </li>
-                            <li>
-                                <form action="{{ route('media.destroy', ['media' => $media->id]) }}" method="POST"
-                                    class="d-inline">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="dropdown-item text-danger"
-                                        onclick="return confirm('Are you sure you want to delete this media?')">Delete</button>
-                                </form>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <!-- Image Container -->
-                    <div class="image-container">
-                        <img src="{{ asset('storage/' . $media->path) }}" alt="{{ $media->name }}" class="media-preview" />
-                    </div>
-
-                    <!-- File Info -->
-                    <div class="file-info">
-                        <p class="fw-bold text-truncate">{{ $media->name }}</p>
+                        <div class="dropdown-menu">
+                            <button onclick="renameFolder({{ $folder->id }})">Rename</button>
+                            <button onclick="shareFolder({{ $folder->id }})">Share</button>
+                            <button onclick="deleteFolder({{ $folder->id }})">Delete</button>
+                        </div>
                     </div>
                 </div>
             @endforeach
         </div>
-
 
         @if(session('success'))
             <div class="alert alert-success">
@@ -111,7 +78,4 @@
     </div>
 </div>
 
-@endsection
-
-@section('styles')
 @endsection
