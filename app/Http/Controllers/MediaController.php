@@ -54,11 +54,10 @@ class MediaController extends Controller
             'folder_id' => 'nullable|exists:mysql_second.media_folders,id',
         ]);
 
-        // Simpan file ke storage
-        $filePath = $request->file('file')->store('public', 'media');
-        dd($filePath);
+        // Simpan file ke disk 'media'
+        $filePath = $request->file('file')->store('uploads', 'media');
 
-        // Buat media baru di folder yang sesuai
+        // Simpan informasi media ke database
         Media::create([
             'name' => $request->name,
             'path' => $filePath,
@@ -66,9 +65,10 @@ class MediaController extends Controller
             'folder_id' => $request->folder_id, // Folder induk
         ]);
 
-        return redirect()->route('media.folder.show', ['id' => $request->folder_id])
-            ->with('success', 'Media berhasil ditambahkan ke folder!');
+        // Redirect dengan pesan sukses
+        return redirect()->route('media.index')->with('success', 'Media berhasil ditambahkan ke folder!');
     }
+
 
     /**
      * Show the form for editing the specified resource.

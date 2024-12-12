@@ -337,6 +337,13 @@
             margin-top: 5px;
         }
 
+        .media-preview {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+
         .media-item {
             display: flex;
             flex-direction: column;
@@ -401,12 +408,16 @@
     }
 
     function deleteFolder(folderId) {
-        if (confirm("Are you sure you want to delete this folder?")) {
-            alert(`Delete folder with ID: ${folderId}`);
-            // Tambahkan logika delete di sini
-        }
-    }
+        // Dapatkan elemen form
+        const form = document.getElementById('deleteFolderForm');
 
+        // Atur action URL form sesuai folder yang akan dihapus
+        form.action = `/media/folder/${folderId}/delete`; // Endpoint untuk delete
+
+        // Tampilkan modal delete folder
+        const deleteModal = new bootstrap.Modal(document.getElementById('deleteFolderModal'));
+        deleteModal.show();
+    }
 </script>
 
 </html>

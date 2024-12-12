@@ -102,4 +102,19 @@ class MediaFolderController extends Controller
         ]);
     }
 
+    public function destroy($id)
+    {
+        $folder = MediaFolder::findOrFail($id);
+
+        // Logika tambahan (opsional): Hapus semua media dan subfolder jika ada
+        $folder->mediaItems()->delete(); // Jika folder memiliki media
+        $folder->subfolders()->delete(); // Jika folder memiliki subfolder
+
+        // Hapus folder
+        $folder->delete();
+
+        return redirect()->route('media.index')->with('success', 'Folder deleted successfully!');
+    }
+
+
 }
