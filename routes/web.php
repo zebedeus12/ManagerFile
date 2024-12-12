@@ -44,7 +44,7 @@ Route::get('/folder/{folder}', [FolderController::class, 'show'])->name('folder.
 Route::post('/folder/rename/{id}', [FolderController::class, 'rename'])->name('folder.rename');
 Route::post('/folder/share/{id}', [FolderController::class, 'share'])->name('folder.share');
 Route::delete('/folder/{id}', [FolderController::class, 'destroy'])->name('folder.destroy');
-Route::post('/folder/{id}/copy', [FolderController::class, 'copy'])->name('folder.copy');
+Route::post('/folder/copy/{id}', [FolderController::class, 'copy'])->name('folder.copy');
 Route::delete('/folder/delete/{id}', [FolderController::class, 'destroy'])->name('folder.delete');
 
 
