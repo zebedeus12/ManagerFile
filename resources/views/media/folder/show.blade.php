@@ -56,7 +56,6 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <!-- Form untuk Add Media -->
                         <form action="{{ route('media.store') }}" method="POST" enctype="multipart/form-data">
                             @csrf
                             <div class="form-group mb-3">
@@ -100,11 +99,9 @@
             <div class="file-grid">
                 @foreach($folder->mediaItems as $media)
                     <div class="file-card">
-                        <!-- Cek apakah file adalah gambar -->
                         <div class="image-container">
                             @if(Str::startsWith($media->type, 'image/'))
-                                <img src="{{ asset('storage/' . $media->path) }}" alt="{{ $media->name }}"
-                                    class="media-preview">
+                                <img src="{{ Storage::url($media->path) }}" alt="{{ $media->name }}" class="media-preview">
                             @else
                                 <div class="file-icon text-center">
                                     <span class="material-icons" style="font-size: 48px;">insert_drive_file</span>

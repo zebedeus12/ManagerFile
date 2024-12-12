@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Models\Media;
 use App\Models\MediaFolder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class MediaFolderController extends Controller
 {

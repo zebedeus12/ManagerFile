@@ -55,7 +55,8 @@ class MediaController extends Controller
         ]);
 
         // Simpan file ke storage
-        $filePath = $request->file('file')->store('media', 'public');
+        $filePath = $request->file('file')->store('public', 'media');
+        dd($filePath);
 
         // Buat media baru di folder yang sesuai
         Media::create([

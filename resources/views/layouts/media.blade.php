@@ -20,6 +20,9 @@
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=view_list" />
 
+    <!-- Tambahkan di dalam <head> jika belum ada -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
     <!-- Custom CSS -->
     <style>
         /* Global reset */
@@ -137,52 +140,68 @@
         }
 
         /* Dropdown item styling */
-        .dropdown-item {
-            font-size: 14px;
-            /* Ukuran font seragam */
-            font-weight: normal;
-            /* Berat font seragam */
-            color: black;
-            /* Warna default */
-            padding: 5px 10px;
-            /* Jarak padding seragam */
-            cursor: pointer;
+        .dropdown {
+            position: absolute;
+            display: inline-block;
+            top: 10px;
+            right: 10px;
         }
 
-        /* Khusus untuk tombol Delete */
-        .dropdown-item.delete {
-            color: red;
-            /* Warna teks merah */
-            font-weight: bold;
-            /* Berat font khusus */
+        .dropdown-toggle::before {
+            display: none;
+            content: none;
         }
 
-        /* Hover styling */
-        .dropdown-item:hover {
-            background-color: rgba(0, 0, 0, 0.1);
-            border-radius: 4px;
+        .dropdown-toggle::after {
+            display: none !important;
+            content: none !important;
         }
 
-
-        /* Tombol tiga titik */
-        .action-menu button {
-            padding: 15;
-            border: none;
+        .custom-toggle {
             background: none;
+            border: none;
             cursor: pointer;
-            color: white;
-            /* Warna ikon */
-            font-size: 15px;
-            /* Ukuran ikon */
+            font-size: 20px;
+            color: #000;
             display: flex;
             align-items: center;
-            justify: center;
+            justify-content: center;
+            padding: 0;
+            width: 40px;
+            height: 40px;
         }
 
-        /* Menghilangkan tanda panah bawaan */
-        .action-menu button::after {
+        .dropdown-menu {
             display: none;
-            /* Hilangkan tanda panah dropdown */
+            position: absolute;
+            top: 100%;
+            /* Posisi dropdown di bawah tombol */
+            right: 0;
+            background-color: white;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 4px;
+            padding: 10px 0;
+            z-index: 1050;
+        }
+
+        .dropdown-menu.show {
+            display: block;
+        }
+
+
+        .dropdown-menu button {
+            background: none;
+            border: none;
+            width: 100%;
+            text-align: left;
+            padding: 8px 15px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+
+        .dropdown-menu button:hover {
+            background-color: #f5f5f5;
         }
 
         /* File info section */
