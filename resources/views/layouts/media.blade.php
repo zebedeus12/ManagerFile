@@ -140,55 +140,30 @@
             object-fit: cover;
         }
 
-        /* Dropdown item styling */
-        .dropdown {
-            position: absolute;
-            display: inline-block;
-            top: 10px;
-            right: 10px;
-        }
-
-        .dropdown-toggle::before {
-            display: none;
-            content: none;
-        }
-
-        .dropdown-toggle::after {
-            display: none !important;
-            content: none !important;
-        }
-
+        /* Dropdown Container */
         .custom-toggle {
             background: none;
             border: none;
             cursor: pointer;
             font-size: 20px;
-            color: #000;
+            color: #888;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 0;
-            width: 40px;
-            height: 40px;
         }
 
         .dropdown-menu {
             display: none;
             position: absolute;
             top: 100%;
-            /* Posisi dropdown di bawah tombol */
             right: 0;
             background-color: white;
             box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
             border-radius: 4px;
             padding: 10px 0;
-            z-index: 1050;
+            z-index: 20;
+            min-width: 150px;
         }
-
-        .dropdown-menu.show {
-            display: block;
-        }
-
 
         .dropdown-menu button {
             background: none;
@@ -198,12 +173,25 @@
             padding: 8px 15px;
             font-size: 14px;
             cursor: pointer;
+            color: #333;
         }
-
 
         .dropdown-menu button:hover {
             background-color: #f5f5f5;
         }
+
+        .dropdown-menu.show {
+            display: block;
+        }
+
+        .folder-card .dropdown {
+            position: absolute;
+            top: 5px;
+            /* Sesuaikan dengan kebutuhan */
+            right: 5px;
+            z-index: 10;
+        }
+
 
         /* File info section */
         .file-info {
@@ -255,6 +243,8 @@
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             cursor: pointer;
             margin: 10px;
+            position: relative;
+            /* Menjadikan posisi dropdown mengikuti card */
         }
 
         .folder-card:hover {
@@ -374,5 +364,29 @@
 
     @stack('scripts')
 </body>
+<script>
+    function toggleMenu(button) {
+        const menu = button.nextElementSibling;
+        menu.classList.toggle('show');
+    }
+
+    function renameFolder(folderId) {
+        alert(`Rename folder with ID: ${folderId}`);
+        // Tambahkan logika rename di sini
+    }
+
+    function shareFolder(folderId) {
+        alert(`Share folder with ID: ${folderId}`);
+        // Tambahkan logika share di sini
+    }
+
+    function deleteFolder(folderId) {
+        if (confirm("Are you sure you want to delete this folder?")) {
+            alert(`Delete folder with ID: ${folderId}`);
+            // Tambahkan logika delete di sini
+        }
+    }
+
+</script>
 
 </html>
