@@ -1,15 +1,14 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Models\File;
 use App\Models\Folder;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 
 class FileController extends Controller
 {
-    // FileController.php
-
     public function index()
     {
         $folders = Folder::whereNull('parent_id')->get(); // Ambil folder utama
@@ -25,34 +24,36 @@ class FileController extends Controller
     }
 
     public function store(Request $request, $folder = null)
-    {
-        $request->validate([
-            'file' => 'required|file|max:2048|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx',
+{
+    $request->validate([
+        'file' => 'required|file|max:2048|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx',
+    ]);
+
+    if ($request->hasFile('file')) {
+        $uploadedFile = $request->file('file');
+        $filePath = $uploadedFile->store('uploads', 'public');
+
+        // Simpan metadata file ke database
+        $file = new File([
+            'name' => $uploadedFile->getClientOriginalName(),
+            'size' => $uploadedFile->getSize() / 1024, // dalam KB
+            'type' => $uploadedFile->extension(),
+            'path' => $filePath,
+            'folder_id' => $folder, // Hubungkan file ke folder jika ada
+            'created_by' => auth()->id(),
         ]);
-
-        if ($request->hasFile('file')) {
-            $uploadedFile = $request->file('file');
-            $filePath = $uploadedFile->store('uploads', 'public');
-
-            // Simpan metadata file ke database
-            $file = new File([
-                'name' => $uploadedFile->getClientOriginalName(),
-                'size' => $uploadedFile->getSize() / 1024, // dalam KB
-                'type' => $uploadedFile->extension(),
-                'folder_id' => $folder, // Hubungkan file ke folder jika ada
-                'created_by' => auth()->id(),
-            ]);
-            $file->save();
-        }
-
-        // Jika folder null, arahkan ke file index
-        if ($folder === null) {
-            return redirect()->route('file.index')->with('success', 'File berhasil diunggah.');
-        }
-
-        // Jika folder ada, arahkan ke folder tersebut
-        return redirect()->route('folder.show', ['folder' => $folder])->with('success', 'File berhasil diunggah.');
+        $file->save();
     }
+
+    // Redirect ke folder tempat file diunggah
+    if ($folder) {
+        return redirect()->route('folder.show', $folder)->with('success', 'File berhasil diunggah.');
+    }
+
+    // Redirect ke halaman utama jika diunggah ke root
+    return redirect()->route('file.index')->with('success', 'File berhasil diunggah.');
+}
+
 
     public function show($folderId)
     {
@@ -61,5 +62,43 @@ class FileController extends Controller
         $files = $folder->files; // File di dalam folder ini
 
         return view('folder.show', compact('folder', 'subFolders', 'files'));
+    }
+
+    // Fungsi Rename File
+    public function rename(Request $request, $fileId)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+        ]);
+
+        $file = File::findOrFail($fileId); // Temukan file berdasarkan ID
+        $file->name = $request->input('name'); // Perbarui nama file
+        $file->save();
+
+        return redirect()->back()->with('success', 'File berhasil diubah namanya.');
+    }
+
+    // Fungsi Delete File
+    public function destroy($fileId)
+    {
+        $file = File::findOrFail($fileId); // Temukan file berdasarkan ID
+    
+        if ($file->path && Storage::disk('public')->exists($file->path)) {
+            Storage::disk('public')->delete($file->path); // Hapus file dari storage
+        }
+    
+        $file->delete(); // Hapus metadata dari database
+    
+        return redirect()->back()->with('success', 'File berhasil dihapus.');
+    }
+    
+
+    // Fungsi Share File
+    public function share($fileId)
+    {
+        $file = File::findOrFail($fileId); // Temukan file berdasarkan ID
+        $shareUrl = Storage::url($file->path); // Dapatkan URL publik file
+
+        return response()->json(['url' => $shareUrl]); // Kembalikan URL sebagai respons JSON
     }
 }

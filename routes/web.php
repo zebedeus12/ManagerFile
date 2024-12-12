@@ -36,6 +36,9 @@ Route::get('/files', [FileController::class, 'index'])->name('file.index'); // M
 Route::get('/files/create/{folder?}', [FileController::class, 'create'])->name('files.create'); // Form upload file
 Route::get('/files/{id}', [FileController::class, 'show'])->name('files.show'); // Detail file
 Route::post('/files/{folder?}', [FileController::class, 'store'])->name('files.store');
+Route::post('/file/rename/{fileId}', [FileController::class, 'rename'])->name('file.rename');
+Route::delete('/file/delete/{fileId}', [FileController::class, 'destroy'])->name('file.destroy');
+Route::get('/file/share/{fileId}', [FileController::class, 'share'])->name('file.share');
 
 // Mengelola folder
 Route::get('/folder/create/{parentId?}', [FolderController::class, 'showForm'])->name('folder.create'); // Form tambah folder
