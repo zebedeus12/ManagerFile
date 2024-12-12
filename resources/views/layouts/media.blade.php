@@ -378,8 +378,26 @@
     }
 
     function shareFolder(folderId) {
-        alert(`Share folder with ID: ${folderId}`);
-        // Tambahkan logika share di sini
+        // Set URL share folder (sesuaikan endpoint Anda)
+        const link = `${window.location.origin}/folder/${folderId}/share`;
+
+        // Set link ke input di modal
+        document.getElementById('shareFolderLink').value = link;
+
+        // Tampilkan modal
+        const shareModal = new bootstrap.Modal(document.getElementById('shareFolderModal'));
+        shareModal.show();
+    }
+
+    function copyToClipboard() {
+        // Salin teks dari input ke clipboard
+        const linkInput = document.getElementById('shareFolderLink');
+        linkInput.select();
+        linkInput.setSelectionRange(0, 99999); // Untuk perangkat seluler
+        navigator.clipboard.writeText(linkInput.value);
+
+        // Beri notifikasi
+        alert('Link copied to clipboard!');
     }
 
     function deleteFolder(folderId) {

@@ -97,6 +97,27 @@
             </div>
         </div>
 
+        <!-- Modal untuk Share Folder -->
+        <div class="modal fade" id="shareFolderModal" tabindex="-1" aria-labelledby="shareFolderModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="shareFolderModalLabel">Share Folder Link</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <input type="text" id="shareFolderLink" class="form-control" readonly>
+                        </div>
+                        <div class="form-group mt-3 text-center">
+                            <button class="btn btn-primary" onclick="copyToClipboard()">Copy Link</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         @if(session('success'))
             <div class="alert alert-success">
                 {{ session('success') }}

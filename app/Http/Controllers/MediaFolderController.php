@@ -90,4 +90,16 @@ class MediaFolderController extends Controller
         return redirect()->route('media.index')->with('success', 'Folder renamed successfully!');
     }
 
+    public function share($id)
+    {
+        $folder = MediaFolder::findOrFail($id);
+
+        // Anda bisa menambahkan logika di sini untuk memvalidasi atau membuat link share
+
+        // Redirect ke halaman folder atau tampilkan halaman share
+        return response()->json([
+            'share_url' => route('media.folder.share', ['id' => $folder->id]),
+        ]);
+    }
+
 }
