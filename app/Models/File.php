@@ -16,7 +16,7 @@ class File extends Model
     // Relasi ke folder
     public function folder()
     {
-        return $this->belongsTo(Folder::class);
+        return $this->hasMany(File::class);
     }
 
     // Relasi ke user yang membuat file
@@ -24,4 +24,9 @@ class File extends Model
     {
         return $this->belongsTo(User::class, 'created_by');
     }
+    public function index()
+{
+    $folders = Folder::with('files')->get(); // Ambil folder beserta file-nya
+    return view('file_manager.index', compact('folders'));
+}
 }

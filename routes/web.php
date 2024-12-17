@@ -8,6 +8,9 @@ use App\Http\Controllers\MediaController;
 use App\Http\Controllers\MediaFolderController;
 use App\Http\Controllers\FolderController;
 use App\Http\Controllers\FileController;
+use App\Http\Controllers\PricingController;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Response;
 
 
 Route::get('/', function () {
@@ -28,17 +31,28 @@ Route::get('/dashboard', function () {
 })->middleware('auth');
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
+//princing
+Route::get('/pricing', [PricingController::class, 'index'])->name('pricing.index');
+Route::get('/pricing', function () {
+    return view('pricing.index'); // View placeholder
+})->name('pricing.index');
+
 //employees
 Route::resource('employees', EmployeeController::class);
 
 // Mengelola file
-Route::get('/files', [FileController::class, 'index'])->name('file.index'); // Menampilkan halaman utama file manager
-Route::get('/files/create/{folder?}', [FileController::class, 'create'])->name('files.create'); // Form upload file
-Route::get('/files/{id}', [FileController::class, 'show'])->name('files.show'); // Detail file
-Route::post('/files/{folder?}', [FileController::class, 'store'])->name('files.store');
-Route::post('/file/rename/{fileId}', [FileController::class, 'rename'])->name('file.rename');
-Route::delete('/file/delete/{fileId}', [FileController::class, 'destroy'])->name('file.destroy');
-Route::get('/file/share/{fileId}', [FileController::class, 'share'])->name('file.share');
+Route::prefix('files')->group(function () {
+    Route::get('/files', [FileController::class, 'index'])->name('file.index');
+    Route::get('/create/{folder?}', [FileController::class, 'create'])->name('files.create'); // Form upload file
+    Route::post('/store/{folder?}', [FileController::class, 'store'])->name('files.store'); // Menyimpan file
+    Route::get('/{id}', [FileController::class, 'show'])->name('files.show'); // Menampilkan detail file
+    Route::post('/rename/{fileId}', [FileController::class, 'rename'])->name('files.rename'); // Rename file
+    Route::delete('/file/delete/{fileId}', [FileController::class, 'destroy'])->name('file.destroy');
+    Route::get('/file/share/{fileId}', [FileController::class, 'share'])->name('file.share');
+});
+
+// Preview file
+Route::get('/file/preview/{id}', [FileController::class, 'preview'])->name('files.preview');
 
 // Mengelola folder
 Route::get('/folder/create/{parentId?}', [FolderController::class, 'showForm'])->name('folder.create'); // Form tambah folder
