@@ -11,38 +11,54 @@
     <div class="container content-container">
         <div class="header d-flex align-items-center justify-content-between mb-4">
             <h1 class="mb-0">File Manager</h1>
-            <button class="add-folder ms-auto" onclick="location.href='{{ route('folder.create') }}'">Add
-                Folder</button>
+            <button class="add-folder ms-auto" onclick="location.href='{{ route('folder.create') }}'">Add Folder</button>
         </div>
-        <p class="text-muted">Terdapat {{ $folders->count() }} Folders.
-        </p>
+        <p class="text-muted">Terdapat {{ $folders->count() }} Folders.</p>
+
         <div class="file-grid">
             {{-- Grid Folders --}}
             @foreach ($folders as $folder)
-                <div class="file-card">
-                    <!-- Dropdown Tombol -->
-                    <div class="dropdown">
-                        <button class="dropdown-toggle custom-toggle" onclick="toggleDropdown(this)">⋮</button>
-                        <!-- Menu Dropdown -->
-                        <div class="dropdown-menu">
-                            <button onclick="openRenameModal({{ $folder->id }}, '{{ $folder->name }}')">Rename</button>
-                            <button
-                                onclick="openShareModal({{ $folder->id }}, '{{ url('/folder/' . $folder->id . '/share') }}')">Share</button>
-                            <button onclick="openDeleteModal({{ $folder->id }})">Delete</button>
+                @if ($folder)
+                    <div class="file-card">
+                        <!-- Dropdown Tombol -->
+                        <div class="dropdown">
+                            <button class="dropdown-toggle custom-toggle" onclick="toggleDropdown({{ $folder->id }})">⋮</button>
+                            <!-- Menu Dropdown -->
+                            <div class="dropdown-menu" id="dropdown-{{ $folder->id }}">
+                                <button onclick="openRenameModal({{ $folder->id }}, '{{ $folder->name }}')">Rename</button>
+                                <button
+                                    onclick="openShareModal({{ $folder->id }}, '{{ url('/folder/' . $folder->id . '/share') }}')">Share</button>
+                                <button onclick="openDeleteModal({{ $folder->id }})">Delete</button>
+                            </div>
                         </div>
+
+                        <!-- Ikon dan Info Folder -->
+                        <a href="{{ route('folder.show', $folder->id) }}" class="file-link">
+                            <div class="icon-container">
+                                <span class="material-icons folder-icon">folder</span>
+                            </div>
+                            <div class="file-info">
+                                <span class="fw-bold">{{ $folder->name }}</span>
+                                <span class="text-muted">Updated at: {{ $folder->updated_at->format('d/m/Y') }}</span>
+                            </div>
+                        </a>
                     </div>
 
-                    <!-- Ikon dan Info Folder -->
-                    <a href="{{ route('folder.show', $folder->id) }}" class="folder-link">
-                        <div class="icon-container">
-                            <span class="material-icons folder-icon">folder</span>
+                    {{-- Files --}}
+                    @foreach (optional($folder->files) as $file)
+                        <div class="file-card">
+                            <a href="{{ asset('storage/' . $file->path) }}" target="_blank" class="file-link">
+                                <div class="icon-container">
+                                    <span class="material-icons file-icon">description</span>
+                                </div>
+                                <div class="file-info">
+                                    <span class="fw-bold">{{ $file->name }}</span>
+                                    <span class="text-muted">{{ round($file->size / 1024, 2) }} KB</span>
+                                </div>
+                            </a>
                         </div>
-                        <div class="file-info">
-                            <span class="fw-bold">{{ $folder->name }}</span>
-                            <span class="text-muted">Updated at: {{ $folder->updated_at->format('d/m/Y') }}</span>
-                        </div>
-                    </a>
-                </div>
+                    @endforeach
+                @endif
             @endforeach
         </div>
 
@@ -88,23 +104,16 @@
         </div>
     </div>
 </div>
-<script>
-    function toggleDropdown(button) {
-        const dropdownMenu = button.nextElementSibling;
 
+<script>
+    function toggleDropdown(folderId) {
+        const dropdownMenu = document.getElementById(`dropdown-${folderId}`);
         document.querySelectorAll('.dropdown-menu').forEach(menu => {
             if (menu !== dropdownMenu) {
                 menu.style.display = 'none';
             }
         });
-
-        if (dropdownMenu.style.display === 'block') {
-            dropdownMenu.style.display = 'none';
-        } else {
-            dropdownMenu.style.display = 'block';
-        }
-
-        event.stopPropagation();
+        dropdownMenu.style.display = (dropdownMenu.style.display === 'block') ? 'none' : 'block';
     }
 
     // Tutup dropdown saat klik di luar area
@@ -120,5 +129,4 @@
         modal.style.display = "none";
     }
 </script>
-
 @endsection

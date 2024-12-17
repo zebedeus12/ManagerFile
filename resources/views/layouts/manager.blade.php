@@ -25,112 +25,109 @@
 
     <!-- Custom CSS -->
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        /* Mengatur Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-        body,
-        html {
-            height: 100%;
-            overflow: hidden;
-            font-family: 'Poppins', sans-serif;
-            background-color: #f5f5f5;
-            margin: 0;
-            padding: 0;
-            display: flex;
-        }
+body,
+html {
+    height: 100%;
+    width: 100%;
+    font-family: 'Poppins', sans-serif;
+    overflow: hidden; /* Mencegah scroll di body */
+    background-color: #f5f5f5;
+}
 
-        .main-layout {
-            display: flex;
-            width: 100vw;
-            height: 100vh;
-        }
+/* Wrapper Utama */
+.main-layout {
+    display: flex;
+    height: 100vh;
+    overflow: hidden; /* Mencegah scroll di main layout */
+}
 
-        /* Sidebar styling */
-        .sidebar {
-            width: 70px;
-            background-color: white;
-        }
+/* Sidebar Styling */
+.sidebar {
+    width: 70px; /* Lebar sidebar default */
+    position: fixed; /* Sidebar tetap di sisi kiri */
+    height: 100vh;
+    background-color: white;
+    box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.1);
+    transition: width 0.3s ease; /* Animasi jika sidebar melebar */
+    z-index: 1000; /* Pastikan sidebar berada di atas konten */
+}
 
-        /*container*/
-        .container {
-            flex: 1;
-            background-color: #f1f1f1;
-            padding: 20px;
-            overflow-y: auto;
-        }
+.sidebar:hover {
+    width: 250px; /* Sidebar melebar saat dihover */
+}
 
-        /* File Manager Grid */
-        .content-container {
-            flex-grow: 1;
-            padding: 20px;
-            background-color: #ffffff;
-            margin-left: 50px;
-            min-height: 100vh;
-        }
+/* Kontainer Konten Utama */
+.container {
+    margin: 0 auto; /* Konten berada di tengah */
+    /* margin-left: 70px; Jarak konten dari sidebar */
+    padding: 20px;
+    flex-grow: 1;
+    background-color: #f1f1f1;
+    min-height: 100vh;
+    width: calc(100% - 70px); /* Lebar awal dikurangi sidebar collapsed */
+    transition: width 0.3s ease, margin-left 0.3s ease;
+}
 
-        .file-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
-        }
+.sidebar:hover ~ .container {
+    margin-left: 250px; /* Konten bergeser saat sidebar melebar */
+    width: calc(100% - 250px);
+}
 
-        .file-card,
-        .sub-folder-card {
-            position: relative;
-            background-color: #ffffff;
-            border-radius: 8px;
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-            padding: 15px;
-            text-align: center;
-            transition: transform 0.2s;
-        }
+/* Content Container Styling */
+.content-container {
+    background-color: #ffffff;
+    min-height: 100vh;
+    padding: 25px;
+    overflow-y: auto;
+}
 
-        .file-card:hover,
-        .sub-folder-card:hover {
-            transform: translateY(-5px);
-        }
+/* File Grid */
+.file-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
 
-        .icon-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-bottom: 10px;
-            text-decoration: none;
-        }
+/* File dan Folder Card */
+.file-card,
+.sub-folder-card {
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    text-align: center;
+    transition: transform 0.2s;
+}
 
-        .folder-icon {
-            font-size: 48px;
-            color: #FFB400;
-        }
+.file-card:hover,
+.sub-folder-card:hover {
+    transform: translateY(-5px);
+}
 
-        .file-icon {
-            width: 40px;
-            height: 40px;
-        }
+/* Tombol Tambah Folder/File */
+.add-folder,
+.add-file {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    transition: background-color 0.3s;
+}
 
-        .file-info {
-            font-size: 14px;
-            color: #6c757d;
-        }
+.add-folder:hover,
+.add-file:hover {
+    background-color: #0056b3;
+}
 
-        .add-folder,
-        .add-file {
-            background-color: #007bff;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 8px;
-            transition: background-color 0.3s;
-        }
-
-        .add-folder:hover,
-        .add-file:hover {
-            background-color: #0056b3;
-        }
 
         .header .buttons {
             margin-left: auto;

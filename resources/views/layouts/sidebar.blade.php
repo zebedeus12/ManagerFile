@@ -1,30 +1,36 @@
-<div class="sidebar">
+<div class="sidebar" id="sidebar">
+    <!-- Header Sidebar -->
+    <div class="sidebar-header">
+        <h3 class="logo">BBSPJIS</h3>
+    </div>
+
+    <!-- Menu Navigasi -->
     <nav class="menu">
         <ul class="list-unstyled">
             <li>
-            <li>
-                <a href="{{ route('employees.index') }}" class="icon-link">
+                <a href="{{ route('employees.index') }}" class="menu-item">
                     <span class="material-icons">admin_panel_settings</span>
+                    <span class="menu-text">Employees</span>
                 </a>
             </li>
-
-            </li>
             <li>
-                <a href="{{ route('file.index') }}" class=" icon-link">
+                <a href="{{ route('file.index') }}" class="menu-item">
                     <span class="material-icons">folder</span>
+                    <span class="menu-text">Files</span>
                 </a>
             </li>
             <li>
-                <a href="{{ route('media.index') }}" class="icon-link">
+                <a href="{{ route('media.index') }}" class="menu-item">
                     <span class="material-icons">perm_media</span>
+                    <span class="menu-text">Media</span>
                 </a>
             </li>
-            <li>
-                <!-- Tambahkan Logout Button di Sidebar -->
-                <form action="{{ route('logout') }}" method="POST" class="d-flex justify-content-center mt-3">
+                <!-- Tombol Logout -->
+                <form action="{{ route('logout') }}" method="POST" class="logout-form">
                     @csrf
-                    <button type="submit" class="btn btn-link icon-link" title="Logout">
+                    <button type="submit" class="menu-item logout-btn">
                         <span class="material-icons">logout</span>
+                        <span class="menu-text">Logout</span>
                     </button>
                 </form>
             </li>
@@ -32,65 +38,92 @@
     </nav>
 </div>
 
+<!-- CSS untuk Sidebar -->
 <style>
+    /* Sidebar Default (Collapsed) */
     .sidebar {
-        width: 80px;
+        width: 100px;
         height: 100vh;
-        background: linear-gradient(180deg, #188A98, #5CCED1);
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        padding-top: 20px;
-        box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-        border-right: 1px solid #e0e0e0;
-    }
-
-    .icon-link {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 100%;
-        height: 60px;
-        text-decoration: none;
+        background-color: #188A98;
         color: white;
-        font-size: 28px;
-        /* Ukuran ikon */
+        transition: width 0.3s ease;
+        overflow: hidden;
+        position: fixed;
     }
 
-    .icon-link:hover {
-        background: none;
-        /* Tidak ada efek hover */
+    /* Sidebar saat dihover */
+    .sidebar:hover {
+        width: 260px;
     }
 
-    .material-icons {
-        font-size: 28px;
+    /* Logo Styling */
+    .logo {
+        font-size: 20px;
+        text-align: center;
+        padding: 20px 0;
+        display: none; /* Sembunyikan logo saat sidebar collapsed */
     }
 
+    .sidebar:hover .logo {
+        display: block; /* Tampilkan logo saat sidebar dihover */
+    }
+
+    /* Menu Item Styling */
     .menu ul {
-        width: 100%;
         padding: 0;
         list-style: none;
     }
 
-    .menu ul li {
-        margin: 20px 0;
-    }
-
-    .icon-link:hover {
-        background-color: #145d65;
-    }
-
-    .menu ul li a {
-        color: #adb5bd;
+    .menu-item {
         display: flex;
-        justify-content: center;
-        padding: 15px 15px;
-        font-size: 24px;
-        /* Adjust icon size */
+        align-items: center;
+        gap: 15px;
+        padding: 15px 30px;
+        color: white;
+        text-decoration: none;
+        border-radius: 8px;
+        transition: background 0.3s;
     }
 
-    .menu ul li a:hover {
-        background-color: #1CAAB8;
+    .menu-item:hover {
+        background-color: white;
+        color: #188A98;
+    }
+
+    /* Menu Text (Judul Menu) */
+    .menu-text {
+        display: none;
+        transition: opacity 0.3s ease;
+    }
+
+    /* Tampilkan judul menu saat sidebar dihover */
+    .sidebar:hover .menu-text {
+        display: inline;
+        opacity: 1;
+    }
+
+    /* Icon Styling */
+    .material-icons {
+        font-size: 26px;
+        text-align: center;
+    }
+
+    /* Logout Button */
+    .logout-btn {
+        background: none;
+        border: none;
         color: white;
+        font-size: 18px;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        width: 100%;
+        text-align: left;
+        cursor: pointer;
+    }
+
+    .logout-btn:hover {
+        background-color: white;
+        color: #188A98;
     }
 </style>

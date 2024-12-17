@@ -6,6 +6,7 @@ use App\Models\File;
 use App\Models\Folder;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Response;
 
 class FileController extends Controller
 {
@@ -33,6 +34,9 @@ class FileController extends Controller
         $uploadedFile = $request->file('file');
         $filePath = $uploadedFile->store('uploads', 'public');
 
+        // Validasi folder jika ada
+        $folderId = $folder ? Folder::findOrFail($folder)->id : null;
+
         // Simpan metadata file ke database
         $file = new File([
             'name' => $uploadedFile->getClientOriginalName(),
@@ -57,7 +61,7 @@ class FileController extends Controller
 
     public function show($folderId)
     {
-        $folder = Folder::findOrFail($folderId); // Temukan folder berdasarkan ID
+        $folder = Folder::with(['children', 'files'])->findOrFail($folderId); // Temukan folder berdasarkan ID
         $subFolders = $folder->children; // Subfolder di dalam folder ini
         $files = $folder->files; // File di dalam folder ini
 
@@ -97,8 +101,29 @@ class FileController extends Controller
     public function share($fileId)
     {
         $file = File::findOrFail($fileId); // Temukan file berdasarkan ID
-        $shareUrl = Storage::url($file->path); // Dapatkan URL publik file
+        $shareUrl = asset('storage/' . $file->path); // Dapatkan URL publik file
 
         return response()->json(['url' => $shareUrl]); // Kembalikan URL sebagai respons JSON
     }
+
+    public function preview($id)
+{
+    // Ambil path file dari database berdasarkan ID
+    $file = File::findOrFail($id);
+    $filePath = 'public/' . $file->path;
+
+    // Periksa apakah file ada
+    if (!Storage::exists($filePath)) {
+        abort(404, 'File not found');
+    }
+
+    // Tentukan MIME type dan tampilkan file
+    $fileContent = Storage::get($filePath);
+    $mimeType = Storage::mimeType($filePath);
+
+    return Response::make($fileContent, 200, [
+        'Content-Type' => $mimeType,
+        'Content-Disposition' => 'inline; filename="' . $file->name . '"',
+    ]);
+}
 }
