@@ -155,10 +155,6 @@
                         <form action="{{ route('media.store') }}" method="POST" enctype="multipart/form-data">
                             @csrf
                             <div class="form-group mb-3">
-                                <label for="mediaName">Media Name</label>
-                                <input type="text" class="form-control" name="name" id="mediaName" required>
-                            </div>
-                            <div class="form-group mb-3">
                                 <label for="mediaFile">Media File</label>
                                 <input type="file" class="form-control" name="file" id="mediaFile"
                                     accept="image/*,audio/*,video/*" required>
