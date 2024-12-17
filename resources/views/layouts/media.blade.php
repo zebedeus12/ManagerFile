@@ -58,7 +58,9 @@
         .sidebar {
             width: 70px;
             background-color: white;
+            z-index: 1000;
         }
+        
 
         /* Main content area */
         .employee-content {
@@ -117,6 +119,13 @@
 
         .file-info {
             padding: 10px;
+        }
+
+        .content-container {
+            background-color: #ffffff;
+            min-height: 100vh;
+            padding: 25px;
+            overflow-y: auto;
         }
 
         .media-preview {
