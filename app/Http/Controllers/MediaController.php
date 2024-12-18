@@ -123,6 +123,9 @@ class MediaController extends Controller
     /**
      * Remove the specified resource from storage.
      */
+    /**
+     * Remove the specified resource from storage.
+     */
     public function destroy(Media $media)
     {
         // Hapus file dari storage jika ada

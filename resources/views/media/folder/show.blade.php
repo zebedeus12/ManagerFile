@@ -169,23 +169,46 @@
             </div>
         </div>
 
-        <!-- Media List -->
         <div class="media-list">
             <h5>Media Files</h5>
             <div class="file-grid">
                 @foreach($folder->mediaItems as $media)
-                    <div class="file-card">
-                        <div class="image-container">
+                    <div class="file-card position-relative">
+                        <div class="media-container"
+                            onclick="handleMediaClick('{{ $media->id }}', '{{ Storage::url($media->path) }}', '{{ $media->type }}')">
                             @if(Str::startsWith($media->type, 'image/'))
-                                <img src="{{ Storage::url($media->path) }}" alt="{{ $media->name }}" class="media-preview">
-                            @else
-                                <div class="file-icon text-center">
-                                    <span class="material-icons" style="font-size: 48px;">insert_drive_file</span>
+                                <!-- Tampilkan Gambar -->
+                                <img src="{{ Storage::url($media->path) }}" alt="{{ $media->name }}" class="media-preview"
+                                    id="media-{{ $media->id }}">
+                            @elseif(Str::startsWith($media->type, 'audio/'))
+                                <!-- Tampilkan Ikon Musik -->
+                                <div class="audio-icon text-center">
+                                    <span class="material-icons" style="font-size: 48px;">music_note</span>
                                 </div>
+                                <audio id="audio-{{ $media->id }}" preload="none">
+                                    <source src="{{ Storage::url($media->path) }}" type="{{ $media->type }}">
+                                </audio>
+                            @elseif(Str::startsWith($media->type, 'video/'))
+                                <!-- Tampilkan Video -->
+                                <video class="media-preview" id="video-{{ $media->id }}" preload="none">
+                                    <source src="{{ Storage::url($media->path) }}" type="{{ $media->type }}">
+                                    Your browser does not support the video tag.
+                                </video>
                             @endif
                         </div>
-                        <div class="file-info">
+                        <div class="file-info text-center">
                             <p>{{ $media->name }}</p>
+                        </div>
+
+                        <div class="dropdown position-absolute top-0 end-0 m-2">
+                            <button class="custom-toggle" onclick="toggleMenu(this)">
+                                <span class="material-icons">more_vert</span>
+                            </button>
+                            <div class="dropdown-menu">
+                                <a href="{{ route('media.edit', $media->id) }}" class="dropdown-item">Edit</a>
+                                <button onclick="deleteMedia({{ $media->id }})"
+                                    class="dropdown-item text-danger">Delete</button>
+                            </div>
                         </div>
                     </div>
                 @endforeach
