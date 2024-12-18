@@ -57,19 +57,37 @@
         }
 
         .employee-content {
-            flex: 1;
+            margin-left: 240px; /* Jarak dari sidebar */
             padding: 20px;
-            overflow-y: auto;
+            height: calc(100vh - 60px); /* Pastikan tinggi mengikuti viewport */
+            overflow-y: auto; /* Aktifkan scroll vertikal */
+            overflow-x: auto; /* Scroll horizontal jika tabel terlalu lebar */
+            background-color: #ffffff;
         }
 
         .table {
-            width: 100%;
+            width: 100%; /* Table mengambil seluruh lebar kontainer */
+            border-collapse: collapse;
         }
 
         .table th,
         .table td {
-            vertical-align: middle;
+            white-space: nowrap; /* Mencegah wrapping */
+            overflow: hidden; /* Sembunyikan konten yang meluap */
+            text-overflow: ellipsis; /* Tampilkan ... untuk konten panjang */
         }
+
+        .table thead {
+            /* position: sticky; Sticky header */
+            top: 0;
+            background-color: #ffffff;
+            z-index: 1;
+        }
+
+        .table .password-column {
+            width: 150px; /* Lebar kolom Password tetap */
+            max-width: 150px;
+    }
     </style>
     @stack('styles')
 </head>
