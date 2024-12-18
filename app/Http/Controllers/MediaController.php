@@ -123,6 +123,9 @@ class MediaController extends Controller
     /**
      * Remove the specified resource from storage.
      */
+    /**
+     * Remove the specified resource from storage.
+     */
     public function destroy(Media $media)
     {
         // Hapus file dari storage jika ada
@@ -135,6 +138,5 @@ class MediaController extends Controller
 
         return redirect()->route('media.index')->with('success', 'Media berhasil dihapus.');
     }
-
 
 }

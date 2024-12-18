@@ -174,7 +174,7 @@
             <h5>Media Files</h5>
             <div class="file-grid">
                 @foreach($folder->mediaItems as $media)
-                    <div class="file-card">
+                    <div class="file-card position-relative">
                         <div class="image-container">
                             @if(Str::startsWith($media->type, 'image/'))
                                 <img src="{{ Storage::url($media->path) }}" alt="{{ $media->name }}" class="media-preview">
@@ -186,6 +186,18 @@
                         </div>
                         <div class="file-info">
                             <p>{{ $media->name }}</p>
+                        </div>
+
+                        <!-- Dropdown menu for Edit and Delete -->
+                        <div class="dropdown position-absolute top-0 end-0 m-2">
+                            <button class="custom-toggle" onclick="toggleMenu(this)">
+                                <span class="material-icons">more_vert</span>
+                            </button>
+                            <div class="dropdown-menu">
+                                <a href="{{ route('media.edit', $media->id) }}" class="dropdown-item">Edit</a>
+                                <button onclick="deleteMedia({{ $media->id }})"
+                                    class="dropdown-item text-danger">Delete</button>
+                            </div>
                         </div>
                     </div>
                 @endforeach

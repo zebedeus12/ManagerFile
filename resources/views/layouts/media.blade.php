@@ -60,7 +60,7 @@
             background-color: white;
             z-index: 1000;
         }
-        
+
 
         /* Main content area */
         .employee-content {
@@ -431,6 +431,32 @@
         // Tampilkan modal delete folder
         const deleteModal = new bootstrap.Modal(document.getElementById('deleteFolderModal'));
         deleteModal.show();
+    }
+
+    function deleteMedia(mediaId) {
+        if (confirm('Are you sure you want to delete this media?')) {
+            const form = document.createElement('form');
+            form.action = `/media/${mediaId}`;
+            form.method = 'POST';
+            form.style.display = 'none';
+
+            // Create CSRF token input
+            const csrfToken = document.createElement('input');
+            csrfToken.type = 'hidden';
+            csrfToken.name = '_token';
+            csrfToken.value = '{{ csrf_token() }}';
+            form.appendChild(csrfToken);
+
+            // Create method field for DELETE
+            const methodInput = document.createElement('input');
+            methodInput.type = 'hidden';
+            methodInput.name = '_method';
+            methodInput.value = 'DELETE';
+            form.appendChild(methodInput);
+
+            document.body.appendChild(form);
+            form.submit();
+        }
     }
 </script>
 
