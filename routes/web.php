@@ -85,3 +85,4 @@ Route::get('media/folder/{id}', [MediaFolderController::class, 'show'])->name('m
 Route::put('/media/folder/{id}/rename', [MediaFolderController::class, 'rename'])->name('media.folder.rename');
 Route::get('/folder/{id}/share', [MediaFolderController::class, 'share'])->name('media.folder.share');
 Route::delete('/media/folder/{id}/delete', [MediaFolderController::class, 'destroy'])->name('media.folder.destroy');
+Route::post('/media/folder/copy/{id}', [MediaFolderController::class, 'copy'])->name('media.folder.copy');

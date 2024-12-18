@@ -150,6 +150,11 @@
         }
 
         /* Dropdown Container */
+        .dropdown {
+            z-index: 10;
+            position: absolute;
+        }
+
         .custom-toggle {
             background: none;
             border: none;

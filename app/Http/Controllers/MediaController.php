@@ -49,26 +49,28 @@ class MediaController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
-            'file' => 'required|file|mimes:jpeg,png,jpg,gif,mp3,mp4,mkv|max:10240',
+            'file' => 'required|file|mimes:jpeg,png,jpg,gif,mp3,wav,ogg,mp4,mkv,avi|max:10240',
             'folder_id' => 'nullable|exists:mysql_second.media_folders,id',
         ]);
 
+        // Ambil nama file
+        $fileName = $request->file('file')->getClientOriginalName();
+
         // Simpan file ke disk 'media'
-        $filePath = $request->file('file')->store('uploads', 'media');
+        $filePath = $request->file('file')->store('uploads', 'public');
+        $type = $request->file('file')->getClientMimeType();
 
         // Simpan informasi media ke database
         Media::create([
-            'name' => $request->name,
+            'name' => $fileName, // Gunakan nama file sebagai nama media
             'path' => $filePath,
-            'type' => $request->file('file')->getMimeType(),
+            'type' => $type,
             'folder_id' => $request->folder_id, // Folder induk
         ]);
 
         // Redirect dengan pesan sukses
         return redirect()->route('media.index')->with('success', 'Media berhasil ditambahkan ke folder!');
     }
-
 
     /**
      * Show the form for editing the specified resource.
