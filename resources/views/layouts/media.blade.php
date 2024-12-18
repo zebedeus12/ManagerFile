@@ -354,8 +354,7 @@
         .media-preview {
             max-width: 100%;
             height: auto;
-            display: block;
-            margin: 0 auto;
+            cursor: pointer;
         }
 
         .media-item {
@@ -367,6 +366,41 @@
         .media-item img {
             border: 1px solid #ccc;
             border-radius: 5px;
+        }
+
+        .media-container {
+            position: relative;
+            overflow: hidden;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 10px;
+        }
+
+        .audio-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .audio-icon {
+            cursor: pointer;
+            color: #4CAF50;
+            transition: transform 0.3s;
+        }
+
+        .audio-icon:hover {
+            transform: scale(1.2);
+        }
+
+        .audio-player {
+            width: 100%;
+            height: 40px;
+            display: none;
+        }
+
+        .audio-container .audio-player {
+            display: block;
         }
     </style>
 
@@ -457,6 +491,37 @@
             document.body.appendChild(form);
             form.submit();
         }
+    }
+
+    function handleMediaClick(mediaId, mediaUrl, mediaType) {
+        // Hentikan semua audio dan video yang sedang diputar
+        document.querySelectorAll('audio, video').forEach(media => {
+            media.pause();
+            media.currentTime = 0;
+        });
+
+        // Periksa jenis media yang diklik
+        if (mediaType.startsWith('audio/')) {
+            const audioElement = document.getElementById(`audio-${mediaId}`);
+            audioElement.play();
+        } else if (mediaType.startsWith('video/')) {
+            const videoElement = document.getElementById(`video-${mediaId}`);
+            videoElement.play();
+        } else if (mediaType.startsWith('image/')) {
+            // Buka gambar dalam modal
+            openImageModal(mediaUrl);
+        }
+    }
+
+    function openImageModal(imageUrl) {
+        const modal = document.createElement('div');
+        modal.innerHTML = `
+            <div style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); display:flex; justify-content:center; align-items:center; z-index:1000;">
+                <img src="${imageUrl}" style="max-width:90%; max-height:90%;">
+                <button onclick="this.parentNode.remove()" style="position:absolute; top:20px; right:20px; background:red; color:white; border:none; font-size:20px; cursor:pointer;">&times;</button>
+            </div>
+        `;
+        document.body.appendChild(modal);
     }
 </script>
 
