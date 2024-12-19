@@ -124,15 +124,5 @@ class MediaController extends Controller
         return redirect()->route('media.index')->with('success', 'Media berhasil dihapus.');
     }
 
-    public function searchFolders(Request $request)
-    {
-        $search = $request->query('search', '');
-
-        // Cari folder berdasarkan nama
-        $folders = MediaFolder::where('name', 'like', "%{$search}%")->get();
-
-        return view('media.index', compact('folders', 'search'));
-    }
-
 
 }
