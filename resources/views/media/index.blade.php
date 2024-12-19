@@ -11,9 +11,11 @@
     <div class="employee-content p-4">
         <div class="header d-flex align-items-center justify-content-between mb-4">
             <h2>Media Manager</h2>
-            <form action="{{ route('media.search') }}" method="GET" class="d-flex">
-                <input type="text" name="query" class="form-control me-2" placeholder="Search media..." required>
-                <button type="submit" class="btn btn-outline-primary">Search</button>
+            <!-- Search Form -->
+            <form method="GET" action="{{ route('media.folders.search') }}" class="d-flex mb-3">
+                <input type="text" name="search" value="{{ request('search') }}" class="form-control me-2"
+                    placeholder="Search folders...">
+                <button type="submit" class="btn btn-primary">Search</button>
             </form>
             <!-- Button untuk Add Folder -->
             <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addFolderModal">Add Folder</button>
@@ -46,29 +48,34 @@
 
         <!-- Media Grid Display -->
         <div class="file-grid mt-4" id="media-container">
-            @foreach($folders as $folder)
-                <div class="folder-card position-relative">
-                    <a href="{{ route('media.folder.show', $folder->id) }}" class="folder-link">
-                        <div class="folder-icon">
-                            <span class="material-icons">folder</span>
-                        </div>
-                        <div class="folder-name text-center">{{ $folder->name }}</div>
-                    </a>
+            @if($folders->isEmpty())
+                <p>No folders found.</p>
+            @else
+                @foreach($folders as $folder)
+                    <div class="folder-card position-relative">
+                        <a href="{{ route('media.folder.show', $folder->id) }}" class="folder-link">
+                            <div class="folder-icon">
+                                <span class="material-icons">folder</span>
+                            </div>
+                            <div class="folder-name text-center">{{ $folder->name }}</div>
+                        </a>
 
-                    <!-- Tombol Titik Tiga -->
-                    <div class="dropdown position-absolute top-0 end-0 m-2">
-                        <button class="custom-toggle" onclick="toggleMenu(this)">
-                            <span class="material-icons">more_vert</span>
-                        </button>
-                        <div class="dropdown-menu">
-                            <button onclick="renameFolder({{ $folder->id }})">Rename</button>
-                            <button onclick="shareFolder({{ $folder->id }})">Share</button>
-                            <button onclick="deleteFolder({{ $folder->id }})">Delete</button>
+                        <!-- Tombol Titik Tiga -->
+                        <div class="dropdown position-absolute top-0 end-0 m-2">
+                            <button class="custom-toggle" onclick="toggleMenu(this)">
+                                <span class="material-icons">more_vert</span>
+                            </button>
+                            <div class="dropdown-menu">
+                                <button onclick="renameFolder({{ $folder->id }})">Rename</button>
+                                <button onclick="shareFolder({{ $folder->id }})">Share</button>
+                                <button onclick="deleteFolder({{ $folder->id }})">Delete</button>
+                            </div>
                         </div>
                     </div>
-                </div>
-            @endforeach
+                @endforeach
+            @endif
         </div>
+
 
         <!-- Modal untuk Rename Folder -->
         <div class="modal fade" id="renameFolderModal" tabindex="-1" aria-labelledby="renameFolderModalLabel"
@@ -147,6 +154,7 @@
                 {{ session('success') }}
             </div>
         @endif
+
     </div>
 </div>
 <script>

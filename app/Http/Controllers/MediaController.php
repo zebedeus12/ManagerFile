@@ -22,21 +22,6 @@ class MediaController extends Controller
         return view('media.index', compact('mediaItems', 'folders'));
     }
 
-    /**
-     * Search media by name.
-     */
-    public function search(Request $request)
-    {
-        $query = $request->input('query');
-        // Cari media berdasarkan nama
-        $mediaItems = Media::where('name', 'LIKE', "%$query%")->get();
-
-        return view('media.index', compact('mediaItems'));
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create(Request $request)
     {
         $folderId = $request->input('folder_id'); // Ambil folder_id dari request
@@ -137,6 +122,16 @@ class MediaController extends Controller
         $media->delete();
 
         return redirect()->route('media.index')->with('success', 'Media berhasil dihapus.');
+    }
+
+    public function searchFolders(Request $request)
+    {
+        $search = $request->query('search', '');
+
+        // Cari folder berdasarkan nama
+        $folders = MediaFolder::where('name', 'like', "%{$search}%")->get();
+
+        return view('media.index', compact('folders', 'search'));
     }
 
 
