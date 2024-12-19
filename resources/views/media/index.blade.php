@@ -150,24 +150,7 @@
     </div>
 </div>
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const sidebar = document.querySelector('.sidebar');
-        const toggleButton = document.createElement('button');
-        toggleButton.textContent = '☰';
-        toggleButton.classList.add('btn', 'btn-primary');
-        toggleButton.style.position = 'fixed';
-        toggleButton.style.top = '20px';
-        toggleButton.style.left = '20px';
-        toggleButton.style.zIndex = '1100';
 
-        // Tambahkan tombol toggle ke dalam body
-        document.body.appendChild(toggleButton);
-
-        // Fungsi toggle sidebar
-        toggleButton.addEventListener('click', function () {
-            sidebar.classList.toggle('collapsed');
-        });
-    });
 
     function toggleMenu(button) {
         // Tutup semua dropdown lainnya
