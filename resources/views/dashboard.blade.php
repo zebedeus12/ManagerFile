@@ -56,7 +56,7 @@
     /* Konten Dashboard */
     .dashboard-content {
         flex: 1;
-        background-color: #f1f1f1;
+        background-color: white;
         padding: 20px;
         margin-left: 240px;
         transition: margin-left 0.3s ease;

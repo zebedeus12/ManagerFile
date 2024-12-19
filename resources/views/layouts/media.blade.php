@@ -26,6 +26,11 @@
     <!-- Custom CSS -->
     <style>
         /* Global reset */
+
+    h5 {
+        padding-left: 20px;
+        padding-top: 10px;
+    }
         * {
             margin: 0;
             padding: 0;
@@ -42,31 +47,40 @@
         }
 
         .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
+            margin-left: 20px; /* Jarak tambahan dari kiri agar terlihat lebih rapi */
+            margin-right: 20px;
         }
 
         .main-layout {
             display: flex;
             width: 100vw;
             height: 100vh;
+            position: relative;
+            overflow: hidden;
         }
 
         /* Sidebar styling */
         .sidebar {
-            width: 70px;
-            background-color: white;
+            width: 240px; /* Lebar default sidebar */
+            background-color: #ffffff;
+            transition: width 0.3s ease; /* Animasi transisi */
             z-index: 1000;
         }
 
+        .sidebar.collapsed {
+            width: 70px; /* Sidebar dalam mode collapse */
+        }
+
+        .sidebar.collapsed ~ .employee-content {
+            margin-left: 70px;
+        }
 
         /* Main content area */
         .employee-content {
             flex: 1;
+            margin-left: 240px; /* Jarak default konten dari sidebar */
             padding: 20px;
-            overflow-y: auto;
+            transition: margin-left 0.3s ease; /* Transisi saat sidebar berubah */
         }
 
         /* Filter buttons styling */
@@ -96,10 +110,12 @@
 
         /* File grid layout */
         .file-grid {
+            margin-left: 20px; /* Jarak dari kiri */
+            margin-right: 20px;
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
             gap: 20px;
-            padding: 20px;
+            transition: all 0.3s ease; /* Efek transisi halus */
         }
 
         /* File card container */
@@ -244,26 +260,18 @@
 
         /* Menambahkan gaya untuk folder */
         .folder-card {
-            width: 150px;
-            height: 150px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
             text-align: center;
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            padding: 15px;
+            transition: transform 0.3s ease;
             cursor: pointer;
-            margin: 10px;
-            position: relative;
-            /* Menjadikan posisi dropdown mengikuti card */
         }
 
         .folder-card:hover {
             transform: scale(1.05);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            /* box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); */
         }
 
         .folder-icon {
