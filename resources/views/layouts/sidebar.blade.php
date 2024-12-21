@@ -25,14 +25,14 @@
                     <span class="menu-text">Media</span>
                 </a>
             </li>
-                <!-- Tombol Logout -->
-                <form action="{{ route('logout') }}" method="POST" class="logout-form">
-                    @csrf
-                    <button type="submit" class="menu-item logout-btn">
-                        <span class="material-icons">logout</span>
-                        <span class="menu-text">Logout</span>
-                    </button>
-                </form>
+            <!-- Tombol Logout -->
+            <form action="{{ route('logout') }}" method="POST" class="logout-form">
+                @csrf
+                <button type="submit" class="menu-item logout-btn">
+                    <span class="material-icons">logout</span>
+                    <span class="menu-text">Logout</span>
+                </button>
+            </form>
             </li>
         </ul>
     </nav>
@@ -61,11 +61,13 @@
         font-size: 20px;
         text-align: center;
         padding: 20px 0;
-        display: none; /* Sembunyikan logo saat sidebar collapsed */
+        display: none;
+        /* Sembunyikan logo saat sidebar collapsed */
     }
 
     .sidebar:hover .logo {
-        display: block; /* Tampilkan logo saat sidebar dihover */
+        display: block;
+        /* Tampilkan logo saat sidebar dihover */
     }
 
     /* Menu Item Styling */
