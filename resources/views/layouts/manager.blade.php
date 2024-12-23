@@ -26,107 +26,117 @@
     <!-- Custom CSS -->
     <style>
         /* Mengatur Reset */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-body,
-html {
-    height: 100%;
-    width: 100%;
-    font-family: 'Poppins', sans-serif;
-    overflow: hidden; /* Mencegah scroll di body */
-    background-color: #f5f5f5;
-}
+        body,
+        html {
+            height: 100%;
+            width: 100%;
+            font-family: 'Poppins', sans-serif;
+            overflow: hidden;
+            /* Mencegah scroll di body */
+            background-color: #f5f5f5;
+        }
 
-/* Wrapper Utama */
-.main-layout {
-    display: flex;
-    height: 100vh;
-    overflow: hidden; /* Mencegah scroll di main layout */
-}
+        /* Wrapper Utama */
+        .main-layout {
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+            /* Mencegah scroll di main layout */
+        }
 
-/* Sidebar Styling */
-.sidebar {
-    width: 70px; /* Lebar sidebar default */
-    position: fixed; /* Sidebar tetap di sisi kiri */
-    height: 100vh;
-    background-color: white;
-    box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.1);
-    transition: width 0.3s ease; /* Animasi jika sidebar melebar */
-    z-index: 1000; /* Pastikan sidebar berada di atas konten */
-}
+        /* Sidebar Styling */
+        .sidebar {
+            width: 70px;
+            /* Lebar sidebar default */
+            position: fixed;
+            /* Sidebar tetap di sisi kiri */
+            height: 100vh;
+            background-color: white;
+            box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.1);
+            transition: width 0.3s ease;
+            /* Animasi jika sidebar melebar */
+            z-index: 1000;
+            /* Pastikan sidebar berada di atas konten */
+        }
 
-.sidebar:hover {
-    width: 250px; /* Sidebar melebar saat dihover */
-}
+        .sidebar:hover {
+            width: 250px;
+            /* Sidebar melebar saat dihover */
+        }
 
-/* Kontainer Konten Utama */
-.container {
-    margin: 0 auto; /* Konten berada di tengah */
-    /* margin-left: 70px; Jarak konten dari sidebar */
-    padding: 20px;
-    flex-grow: 1;
-    background-color: #f1f1f1;
-    min-height: 100vh;
-    width: calc(100% - 70px); /* Lebar awal dikurangi sidebar collapsed */
-    transition: width 0.3s ease, margin-left 0.3s ease;
-}
+        /* Kontainer Konten Utama */
+        .container {
+            margin: 0 auto;
+            /* Konten berada di tengah */
+            /* margin-left: 70px; Jarak konten dari sidebar */
+            padding: 20px;
+            flex-grow: 1;
+            background-color: #f1f1f1;
+            min-height: 100vh;
+            width: calc(100% - 70px);
+            /* Lebar awal dikurangi sidebar collapsed */
+            transition: width 0.3s ease, margin-left 0.3s ease;
+        }
 
-.sidebar:hover ~ .container {
-    margin-left: 250px; /* Konten bergeser saat sidebar melebar */
-    width: calc(100% - 250px);
-}
+        .sidebar:hover~.container {
+            margin-left: 250px;
+            /* Konten bergeser saat sidebar melebar */
+            width: calc(100% - 250px);
+        }
 
-/* Content Container Styling */
-.content-container {
-    background-color: #ffffff;
-    min-height: 100vh;
-    padding: 25px;
-    overflow-y: auto;
-}
+        /* Content Container Styling */
+        .content-container {
+            background-color: #ffffff;
+            min-height: 100vh;
+            padding: 25px;
+            overflow-y: auto;
+        }
 
-/* File Grid */
-.file-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 20px;
-    margin-top: 20px;
-}
+        /* File Grid */
+        .file-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
 
-/* File dan Folder Card */
-.file-card,
-.sub-folder-card {
-    background-color: #ffffff;
-    border-radius: 8px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-    padding: 15px;
-    text-align: center;
-    transition: transform 0.2s;
-}
+        /* File dan Folder Card */
+        .file-card,
+        .sub-folder-card {
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 15px;
+            text-align: center;
+            transition: transform 0.2s;
+        }
 
-.file-card:hover,
-.sub-folder-card:hover {
-    transform: translateY(-5px);
-}
+        .file-card:hover,
+        .sub-folder-card:hover {
+            transform: translateY(-5px);
+        }
 
-/* Tombol Tambah Folder/File */
-.add-folder,
-.add-file {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 8px;
-    transition: background-color 0.3s;
-}
+        /* Tombol Tambah Folder/File */
+        .add-folder,
+        .add-file {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            transition: background-color 0.3s;
+        }
 
-.add-folder:hover,
-.add-file:hover {
-    background-color: #0056b3;
-}
+        .add-folder:hover,
+        .add-file:hover {
+            background-color: #0056b3;
+        }
 
 
         .header .buttons {
@@ -247,62 +257,63 @@ html {
         }
 
         .file-icon {
-    font-size: 48px;
-    color: #4CAF50; /* Warna ikon */
-}
-.icon-container {
-    text-align: center;
-    margin-bottom: 10px;
-}
+            font-size: 48px;
+            color: #4CAF50;
+            /* Warna ikon */
+        }
 
-/* css fungsi titik 3 file */
-.dropdown {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-}
+        .icon-container {
+            text-align: center;
+            margin-bottom: 10px;
+        }
 
-.dropdown-toggle {
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-size: 20px;
-    color: #000;
-    width: 40px;
-    height: 40px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
+        /* css fungsi titik 3 file */
+        .dropdown {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
 
-.dropdown-menu {
-    position: absolute;
-    top: 40px;
-    right: 0;
-    display: none;
-    background-color: white;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    z-index: 1000;
-    min-width: 150px;
-    overflow: hidden;
-}
+        .dropdown-toggle {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 20px;
+            color: #000;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
 
-.dropdown-menu button {
-    width: 100%;
-    padding: 10px 15px;
-    background: none;
-    border: none;
-    text-align: left;
-    font-size: 14px;
-    cursor: pointer;
-}
+        .dropdown-menu {
+            position: absolute;
+            top: 40px;
+            right: 0;
+            display: none;
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            min-width: 150px;
+            overflow: hidden;
+        }
 
-.dropdown-menu button:hover {
-    background-color: #f5f5f5;
-}
+        .dropdown-menu button {
+            width: 100%;
+            padding: 10px 15px;
+            background: none;
+            border: none;
+            text-align: left;
+            font-size: 14px;
+            cursor: pointer;
+        }
 
+        .dropdown-menu button:hover {
+            background-color: #f5f5f5;
+        }
     </style>
     @stack('styles')
 </head>

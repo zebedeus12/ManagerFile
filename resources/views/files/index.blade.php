@@ -11,7 +11,8 @@
     <div class="container content-container">
         <div class="header d-flex align-items-center justify-content-between mb-4">
             <h1 class="mb-0">File Manager</h1>
-            <button class="add-folder ms-auto" onclick="location.href='{{ route('folder.create') }}'">Add Folder</button>
+            <button class="add-folder ms-auto" onclick="location.href='{{ route('folder.create') }}'">Add
+                Folder</button>
         </div>
         <p class="text-muted">Terdapat {{ $folders->count() }} Folders.</p>
 
