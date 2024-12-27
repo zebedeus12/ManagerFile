@@ -98,28 +98,52 @@
             overflow-y: auto;
         }
 
+        .folder-card {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            transition: all 0.3s;
+        }
+
+        .folder-card:hover {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transform: translateY(-3px);
+        }
+
+        .folder-card:hover .dropdown-menu,
+        .file-card:hover .dropdown-menu {
+            display: block;
+        }
+
         /* File Grid */
         .file-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
+            gap: 10px;
+            margin-top: 10px;
         }
 
         /* File dan Folder Card */
-        .file-card,
-        .sub-folder-card {
-            background-color: #ffffff;
+        .file-card {
+            background-color: #f9f9f9;
+            border: 1px solid #ccc;
             border-radius: 8px;
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
             padding: 15px;
-            text-align: center;
-            transition: transform 0.2s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            transition: all 0.3s;
         }
 
-        .file-card:hover,
-        .sub-folder-card:hover {
-            transform: translateY(-5px);
+        .file-card:hover {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transform: translateY(-3px);
         }
 
         /* Tombol Tambah Folder/File */
@@ -257,14 +281,28 @@
         }
 
         .file-icon {
-            font-size: 48px;
+            font-size: 32px;
             color: #4CAF50;
-            /* Warna ikon */
+        }
+
+        .file-info {
+            font-size: 14px;
+            /* Ukuran font */
+            white-space: nowrap;
+            /* Mencegah teks menjadi dua baris */
+            overflow: hidden;
+            /* Jika teks terlalu panjang */
+            text-overflow: ellipsis;
+            /* Tambahkan elipsis jika teks terpotong */
+            flex-grow: 1;
+            /* Membuat teks mengambil sisa ruang */
+            padding-left: 10px;
+            /* Memberikan jarak antara ikon dan teks */
         }
 
         .icon-container {
             text-align: center;
-            margin-bottom: 10px;
+            flex-shrink: 0;
         }
 
         /* css fungsi titik 3 file */

@@ -49,84 +49,31 @@
             {{ $files ? $files->count() : 0 }} File.
         </p>
 
-        <div class="file-grid">
+        <h3>Folders</h3>
+        <div class="file-grid mt-4" id="media-container">
             {{-- Tampilkan subfolder --}}
             @foreach ($subFolders as $subFolder)
-                <div class="sub-folder-card">
-                    <!-- Tombol titik tiga -->
-                    <div class="dropdown">
-                        <button class="dropdown-toggle custom-toggle" onclick="toggleDropdown(this)">⋮</button>
-                        <div class="dropdown-menu">
-                            <button onclick="openRenameModal({{ $folder->id }}, '{{ $folder->name }}')">Rename</button>
-                            <button
-                                onclick="openShareModal({{ $folder->id }}, '{{ url('/folder/' . $folder->id . '/share') }}')">Share</button>
-                            <button onclick="openDeleteModal({{ $folder->id }})">Delete</button>
-                            <button onclick="openCopyModal({{ $folder->id }})">Copy</button>
-                        </div>
+            <div class="folder-card">
+            <a href="{{ route('folder.show', $subFolder->id) }}" class="file-link">
+                <div class="d-flex align-items-center">
+                    <div class="icon-container">
+                        <span class="material-icons folder-icon">folder</span>
                     </div>
-                    <a href="{{ route('folder.show', $subFolder->id) }}">
-                        <div class="icon-container">
-                            <span class="material-icons folder-icon">folder</span>
-                        </div>
-                        <div class="file-info">
-                            <span class="fw-bold">{{ $subFolder->name }}</span>
-                            <span class="text-muted">Updated at: {{ $subFolder->updated_at->format('d/m/Y') }}</span>
-                        </div>
-                    </a>
-                </div>
-            @endforeach
-
-            {{-- Tampilkan file --}}
-            @foreach ($files as $file)
-                <div class="file-card">
-                    {{-- <div class="icon-container">
-                        <img src="{{ asset('icons/' . $file->type . '.png') }}" alt="{{ $file->type }} icon"
-                            class="file-icon">
-                    </div> --}}
-                    <div class="dropdown">
-                        <button class="dropdown-toggle custom-toggle" onclick="toggleDropdown(this)">⋮</button>
-                        <div class="dropdown-menu">
-                            <!-- Rename File -->
-                            <button type="button" onclick="openRenameFileModal({{ $file->id }}, '{{ $file->name }}')">Rename</button>
-                            <!-- Share File -->
-                            <button type="button" onclick="openShareFileModal('{{ route('file.share', $file->id) }}')">Share</button>
-                            <!-- Delete File -->
-                            <form action="{{ route('file.destroy', $file->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus file ini?')">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit">Delete</button>
-                            </form>
-                        </div>
+                    <div class="file-info ms-2">
+                        <span class="fw-bold">{{ $subFolder->name }}</span>
                     </div>
-                
-                    <a href="{{ Storage::url($file->path) }}" target="_blank" class="file-link">
-                        <div class="icon-container">
-                            @switch($file->type)
-                                @case('pdf')
-                                    <i class="fas fa-file-pdf file-icon" style="color: #E74C3C;"></i>
-                                    @break
-                                @case('doc')
-                                @case('docx')
-                                    <i class="fas fa-file-word file-icon" style="color: #3498DB;"></i>
-                                    @break
-                                @case('xls')
-                                @case('xlsx')
-                                    <i class="fas fa-file-excel file-icon" style="color: #28A745;"></i>
-                                    @break
-                                @case('ppt')
-                                @case('pptx')
-                                    <i class="fas fa-file-powerpoint file-icon" style="color: #FF5733;"></i>
-                                    @break
-                                @default
-                                    <i class="fas fa-file file-icon" style="color: #BDC3C7;"></i>
-                            @endswitch
-                        </div>
-                        <div class="file-info">
-                            <span class="fw-bold">{{ $file->name }}</span>
-                            <span class="text-muted">{{ number_format($file->size, 2) }} KB</span>
-                        </div>
-                    </a>
                 </div>
+            </a>
+            <!-- Dropdown Tombol -->
+            <div class="dropdown">
+                <button class="dropdown-toggle custom-toggle" onclick="toggleDropdown(this)">⋮</button>
+                <div class="dropdown-menu">
+                    <button onclick="openRenameModal({{ $subFolder->id }}, '{{ $subFolder->name }}')">Rename</button>
+                    <button onclick="openShareModal({{ $subFolder->id }}, '{{ url('/folder/' . $subFolder->id . '/share') }}')">Share</button>
+                    <button onclick="openDeleteModal({{ $subFolder->id }})">Delete</button>
+                </div>
+            </div>
+        </div>
             @endforeach
         </div>
 
@@ -172,32 +119,76 @@
         </div>
 
         <!-- Copy -->
-<div id="copyModal" class="modal" style="display: none;">
-    <div class="modal-content">
-        <span class="close" onclick="closeCopyModal()">&times;</span>
-        <h2>Copy Folder</h2>
-        <p>Apakah Anda yakin ingin menyalin folder ini?</p>
-        <form id="copyForm" method="POST" action="{{ route('folder.copy', $folder->id) }}">
-            @csrf
-            <div class="form-group">
-                <label for="destination_folder_id">Pilih Folder Tujuan</label>
-                <select id="destination_folder_id" name="destination_folder_id" class="form-control">
-                    <option value="">Pilih Folder Tujuan</option>
-                    @foreach($allFolders as $folderOption)
-                        <option value="{{ $folderOption->id }}" @if($folderOption->id == $folder->id) selected @endif>
-                            {{ $folderOption->name }}
-                        </option>
-                    @endforeach
-                    <option value="new">Buat Folder Baru</option>
-                </select>
+        <div id="copyModal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <span class="close" onclick="closeCopyModal()">&times;</span>
+                <h2>Copy Folder</h2>
+                <p>Apakah Anda yakin ingin menyalin folder ini?</p>
+                <form id="copyForm" method="POST" action="{{ route('folder.copy', $folder->id) }}">
+                    @csrf
+                        <div class="form-group">
+                            <label for="destination_folder_id">Pilih Folder Tujuan</label>
+                            <select id="destination_folder_id" name="destination_folder_id" class="form-control">
+                                <option value="">Pilih Folder Tujuan</option>
+                                    @foreach($allFolders as $folderOption)
+                                        <option value="{{ $folderOption->id }}" @if($folderOption->id == $folder->id) selected @endif>
+                                            {{ $folderOption->name }}
+                                        </option>
+                                    @endforeach
+                                <option value="new">Buat Folder Baru</option>
+                            </select>
+                        </div>
+                    <button type="button" class="btn btn-secondary" onclick="closeCopyModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Copy</button>
+                </form>
             </div>
-            <button type="button" class="btn btn-secondary" onclick="closeCopyModal()">Cancel</button>
-            <button type="submit" class="btn btn-primary">Copy</button>
-        </form>
-    </div>
-</div>
+        </div>
 
-{{-- dropdown file titik 3 --}}
+        <div class="file-list">
+            <h3>Files</h3>
+            {{-- Tampilkan file --}}
+            @foreach ($files as $file)
+            <div class="file-card">
+                <div class="dropdown">
+                    <button class="dropdown-toggle custom-toggle" onclick="toggleDropdown(this)">⋮</button>
+                <div class="dropdown-menu">
+                    <button type="button" onclick="openRenameFileModal({{ $file->id }}, '{{ $file->name }}')">Rename</button>
+                    <button type="button" onclick="openShareFileModal('{{ route('file.share', $file->id) }}')">Share</button>
+                    <form action="{{ route('file.destroy', $file->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus file ini?')">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit">Delete</button>
+                    </form>
+                </div>
+            </div>
+            <a href="{{ Storage::url($file->path) }}" target="_blank" class="file-link">
+                <div class="icon-container">
+                    @switch($file->type)
+                        @case('pdf')
+                            <i class="fas fa-file-pdf file-icon" style="color: #E74C3C;"></i>
+                            @break
+                        @case('doc')
+                        @case('docx')
+                            <i class="fas fa-file-word file-icon" style="color: #3498DB;"></i>
+                            @break
+                        @case('xls')
+                        @case('xlsx')
+                            <i class="fas fa-file-excel file-icon" style="color: #28A745;"></i>
+                            @break
+                        @default
+                            <i class="fas fa-file file-icon" style="color: #BDC3C7;"></i>
+                    @endswitch
+                </div>
+                <div class="file-info">
+                    <span class="fw-bold">{{ $file->name }}</span>
+                    <span class="text-muted">{{ number_format($file->size, 2) }} KB</span>
+                </div>
+            </a>
+        </div>
+            @endforeach
+        </div>
+        </div>
+
 {{-- rename file --}}
 <div id="renameFileModal" class="modal" style="display: none;">
     <div class="modal-content">

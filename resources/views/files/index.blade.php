@@ -16,53 +16,33 @@
         </div>
         <p class="text-muted">Terdapat {{ $folders->count() }} Folders.</p>
 
-        <div class="file-grid">
-            {{-- Grid Folders --}}
+        <div class="file-grid mt-4">
+            {{-- Grid untuk Folder --}}
             @foreach ($folders as $folder)
-                @if ($folder)
-                    <div class="file-card">
-                        <!-- Dropdown Tombol -->
-                        <div class="dropdown">
-                            <button class="dropdown-toggle custom-toggle" onclick="toggleDropdown({{ $folder->id }})">⋮</button>
-                            <!-- Menu Dropdown -->
-                            <div class="dropdown-menu" id="dropdown-{{ $folder->id }}">
-                                <button onclick="openRenameModal({{ $folder->id }}, '{{ $folder->name }}')">Rename</button>
-                                <button
-                                    onclick="openShareModal({{ $folder->id }}, '{{ url('/folder/' . $folder->id . '/share') }}')">Share</button>
-                                <button onclick="openDeleteModal({{ $folder->id }})">Delete</button>
-                            </div>
+                <div class="folder-card">
+                    <!-- Tombol titik tiga -->
+                    <div class="dropdown">
+                        <button class="dropdown-toggle custom-toggle" onclick="toggleDropdown(this)">⋮</button>
+                        <div class="dropdown-menu">
+                            <button onclick="openRenameModal({{ $folder->id }}, '{{ $folder->name }}')">Rename</button>
+                            <button
+                                onclick="openShareModal({{ $folder->id }}, '{{ url('/folder/' . $folder->id . '/share') }}')">Share</button>
+                            <button onclick="openDeleteModal({{ $folder->id }})">Delete</button>
                         </div>
-
-                        <!-- Ikon dan Info Folder -->
-                        <a href="{{ route('folder.show', $folder->id) }}" class="file-link">
+                    </div>
+                    <a href="{{ route('folder.show', $folder->id) }}" class="file-link">
+                        <div class="d-flex align-items-center">
                             <div class="icon-container">
                                 <span class="material-icons folder-icon">folder</span>
                             </div>
-                            <div class="file-info">
+                            <div class="file-info ms-2">
                                 <span class="fw-bold">{{ $folder->name }}</span>
-                                <span class="text-muted">Updated at: {{ $folder->updated_at->format('d/m/Y') }}</span>
                             </div>
-                        </a>
-                    </div>
-
-                    {{-- Files --}}
-                    @foreach (optional($folder->files) as $file)
-                        <div class="file-card">
-                            <a href="{{ asset('storage/' . $file->path) }}" target="_blank" class="file-link">
-                                <div class="icon-container">
-                                    <span class="material-icons file-icon">description</span>
-                                </div>
-                                <div class="file-info">
-                                    <span class="fw-bold">{{ $file->name }}</span>
-                                    <span class="text-muted">{{ round($file->size / 1024, 2) }} KB</span>
-                                </div>
-                            </a>
                         </div>
-                    @endforeach
-                @endif
+                    </a>
+                </div>
             @endforeach
         </div>
-
         <!-- Rename Folder-->
         <div id="renameFolderModal" class="modal" style="display: none;">
             <div class="modal-content">
