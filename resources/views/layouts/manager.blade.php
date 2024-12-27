@@ -65,11 +65,6 @@
             /* Pastikan sidebar berada di atas konten */
         }
 
-        .sidebar:hover {
-            width: 250px;
-            /* Sidebar melebar saat dihover */
-        }
-
         /* Kontainer Konten Utama */
         .container {
             margin: 0 auto;
@@ -96,54 +91,6 @@
             min-height: 100vh;
             padding: 25px;
             overflow-y: auto;
-        }
-
-        .folder-card {
-            background-color: #fff;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            padding: 15px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: relative;
-            transition: all 0.3s;
-        }
-
-        .folder-card:hover {
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            transform: translateY(-3px);
-        }
-
-        .folder-card:hover .dropdown-menu,
-        .file-card:hover .dropdown-menu {
-            display: block;
-        }
-
-        /* File Grid */
-        .file-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 10px;
-            margin-top: 10px;
-        }
-
-        /* File dan Folder Card */
-        .file-card {
-            background-color: #f9f9f9;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            padding: 15px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: relative;
-            transition: all 0.3s;
-        }
-
-        .file-card:hover {
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            transform: translateY(-3px);
         }
 
         /* Tombol Tambah Folder/File */
@@ -176,7 +123,19 @@
             right: 10px;
         }
 
-        /* Tombol Titik Tiga */
+        .dropdown-toggle {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 20px;
+            color: #000;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
         .dropdown-toggle::before {
             display: none;
             content: none;
@@ -280,77 +239,70 @@
             color: white;
         }
 
-        .file-icon {
-            font-size: 32px;
-            color: #4CAF50;
-        }
-
-        .file-info {
-            font-size: 14px;
-            /* Ukuran font */
-            white-space: nowrap;
-            /* Mencegah teks menjadi dua baris */
-            overflow: hidden;
-            /* Jika teks terlalu panjang */
-            text-overflow: ellipsis;
-            /* Tambahkan elipsis jika teks terpotong */
-            flex-grow: 1;
-            /* Membuat teks mengambil sisa ruang */
-            padding-left: 10px;
-            /* Memberikan jarak antara ikon dan teks */
-        }
-
         .icon-container {
             text-align: center;
             flex-shrink: 0;
         }
 
-        /* css fungsi titik 3 file */
-        .dropdown {
-            position: absolute;
-            top: 10px;
-            right: 10px;
+        /* File Grid */
+        .file-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
         }
 
-        .dropdown-toggle {
-            background: none;
-            border: none;
-            cursor: pointer;
-            font-size: 20px;
-            color: #000;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .dropdown-menu {
-            position: absolute;
-            top: 40px;
-            right: 0;
-            display: none;
-            background-color: white;
+        /*Folder*/
+        .folder-card {
+            background-color: #fff;
             border: 1px solid #ddd;
-            border-radius: 4px;
+            border-radius: 8px;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            transition: all 0.3s;
+        }
+
+        .folder-card:hover {
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            z-index: 1000;
-            min-width: 150px;
-            overflow: hidden;
+            transform: translateY(-3px);
         }
 
-        .dropdown-menu button {
-            width: 100%;
-            padding: 10px 15px;
-            background: none;
-            border: none;
-            text-align: left;
+        .folder-card:hover .dropdown-menu,
+        .file-card:hover .dropdown-menu {
+            display: block;
+        }
+
+        /* File Card */
+        .file-card {
+            background-color: #f9f9f9;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            position: relative;
+            transition: all 0.3s;
+        }
+
+        .file-card:hover {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transform: translateY(-3px);
+        }
+
+        .file-icon {
+            font-size: 30px;
+        }
+
+        .file-info {
             font-size: 14px;
-            cursor: pointer;
-        }
-
-        .dropdown-menu button:hover {
-            background-color: #f5f5f5;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            flex-grow: 1;
+            padding-left: 10px;
         }
     </style>
     @stack('styles')

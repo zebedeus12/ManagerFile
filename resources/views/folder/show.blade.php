@@ -48,33 +48,71 @@
             Terdapat {{ $subFolders ? $subFolders->count() : 0 }} Folders,
             {{ $files ? $files->count() : 0 }} File.
         </p>
-
-        <h3>Folders</h3>
-        <div class="file-grid mt-4" id="media-container">
-            {{-- Tampilkan subfolder --}}
+        
+        <div class="file-grid mt-4">
             @foreach ($subFolders as $subFolder)
-            <div class="folder-card">
-            <a href="{{ route('folder.show', $subFolder->id) }}" class="file-link">
-                <div class="d-flex align-items-center">
-                    <div class="icon-container">
-                        <span class="material-icons folder-icon">folder</span>
-                    </div>
-                    <div class="file-info ms-2">
-                        <span class="fw-bold">{{ $subFolder->name }}</span>
+                <div class="folder-card">
+                    <a href="{{ route('folder.show', $subFolder->id) }}" class="file-link">
+                        <div class="d-flex align-items-center">
+                            <div class="icon-container">
+                                <span class="material-icons folder-icon">folder</span>
+                            </div>
+                            <div class="file-info ms-2">
+                                <span class="fw-bold">{{ $subFolder->name }}</span>
+                            </div>
+                        </div>
+                    </a>
+                    <div class="dropdown">
+                        <button class="dropdown-toggle custom-toggle" onclick="toggleDropdown(this)">⋮</button>
+                        <div class="dropdown-menu">
+                            <button onclick="openRenameModal({{ $subFolder->id }}, '{{ $subFolder->name }}')">Rename</button>
+                            <button onclick="openShareModal({{ $subFolder->id }}, '{{ url('/folder/' . $subFolder->id . '/share') }}')">Share</button>
+                            <button onclick="openDeleteModal({{ $subFolder->id }})">Delete</button>
+                        </div>
                     </div>
                 </div>
-            </a>
-            <!-- Dropdown Tombol -->
-            <div class="dropdown">
-                <button class="dropdown-toggle custom-toggle" onclick="toggleDropdown(this)">⋮</button>
-                <div class="dropdown-menu">
-                    <button onclick="openRenameModal({{ $subFolder->id }}, '{{ $subFolder->name }}')">Rename</button>
-                    <button onclick="openShareModal({{ $subFolder->id }}, '{{ url('/folder/' . $subFolder->id . '/share') }}')">Share</button>
-                    <button onclick="openDeleteModal({{ $subFolder->id }})">Delete</button>
-                </div>
-            </div>
-        </div>
             @endforeach
+
+            {{-- Grid untuk File --}}
+            @foreach ($files as $file)
+                <div class="file-card">
+                    <div class="dropdown">
+                        <button class="dropdown-toggle custom-toggle" onclick="toggleDropdown(this)">⋮</button>
+                    <div class="dropdown-menu">
+                        <button type="button" onclick="openRenameFileModal({{ $file->id }}, '{{ $file->name }}')">Rename</button>
+                        <button type="button" onclick="openShareFileModal('{{ route('file.share', $file->id) }}')">Share</button>
+                        <form action="{{ route('file.destroy', $file->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus file ini?')">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit">Delete</button>
+                        </form>
+                    </div>
+                </div>
+                <a href="{{ Storage::url($file->path) }}" target="_blank" class="file-link">
+                    <div class="icon-container">
+                        @switch($file->type)
+                            @case('pdf')
+                                <i class="fas fa-file-pdf file-icon" style="color: #E74C3C;"></i>
+                                @break
+                            @case('doc')
+                            @case('docx')
+                                <i class="fas fa-file-word file-icon" style="color: #3498DB;"></i>
+                                @break
+                            @case('xls')
+                            @case('xlsx')
+                                <i class="fas fa-file-excel file-icon" style="color: #28A745;"></i>
+                                @break
+                            @default
+                                <i class="fas fa-file file-icon" style="color: #BDC3C7;"></i>
+                        @endswitch
+                    </div>
+                    <div class="file-info">
+                        <span class="fw-bold">{{ $file->name }}</span>
+                        <span class="text-muted">{{ number_format($file->size, 2) }} KB</span>
+                    </div>
+                </a>
+            </div>
+        @endforeach
         </div>
 
         <!-- Rename Folder-->
@@ -144,84 +182,41 @@
             </div>
         </div>
 
-        <div class="file-list">
-            <h3>Files</h3>
-            {{-- Tampilkan file --}}
-            @foreach ($files as $file)
-            <div class="file-card">
-                <div class="dropdown">
-                    <button class="dropdown-toggle custom-toggle" onclick="toggleDropdown(this)">⋮</button>
-                <div class="dropdown-menu">
-                    <button type="button" onclick="openRenameFileModal({{ $file->id }}, '{{ $file->name }}')">Rename</button>
-                    <button type="button" onclick="openShareFileModal('{{ route('file.share', $file->id) }}')">Share</button>
-                    <form action="{{ route('file.destroy', $file->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus file ini?')">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit">Delete</button>
-                    </form>
-                </div>
+        {{-- rename file --}}
+        <div id="renameFileModal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <span class="close" onclick="closeRenameFileModal()">&times;</span>
+                <h2>Rename File</h2>
+                <form id="renameFileForm" method="POST">
+                    @csrf
+                    <div class="form-group">
+                        <label for="newFileName">Nama File Baru</label>
+                        <input type="text" id="newFileName" name="name" class="form-control" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </form>
             </div>
-            <a href="{{ Storage::url($file->path) }}" target="_blank" class="file-link">
-                <div class="icon-container">
-                    @switch($file->type)
-                        @case('pdf')
-                            <i class="fas fa-file-pdf file-icon" style="color: #E74C3C;"></i>
-                            @break
-                        @case('doc')
-                        @case('docx')
-                            <i class="fas fa-file-word file-icon" style="color: #3498DB;"></i>
-                            @break
-                        @case('xls')
-                        @case('xlsx')
-                            <i class="fas fa-file-excel file-icon" style="color: #28A745;"></i>
-                            @break
-                        @default
-                            <i class="fas fa-file file-icon" style="color: #BDC3C7;"></i>
-                    @endswitch
-                </div>
-                <div class="file-info">
-                    <span class="fw-bold">{{ $file->name }}</span>
-                    <span class="text-muted">{{ number_format($file->size, 2) }} KB</span>
-                </div>
-            </a>
-        </div>
-            @endforeach
-        </div>
         </div>
 
-{{-- rename file --}}
-<div id="renameFileModal" class="modal" style="display: none;">
-    <div class="modal-content">
-        <span class="close" onclick="closeRenameFileModal()">&times;</span>
-        <h2>Rename File</h2>
-        <form id="renameFileForm" method="POST">
-            @csrf
-            <div class="form-group">
-                <label for="newFileName">Nama File Baru</label>
-                <input type="text" id="newFileName" name="name" class="form-control" required>
+        {{-- share file --}}
+        <div id="shareFileModal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <span class="close" onclick="closeShareFileModal()">&times;</span>
+                <h2>Share File Link</h2>
+                <input type="text" id="shareFileUrlInput" class="form-control" readonly>
+                <button id="copyFileLinkButton" class="btn btn-primary mt-2">Copy Link</button>
             </div>
-            <button type="submit" class="btn btn-primary">Save</button>
-        </form>
-    </div>
-</div>
+        </div>
 
-{{-- share file --}}
-<div id="shareFileModal" class="modal" style="display: none;">
-    <div class="modal-content">
-        <span class="close" onclick="closeShareFileModal()">&times;</span>
-        <h2>Share File Link</h2>
-        <input type="text" id="shareFileUrlInput" class="form-control" readonly>
-        <button id="copyFileLinkButton" class="btn btn-primary mt-2">Copy Link</button>
-    </div>
-</div>
-
-{{-- delete file --}}
-<div id="shareFileModal" class="modal" style="display: none;">
-    <div class="modal-content">
-        <span class="close" onclick="closeShareFileModal()">&times;</span>
-        <h2>Share File Link</h2>
-        <input type="text" id="shareFileUrlInput" class="form-control" readonly>
-        <button id="copyFileLinkButton" class="btn btn-primary mt-2">Copy Link</button>
+        {{-- delete file --}}
+        <div id="shareFileModal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <span class="close" onclick="closeShareFileModal()">&times;</span>
+                <h2>Share File Link</h2>
+                <input type="text" id="shareFileUrlInput" class="form-control" readonly>
+                <button id="copyFileLinkButton" class="btn btn-primary mt-2">Copy Link</button>
+            </div>
+        </div>
     </div>
 </div>
 
