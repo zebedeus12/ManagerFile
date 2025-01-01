@@ -42,32 +42,20 @@
 <style>
     /* Sidebar Default (Collapsed) */
     .sidebar {
-        width: 100px;
-        height: 100vh;
-        background-color: #188A98;
-        color: white;
-        transition: width 0.3s ease;
-        overflow: hidden;
-        position: fixed;
-    }
-
-    /* Sidebar saat dihover */
-    .sidebar:hover {
-        width: 260px;
-    }
+        width: 260px; /* Lebar sidebar tetap penuh */
+    height: 100vh;
+    background-color: #188A98; /* Warna sidebar */
+    color: white;
+    position: fixed;
+    transition: none; /* Tidak ada animasi hover */
+}
 
     /* Logo Styling */
     .logo {
         font-size: 20px;
         text-align: center;
         padding: 20px 0;
-        display: none;
-        /* Sembunyikan logo saat sidebar collapsed */
-    }
-
-    .sidebar:hover .logo {
-        display: block;
-        /* Tampilkan logo saat sidebar dihover */
+        display: block; /* Selalu tampilkan logo */
     }
 
     /* Menu Item Styling */
@@ -94,15 +82,11 @@
 
     /* Menu Text (Judul Menu) */
     .menu-text {
-        display: none;
-        transition: opacity 0.3s ease;
+        display: inline; /* Selalu tampilkan judul menu */
+        opacity: 1;
+        margin-left: 10px; /* Tambahkan jarak agar lebih rapi */ 
     }
 
-    /* Tampilkan judul menu saat sidebar dihover */
-    .sidebar:hover .menu-text {
-        display: inline;
-        opacity: 1;
-    }
 
     /* Icon Styling */
     .material-icons {

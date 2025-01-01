@@ -45,51 +45,34 @@
         /* Wrapper Utama */
         .main-layout {
             display: flex;
+            width: 100vw;
             height: 100vh;
             overflow: hidden;
-            /* Mencegah scroll di main layout */
         }
 
         /* Sidebar Styling */
         .sidebar {
-            width: 70px;
-            /* Lebar sidebar default */
+            width: 250px; /* Lebar sidebar tetap */
             position: fixed;
-            /* Sidebar tetap di sisi kiri */
             height: 100vh;
             background-color: white;
             box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.1);
-            transition: width 0.3s ease;
-            /* Animasi jika sidebar melebar */
             z-index: 1000;
-            /* Pastikan sidebar berada di atas konten */
         }
+
 
         /* Kontainer Konten Utama */
         .container {
-            margin: 0 auto;
-            /* Konten berada di tengah */
-            /* margin-left: 70px; Jarak konten dari sidebar */
-            padding: 20px;
-            flex-grow: 1;
-            background-color: #f1f1f1;
-            min-height: 100vh;
-            width: calc(100% - 70px);
-            /* Lebar awal dikurangi sidebar collapsed */
-            transition: width 0.3s ease, margin-left 0.3s ease;
-        }
-
-        .sidebar:hover~.container {
-            margin-left: 250px;
-            /* Konten bergeser saat sidebar melebar */
-            width: calc(100% - 250px);
+            transition: none; /* Hilangkan efek transisi */
         }
 
         /* Content Container Styling */
         .content-container {
+            margin-left: 250px; /* Sesuai dengan lebar sidebar */
+            padding: 25px;
+            width: calc(100% - 250px); /* Sisa lebar layar */
             background-color: #ffffff;
             min-height: 100vh;
-            padding: 25px;
             overflow-y: auto;
         }
 
