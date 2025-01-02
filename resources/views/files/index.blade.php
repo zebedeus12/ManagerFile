@@ -16,7 +16,7 @@
         </div>
         <p class="text-muted">Terdapat {{ $folders->count() }} Folders.</p>
 
-        <div class="file-grid mt-4">
+        <div class="folder-grid mt-4">
             {{-- Grid untuk Folder --}}
             @foreach ($folders as $folder)
                 <div class="folder-card">

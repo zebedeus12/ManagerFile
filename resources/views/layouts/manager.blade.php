@@ -117,6 +117,7 @@
 
         /* Dropdown Container */
         .dropdown {
+            z-index: 10;
             position: absolute;
             display: inline-block;
             top: 10px;
@@ -160,9 +161,8 @@
             height: 40px;
         }
 
-        /* Gaya Menu Dropdown */
         .dropdown-menu {
-            z-index: 1050;
+            z-index: 20;
             position: absolute;
             display: none;
             top: 40px;
@@ -244,65 +244,162 @@
             flex-shrink: 0;
         }
 
-        /* File Grid */
-        .file-grid {
+        /* Folder */
+        .folder-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 10px;
-            margin-top: 10px;
+            /* Card responsif */
+            gap: 15px;
+            /* Jarak antar card */
+            margin-top: 20px;
+            /* Jarak atas */
         }
 
-        /*Folder*/
         .folder-card {
-            background-color: #fff;
-            border: 1px solid #ddd;
+            background-color: #f0fdf4;
+            /* Hijau pias, hampir putih */
             border-radius: 8px;
-            padding: 15px;
+            /* Sudut melengkung */
+            padding: 10px 15px;
+            /* Padding dalam card */
             display: flex;
             justify-content: space-between;
+            /* Jarak antara ikon + teks dengan dropdown */
             align-items: center;
             position: relative;
-            transition: all 0.3s;
+            transition: all 0.3s ease;
+            /* Animasi hover */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            /* Bayangan lembut */
         }
 
         .folder-card:hover {
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+            /* Bayangan lebih besar saat hover */
             transform: translateY(-3px);
+            /* Efek naik saat hover */
         }
 
-        .folder-card:hover .dropdown-menu,
-        .file-card:hover .dropdown-menu {
-            display: block;
+        .folder-icon {
+            font-size: 40px;
+            /* Ukuran ikon */
+            color: #4caf50;
+            /* Warna hijau untuk ikon */
+            margin-right: 10px;
+            /* Jarak dengan teks */
         }
 
-        /* File Card */
-        .file-card {
-            background-color: #f9f9f9;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            padding: 15px;
-            display: flex;
-            align-items: center;
-            position: relative;
-            transition: all 0.3s;
+        .folder-link {
+
+            /* Hilangkan garis bawah */
+            color: #333;
+            /* Warna teks menjadi abu-abu gelap */
+            font-weight: bold;
+            /* Teks lebih tebal */
+            font-size: 14px;
+            /* Ukuran font teks */
         }
 
-        .file-card:hover {
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            transform: translateY(-3px);
+        .folder-link:hover {
+            color: #2d6a4f;
+            /* Warna teks saat hover */
         }
 
-        .file-icon {
-            font-size: 30px;
+        .folder-card .dropdown {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 10;
         }
 
         .file-info {
+            text-decoration: none;
+        }
+
+        /* File Card */
+        .file-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            /* Responsif */
+            gap: 15px;
+            /* Jarak antar card */
+            margin-top: 20px;
+        }
+
+        .file-card {
+            background-color: #f0fdf4;
+            /* Hijau pias, hampir putih */
+            border-radius: 8px;
+            /* Sudut melengkung */
+            width: 300px;
+            /* Lebar card */
+            color: #333;
+            /* Warna teks */
+            font-family: 'Poppins', sans-serif;
+            padding: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            /* Bayangan lembut */
+            display: flex;
+            flex-direction: column;
+            /* Vertikal */
+            gap: 10px;
+            /* Jarak antar elemen dalam card */
+            position: relative;
+            margin: 10px;
+            /* Jarak antar card */
+        }
+
+        .file-header {
+            display: flex;
+            align-items: center;
+            /* Posisikan ikon dan nama file sejajar secara vertikal */
+            gap: 8px;
+            /* Sebar antara nama file dan dropdown */
+        }
+
+        .file-icon i {
+            font-size: 24px;
+            /* Ukuran ikon */
+        }
+
+        .file-name {
             font-size: 14px;
+            /* Ukuran teks nama file */
+            font-weight: bold;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-            flex-grow: 1;
-            padding-left: 10px;
+            /* Potong teks yang terlalu panjang */
+            max-width: 200px;
+            /* Batasi lebar teks */
+            margin: 0;
+        }
+
+        .file-preview img {
+            width: 100%;
+            /* Lebar penuh */
+            height: 150px;
+            /* Tinggi tetap */
+            object-fit: cover;
+            /* Crop gambar agar pas */
+            border-radius: 4px;
+            /* Sedikit lengkung di preview */
+        }
+
+        .file-footer {
+            font-size: 12px;
+            /* Ukuran teks lebih kecil */
+            color: #ccc;
+            /* Warna teks lebih redup */
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            /* Jarak antar elemen */
+        }
+
+        .file-footer i {
+            color: #999;
+            /* Warna ikon lebih redup */
         }
     </style>
     @stack('styles')

@@ -48,71 +48,29 @@
             Terdapat {{ $subFolders ? $subFolders->count() : 0 }} Folders,
             {{ $files ? $files->count() : 0 }} File.
         </p>
-        
-        <div class="file-grid mt-4">
+        <h4>Folders</h4>
+        <div class="folder-grid">
             @foreach ($subFolders as $subFolder)
                 <div class="folder-card">
-                    <a href="{{ route('folder.show', $subFolder->id) }}" class="file-link">
+                    <a href="{{ route('folder.show', $subFolder->id) }}" class="folder-link">
                         <div class="d-flex align-items-center">
                             <div class="icon-container">
                                 <span class="material-icons folder-icon">folder</span>
                             </div>
-                            <div class="file-info ms-2">
-                                <span class="fw-bold">{{ $subFolder->name }}</span>
-                            </div>
+                            <span>{{ $subFolder->name }}</span>
                         </div>
                     </a>
                     <div class="dropdown">
-                        <button class="dropdown-toggle custom-toggle" onclick="toggleDropdown(this)">⋮</button>
+                        <button class="dropdown-toggle custom-toggle">⋮</button>
                         <div class="dropdown-menu">
                             <button onclick="openRenameModal({{ $subFolder->id }}, '{{ $subFolder->name }}')">Rename</button>
                             <button onclick="openShareModal({{ $subFolder->id }}, '{{ url('/folder/' . $subFolder->id . '/share') }}')">Share</button>
                             <button onclick="openDeleteModal({{ $subFolder->id }})">Delete</button>
+                            <button onclick="openCopyModal({{ $folder->id }})">Copy</button>
                         </div>
                     </div>
                 </div>
             @endforeach
-
-            {{-- Grid untuk File --}}
-            @foreach ($files as $file)
-                <div class="file-card">
-                    <div class="dropdown">
-                        <button class="dropdown-toggle custom-toggle" onclick="toggleDropdown(this)">⋮</button>
-                    <div class="dropdown-menu">
-                        <button type="button" onclick="openRenameFileModal({{ $file->id }}, '{{ $file->name }}')">Rename</button>
-                        <button type="button" onclick="openShareFileModal('{{ route('file.share', $file->id) }}')">Share</button>
-                        <form action="{{ route('file.destroy', $file->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus file ini?')">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit">Delete</button>
-                        </form>
-                    </div>
-                </div>
-                <a href="{{ Storage::url($file->path) }}" target="_blank" class="file-link">
-                    <div class="icon-container">
-                        @switch($file->type)
-                            @case('pdf')
-                                <i class="fas fa-file-pdf file-icon" style="color: #E74C3C;"></i>
-                                @break
-                            @case('doc')
-                            @case('docx')
-                                <i class="fas fa-file-word file-icon" style="color: #3498DB;"></i>
-                                @break
-                            @case('xls')
-                            @case('xlsx')
-                                <i class="fas fa-file-excel file-icon" style="color: #28A745;"></i>
-                                @break
-                            @default
-                                <i class="fas fa-file file-icon" style="color: #BDC3C7;"></i>
-                        @endswitch
-                    </div>
-                    <div class="file-info">
-                        <span class="fw-bold">{{ $file->name }}</span>
-                        <span class="text-muted">{{ number_format($file->size, 2) }} KB</span>
-                    </div>
-                </a>
-            </div>
-        @endforeach
         </div>
 
         <!-- Rename Folder-->
@@ -164,22 +122,75 @@
                 <p>Apakah Anda yakin ingin menyalin folder ini?</p>
                 <form id="copyForm" method="POST" action="{{ route('folder.copy', $folder->id) }}">
                     @csrf
-                        <div class="form-group">
-                            <label for="destination_folder_id">Pilih Folder Tujuan</label>
-                            <select id="destination_folder_id" name="destination_folder_id" class="form-control">
-                                <option value="">Pilih Folder Tujuan</option>
-                                    @foreach($allFolders as $folderOption)
-                                        <option value="{{ $folderOption->id }}" @if($folderOption->id == $folder->id) selected @endif>
-                                            {{ $folderOption->name }}
-                                        </option>
-                                    @endforeach
-                                <option value="new">Buat Folder Baru</option>
-                            </select>
-                        </div>
+                    <div class="form-group">
+                        <label for="destination_folder_id">Pilih Folder Tujuan</label>
+                        <select id="destination_folder_id" name="destination_folder_id" class="form-control">
+                            <option value="">Pilih Folder Tujuan</option>
+                            @foreach($allFolders as $folderOption)
+                                <option value="{{ $folderOption->id }}" @if($folderOption->id == $folder->id) selected @endif>
+                                    {{ $folderOption->name }}
+                                </option>
+                            @endforeach
+                            <option value="new">Buat Folder Baru</option>
+                        </select>
+                    </div>
                     <button type="button" class="btn btn-secondary" onclick="closeCopyModal()">Cancel</button>
                     <button type="submit" class="btn btn-primary">Copy</button>
                 </form>
             </div>
+        </div>
+
+        <!-- Bagian untuk File -->
+        <h4>Files</h4>
+        <div class="file-grid">
+            @foreach ($files as $file)
+                <div class="file-card">
+                    <div class="file-header">
+                        <span class="file-icon">
+                            @switch($file->type)
+                                @case('pdf')
+                                    <i class="fas fa-file-pdf" style="color: #E74C3C;"></i>
+                                    @break
+                                @case('xls')
+                                @case('xlsx')
+                                    <i class="fas fa-file-excel" style="color: #28A745;"></i>
+                                    @break
+                                @case('doc')
+                                @case('docx')
+                                    <i class="fas fa-file-word" style="color: #3498DB;"></i>
+                                    @break
+                                @case('ppt')
+                                @case('pptx')
+                                    <i class="fas fa-file-powerpoint" style="color: #FF5733;"></i>
+                                    @break
+                                @default
+                                    <i class="fas fa-file" style="color: #BDC3C7;"></i>
+                            @endswitch
+                        </span>
+                        <span class="file-name">{{ $file->name }}</span>
+                        <div class="dropdown">
+                            <button class="dropdown-toggle custom-toggle">⋮</button>
+                            <div class="dropdown-menu">
+                                <button onclick="openRenameFileModal({{ $file->id }}, '{{ $file->name }}')">Rename</button>
+                                <button onclick="openShareFileModal('{{ route('file.share', $file->id) }}')">Share</button>
+                                <form action="{{ route('file.destroy', $file->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus file ini?')">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit">Delete</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="file-preview">
+                        <img src="{{ $file->thumbnail ?? 'default-thumbnail.jpg' }}" alt="File Preview">
+                    </div>
+                    <div class="file-footer">
+                        <span class="file-info">
+                            Anda membuatnya • {{ $file->created_at->format('d M Y') }}
+                        </span>
+                    </div>
+                </div>
+            @endforeach
         </div>
 
         {{-- rename file --}}
@@ -199,16 +210,6 @@
         </div>
 
         {{-- share file --}}
-        <div id="shareFileModal" class="modal" style="display: none;">
-            <div class="modal-content">
-                <span class="close" onclick="closeShareFileModal()">&times;</span>
-                <h2>Share File Link</h2>
-                <input type="text" id="shareFileUrlInput" class="form-control" readonly>
-                <button id="copyFileLinkButton" class="btn btn-primary mt-2">Copy Link</button>
-            </div>
-        </div>
-
-        {{-- delete file --}}
         <div id="shareFileModal" class="modal" style="display: none;">
             <div class="modal-content">
                 <span class="close" onclick="closeShareFileModal()">&times;</span>
@@ -249,76 +250,76 @@
 
     // fungsi dropdown titik tiga file
     function toggleDropdown(button) {
-    const dropdownMenu = button.nextElementSibling;
+        const dropdownMenu = button.nextElementSibling;
 
-    document.querySelectorAll('.dropdown-menu').forEach(menu => {
-        if (menu !== dropdownMenu) {
-            menu.style.display = 'none';
+        document.querySelectorAll('.dropdown-menu').forEach(menu => {
+            if (menu !== dropdownMenu) {
+                menu.style.display = 'none';
+            }
+        });
+
+        if (dropdownMenu.style.display === 'block') {
+            dropdownMenu.style.display = 'none';
+        } else {
+            dropdownMenu.style.display = 'block';
         }
-    });
 
-    if (dropdownMenu.style.display === 'block') {
-        dropdownMenu.style.display = 'none';
-    } else {
-        dropdownMenu.style.display = 'block';
+        event.stopPropagation();
     }
 
-    event.stopPropagation();
-}
-
-// Tutup dropdown saat klik di luar area
-window.addEventListener('click', function () {
-    document.querySelectorAll('.dropdown-menu').forEach(menu => {
-        menu.style.display = 'none';
-    });
-});
-
-function downloadFile(fileUrl) {
-    window.open(fileUrl, '_blank');
-}
-
-function openRenameFileModal(fileId, currentName) {
-    const modal = document.getElementById('renameFileModal');
-    modal.style.display = 'block';
-    const form = document.getElementById('renameFileForm');
-    form.action = `/file/rename/${fileId}`;
-    document.getElementById('newFileName').value = currentName;
-}
-
-function closeRenameFileModal() {
-    const modal = document.getElementById('renameFileModal');
-    modal.style.display = 'none';
-}
-
-function openShareFileModal(fileUrl) {
-    const modal = document.getElementById('shareFileModal');
-    modal.style.display = 'block';
-    const shareUrlInput = document.getElementById('shareFileUrlInput');
-    shareUrlInput.value = fileUrl;
-    const copyButton = document.getElementById('copyFileLinkButton');
-    copyButton.addEventListener('click', function () {
-        navigator.clipboard.writeText(shareUrlInput.value).then(() => {
-            alert('Link copied to clipboard!');
+    // Tutup dropdown saat klik di luar area
+    window.addEventListener('click', function () {
+        document.querySelectorAll('.dropdown-menu').forEach(menu => {
+            menu.style.display = 'none';
         });
     });
-}
 
-function closeShareFileModal() {
-    const modal = document.getElementById('shareFileModal');
-    modal.style.display = 'none';
-}
+    function downloadFile(fileUrl) {
+        window.open(fileUrl, '_blank');
+    }
 
-function openDeleteFileModal(fileId) {
-    const modal = document.getElementById('deleteFileModal');
-    modal.style.display = 'block';
-    const form = document.getElementById('deleteFileForm');
-    form.action = `/file/delete/${fileId}`;
-}
+    function openRenameFileModal(fileId, currentName) {
+        const modal = document.getElementById('renameFileModal');
+        modal.style.display = 'block';
+        const form = document.getElementById('renameFileForm');
+        form.action = `/file/rename/${fileId}`;
+        document.getElementById('newFileName').value = currentName;
+    }
 
-function closeDeleteFileModal() {
-    const modal = document.getElementById('deleteFileModal');
-    modal.style.display = 'none';
-}
+    function closeRenameFileModal() {
+        const modal = document.getElementById('renameFileModal');
+        modal.style.display = 'none';
+    }
+
+    function openShareFileModal(fileUrl) {
+        const modal = document.getElementById('shareFileModal');
+        modal.style.display = 'block';
+        const shareUrlInput = document.getElementById('shareFileUrlInput');
+        shareUrlInput.value = fileUrl;
+        const copyButton = document.getElementById('copyFileLinkButton');
+        copyButton.addEventListener('click', function () {
+            navigator.clipboard.writeText(shareUrlInput.value).then(() => {
+                alert('Link copied to clipboard!');
+            });
+        });
+    }
+
+    function closeShareFileModal() {
+        const modal = document.getElementById('shareFileModal');
+        modal.style.display = 'none';
+    }
+
+    function openDeleteFileModal(fileId) {
+        const modal = document.getElementById('deleteFileModal');
+        modal.style.display = 'block';
+        const form = document.getElementById('deleteFileForm');
+        form.action = `/file/delete/${fileId}`;
+    }
+
+    function closeDeleteFileModal() {
+        const modal = document.getElementById('deleteFileModal');
+        modal.style.display = 'none';
+    }
 
 </script>
 @endsection

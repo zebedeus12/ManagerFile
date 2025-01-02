@@ -27,10 +27,11 @@
     <style>
         /* Global reset */
 
-    h5 {
-        padding-left: 20px;
-        padding-top: 10px;
-    }
+        h5 {
+            padding-left: 20px;
+            padding-top: 10px;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -47,7 +48,8 @@
         }
 
         .header {
-            margin-left: 20px; /* Jarak tambahan dari kiri agar terlihat lebih rapi */
+            margin-left: 20px;
+            /* Jarak tambahan dari kiri agar terlihat lebih rapi */
             margin-right: 20px;
         }
 
@@ -61,26 +63,31 @@
 
         /* Sidebar styling */
         .sidebar {
-            width: 240px; /* Lebar default sidebar */
+            width: 240px;
+            /* Lebar default sidebar */
             background-color: #ffffff;
-            transition: width 0.3s ease; /* Animasi transisi */
+            transition: width 0.3s ease;
+            /* Animasi transisi */
             z-index: 1000;
         }
 
         .sidebar.collapsed {
-            width: 70px; /* Sidebar dalam mode collapse */
+            width: 70px;
+            /* Sidebar dalam mode collapse */
         }
 
-        .sidebar.collapsed ~ .employee-content {
+        .sidebar.collapsed~.employee-content {
             margin-left: 70px;
         }
 
         /* Main content area */
         .employee-content {
             flex: 1;
-            margin-left: 240px; /* Jarak default konten dari sidebar */
+            margin-left: 240px;
+            /* Jarak default konten dari sidebar */
             padding: 20px;
-            transition: margin-left 0.3s ease; /* Transisi saat sidebar berubah */
+            transition: margin-left 0.3s ease;
+            /* Transisi saat sidebar berubah */
         }
 
         /* Filter buttons styling */
@@ -110,15 +117,16 @@
 
         /* File grid layout */
         .file-grid {
-            margin-left: 20px; /* Jarak dari kiri */
+            margin-left: 20px;
+            /* Jarak dari kiri */
             margin-right: 20px;
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
             gap: 20px;
-            transition: all 0.3s ease; /* Efek transisi halus */
+            transition: all 0.3s ease;
+            /* Efek transisi halus */
         }
 
-        /* File card container */
         .file-card {
             width: 150px;
             background-color: white;
@@ -306,7 +314,6 @@
             padding: 20px;
         }
 
-        /* Subfolder List */
         .subfolder-list {
             margin-top: 20px;
         }
