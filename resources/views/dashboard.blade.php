@@ -45,8 +45,13 @@
 
     /* Sidebar styling */
     .sidebar {
-        width: 70px;
-        transition: all 0.3s ease;
+        background-color: #188A98;
+        color: white;
+        width: 250px; /* Lebar sidebar tetap */
+        position: fixed;
+        height: 100vh;
+        box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.1);
+        z-index: 1000;
     }
 
     .sidebar.collapsed {
@@ -55,11 +60,14 @@
 
     /* Konten Dashboard */
     .dashboard-content {
-        flex: 1;
-        background-color: white;
+        margin-left: 240px; /* Sama dengan lebar sidebar */
         padding: 20px;
-        margin-left: 240px;
-        transition: margin-left 0.3s ease;
+        height: calc(100vh - 60px); /* Sesuaikan dengan tinggi header jika ada */
+        overflow-y: auto; /* Aktifkan scroll vertikal */
+        overflow-x: hidden; /* Hilangkan scroll horizontal */
+        background-color: #ffffff;
+        width: calc(100% - 240px); /* Ambil sisa lebar layar */
+        box-sizing: border-box; /* Sertakan padding dalam ukuran total elemen */
     }
 
     .sidebar.collapsed ~ .dashboard-content {

@@ -30,13 +30,12 @@
 
         body,
         html {
-            height: 100%;
-            overflow: hidden;
-            font-family: 'Poppins', sans-serif;
             background-color: #f5f5f5;
             margin: 0;
             padding: 0;
-            display: flex;
+            width: 100%;
+            height: 100%;
+            overflow: hidden; /* Mencegah scroll di body */
         }
 
         .main-content {
@@ -57,22 +56,19 @@
         }
 
         .employee-content {
-            margin-left: 240px;
-            /* Jarak dari sidebar */
+            margin-left: 240px; /* Sama dengan lebar sidebar */
             padding: 20px;
-            height: calc(100vh - 60px);
-            /* Pastikan tinggi mengikuti viewport */
-            overflow-y: auto;
-            /* Aktifkan scroll vertikal */
-            overflow-x: auto;
-            /* Scroll horizontal jika tabel terlalu lebar */
+            height: calc(100vh - 60px); /* Sesuaikan dengan tinggi header jika ada */
+            overflow-y: auto; /* Aktifkan scroll vertikal */
+            overflow-x: hidden; /* Hilangkan scroll horizontal */
             background-color: #ffffff;
+            width: calc(100% - 240px); /* Ambil sisa lebar layar */
+            box-sizing: border-box; /* Sertakan padding dalam ukuran total elemen */
         }
 
         .table {
             width: 100%;
-            /* Table mengambil seluruh lebar kontainer */
-            border-collapse: collapse;
+            /* Table mengambil seluruh lebar kontainer *
         }
 
         .table th,
