@@ -64,6 +64,9 @@
         /* Kontainer Konten Utama */
         .container {
             transition: none; /* Hilangkan efek transisi */
+            margin-left: 250px; /* Sesuai dengan lebar sidebar */
+            width: calc(100% - 250px); /* Sisa lebar layar */
+            padding: 25px;
         }
 
         /* Content Container Styling */
