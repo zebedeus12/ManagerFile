@@ -21,8 +21,10 @@
             @foreach ($folders as $folder)
                 <div class="folder-card">
                     <!-- Tombol titik tiga -->
-                    <div class="dropdown">
-                        <button class="dropdown-toggle custom-toggle" onclick="toggleDropdown(this)">⋮</button>
+                    <div class="dropdown position-absolute top-0 end-0 m-2">
+                        <button class="custom-toggle" onclick="toggleMenu(this)">
+                            <span class="material-icons">more_vert</span>
+                        </button>
                         <div class="dropdown-menu">
                             <button onclick="openRenameModal({{ $folder->id }}, '{{ $folder->name }}')">Rename</button>
                             <button
@@ -35,14 +37,13 @@
                             <div class="icon-container">
                                 <span class="material-icons folder-icon">folder</span>
                             </div>
-                            <div class="file-info ms-2">
-                                <span class="fw-bold">{{ $folder->name }}</span>
-                            </div>
+                            <span>{{ $folder->name }}</span>
                         </div>
                     </a>
                 </div>
             @endforeach
         </div>
+
         <!-- Rename Folder-->
         <div id="renameFolderModal" class="modal" style="display: none;">
             <div class="modal-content">
@@ -85,29 +86,4 @@
         </div>
     </div>
 </div>
-
-<script>
-    function toggleDropdown(folderId) {
-        const dropdownMenu = document.getElementById(`dropdown-${folderId}`);
-        document.querySelectorAll('.dropdown-menu').forEach(menu => {
-            if (menu !== dropdownMenu) {
-                menu.style.display = 'none';
-            }
-        });
-        dropdownMenu.style.display = (dropdownMenu.style.display === 'block') ? 'none' : 'block';
-    }
-
-    // Tutup dropdown saat klik di luar area
-    window.addEventListener('click', function () {
-        document.querySelectorAll('.dropdown-menu').forEach(menu => {
-            menu.style.display = 'none';
-        });
-    });
-
-    //SHARE
-    function closeShareModal() {
-        const modal = document.getElementById("shareModal");
-        modal.style.display = "none";
-    }
-</script>
 @endsection

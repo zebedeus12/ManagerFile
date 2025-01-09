@@ -48,7 +48,7 @@
             Terdapat {{ $subFolders ? $subFolders->count() : 0 }} Folders,
             {{ $files ? $files->count() : 0 }} File.
         </p>
-        <h4>Folders</h4>
+        <h6>Folders</h6>
         <div class="folder-grid">
             @foreach ($subFolders as $subFolder)
                 <div class="folder-card">
@@ -141,7 +141,7 @@
         </div>
 
         <!-- Bagian untuk File -->
-        <h4>Files</h4>
+        <h6>Files</h6>
         <div class="file-grid">
             @foreach ($files as $file)
                 <div class="file-card">
@@ -222,24 +222,26 @@
 </div>
 
 <script>
-    function toggleDropdown(button) {
-        const dropdownMenu = button.nextElementSibling;
-        // Tampilkan atau sembunyikan dropdown
-        if (dropdownMenu.style.display === 'block') {
-            dropdownMenu.style.display = 'none';
-        } else {
-            dropdownMenu.style.display = 'block';
-        }
-    }
-
-    // Tutup dropdown saat klik di luar area
-    window.addEventListener('click', function (e) {
-        const dropdowns = document.querySelectorAll('.dropdown-menu');
-        dropdowns.forEach(menu => {
-            if (!menu.parentElement.contains(e.target)) {
-                menu.style.display = 'none';
+   function toggleMenu(button) {
+        // Tutup semua dropdown lainnya
+        document.querySelectorAll('.dropdown-menu').forEach(menu => {
+            if (menu !== button.nextElementSibling) {
+                menu.classList.remove('show');
             }
         });
+
+        // Toggle dropdown saat ini
+        const menu = button.nextElementSibling;
+        menu.classList.toggle('show');
+    }
+
+    // Tutup dropdown saat klik di luar
+    document.addEventListener('click', function (event) {
+        if (!event.target.closest('.dropdown')) {
+            document.querySelectorAll('.dropdown-menu').forEach(menu => {
+                menu.classList.remove('show');
+            });
+        }
     });
 
     //SHARE

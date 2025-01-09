@@ -47,35 +47,35 @@
         </div>
 
         <!-- Media Grid Display -->
-        <div class="file-grid mt-4" id="media-container">
+        <div class="folder-grid mt-4">
             @if($folders->isEmpty())
                 <p>No folders found.</p>
             @else
-                @foreach($folders as $folder)
-                    <div class="folder-card position-relative">
-                        <a href="{{ route('media.folder.show', $folder->id) }}" class="folder-link">
-                            <div class="folder-icon">
-                                <span class="material-icons">folder</span>
-                            </div>
-                            <div class="folder-name text-center">{{ $folder->name }}</div>
-                        </a>
-
-                        <!-- Tombol Titik Tiga -->
-                        <div class="dropdown position-absolute top-0 end-0 m-2">
-                            <button class="custom-toggle" onclick="toggleMenu(this)">
-                                <span class="material-icons">more_vert</span>
-                            </button>
-                            <div class="dropdown-menu">
-                                <button onclick="renameFolder({{ $folder->id }})">Rename</button>
-                                <button onclick="shareFolder({{ $folder->id }})">Share</button>
-                                <button onclick="deleteFolder({{ $folder->id }})">Delete</button>
+                @foreach ($folders as $folder)
+                    <div class="folder-card">
+                        <div class="d-flex align-items-center justify-content-between w-100">
+                            <a href="{{ route('media.folder.show', $folder->id) }}"
+                                class="folder-link d-flex align-items-center">
+                                <div class="icon-container">
+                                    <span class="material-icons folder-icon">folder</span>
+                                </div>
+                                <span class="folder-name">{{ $folder->name }}</span>
+                            </a>
+                            <div class="dropdown">
+                                <button class="custom-toggle" onclick="toggleMenu(this)">
+                                    <span class="material-icons">more_vert</span>
+                                </button>
+                                <div class="dropdown-menu">
+                                    <button onclick="renameFolder({{ $folder->id }})">Rename</button>
+                                    <button onclick="shareFolder({{ $folder->id }})">Share</button>
+                                    <button onclick="deleteFolder({{ $folder->id }})">Delete</button>
+                                </div>
                             </div>
                         </div>
                     </div>
                 @endforeach
             @endif
         </div>
-
 
         <!-- Modal untuk Rename Folder -->
         <div class="modal fade" id="renameFolderModal" tabindex="-1" aria-labelledby="renameFolderModalLabel"
@@ -158,8 +158,6 @@
     </div>
 </div>
 <script>
-
-
     function toggleMenu(button) {
         // Tutup semua dropdown lainnya
         document.querySelectorAll('.dropdown-menu').forEach(menu => {

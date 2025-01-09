@@ -47,7 +47,7 @@
         </div>
 
         <!-- Subfolder List -->
-        <div class="file-grid mt-4" id="media-container">
+        <div class="folder-grid mt-4" id="media-container">
             @foreach($folder->subfolders as $subfolder)
                 <div class="folder-card position-relative">
                     <a href="{{ route('media.folder.show', $subfolder->id) }}" class="folder-link">
@@ -169,35 +169,40 @@
             </div>
         </div>
 
+        <!-- Media List -->
         <div class="media-list">
             <h5>Media Files</h5>
             <div class="file-grid">
                 @foreach($folder->mediaItems as $media)
                     <div class="file-card position-relative">
+                        <div class="file-info text-center">
+                            @if(Str::startsWith($media->type, 'image/'))
+                                <span class="material-icons media-icon">image</span>
+                            @elseif(Str::startsWith($media->type, 'audio/'))
+                                <span class="material-icons media-icon">music_note</span>
+                            @elseif(Str::startsWith($media->type, 'video/'))
+                                <span class="material-icons media-icon">videocam</span>
+                            @endif
+                            <p>{{ $media->name }}</p>
+                        </div>
                         <div class="media-container"
                             onclick="handleMediaClick('{{ $media->id }}', '{{ Storage::url($media->path) }}', '{{ $media->type }}')">
                             @if(Str::startsWith($media->type, 'image/'))
-                                <!-- Tampilkan Gambar -->
                                 <img src="{{ Storage::url($media->path) }}" alt="{{ $media->name }}" class="media-preview"
                                     id="media-{{ $media->id }}">
                             @elseif(Str::startsWith($media->type, 'audio/'))
-                                <!-- Tampilkan Ikon Musik -->
-                                <div class="audio-icon text-center">
-                                    <span class="material-icons" style="font-size: 48px;">music_note</span>
+                                <div class="audio-container">
+                                    <span class="material-icons audio-icon">play_arrow</span>
+                                    <audio id="audio-{{ $media->id }}" preload="none" class="audio-player">
+                                        <source src="{{ Storage::url($media->path) }}" type="{{ $media->type }}">
+                                    </audio>
                                 </div>
-                                <audio id="audio-{{ $media->id }}" preload="none">
-                                    <source src="{{ Storage::url($media->path) }}" type="{{ $media->type }}">
-                                </audio>
                             @elseif(Str::startsWith($media->type, 'video/'))
-                                <!-- Tampilkan Video -->
-                                <video class="media-preview" id="video-{{ $media->id }}" preload="none">
+                                <video class="media-preview video-player" id="video-{{ $media->id }}" preload="none" controls>
                                     <source src="{{ Storage::url($media->path) }}" type="{{ $media->type }}">
-                                    Your browser does not support the video tag.
+                                    Your browser does not support the vi deo tag.
                                 </video>
                             @endif
-                        </div>
-                        <div class="file-info text-center">
-                            <p>{{ $media->name }}</p>
                         </div>
 
                         <div class="dropdown position-absolute top-0 end-0 m-2">

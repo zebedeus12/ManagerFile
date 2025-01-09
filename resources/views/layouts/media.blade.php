@@ -90,6 +90,13 @@
             /* Transisi saat sidebar berubah */
         }
 
+        .content-container {
+            background-color: #ffffff;
+            min-height: 100vh;
+            padding: 25px;
+            overflow-y: auto;
+        }
+
         /* Filter buttons styling */
         .btn {
             margin-right: 10px;
@@ -115,68 +122,69 @@
             color: #fff;
         }
 
-        /* File grid layout */
-        .file-grid {
-            margin-left: 20px;
-            /* Jarak dari kiri */
-            margin-right: 20px;
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            gap: 20px;
-            transition: all 0.3s ease;
-            /* Efek transisi halus */
-        }
-
-        .file-card {
-            width: 150px;
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-            text-align: center;
-            transition: transform 0.3s ease;
-        }
-
-        .file-card:hover {
-            transform: scale(1.05);
-        }
-
-        .file-info {
-            padding: 10px;
-        }
-
-        .content-container {
-            background-color: #ffffff;
-            min-height: 100vh;
-            padding: 25px;
-            overflow-y: auto;
-        }
-
-        .media-preview {
-            width: 100%;
-            height: auto;
-            max-height: 120px;
-            object-fit: cover;
-        }
-
-        /* Image container for media preview */
-        .image-container {
+        .media-container {
             width: 100%;
             aspect-ratio: 4 / 3;
-            /* Set aspect ratio for consistent display */
             overflow: hidden;
+            margin-top: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
         }
 
         .media-preview {
             width: 100%;
             height: 100%;
             object-fit: cover;
+            cursor: pointer;
         }
+
+        .media-icon {
+            font-size: 32px;
+            color: #555;
+            display: block;
+            margin: 0 auto 5px;
+        }
+
+        .audio-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .audio-icon {
+            font-size: 48px;
+            color: #4CAF50;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .audio-icon:hover {
+            transform: scale(1.2);
+        }
+
+        .audio-player {
+            display: none;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .audio-container:hover .audio-player {
+            display: block;
+            width: 100%;
+        }
+
+        .video-player {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+        }
+
 
         /* Dropdown Container */
         .dropdown {
             z-index: 10;
-            position: absolute;
+            position: relative;
         }
 
         .custom-toggle {
@@ -225,15 +233,37 @@
         .folder-card .dropdown {
             position: absolute;
             top: 5px;
-            /* Sesuaikan dengan kebutuhan */
             right: 5px;
             z-index: 10;
         }
 
 
-        /* File info section */
-        .file-info {
+        /* File */
+        .file-grid {
+            margin-left: 20px;
+            margin-right: 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .file-card {
+            width: 150px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            text-align: center;
+            transition: transform 0.3s ease;
             padding: 10px;
+        }
+
+        .file-card:hover {
+            transform: scale(1.05);
+        }
+
+        .file-info {
             text-align: center;
         }
 
@@ -241,94 +271,12 @@
             font-size: 14px;
             font-weight: bold;
             color: #333;
-            margin: 0;
+            margin: 5px 0;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
         }
 
-        /* Zoom slider container */
-        .zoom-slider-container {
-            display: flex;
-            align-items: center;
-        }
-
-        .zoom-slider-button {
-            background: none;
-            border: none;
-            margin: 0 5px;
-            font-size: 16px;
-            cursor: pointer;
-        }
-
-        .zoom-slider {
-            width: 100px;
-            margin: 0 10px;
-        }
-
-        /* Menambahkan gaya untuk folder */
-        .folder-card {
-            background-color: #ffffff;
-            border-radius: 8px;
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            padding: 15px;
-            transition: transform 0.3s ease;
-            cursor: pointer;
-        }
-
-        .folder-card:hover {
-            transform: scale(1.05);
-            /* box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); */
-        }
-
-        .folder-icon {
-            font-size: 50px;
-            color: #ffc107;
-            /* Warna kuning untuk folder */
-            margin-bottom: 10px;
-        }
-
-        .folder-link {
-            text-decoration: none;
-            color: inherit;
-        }
-
-        .folder-name {
-            font-weight: 600;
-            font-size: 14px;
-            color: #333;
-            word-wrap: break-word;
-        }
-
-        /* Modal Styling */
-        .modal-content {
-            border-radius: 8px;
-        }
-
-        .modal-header {
-            background-color: #f8f9fa;
-        }
-
-        .modal-body {
-            padding: 20px;
-        }
-
-        .subfolder-list {
-            margin-top: 20px;
-        }
-
-        .subfolder-list a {
-            font-size: 16px;
-            text-decoration: none;
-            color: #007bff;
-        }
-
-        .subfolder-list a:hover {
-            text-decoration: underline;
-        }
-
-        /* File List */
         .file-list {
             margin-top: 20px;
             display: flex;
@@ -350,8 +298,109 @@
         }
 
         .file-icon {
-            font-size: 48px;
-            color: #888;
+            font-size: 32px;
+            color: #555;
+            margin-bottom: 5px;
+        }
+
+        /* Zoom slider container */
+        .zoom-slider-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .zoom-slider-button {
+            background: none;
+            border: none;
+            margin: 0 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .zoom-slider {
+            width: 100px;
+            margin: 0 10px;
+        }
+
+        /* folder dan subfolder */
+        .folder-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .folder-card {
+            background-color: #f0fdf4;
+            border-radius: 8px;
+            padding: 10px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .folder-card:hover {
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+            transform: translateY(-3px);
+        }
+
+        .folder-icon {
+            font-size: 40px;
+            color: #4caf50;
+            margin-right: 10px;
+        }
+
+        .folder-link {
+            color: #333;
+            font-weight: bold;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            flex-grow: 1;
+        }
+
+        .folder-name {
+            font-size: 14px;
+            font-weight: bold;
+            color: #333;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+            max-width: 150px;
+        }
+
+        .folder-name:hover {
+            color: #2e7d32;
+        }
+
+        .subfolder-list {
+            margin-top: 20px;
+        }
+
+        .subfolder-list a {
+            font-size: 16px;
+            text-decoration: none;
+            color: #007bff;
+        }
+
+        .subfolder-list a:hover {
+            text-decoration: underline;
+        }
+
+        /* Modal pop up*/
+        .modal-content {
+            border-radius: 8px;
+        }
+
+        .modal-header {
+            background-color: #f8f9fa;
+        }
+
+        .modal-body {
+            padding: 20px;
         }
 
         /* Form Styling */
@@ -364,58 +413,6 @@
             font-size: 14px;
             padding: 10px;
             margin-top: 5px;
-        }
-
-        .media-preview {
-            max-width: 100%;
-            height: auto;
-            cursor: pointer;
-        }
-
-        .media-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .media-item img {
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-
-        .media-container {
-            position: relative;
-            overflow: hidden;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            padding: 10px;
-        }
-
-        .audio-container {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-
-        .audio-icon {
-            cursor: pointer;
-            color: #4CAF50;
-            transition: transform 0.3s;
-        }
-
-        .audio-icon:hover {
-            transform: scale(1.2);
-        }
-
-        .audio-player {
-            width: 100%;
-            height: 40px;
-            display: none;
-        }
-
-        .audio-container .audio-player {
-            display: block;
         }
     </style>
 
@@ -520,13 +517,14 @@
             const audioElement = document.getElementById(`audio-${mediaId}`);
             audioElement.play();
         } else if (mediaType.startsWith('video/')) {
-            const videoElement = document.getElementById(`video-${mediaId}`);
-            videoElement.play();
+            // Buka video dalam modal dan tampilkan preview
+            openVideoModal(mediaUrl, mediaId);
         } else if (mediaType.startsWith('image/')) {
             // Buka gambar dalam modal
             openImageModal(mediaUrl);
         }
     }
+
 
     function openImageModal(imageUrl) {
         const modal = document.createElement('div');
@@ -537,6 +535,49 @@
             </div>
         `;
         document.body.appendChild(modal);
+    }
+
+    function openAudioModal(audioUrl) {
+        const modal = document.createElement('div');
+        modal.innerHTML = `
+        <div style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); display:flex; justify-content:center; align-items:center; z-index:1000;">
+            <audio controls autoplay style="max-width:90%; max-height:90%;">
+                <source src="${audioUrl}" type="audio/mpeg">
+                Your browser does not support the audio element.
+            </audio>
+            <button onclick="this.parentNode.remove()" style="position:absolute; top:20px; right:20px; background:red; color:white; border:none; font-size:20px; cursor:pointer;">&times;</button>
+        </div>
+    `;
+        document.body.appendChild(modal);
+    }
+
+    function openVideoModal(videoUrl, mediaId) {
+        const modal = document.createElement('div');
+        modal.innerHTML = `
+        <div style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); display:flex; justify-content:center; align-items:center; z-index:1000;">
+            <div style="position:relative; max-width:90%; max-height:90%; display:flex; flex-direction:column; justify-content:center; align-items:center;">
+                <video id="video-${mediaId}" controls poster="${videoUrl}" style="max-width:100%; max-height:100%; cursor: pointer;">
+                    <source src="${videoUrl}" type="video/mp4">
+                    Your browser does not support the video element.
+                </video>
+                <button onclick="this.parentNode.parentNode.remove()" style="position:absolute; top:20px; right:20px; background:red; color:white; border:none; font-size:20px; cursor:pointer;">&times;</button>
+                            </div>
+        </div>
+    `;
+        document.body.appendChild(modal);
+    }
+
+    function togglePlayPause(mediaId) {
+        const video = document.getElementById(`video-${mediaId}`);
+        const button = document.getElementById(`playPauseBtn-${mediaId}`);
+
+        if (video.paused) {
+            video.play();
+            button.textContent = 'Pause'; // Change button text to "Pause"
+        } else {
+            video.pause();
+            button.textContent = 'Play'; // Change button text to "Play"
+        }
     }
 </script>
 
