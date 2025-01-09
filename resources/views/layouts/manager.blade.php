@@ -62,7 +62,14 @@
 
         /* Kontainer Konten Utama */
         .container {
+<<<<<<< HEAD
             transition: none;
+=======
+            transition: none; /* Hilangkan efek transisi */
+            margin-left: 250px; /* Sesuai dengan lebar sidebar */
+            width: calc(100% - 250px); /* Sisa lebar layar */
+            padding: 25px;
+>>>>>>> 2f9e13dcf8ec6a32d925ff27bd1d38c4bcaf9307
         }
 
         /* Content Container Styling */
