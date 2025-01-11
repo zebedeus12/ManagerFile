@@ -33,6 +33,7 @@ class MediaController extends Controller
         $request->validate([
             'file' => 'required|file|mimes:jpeg,png,jpg,gif,mp3,wav,ogg,mp4,mkv,avi|max:10240',
             'folder_id' => 'nullable|exists:mysql_second.media_folders,id',
+            'description' => 'nullable|string|max:255',
         ]);
 
         // Ambil nama file
@@ -44,10 +45,11 @@ class MediaController extends Controller
 
         // Simpan informasi media ke database
         Media::create([
-            'name' => $fileName, // Gunakan nama file sebagai nama media
+            'name' => $fileName,
             'path' => $filePath,
             'type' => $type,
-            'folder_id' => $request->folder_id, // Folder induk
+            'folder_id' => $request->folder_id,
+            'description' => $request->description,
         ]);
 
         // Redirect dengan pesan sukses

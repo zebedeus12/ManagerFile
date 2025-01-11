@@ -38,6 +38,11 @@
                                 <input type="text" class="form-control" name="name" id="folderName" required>
                             </div>
                             <div class="form-group mt-3">
+                                <label for="folderDescription">Keterangan</label>
+                                <textarea class="form-control" name="description" id="folderDescription"
+                                    rows="3"></textarea>
+                            </div>
+                            <div class="form-group mt-3">
                                 <button type="submit" class="btn btn-primary">Create Folder</button>
                             </div>
                         </form>
@@ -46,7 +51,6 @@
             </div>
         </div>
 
-        <!-- Subfolder List -->
         <!-- Subfolder List -->
         <div class="folder-grid mt-4" id="media-container">
             @foreach($folder->subfolders as $subfolder)
@@ -159,6 +163,11 @@
                                 <label for="mediaFile">Media File</label>
                                 <input type="file" class="form-control" name="file" id="mediaFile"
                                     accept="image/*,audio/*,video/*" required>
+                            </div>
+                            <div class="form-group mb-3">
+                                <label for="mediaDescription">Keterangan</label>
+                                <textarea class="form-control" name="description" id="mediaDescription"
+                                    rows="3"></textarea>
                             </div>
                             <input type="hidden" name="folder_id" value="{{ $folder->id }}">
                             <div class="form-group mt-3">

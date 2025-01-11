@@ -13,7 +13,7 @@ class Media extends Model
     protected $primaryKey = 'id'; // Pastikan primary key adalah `id`
     public $timestamps = true; // Kolom `created_at` dan `updated_at`
 
-    protected $fillable = ['name', 'path', 'type', 'folder_id']; // Pastikan ada folder_id
+    protected $fillable = ['name', 'path', 'type', 'folder_id', 'description']; // Pastikan ada folder_id
 
     public function folder()
     {
