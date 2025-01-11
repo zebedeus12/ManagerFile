@@ -47,6 +47,7 @@
         </div>
 
         <!-- Subfolder List -->
+        <!-- Subfolder List -->
         <div class="folder-grid mt-4" id="media-container">
             @foreach($folder->subfolders as $subfolder)
                 <div class="folder-card position-relative">

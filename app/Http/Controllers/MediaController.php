@@ -14,11 +14,8 @@ class MediaController extends Controller
      */
     public function index()
     {
-        // Ambil semua media
         $mediaItems = Media::all();
-        // Ambil semua folder
-        $folders = MediaFolder::all();
-
+        $folders = MediaFolder::whereNull('parent_id')->with('subfolders')->get();
         return view('media.index', compact('mediaItems', 'folders'));
     }
 
