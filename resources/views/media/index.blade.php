@@ -38,6 +38,11 @@
                                 <input type="text" class="form-control" name="name" id="folderName" required>
                             </div>
                             <div class="form-group mt-3">
+                                <label for="folderDescription">Keterangan</label>
+                                <textarea class="form-control" name="description" id="folderDescription"
+                                    rows="3"></textarea>
+                            </div>
+                            <div class="form-group mt-3">
                                 <button type="submit" class="btn btn-primary">Create Folder</button>
                             </div>
                         </form>

@@ -43,7 +43,6 @@ class FolderController extends Controller
         $folder->accessibility = $request->input('accessibility');
         $folder->keterangan = $request->input('keterangan');
 
-
         if ($parentId) {
             $folder->parent_id = $parentId;
         }

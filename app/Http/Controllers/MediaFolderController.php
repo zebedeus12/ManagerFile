@@ -8,6 +8,15 @@ use Illuminate\Support\Facades\Storage;
 
 class MediaFolderController extends Controller
 {
+    public function index()
+    {
+        // Ambil semua folder dan media
+        $folders = MediaFolder::with('subfolders')->get();
+        $mediaItems = Media::all();
+
+        return view('media.index', compact('mediaItems', 'folders'));
+    }
+
     public function create($parentId = null)
     {
         // Menampilkan form untuk membuat folder, bisa subfolder atau folder utama
@@ -18,11 +27,13 @@ class MediaFolderController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
+            'description' => 'nullable|string|max:255',
         ]);
 
         // Jika $parentId null, maka folder ini adalah folder utama
         MediaFolder::create([
             'name' => $request->name,
+            'description' => $request->description,
             'parent_id' => $parentId, // Jika null, maka parent_id juga null
         ]);
 
