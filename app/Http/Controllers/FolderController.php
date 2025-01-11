@@ -35,11 +35,14 @@ class FolderController extends Controller
         $request->validate([
             'folder_name' => 'required|string|max:255',
             'accessibility' => 'required|in:public,private',
+            'keterangan' => 'nullable|string|max:255',
         ]);
 
         $folder = new Folder();
         $folder->name = $request->input('folder_name');
         $folder->accessibility = $request->input('accessibility');
+        $folder->keterangan = $request->input('keterangan');
+
 
         if ($parentId) {
             $folder->parent_id = $parentId;
@@ -99,7 +102,7 @@ class FolderController extends Controller
 
     public function copy(Request $request, $id)
     {
-        
+
         // Ambil folder yang ingin disalin
         $folder = Folder::with('children', 'files')->findOrFail($id);
 

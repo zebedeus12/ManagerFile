@@ -26,6 +26,10 @@
                     <option value="private">Rahasia</option>
                 </select>
             </div>
+            <div class="mb-3">
+                <label for="keterangan" class="form-label">Keterangan</label>
+                <textarea class="form-control" id="keterangan" name="keterangan" rows="3"></textarea>
+            </div>
             <button type="submit" class="btn btn-primary">Simpan Folder</button>
         </form>
     </div>

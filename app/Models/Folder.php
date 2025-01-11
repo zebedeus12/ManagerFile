@@ -10,7 +10,7 @@ class Folder extends Model
     use HasFactory;
 
     protected $connection = 'mysql_second';
-    protected $fillable = ['name', 'accessibility', 'parent_id'];
+    protected $fillable = ['name', 'accessibility', 'parent_id', 'keterangan'];
 
     public function children()
     {
