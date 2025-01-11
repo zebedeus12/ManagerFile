@@ -25,39 +25,40 @@ class FileController extends Controller
     }
 
     public function store(Request $request, $folder = null)
-{
-    $request->validate([
-        'file' => 'required|file|max:2048|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx',
-    ]);
-
-    if ($request->hasFile('file')) {
-        $uploadedFile = $request->file('file');
-        $filePath = $uploadedFile->store('uploads', 'public');
-
-        // Validasi folder jika ada
-        $folderId = $folder ? Folder::findOrFail($folder)->id : null;
-
-        // Simpan metadata file ke database
-        $file = new File([
-            'name' => $uploadedFile->getClientOriginalName(),
-            'size' => $uploadedFile->getSize() / 1024, // dalam KB
-            'type' => $uploadedFile->extension(),
-            'path' => $filePath,
-            'folder_id' => $folder, // Hubungkan file ke folder jika ada
-            'created_by' => auth()->id(),
+    {
+        $request->validate([
+            'file' => 'required|file|max:2048|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx',
+            'keterangan' => 'nullable|string|max:255',
         ]);
-        $file->save();
+
+        if ($request->hasFile('file')) {
+            $uploadedFile = $request->file('file');
+            $filePath = $uploadedFile->store('uploads', 'public');
+
+            // Validasi folder jika ada
+            $folderId = $folder ? Folder::findOrFail($folder)->id : null;
+
+            // Simpan metadata file ke database
+            $file = new File([
+                'name' => $uploadedFile->getClientOriginalName(),
+                'size' => $uploadedFile->getSize() / 1024, // dalam KB
+                'type' => $uploadedFile->extension(),
+                'path' => $filePath,
+                'folder_id' => $folder, // Hubungkan file ke folder jika ada
+                'created_by' => auth()->id(),
+                'keterangan' => $request->input('keterangan'),
+            ]);
+            $file->save();
+        }
+
+        // Redirect ke folder tempat file diunggah
+        if ($folder) {
+            return redirect()->route('folder.show', $folder)->with('success', 'File berhasil diunggah.');
+        }
+
+        // Redirect ke halaman utama jika diunggah ke root
+        return redirect()->route('file.index')->with('success', 'File berhasil diunggah.');
     }
-
-    // Redirect ke folder tempat file diunggah
-    if ($folder) {
-        return redirect()->route('folder.show', $folder)->with('success', 'File berhasil diunggah.');
-    }
-
-    // Redirect ke halaman utama jika diunggah ke root
-    return redirect()->route('file.index')->with('success', 'File berhasil diunggah.');
-}
-
 
     public function show($folderId)
     {
@@ -86,16 +87,16 @@ class FileController extends Controller
     public function destroy($fileId)
     {
         $file = File::findOrFail($fileId); // Temukan file berdasarkan ID
-    
+
         if ($file->path && Storage::disk('public')->exists($file->path)) {
             Storage::disk('public')->delete($file->path); // Hapus file dari storage
         }
-    
+
         $file->delete(); // Hapus metadata dari database
-    
+
         return redirect()->back()->with('success', 'File berhasil dihapus.');
     }
-    
+
 
     // Fungsi Share File
     public function share($fileId)
@@ -107,23 +108,23 @@ class FileController extends Controller
     }
 
     public function preview($id)
-{
-    // Ambil path file dari database berdasarkan ID
-    $file = File::findOrFail($id);
-    $filePath = 'public/' . $file->path;
+    {
+        // Ambil path file dari database berdasarkan ID
+        $file = File::findOrFail($id);
+        $filePath = 'public/' . $file->path;
 
-    // Periksa apakah file ada
-    if (!Storage::exists($filePath)) {
-        abort(404, 'File not found');
+        // Periksa apakah file ada
+        if (!Storage::exists($filePath)) {
+            abort(404, 'File not found');
+        }
+
+        // Tentukan MIME type dan tampilkan file
+        $fileContent = Storage::get($filePath);
+        $mimeType = Storage::mimeType($filePath);
+
+        return Response::make($fileContent, 200, [
+            'Content-Type' => $mimeType,
+            'Content-Disposition' => 'inline; filename="' . $file->name . '"',
+        ]);
     }
-
-    // Tentukan MIME type dan tampilkan file
-    $fileContent = Storage::get($filePath);
-    $mimeType = Storage::mimeType($filePath);
-
-    return Response::make($fileContent, 200, [
-        'Content-Type' => $mimeType,
-        'Content-Disposition' => 'inline; filename="' . $file->name . '"',
-    ]);
-}
 }

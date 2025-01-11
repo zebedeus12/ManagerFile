@@ -11,7 +11,7 @@ class File extends Model
     use HasFactory;
 
     protected $connection = 'mysql_second';
-    protected $fillable = ['name', 'size', 'type', 'folder_id', 'created_by'];
+    protected $fillable = ['name', 'size', 'type', 'folder_id', 'created_by', 'keterangan'];
 
     // Relasi ke folder
     public function folder()
@@ -25,8 +25,8 @@ class File extends Model
         return $this->belongsTo(User::class, 'created_by');
     }
     public function index()
-{
-    $folders = Folder::with('files')->get(); // Ambil folder beserta file-nya
-    return view('file_manager.index', compact('folders'));
-}
+    {
+        $folders = Folder::with('files')->get(); // Ambil folder beserta file-nya
+        return view('file_manager.index', compact('folders'));
+    }
 }
