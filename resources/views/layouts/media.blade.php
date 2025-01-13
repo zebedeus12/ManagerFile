@@ -325,55 +325,79 @@
         /* folder dan subfolder */
         .folder-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 15px;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
             margin-top: 20px;
         }
 
         .folder-card {
-            background-color: #f0fdf4;
-            border-radius: 8px;
-            padding: 10px 15px;
+            background-color: #e8f5e9;
+            border-radius: 12px;
+            padding: 15px;
+            min-height: 120px;
             display: flex;
+            flex-direction: column;
             justify-content: space-between;
-            align-items: center;
             position: relative;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: box-shadow 0.3s ease, transform 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .folder-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            width: 100%;
         }
 
         .folder-card:hover {
-            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
             transform: translateY(-3px);
         }
 
         .folder-icon {
-            font-size: 40px;
-            color: #4caf50;
-            margin-right: 10px;
+            font-size: 48px;
+            color: #43a047;
+            margin-bottom: -20px;
         }
 
         .folder-link {
             color: #333;
             font-weight: bold;
             font-size: 14px;
+            text-decoration: none;
             display: flex;
-            align-items: center;
-            flex-grow: 1;
+            flex-direction: column;
+            align-items: flex-start;
         }
 
         .folder-name {
-            font-size: 14px;
+            font-size: 16px;
+            /* Nama folder */
             font-weight: bold;
-            color: #333;
+            color: #1b5e20;
             text-overflow: ellipsis;
             white-space: nowrap;
             overflow: hidden;
-            max-width: 150px;
+            max-width: 100%;
+            /* Agar teks tidak melebar */
         }
 
         .folder-name:hover {
             color: #2e7d32;
+        }
+
+        .folder-meta {
+            font-size: 12px;
+            color: #616161;
+            margin-top: 5px;
+        }
+
+        .folder-description {
+            font-style: italic;
+            color: #757575;
         }
 
         .subfolder-list {

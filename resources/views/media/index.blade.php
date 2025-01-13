@@ -58,23 +58,24 @@
             @else
                 @foreach ($folders as $folder)
                     <div class="folder-card">
-                        <div class="d-flex align-items-center justify-content-between w-100">
-                            <a href="{{ route('media.folder.show', $folder->id) }}"
-                                class="folder-link d-flex align-items-center">
-                                <div class="icon-container">
-                                    <span class="material-icons folder-icon">folder</span>
-                                </div>
-                                <span class="folder-name">{{ $folder->name }}</span>
-                            </a>
-                            <div class="dropdown">
-                                <button class="custom-toggle" onclick="toggleMenu(this)">
-                                    <span class="material-icons">more_vert</span>
-                                </button>
-                                <div class="dropdown-menu">
-                                    <button onclick="renameFolder({{ $folder->id }})">Rename</button>
-                                    <button onclick="shareFolder({{ $folder->id }})">Share</button>
-                                    <button onclick="deleteFolder({{ $folder->id }})">Delete</button>
-                                </div>
+                        <a href="{{ route('media.folder.show', $folder->id) }}" class="folder-link d-flex align-items-center">
+                            <div class="folder-icon">
+                                <span class="material-icons">folder</span>
+                            </div>
+                            <span class="folder-name text-center">{{ $folder->name }}</span>
+                            <p class="folder-meta">
+                                Anda membuatnya · {{ $folder->created_at->format('d M Y') }}<br>
+                                <span class="folder-description">{{ $folder->description ?? 'Tidak ada keterangan' }}</span>
+                            </p>
+                        </a>
+                        <div class="dropdown">
+                            <button class="custom-toggle" onclick="toggleMenu(this)">
+                                <span class="material-icons">more_vert</span>
+                            </button>
+                            <div class="dropdown-menu">
+                                <button onclick="renameFolder({{ $folder->id }})">Rename</button>
+                                <button onclick="shareFolder({{ $folder->id }})">Share</button>
+                                <button onclick="deleteFolder({{ $folder->id }})">Delete</button>
                             </div>
                         </div>
                     </div>

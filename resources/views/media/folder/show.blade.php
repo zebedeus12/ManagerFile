@@ -52,16 +52,21 @@
         </div>
 
         <!-- Subfolder List -->
-        <div class="folder-grid mt-4" id="media-container">
+        <div class="folder-grid">
             @foreach($folder->subfolders as $subfolder)
-                <div class="folder-card position-relative">
+                <div class="folder-card">
                     <a href="{{ route('media.folder.show', $subfolder->id) }}" class="folder-link">
-                        <div class="folder-icon">
-                            <span class="material-icons">folder</span>
+                        <div class="folder-header">
+                            <div class="folder-icon">
+                                <span class="material-icons">folder</span>
+                            </div>
+                            <span class="folder-name">{{ $folder->name }}</span>
                         </div>
-                        <div class="folder-name text-center">{{ $subfolder->name }}</div>
+                        <p class="folder-meta">
+                            Anda membuatnya · {{ $folder->created_at->format('d M Y') }}<br>
+                            <span class="folder-description">{{ $folder->description ?? 'Tidak ada keterangan' }}</span>
+                        </p>
                     </a>
-
                     <!-- Tombol Titik Tiga -->
                     <div class="dropdown position-absolute top-0 end-0 m-2">
                         <button class="custom-toggle" onclick="toggleMenu(this)">

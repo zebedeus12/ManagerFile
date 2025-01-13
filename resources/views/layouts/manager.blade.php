@@ -62,14 +62,13 @@
 
         /* Kontainer Konten Utama */
         .container {
-<<<<<<< HEAD
             transition: none;
-=======
-            transition: none; /* Hilangkan efek transisi */
-            margin-left: 250px; /* Sesuai dengan lebar sidebar */
-            width: calc(100% - 250px); /* Sisa lebar layar */
+            /* Hilangkan efek transisi */
+            margin-left: 250px;
+            /* Sesuai dengan lebar sidebar */
+            width: calc(100% - 250px);
+            /* Sisa lebar layar */
             padding: 25px;
->>>>>>> 2f9e13dcf8ec6a32d925ff27bd1d38c4bcaf9307
         }
 
         /* Content Container Styling */
@@ -106,33 +105,7 @@
         /* Dropdown Container */
         .dropdown {
             z-index: 10;
-            position: absolute;
-            display: inline-block;
-            top: 10px;
-            right: 10px;
-        }
-
-        .dropdown-toggle {
-            background: none;
-            border: none;
-            cursor: pointer;
-            font-size: 20px;
-            color: #000;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .dropdown-toggle::before {
-            display: none;
-            content: none;
-        }
-
-        .dropdown-toggle::after {
-            display: none !important;
-            content: none !important;
+            position: relative;
         }
 
         .custom-toggle {
@@ -140,27 +113,23 @@
             border: none;
             cursor: pointer;
             font-size: 20px;
-            color: #000;
+            color: #888;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 0;
-            width: 40px;
-            height: 40px;
         }
 
         .dropdown-menu {
-            z-index: 20;
-            position: absolute;
             display: none;
-            top: 40px;
+            position: absolute;
+            top: 100%;
             right: 0;
             background-color: white;
             box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
             border-radius: 4px;
             padding: 10px 0;
-            width: 150px;
-            pointer-events: auto;
+            z-index: 20;
+            min-width: 150px;
         }
 
         .dropdown-menu button {
@@ -171,14 +140,22 @@
             padding: 8px 15px;
             font-size: 14px;
             cursor: pointer;
+            color: #333;
         }
 
         .dropdown-menu button:hover {
             background-color: #f5f5f5;
         }
 
-        .dropdown:hover .dropdown-menu {
+        .dropdown-menu.show {
             display: block;
+        }
+
+        .folder-card .dropdown {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            z-index: 10;
         }
 
         /* style  */
@@ -232,52 +209,95 @@
             flex-shrink: 0;
         }
 
-        /* Folder */
+        /* folder dan subfolder */
         .folder-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 15px;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
             margin-top: 20px;
         }
 
         .folder-card {
-            background-color: #f0fdf4;
-            border-radius: 8px;
-            padding: 10px 15px;
+            background-color: #e8f5e9;
+            border-radius: 12px;
+            padding: 15px;
+            min-height: 120px;
             display: flex;
+            flex-direction: column;
             justify-content: space-between;
-            align-items: center;
             position: relative;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: box-shadow 0.3s ease, transform 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
         .folder-card:hover {
-            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
             transform: translateY(-3px);
         }
 
+        .folder-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            width: 100%;
+        }
+
         .folder-icon {
-            font-size: 40px;
-            color: #4caf50;
-            margin-right: 10px;
+            font-size: 48px;
+            color: #43a047;
+            margin-bottom: -25px;
         }
 
         .folder-link {
             color: #333;
             font-weight: bold;
             font-size: 14px;
+            text-decoration: none;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
         }
 
-        .folder-link:hover {
-            color: #2d6a4f;
+        .folder-name {
+            font-size: 16px;
+            /* Nama folder */
+            font-weight: bold;
+            color: #1b5e20;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+            max-width: 100%;
         }
 
-        .folder-card .dropdown {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            z-index: 10;
+        .folder-name:hover {
+            color: #2e7d32;
+        }
+
+        .folder-meta {
+            font-size: 12px;
+            color: #616161;
+            margin-top: 5px;
+        }
+
+        .folder-description {
+            font-style: italic;
+            color: #757575;
+        }
+
+        .subfolder-list {
+            margin-top: 20px;
+        }
+
+        .subfolder-list a {
+            font-size: 16px;
+            text-decoration: none;
+            color: #007bff;
+        }
+
+        .subfolder-list a:hover {
+            text-decoration: underline;
         }
 
         /* File Card */

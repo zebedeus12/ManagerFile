@@ -44,31 +44,32 @@
             </div>
         @endif
 
-        <p class="text-muted">
-            Terdapat {{ $subFolders ? $subFolders->count() : 0 }} Folders,
-            {{ $files ? $files->count() : 0 }} File.
-        </p>
-        <h6>Folders</h6>
-        <div class="folder-grid">
+        <div class="folder-grid ">
             @foreach ($subFolders as $subFolder)
                 <div class="folder-card">
                     <a href="{{ route('folder.show', $subFolder->id) }}" class="folder-link">
-                        <div class="d-flex align-items-center">
-                            <div class="icon-container">
-                                <span class="material-icons folder-icon">folder</span>
+                        <div class="folder-header">
+                            <div class="folder-icon">
+                                <span class="material-icons">folder</span>
                             </div>
-                            <span>{{ $subFolder->name }}</span>
+                            <div class="folder-name">{{ $subFolder->name }}</div>
+                            <div class="dropdown">
+                                <button class="custom-toggle" onclick="toggleMenu(this)">
+                                    <span class="material-icons">more_vert</span>
+                                </button>
+                                <div class="dropdown-menu">
+                                    <button onclick="openRenameModal({{ $subFolder->id }}, '{{ $subFolder->name }}')">Rename</button>
+                                    <button onclick="openShareModal({{ $subFolder->id }}, '{{ url('/folder/' . $subFolder->id . '/share') }}')">Share</button>
+                                    <button onclick="openDeleteModal({{ $subFolder->id }})">Delete</button>
+                                    <button onclick="openCopyModal({{ $folder->id }})">Copy</button>
+                                </div>
+                            </div>
                         </div>
+                        <p class="folder-meta">
+                            Anda membuatnya · {{ $subFolder->created_at->format('d M Y') }}<br>
+                            <span class="folder-description">{{ $subFolder->description ?? 'Tidak ada keterangan' }}</span>
+                        </p>
                     </a>
-                    <div class="dropdown">
-                        <button class="dropdown-toggle custom-toggle">⋮</button>
-                        <div class="dropdown-menu">
-                            <button onclick="openRenameModal({{ $subFolder->id }}, '{{ $subFolder->name }}')">Rename</button>
-                            <button onclick="openShareModal({{ $subFolder->id }}, '{{ url('/folder/' . $subFolder->id . '/share') }}')">Share</button>
-                            <button onclick="openDeleteModal({{ $subFolder->id }})">Delete</button>
-                            <button onclick="openCopyModal({{ $folder->id }})">Copy</button>
-                        </div>
-                    </div>
                 </div>
             @endforeach
         </div>

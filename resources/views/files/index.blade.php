@@ -17,31 +17,38 @@
         <p class="text-muted">Terdapat {{ $folders->count() }} Folders.</p>
 
         <div class="folder-grid mt-4">
-            {{-- Grid untuk Folder --}}
-            @foreach ($folders as $folder)
-                <div class="folder-card">
-                    <!-- Tombol titik tiga -->
-                    <div class="dropdown position-absolute top-0 end-0 m-2">
-                        <button class="custom-toggle" onclick="toggleMenu(this)">
-                            <span class="material-icons">more_vert</span>
-                        </button>
-                        <div class="dropdown-menu">
-                            <button onclick="openRenameModal({{ $folder->id }}, '{{ $folder->name }}')">Rename</button>
-                            <button
-                                onclick="openShareModal({{ $folder->id }}, '{{ url('/folder/' . $folder->id . '/share') }}')">Share</button>
-                            <button onclick="openDeleteModal({{ $folder->id }})">Delete</button>
-                        </div>
-                    </div>
-                    <a href="{{ route('folder.show', $folder->id) }}" class="file-link">
-                        <div class="d-flex align-items-center">
-                            <div class="icon-container">
-                                <span class="material-icons folder-icon">folder</span>
+            @if($folders->isEmpty())
+                <p>No folders found.</p>
+            @else
+                @foreach ($folders as $folder)
+                    <div class="folder-card">
+                        <a href="{{ route('folder.show', $folder->id) }}" class="folder-link">
+                            <div class="folder-header">
+                                <div class="folder-icon">
+                                    <span class="material-icons">folder</span>
+                                </div>
+                                <div class="folder-name">{{ $folder->name }}</div>
+                                <div class="dropdown">
+                                    <button class="custom-toggle" onclick="toggleMenu(this)">
+                                        <span class="material-icons">more_vert</span>
+                                    </button>
+                                    <div class="dropdown-menu">
+                                        <button
+                                            onclick="openRenameModal({{ $folder->id }}, '{{ $folder->name }}')">Rename</button>
+                                        <button
+                                            onclick="openShareModal({{ $folder->id }}, '{{ url('/folder/' . $folder->id . '/share') }}')">Share</button>
+                                        <button onclick="openDeleteModal({{ $folder->id }})">Delete</button>
+                                    </div>
+                                </div>
                             </div>
-                            <span>{{ $folder->name }}</span>
-                        </div>
-                    </a>
-                </div>
-            @endforeach
+                            <p class="folder-meta">
+                                Anda membuatnya · {{ $folder->created_at->format('d M Y') }}<br>
+                                <span class="folder-description">{{ $folder->description ?? 'Tidak ada keterangan' }}</span>
+                            </p>
+                        </a>
+                    </div>
+                @endforeach
+            @endif
         </div>
 
         <!-- Rename Folder-->
