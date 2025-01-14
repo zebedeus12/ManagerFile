@@ -374,7 +374,7 @@
         }
 
         .folder-name {
-            font-size: 16px;
+            font-size: 14px;
             /* Nama folder */
             font-weight: bold;
             color: #1b5e20;
@@ -398,6 +398,11 @@
         .folder-description {
             font-style: italic;
             color: #757575;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: block;
+            max-width: 200px;
         }
 
         .subfolder-list {

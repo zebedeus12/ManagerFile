@@ -54,14 +54,13 @@
                             </div>
                             <div class="folder-name">{{ $subFolder->name }}</div>
                             <div class="dropdown">
-                                <button class="custom-toggle" onclick="toggleMenu(this)">
+                                <button class="custom-toggle" onclick="toggleMenu(this, event)">
                                     <span class="material-icons">more_vert</span>
                                 </button>
                                 <div class="dropdown-menu">
-                                    <button onclick="openRenameModal({{ $subFolder->id }}, '{{ $subFolder->name }}')">Rename</button>
-                                    <button onclick="openShareModal({{ $subFolder->id }}, '{{ url('/folder/' . $subFolder->id . '/share') }}')">Share</button>
-                                    <button onclick="openDeleteModal({{ $subFolder->id }})">Delete</button>
-                                    <button onclick="openCopyModal({{ $folder->id }})">Copy</button>
+                                    <button onclick="openRenameModal({{ $folder->id }}, '{{ $folder->name }}')">Rename</button>
+                                    <button onclick="openShareModal({{ $folder->id }}, '{{ url('/folder/' . $folder->id . '/share') }}')">Share</button>
+                                    <button onclick="openDeleteModal({{ $folder->id }})">Delete</button>
                                 </div>
                             </div>
                         </div>

@@ -28,22 +28,21 @@
                                     <span class="material-icons">folder</span>
                                 </div>
                                 <div class="folder-name">{{ $folder->name }}</div>
-                                <div class="dropdown">
-                                    <button class="custom-toggle" onclick="toggleMenu(this)">
-                                        <span class="material-icons">more_vert</span>
-                                    </button>
-                                    <div class="dropdown-menu">
-                                        <button
-                                            onclick="openRenameModal({{ $folder->id }}, '{{ $folder->name }}')">Rename</button>
-                                        <button
-                                            onclick="openShareModal({{ $folder->id }}, '{{ url('/folder/' . $folder->id . '/share') }}')">Share</button>
-                                        <button onclick="openDeleteModal({{ $folder->id }})">Delete</button>
-                                    </div>
+                            </div>
+                            <div class="dropdown">
+                                <button class="custom-toggle" onclick="toggleMenu(this, event)">
+                                    <span class="material-icons">more_vert</span>
+                                </button>
+                                <div class="dropdown-menu">
+                                    <button onclick="openRenameModal({{ $folder->id }}, '{{ $folder->name }}')">Rename</button>
+                                    <button
+                                        onclick="openShareModal({{ $folder->id }}, '{{ url('/folder/' . $folder->id . '/share') }}')">Share</button>
+                                    <button onclick="openDeleteModal({{ $folder->id }})">Delete</button>
                                 </div>
                             </div>
                             <p class="folder-meta">
                                 Anda membuatnya · {{ $folder->created_at->format('d M Y') }}<br>
-                                <span class="folder-description">{{ $folder->description ?? 'Tidak ada keterangan' }}</span>
+                                <span class="folder-description">{{ $folder->keterangan ?? 'Tidak ada keterangan' }}</span>
                             </p>
                         </a>
                     </div>

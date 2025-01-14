@@ -130,6 +130,7 @@
             padding: 10px 0;
             z-index: 20;
             min-width: 150px;
+            pointer-events: auto;
         }
 
         .dropdown-menu button {
@@ -247,7 +248,7 @@
         .folder-icon {
             font-size: 48px;
             color: #43a047;
-            margin-bottom: -25px;
+            margin-bottom: -20px;
         }
 
         .folder-link {
@@ -261,7 +262,7 @@
         }
 
         .folder-name {
-            font-size: 16px;
+            font-size: 14px;
             /* Nama folder */
             font-weight: bold;
             color: #1b5e20;
@@ -284,6 +285,11 @@
         .folder-description {
             font-style: italic;
             color: #757575;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: block;
+            max-width: 200px;
         }
 
         .subfolder-list {
@@ -382,7 +388,11 @@
     @stack('scripts')
 </body>
 <script>
-    function toggleMenu(button) {
+    function toggleMenu(button, event) {
+        // Mencegah aksi default (navigasi ke folder) dan propagasi event
+        event.preventDefault();
+        event.stopPropagation();
+
         // Tutup semua dropdown lainnya
         document.querySelectorAll('.dropdown-menu').forEach(menu => {
             if (menu !== button.nextElementSibling) {
@@ -396,12 +406,10 @@
     }
 
     // Tutup dropdown saat klik di luar
-    document.addEventListener('click', function (event) {
-        if (!event.target.closest('.dropdown')) {
-            document.querySelectorAll('.dropdown-menu').forEach(menu => {
-                menu.classList.remove('show');
-            });
-        }
+    document.addEventListener('click', function () {
+        document.querySelectorAll('.dropdown-menu').forEach(menu => {
+            menu.classList.remove('show');
+        });
     });
 
     //RENAME
