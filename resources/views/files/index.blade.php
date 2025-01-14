@@ -81,6 +81,16 @@
             </div>
         </div>
 
+        <div id="warningModal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <span class="close" onclick="closeWarningModal()">&times;</span>
+                <h2>Peringatan!!</h2>
+                <p id="warningMessage"></p>
+                <button class="btn btn-primary" onclick="closeWarningModal()">OK</button>
+            </div>
+        </div>
+
+
         <!-- Share -->
         <div id="shareModal" class="modal" style="display: none;">
             <div class="modal-content">

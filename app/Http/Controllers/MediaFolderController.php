@@ -118,5 +118,26 @@ class MediaFolderController extends Controller
         return redirect()->route('media.index')->with('success', 'Folder deleted successfully!');
     }
 
+    public function checkFolder($id)
+    {
+        $folder = MediaFolder::with(['subfolders', 'mediaItems'])->findOrFail($id);
+
+        // Cek apakah folder memiliki subfolder atau media
+        $hasSubfolders = $folder->subfolders->isNotEmpty();
+        $hasMediaItems = $folder->mediaItems->isNotEmpty();
+
+        if ($hasSubfolders || $hasMediaItems) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Jika Anda ingin menghapus folder, kosongkan folder terlebih dahulu.',
+            ], 400);
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Folder kosong dan siap untuk dihapus.',
+        ], 200);
+    }
+
 
 }

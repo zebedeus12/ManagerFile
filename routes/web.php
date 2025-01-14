@@ -63,6 +63,7 @@ Route::post('/folder/share/{id}', [FolderController::class, 'share'])->name('fol
 Route::delete('/folder/{id}', [FolderController::class, 'destroy'])->name('folder.destroy');
 Route::post('/folder/copy/{id}', [FolderController::class, 'copy'])->name('folder.copy');
 Route::delete('/folder/delete/{id}', [FolderController::class, 'destroy'])->name('folder.delete');
+Route::get('/folder/check/{id}', [FolderController::class, 'checkFolder']);
 
 
 
@@ -75,7 +76,8 @@ Route::get('media/folder/{id}', [MediaController::class, 'index'])->name('media.
 Route::get('/media/{media}', [MediaController::class, 'show'])->name('media.show');
 Route::get('/media/{media}/edit', [MediaController::class, 'edit'])->name('media.edit');
 Route::put('/media/{media}', [MediaController::class, 'update'])->name('media.update');
-Route::delete('/media/{media}', [MediaController::class, 'destroy'])->name('media.destroy');
+Route::delete('/media/folder/{id}', [MediaFolderController::class, 'destroy'])->name('media.folder.destroy');
+Route::get('/media/folder/check/{id}', [MediaFolderController::class, 'checkFolder']);
 Route::get('/media/folders/search', [MediaController::class, 'searchFolders'])->name('media.folders.search');
 
 

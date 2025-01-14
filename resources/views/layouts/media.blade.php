@@ -497,15 +497,32 @@
     }
 
     function deleteFolder(folderId) {
-        // Dapatkan elemen form
-        const form = document.getElementById('deleteFolderForm');
+        // Panggil endpoint untuk mengecek isi folder
+        fetch(`/media/folder/check/${folderId}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'error') {
+                    // Jika folder tidak kosong, tampilkan modal peringatan
+                    showWarningModal(data.message);
+                } else {
+                    // Jika folder kosong, tampilkan modal konfirmasi penghapusan
+                    const deleteForm = document.getElementById('deleteFolderForm');
+                    deleteForm.action = `/media/folder/${folderId}`;
+                    const deleteModal = new bootstrap.Modal(document.getElementById('deleteFolderModal'));
+                    deleteModal.show();
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
 
-        // Atur action URL form sesuai folder yang akan dihapus
-        form.action = `/media/folder/${folderId}/delete`; // Endpoint untuk delete
-
-        // Tampilkan modal delete folder
-        const deleteModal = new bootstrap.Modal(document.getElementById('deleteFolderModal'));
-        deleteModal.show();
+    function showWarningModal(message) {
+        const warningModal = document.getElementById('warningModal');
+        const warningMessage = document.getElementById('warningMessage');
+        warningMessage.textContent = message;
+        const modalInstance = new bootstrap.Modal(warningModal);
+        modalInstance.show();
     }
 
     function deleteMedia(mediaId) {

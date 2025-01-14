@@ -99,6 +99,28 @@ class FolderController extends Controller
         return redirect()->route('file.index')->with('success', 'Folder berhasil dihapus.');
     }
 
+    public function checkFolder($id)
+    {
+        $folder = Folder::findOrFail($id);
+
+        // Pastikan relasi children dan files sudah didefinisikan di model Folder
+        $hasChildren = $folder->children()->exists(); // Cek apakah ada sub-folder
+        $hasFiles = $folder->files()->exists();       // Cek apakah ada file
+
+        if ($hasChildren || $hasFiles) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Jika Anda ingin menghapus folder, kosongkan folder terlebih dahulu.',
+            ], 400); // HTTP 400 untuk error
+        }
+
+        // Jika folder kosong
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Folder kosong dan siap untuk dihapus.',
+        ], 200); // HTTP 200 untuk sukses
+    }
+
     public function copy(Request $request, $id)
     {
 

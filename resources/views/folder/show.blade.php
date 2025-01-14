@@ -60,13 +60,13 @@
                                 <div class="dropdown-menu">
                                     <button onclick="openRenameModal({{ $folder->id }}, '{{ $folder->name }}')">Rename</button>
                                     <button onclick="openShareModal({{ $folder->id }}, '{{ url('/folder/' . $folder->id . '/share') }}')">Share</button>
-                                    <button onclick="openDeleteModal({{ $folder->id }})">Delete</button>
+                                    <button onclick="openDeleteModal({{ $subFolder->id }})">Delete</button>
                                 </div>
                             </div>
                         </div>
                         <p class="folder-meta">
                             Anda membuatnya · {{ $subFolder->created_at->format('d M Y') }}<br>
-                            <span class="folder-description">{{ $subFolder->description ?? 'Tidak ada keterangan' }}</span>
+                            <span class="folder-description">{{ $subFolder->keterangan ?? 'Tidak ada keterangan' }}</span>
                         </p>
                     </a>
                 </div>
@@ -101,6 +101,15 @@
                     <button type="button" class="btn btn-secondary" onclick="closeDeleteModal()">Cancel</button>
                     <button type="submit" class="btn btn-danger">Delete</button>
                 </form>
+            </div>
+        </div>
+
+        <div id="warningModal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <span class="close" onclick="closeWarningModal()">&times;</span>
+                <h2>Peringatan!!</h2>
+                <p id="warningMessage"></p>
+                <button class="btn btn-primary" onclick="closeWarningModal()">OK</button>
             </div>
         </div>
 

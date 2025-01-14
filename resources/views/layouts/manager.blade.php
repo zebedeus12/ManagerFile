@@ -372,6 +372,45 @@
         .file-footer i {
             color: #999;
         }
+
+        /* modal */
+        .modal {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            width: 400px;
+            position: relative;
+        }
+
+        .modal-content .close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
     </style>
     @stack('styles')
 </head>
@@ -437,17 +476,39 @@
     function openDeleteModal(folderId) {
         event.preventDefault();
         event.stopPropagation();
-        const modal = document.getElementById("deleteModal");
-        modal.style.display = "block";
 
-        // Set form action untuk menghapus folder
-        const deleteForm = document.getElementById("deleteForm");
-        deleteForm.action = `/folder/delete/${folderId}`;
+        // Fetch API untuk memeriksa apakah folder kosong
+        fetch(`/folder/check/${folderId}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'error') {
+                    // Jika folder tidak kosong, tampilkan modal peringatan
+                    showWarningModal(data.message);
+                } else {
+                    // Jika folder kosong, tampilkan modal delete
+                    const modal = document.getElementById("deleteModal");
+                    modal.style.display = "block";
+
+                    // Set action form untuk menghapus folder
+                    const deleteForm = document.getElementById("deleteForm");
+                    deleteForm.action = `/folder/delete/${folderId}`;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
     }
 
-    function closeDeleteModal() {
-        const modal = document.getElementById("deleteModal");
-        modal.style.display = "none";
+    function showWarningModal(message) {
+        const warningModal = document.getElementById("warningModal");
+        const warningMessage = document.getElementById("warningMessage");
+        warningMessage.textContent = message;
+        warningModal.style.display = "block";
+    }
+
+    function closeWarningModal() {
+        const warningModal = document.getElementById("warningModal");
+        warningModal.style.display = "none";
     }
 
     //COPY
