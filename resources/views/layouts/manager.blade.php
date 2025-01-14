@@ -414,6 +414,9 @@
 
     //RENAME
     function openRenameModal(folderId, currentName) {
+        event.preventDefault();
+        event.stopPropagation();
+
         const modal = document.getElementById("renameFolderModal");
         modal.style.display = "block";
 
@@ -432,6 +435,8 @@
 
     //DELETE
     function openDeleteModal(folderId) {
+        event.preventDefault();
+        event.stopPropagation();
         const modal = document.getElementById("deleteModal");
         modal.style.display = "block";
 
@@ -447,6 +452,8 @@
 
     //COPY
     function openCopyModal(folderId) {
+        event.preventDefault();
+        event.stopPropagation();
         const modal = document.getElementById("copyModal");
         modal.style.display = "block";
 
@@ -462,6 +469,8 @@
 
     //SHARE
     function openShareModal(folderId, shareUrl) {
+        event.preventDefault();
+        event.stopPropagation();
         // Show the modal (if you have a modal to show the share URL)
         const modal = document.getElementById("shareModal");
         modal.style.display = "block";
@@ -479,6 +488,8 @@
 
     // Function to copy text to clipboard
     function copyToClipboard(text) {
+        event.preventDefault();
+        event.stopPropagation();
         navigator.clipboard.writeText(text).then(function () {
             alert('Link copied to clipboard!');
         }, function (err) {
