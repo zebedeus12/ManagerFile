@@ -178,7 +178,9 @@
                         </span>
                         <span class="file-name">{{ $file->name }}</span>
                         <div class="dropdown">
-                            <button class="dropdown-toggle custom-toggle">⋮</button>
+                            <button class="custom-toggle" onclick="toggleMenu(this, event)">
+                                <span class="material-icons">more_vert</span>
+                            </button>
                             <div class="dropdown-menu">
                                 <button onclick="openRenameFileModal({{ $file->id }}, '{{ $file->name }}')">Rename</button>
                                 <button onclick="openShareFileModal('{{ route('file.share', $file->id) }}')">Share</button>
