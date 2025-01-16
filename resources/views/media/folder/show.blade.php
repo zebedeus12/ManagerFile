@@ -169,7 +169,6 @@
             </div>
         </div>
 
-
         <!-- Add Media Modal -->
         <div class="modal fade" id="addMediaModal" tabindex="-1" aria-labelledby="addMediaModalLabel"
             aria-hidden="true">
