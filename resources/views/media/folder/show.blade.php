@@ -60,11 +60,11 @@
                             <div class="folder-icon">
                                 <span class="material-icons">folder</span>
                             </div>
-                            <span class="folder-name">{{ $folder->name }}</span>
+                            <span class="folder-name">{{ $subfolder->name }}</span>
                         </div>
                         <p class="folder-meta">
-                            Anda membuatnya · {{ $folder->created_at->format('d M Y') }}<br>
-                            <span class="folder-description">{{ $folder->description ?? 'Tidak ada keterangan' }}</span>
+                            Anda membuatnya · {{ $subfolder->created_at->format('d M Y') }}<br>
+                            <span class="folder-description">{{ $subfolder->description ?? 'Tidak ada keterangan' }}</span>
                         </p>
                     </a>
                     <!-- Tombol Titik Tiga -->

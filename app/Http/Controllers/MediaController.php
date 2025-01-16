@@ -12,9 +12,16 @@ class MediaController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request, $folderId = null)
     {
-        $mediaItems = Media::all();
+        // Pastikan folderId didefinisikan, bisa dari request atau route
+        $folderId = $folderId ?? $request->query('folder_id', null);
+
+        // Query media berdasarkan folderId jika tersedia
+        $mediaItems = Media::when($folderId, function ($query) use ($folderId) {
+            return $query->where('folder_id', $folderId);
+        })->get();
+
         $folders = MediaFolder::whereNull('parent_id')->with('subfolders')->get();
         return view('media.index', compact('mediaItems', 'folders'));
     }
@@ -31,7 +38,7 @@ class MediaController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'file' => 'required|file|mimes:jpeg,png,jpg,gif,mp3,wav,ogg,mp4,mkv,avi|max:10240',
+            'file' => 'required|file|mimes:jpeg,png,jpg,gif,mp3,wav,ogg,mp4,mkv,avi|max:500000',
             'folder_id' => 'nullable|exists:mysql_second.media_folders,id',
             'description' => 'nullable|string|max:255',
         ]);
