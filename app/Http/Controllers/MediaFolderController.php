@@ -27,12 +27,14 @@ class MediaFolderController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
+            'accessibility' => 'required|in:public,private',
             'description' => 'nullable|string|max:255',
         ]);
 
         // Jika $parentId null, maka folder ini adalah folder utama
         MediaFolder::create([
             'name' => $request->name,
+            'accessibility' => $request->accessibility,
             'description' => $request->description,
             'parent_id' => $parentId, // Jika null, maka parent_id juga null
         ]);

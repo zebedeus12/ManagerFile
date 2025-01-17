@@ -38,6 +38,13 @@
                                 <input type="text" class="form-control" name="name" id="folderName" required>
                             </div>
                             <div class="form-group mt-3">
+                                <label for="folderAccessibility">Accessibility</label>
+                                <select class="form-control" name="accessibility" id="folderAccessibility" required>
+                                    <option value="public">Public</option>
+                                    <option value="private">Private</option>
+                                </select>
+                            </div>
+                            <div class="form-group mt-3">
                                 <label for="folderDescription">Keterangan</label>
                                 <textarea class="form-control" name="description" id="folderDescription"
                                     rows="3"></textarea>
