@@ -27,6 +27,15 @@
                 </select>
             </div>
             <div class="mb-3">
+                <label for="hak-akses" class="form-label">Hak Akses</label>
+                <select class="form-select" id="hak-akses" name="hak-akses" required>
+                    @foreach ($employees as $employee)
+                        <option value="{{ $employee->id_user }}">{{ $employee->nama_user }} - {{ ucfirst($employee->role) }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="mb-3">
                 <label for="keterangan" class="form-label">Keterangan</label>
                 <textarea class="form-control" id="keterangan" name="keterangan" rows="3"></textarea>
             </div>

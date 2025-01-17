@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Folder;
 use App\Models\File;
+use App\Models\Employee;
 use Illuminate\Support\Facades\Log;
 
 class FolderController extends Controller
@@ -22,12 +23,14 @@ class FolderController extends Controller
 
     public function showForm($parentId = null)
     {
+        $employees = Employee::where('role', 'admin')->get();
+
         $parentFolder = null;
         if ($parentId) {
             $parentFolder = Folder::find($parentId);
         }
 
-        return view('folder.form', compact('parentFolder'));
+        return view('folder.form', compact('parentFolder', 'employees'));
     }
 
     public function store(Request $request, $parentId = null)
