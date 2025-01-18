@@ -44,6 +44,16 @@
                                     <option value="private">Private</option>
                                 </select>
                             </div>
+                            <div class="mb-3">
+                                <label for="hak-akses" class="form-label">Hak Akses</label>
+                                <select class="form-select" id="hak-akses" name="hak-akses" required>
+                                    @foreach ($employees as $employee)
+                                        <option value="{{ $employee->id_user }}">{{ $employee->nama_user }} -
+                                            {{ ucfirst($employee->role) }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
                             <div class="form-group mt-3">
                                 <label for="folderDescription">Keterangan</label>
                                 <textarea class="form-control" name="description" id="folderDescription"

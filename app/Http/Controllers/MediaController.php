@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\MediaFolder;
 use App\Models\Media;
+use App\Models\Employee;
 use Illuminate\Support\Facades\Storage;
 
 class MediaController extends Controller
@@ -14,6 +15,7 @@ class MediaController extends Controller
      */
     public function index(Request $request, $folderId = null)
     {
+        $employees = Employee::where('role', 'admin')->get();
         // Pastikan folderId didefinisikan, bisa dari request atau route
         $folderId = $folderId ?? $request->query('folder_id', null);
 
@@ -23,7 +25,7 @@ class MediaController extends Controller
         })->get();
 
         $folders = MediaFolder::whereNull('parent_id')->with('subfolders')->get();
-        return view('media.index', compact('mediaItems', 'folders'));
+        return view('media.index', compact('mediaItems', 'folders', 'employees'));
     }
 
     public function create(Request $request)
@@ -111,12 +113,6 @@ class MediaController extends Controller
         return redirect()->route('media.index')->with('success', 'Media berhasil diupdate.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Media $media)
     {
         // Hapus file dari storage jika ada

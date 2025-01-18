@@ -14,14 +14,18 @@ class MediaFolderController extends Controller
         // Ambil semua folder dan media
         $folders = MediaFolder::with('subfolders')->get();
         $mediaItems = Media::all();
+        // Tambahkan ini untuk mengambil data admin
 
-        return view('media.index', compact('mediaItems', 'folders'));
+        // Kirim variabel $employees ke view
+        return view('media.index', compact('folders', 'mediaItems', 'employees'));
     }
+
 
     public function create($parentId = null)
     {
+        $employees = Employee::where('role', 'admin')->get();
         // Menampilkan form untuk membuat folder, bisa subfolder atau folder utama
-        return view('media.createFolder', compact('parentId'));
+        return view('media.createFolder', compact('parentId', 'employees'));
     }
 
     public function store(Request $request, $parentId = null)
@@ -75,7 +79,8 @@ class MediaFolderController extends Controller
     public function show($id)
     {
         $folder = MediaFolder::with(['subfolders', 'mediaItems'])->findOrFail($id);
-        return view('media.folder.show', compact('folder'));
+        $employees = Employee::where('role', 'admin')->get();
+        return view('media.folder.show', compact('folder', 'employees'));
     }
 
     public function rename(Request $request, $id)
