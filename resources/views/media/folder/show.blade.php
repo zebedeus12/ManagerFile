@@ -71,7 +71,7 @@
                         </div>
                         <p class="folder-meta">
                             Anda membuatnya · {{ $subfolder->created_at->format('d M Y') }}<br>
-                            <span class="folder-description">{{ $folder->description ?? 'Tidak ada keterangan' }}</span>
+                            <span class="folder-description">{{ $subfolder->description ?? 'Tidak ada keterangan' }}</span>
                         </p>
                     </a>
                     <!-- Tombol Titik Tiga -->

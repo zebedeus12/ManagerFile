@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Models\Media;
 use App\Models\MediaFolder;
 use Illuminate\Http\Request;
+use App\Models\Employee;
 use Illuminate\Support\Facades\Storage;
 
 class MediaFolderController extends Controller
@@ -39,7 +40,7 @@ class MediaFolderController extends Controller
             'parent_id' => $parentId, // Jika null, maka parent_id juga null
         ]);
 
-        return redirect()->route('media.folder.show', ['id' => $parentId ?? MediaFolder::latest()->first()->id])
+        return redirect()->route('media.index', ['id' => $parentId ?? MediaFolder::latest()->first()->id])
             ->with('success', 'Folder created successfully!');
     }
 
