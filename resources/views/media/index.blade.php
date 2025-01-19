@@ -19,6 +19,7 @@
             </form>
             <!-- Button untuk Add Folder -->
             <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addFolderModal">Add Folder</button>
+            <button class="ms-2 btn btn-secondary" onclick="toggleView()">Toggle View</button>
         </div>
 
         <!-- Modal untuk Add Folder -->
@@ -69,7 +70,7 @@
         </div>
 
         <!-- Media Grid Display -->
-        <div class="folder-grid mt-4">
+        <div id="gridView" class="folder-grid mt-4">
             @if($folders->isEmpty())
                 <p>No folders found.</p>
             @else
@@ -97,6 +98,38 @@
                         </div>
                     </div>
                 @endforeach
+            @endif
+        </div>
+
+        <div id="listView" class="folder-list mt-4" style="display: none;">
+            @if($folders->isEmpty())
+                <p>No folders found.</p>
+            @else
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Created At</th>
+                            <th>Description</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($folders as $folder)
+                            <tr>
+                                <td>{{ $folder->name }}</td>
+                                <td>{{ $folder->created_at->format('d M Y') }}</td>
+                                <td>{{ $folder->keterangan ?? 'Tidak ada keterangan' }}</td>
+                                <td>
+                                    <button onclick="openRenameModal({{ $folder->id }}, '{{ $folder->name }}')">Rename</button>
+                                    <button
+                                        onclick="openShareModal({{ $folder->id }}, '{{ url('/folder/' . $folder->id . '/share') }}')">Share</button>
+                                    <button onclick="openDeleteModal({{ $folder->id }})">Delete</button>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
             @endif
         </div>
 
@@ -220,6 +253,18 @@
             });
         }
     });
+
+    function toggleView() {
+        const gridView = document.getElementById('gridView');
+        const listView = document.getElementById('listView');
+        if (gridView.style.display === 'none') {
+            gridView.style.display = 'flex';
+            listView.style.display = 'none';
+        } else {
+            gridView.style.display = 'none';
+            listView.style.display = 'block';
+        }
+    }
 </script>
 
 @endsection

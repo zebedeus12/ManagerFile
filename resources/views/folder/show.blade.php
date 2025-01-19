@@ -12,7 +12,6 @@
         <div class="header d-flex align-items-center justify-content-between mb-4">
             <div>
                 <h1 class="mb-0">{{ $folder->name }}</h1>
-
                 <!-- Breadcrumb untuk jalur folder -->
                 <div class="breadcrumb mt-2">
                     <a href="{{ route('file.index') }}">File Manager</a>
@@ -33,7 +32,7 @@
                     onclick="location.href='{{ route('files.create', ['folder' => $folder->id]) }}'">
                     Add File
                 </button>
-
+                <button class="ms-2 btn btn-secondary" onclick="toggleView()">Toggle View</button>
             </div>
         </div>
 
@@ -44,7 +43,7 @@
             </div>
         @endif
 
-        <div class="folder-grid ">
+        <div id="gridViewFolders" class="folder-grid mt-4">
             @foreach ($subFolders as $subFolder)
                 <div class="folder-card">
                     <a href="{{ route('folder.show', $subFolder->id) }}" class="folder-link">
@@ -71,6 +70,34 @@
                     </a>
                 </div>
             @endforeach
+        </div>
+
+        <!-- List View for Folders --> 
+        <div id="listViewFolders" class="folder-list mt-4" style="display: none;"> 
+            <table class="table table-striped"> 
+                <thead> 
+                    <tr> 
+                        <th>Name</th>
+                        <th>Created At</th> 
+                        <th>Description</th> 
+                        <th>Actions</th> 
+                    </tr> 
+                </thead> 
+                <tbody> 
+                    @foreach ($subFolders as $subFolder) 
+                        <tr> 
+                            <td>{{ $subFolder->name }}</td> 
+                            <td>{{ $subFolder->created_at->format('d M Y') }}</td> 
+                            <td>{{ $subFolder->keterangan ?? 'Tidak ada keterangan' }}</td> 
+                            <td> 
+                                <button onclick="openRenameModal({{ $folder->id }}, '{{ $folder->name }}')">Rename</button> 
+                                <button onclick="openShareModal({{ $folder->id }}, '{{ url('/folder/' . $folder->id . '/share') }}')">Share</button> 
+                                <button onclick="openDeleteModal({{ $subFolder->id }})">Delete</button> 
+                            </td> 
+                        </tr> 
+                    @endforeach 
+                </tbody>           
+            </table>
         </div>
 
         <!-- Rename Folder-->
@@ -151,7 +178,7 @@
 
         <!-- Bagian untuk File -->
         <h6>Files</h6>
-        <div class="file-grid">
+        <div id="gridViewFiles" class="file-grid">
             @foreach ($files as $file)
                 <div class="file-card">
                     <div class="file-header">
@@ -202,6 +229,34 @@
                     </div>
                 </div>
             @endforeach
+        </div>
+
+        <!-- List View for Files --> 
+        <div id="listViewFiles" class="file-list mt-4" style="display: none;"> 
+            <table class="table table-striped"> 
+                <thead> 
+                    <tr> 
+                        <th>Name</th> 
+                        <th>Created At</th> 
+                        <th>Type</th> 
+                        <th>Actions</th> 
+                    </tr> 
+                </thead> 
+                <tbody> 
+                    @foreach ($files as $file) 
+                        <tr> 
+                            <td>{{ $file->name }}</td> 
+                            <td>{{ $file->created_at->format('d M Y') }}</td> 
+                            <td>{{ $file->type }}</td> 
+                            <td> 
+                                <button onclick="openRenameFileModal({{ $file->id }}, '{{ $file->name }}')">Rename</button> 
+                                <button onclick="openShareFileModal('{{ route('file.share', $file->id) }}')">Share</button> 
+                                <form action="{{ route('file.destroy', $file->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus file ini?')"> @csrf @method('DELETE') <button type="submit">Delete</button> </form> 
+                            </td> 
+                        </tr>
+                    @endforeach 
+                </tbody> 
+            </table> 
         </div>
 
         {{-- rename file --}}
@@ -332,6 +387,25 @@
     function closeDeleteFileModal() {
         const modal = document.getElementById('deleteFileModal');
         modal.style.display = 'none';
+    }
+
+    function toggleView() { 
+        const gridViewFolders = document.getElementById('gridViewFolders'); 
+        const listViewFolders = document.getElementById('listViewFolders'); 
+        const gridViewFiles = document.getElementById('gridViewFiles'); 
+        const listViewFiles = document.getElementById('listViewFiles'); 
+        
+        if (gridViewFolders.style.display === 'none') { 
+            gridViewFolders.style.display = 'flex'; 
+            listViewFolders.style.display = 'none'; 
+            gridViewFiles.style.display = 'flex'; 
+            listViewFiles.style.display = 'none'; 
+        } else { 
+            gridViewFolders.style.display = 'none'; 
+            listViewFolders.style.display = 'block'; 
+            gridViewFiles.style.display = 'none'; 
+            listViewFiles.style.display = 'block'; 
+        } 
     }
 
 </script>

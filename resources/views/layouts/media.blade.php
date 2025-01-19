@@ -443,6 +443,33 @@
             padding: 10px;
             margin-top: 5px;
         }
+
+        /* Table Styles */
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        .table th,
+        .table td {
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+        }
+
+        .table th {
+            background-color: #4CAF50;
+            color: white;
+            text-align: left;
+        }
+
+        .table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .table tr:hover {
+            background-color: #d1e7dd;
+        }
     </style>
 
 

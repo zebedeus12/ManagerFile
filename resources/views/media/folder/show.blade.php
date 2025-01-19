@@ -18,6 +18,7 @@
                 <!-- Button to add media -->
                 <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addMediaModal">Create
                     Media</button>
+                <button class="ms-2 btn btn-secondary" onclick="toggleView()">Toggle View</button>
             </div>
         </div>
 
@@ -69,7 +70,7 @@
         </div>
 
         <!-- Subfolder List -->
-        <div class="folder-grid">
+        <div id="gridViewFolders" class="folder-grid mt-4">
             @foreach($folder->subfolders as $subfolder)
                 <div class="folder-card">
                     <a href="{{ route('media.folder.show', $subfolder->id) }}" class="folder-link">
@@ -98,6 +99,35 @@
                     </div>
                 </div>
             @endforeach
+        </div>
+
+        <!-- List View for Folders -->
+        <div id="listViewFolders" class="folder-list mt-4" style="display: none;">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Created At</th>
+                        <th>Description</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($folder->subfolders as $subfolder) 
+                        <tr>
+                            <td>{{ $subfolder->name }}</td>
+                            <td>{{ $subfolder->created_at->format('d M Y') }}</td>
+                            <td>{{ $subfolder->keterangan ?? 'Tidak ada keterangan' }}</td>
+                            <td>
+                                <button onclick="renameFolder({{ $subfolder->id }})">Rename</button>
+                                <button onclick="shareFolder({{ $subfolder->id }})">Share</button>
+                                <button onclick="deleteFolder({{ $subfolder->id }})">Delete</button>
+                                <button onclick="copyFolder({{ $subfolder->id }})">Copy</button>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
         </div>
 
         <!-- Rename Modal -->
@@ -221,7 +251,7 @@
         <!-- Media List -->
         <div class="media-list">
             <h5>Media Files</h5>
-            <div class="file-grid">
+            <div id="gridViewFiles" class="file-grid">
                 @foreach($folder->mediaItems as $media)
                     <div class="file-card position-relative">
                         <div class="file-info text-center">
@@ -268,6 +298,34 @@
                 @endforeach
             </div>
         </div>
+
+        <!-- List View for Files -->
+        <div id="listViewFiles" class="file-list mt-4" style="display: none;">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Created At</th>
+                        <th>Type</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($folder->mediaItems as $media) 
+                        <tr>
+                            <td>{{ $media->name }}</td>
+                            <td>{{ $media->created_at->format('d M Y') }}</td>
+                            <td>{{ $media->type }}</td>
+                            <td>
+                                <a href="{{ route('media.edit', $media->id) }}" class="dropdown-item">Edit</a>
+                                <button onclick="deleteMedia({{ $media->id }})"
+                                    class="dropdown-item text-danger">Delete</button>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 <script>
@@ -294,5 +352,24 @@
             });
         }
     });
+
+    function toggleView() {
+        const gridViewFolders = document.getElementById('gridViewFolders');
+        const listViewFolders = document.getElementById('listViewFolders');
+        const gridViewFiles = document.getElementById('gridViewFiles');
+        const listViewFiles = document.getElementById('listViewFiles');
+
+        if (gridViewFolders.style.display === 'none') {
+            gridViewFolders.style.display = 'flex';
+            listViewFolders.style.display = 'none';
+            gridViewFiles.style.display = 'flex';
+            listViewFiles.style.display = 'none';
+        } else {
+            gridViewFolders.style.display = 'none';
+            listViewFolders.style.display = 'block';
+            gridViewFiles.style.display = 'none';
+            listViewFiles.style.display = 'block';
+        }
+    }
 </script>
 @endsection
