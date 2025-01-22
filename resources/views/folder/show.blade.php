@@ -26,6 +26,11 @@
                 </div>
             </div>
             <div class="buttons">
+                <form action="{{ route('folder.show', $folder->id) }}" method="GET" class="d-flex me-3">
+                    <input type="text" name="search" class="form-control" placeholder="Search subfolders and files..."
+                        value="{{ request('search') }}">
+                    <button type="submit" class="btn btn-primary ms-2">Search</button>
+                </form>
                 <button class="add-folder ms-auto"
                     onclick="location.href='{{ route('folder.create', $folder->id) }}'">Add Folder</button>
                 <button class="add-file ms-2"
@@ -43,7 +48,11 @@
             </div>
         @endif
 
+        <h6>Folders</h6>
         <div id="gridViewFolders" class="folder-grid mt-4">
+        @if($subFolders->isEmpty())
+        <p>No subfolders found.</p>
+    @else
             @foreach ($subFolders as $subFolder)
                 <div class="folder-card">
                     <a href="{{ route('folder.show', $subFolder->id) }}" class="folder-link">
@@ -70,6 +79,7 @@
                     </a>
                 </div>
             @endforeach
+            @endif
         </div>
 
         <!-- List View for Folders --> 
@@ -179,6 +189,9 @@
         <!-- Bagian untuk File -->
         <h6>Files</h6>
         <div id="gridViewFiles" class="file-grid">
+        @if($files->isEmpty())
+        <p>No files found.</p>
+    @else
             @foreach ($files as $file)
                 <div class="file-card">
                     <div class="file-header">
@@ -229,6 +242,7 @@
                     </div>
                 </div>
             @endforeach
+            @endif
         </div>
 
         <!-- List View for Files --> 

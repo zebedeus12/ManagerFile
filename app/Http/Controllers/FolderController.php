@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Log;
 
 class FolderController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         // Ambil folder yang tidak memiliki parent_id (folder induk)
         $folders = Folder::with('children')->whereNull('parent_id')->get();
@@ -64,12 +64,28 @@ class FolderController extends Controller
     }
 
 
-    public function show(Folder $folder)
+    public function show(Request $request, Folder $folder)
     {
-        // Mengambil semua sub-folder dan file yang terkait
-        $subFolders = $folder->children; // Relasi ke sub-folder
-        $files = $folder->files; // Relasi ke file yang ada di folder ini
+        // Ambil semua sub-folder dan file yang terkait
+        $subFolderQuery = $folder->children(); // Relasi ke sub-folder
+        $fileQuery = $folder->files(); // Relasi ke file dalam folder ini
 
+        // Jika ada parameter pencarian
+        if ($request->has('search')) {
+            $search = $request->search;
+
+            // Filter sub-folder berdasarkan pencarian
+            $subFolderQuery->where('name', 'like', '%' . $search . '%')
+                ->orWhere('keterangan', 'like', '%' . $search . '%');
+
+            // Filter file berdasarkan pencarian
+            $fileQuery->where('name', 'like', '%' . $search . '%');
+        }
+
+        $subFolders = $subFolderQuery->get();
+        $files = $fileQuery->get();
+
+        // Semua folder utama untuk navigasi, tanpa filter pencarian
         $allFolders = Folder::whereNull('parent_id')->get();
 
         return view('folder.show', compact('folder', 'subFolders', 'files', 'allFolders'));

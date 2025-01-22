@@ -10,12 +10,18 @@ use Illuminate\Support\Facades\Response;
 
 class FileController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $folders = Folder::whereNull('parent_id')->get(); // Ambil folder utama
-        $files = File::all(); // Ambil semua file di root
+        $query = Folder::query();
 
-        return view('files.index', compact('folders', 'files'));
+        if ($request->has('search')) {
+            $query->where('name', 'like', '%' . $request->search . '%')
+                ->orWhere('keterangan', 'like', '%' . $request->search . '%');
+        }
+
+        $folders = $query->whereNull('parent_id')->get(); // Ambil folder root saja
+
+        return view('files.index', compact('folders'));
     }
 
     public function create($folder = null)

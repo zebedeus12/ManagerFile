@@ -11,9 +11,15 @@
     <div class="container content-container">
         <div class="header d-flex align-items-center justify-content-between mb-4">
             <h1 class="mb-0">File Manager</h1>
-            <button class="add-folder ms-auto" onclick="location.href='{{ route('folder.create') }}'">Add
-                Folder</button>
-            <button class="ms-2 btn btn-secondary" onclick="toggleView()">Toggle View</button>
+            <div class="d-flex align-items-center ms-auto">
+                <form action="{{ route('file.index') }}" method="GET" class="d-flex me-3">
+                    <input type="text" name="search" class="form-control" placeholder="Search folders..."
+                        value="{{ request('search') }}">
+                    <button type="submit" class="btn btn-primary ms-2">Search</button>
+                </form>
+                <button class="add-folder" onclick="location.href='{{ route('folder.create') }}'">Add Folder</button>
+                <button class="ms-2 btn btn-secondary" onclick="toggleView()">Toggle View</button>
+            </div>
         </div>
         <p class="text-muted">Terdapat {{ $folders->count() }} Folders.</p>
 
