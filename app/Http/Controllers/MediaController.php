@@ -16,7 +16,6 @@ class MediaController extends Controller
     public function index(Request $request, $folderId = null)
     {
         $employees = Employee::where('role', 'admin')->get();
-        // Pastikan folderId didefinisikan, bisa dari request atau route
         $folderId = $folderId ?? $request->query('folder_id', null);
 
         // Query media berdasarkan folderId jika tersedia
@@ -24,9 +23,20 @@ class MediaController extends Controller
             return $query->where('folder_id', $folderId);
         })->get();
 
-        $folders = MediaFolder::whereNull('parent_id')->with('subfolders')->get();
+        // Tambahkan pencarian folder
+        $foldersQuery = MediaFolder::query();
+
+        if ($request->has('search')) {
+            $search = $request->input('search');
+            $foldersQuery->where('name', 'like', '%' . $search . '%')
+                ->orWhere('description', 'like', '%' . $search . '%');
+        }
+
+        $folders = $foldersQuery->whereNull('parent_id')->with('subfolders')->get();
+
         return view('media.index', compact('mediaItems', 'folders', 'employees'));
     }
+
 
     public function create(Request $request)
     {
@@ -125,15 +135,4 @@ class MediaController extends Controller
 
         return redirect()->route('media.index')->with('success', 'Media berhasil dihapus.');
     }
-
-    public function searchFolders(Request $request)
-    {
-        $search = $request->query('search', '');
-
-        // Cari folder berdasarkan nama
-        $folders = MediaFolder::where('name', 'like', "%{$search}%")->get();
-
-        return view('media.index', compact('folders', 'search'));
-    }
-
 }

@@ -76,11 +76,37 @@ class MediaFolderController extends Controller
             ->with('success', 'Media uploaded successfully!');
     }
 
-    public function show($id)
+    public function show(Request $request, $id)
     {
-        $folder = MediaFolder::with(['subfolders', 'mediaItems'])->findOrFail($id);
+        // Ambil folder yang diminta dengan subfolder dan media
+        $folder = MediaFolder::findOrFail($id);
+
+        // Query subfolder dengan filter pencarian
+        $subfolderQuery = $folder->subfolders();
+
+        if ($request->has('search')) {
+            $search = $request->input('search');
+            $subfolderQuery->where('name', 'like', '%' . $search . '%')
+                ->orWhere('description', 'like', '%' . $search . '%');
+        }
+
+        $subfolders = $subfolderQuery->get();
+
+        // Query media dengan filter pencarian
+        $mediaQuery = $folder->mediaItems();
+
+        if ($request->has('search')) {
+            $search = $request->input('search');
+            $mediaQuery->where('name', 'like', '%' . $search . '%')
+                ->orWhere('type', 'like', '%' . $search . '%');
+        }
+
+        $mediaItems = $mediaQuery->get();
+
+        // Ambil data admin
         $employees = Employee::where('role', 'admin')->get();
-        return view('media.folder.show', compact('folder', 'employees'));
+
+        return view('media.folder.show', compact('folder', 'subfolders', 'mediaItems', 'employees'));
     }
 
     public function rename(Request $request, $id)

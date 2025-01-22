@@ -12,6 +12,11 @@
         <div class="header">
             <h2>Folder: {{ $folder->name }}</h2>
             <div>
+                <form method="GET" action="{{ route('media.folder.show', $folder->id) }}" class="d-flex mb-3">
+                    <input type="text" name="search" value="{{ request('search') }}" class="form-control me-2"
+                        placeholder="Search subfolders and media...">
+                    <button type="submit" class="btn btn-primary">Search</button>
+                </form>
                 <!-- Button to add subfolder -->
                 <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addSubfolderModal">Add
                     Folder</button>
@@ -71,34 +76,38 @@
 
         <!-- Subfolder List -->
         <div id="gridViewFolders" class="folder-grid mt-4">
-            @foreach($folder->subfolders as $subfolder)
-                <div class="folder-card">
-                    <a href="{{ route('media.folder.show', $subfolder->id) }}" class="folder-link">
-                        <div class="folder-header">
-                            <div class="folder-icon">
-                                <span class="material-icons">folder</span>
+            @if($subfolders->isEmpty())
+                <p>No subfolders found.</p>
+            @else
+                @foreach($folder->subfolders as $subfolder)
+                    <div class="folder-card">
+                        <a href="{{ route('media.folder.show', $subfolder->id) }}" class="folder-link">
+                            <div class="folder-header">
+                                <div class="folder-icon">
+                                    <span class="material-icons">folder</span>
+                                </div>
+                                <span class="folder-name">{{ $subfolder->name }}</span>
                             </div>
-                            <span class="folder-name">{{ $subfolder->name }}</span>
-                        </div>
-                        <p class="folder-meta">
-                            Anda membuatnya · {{ $subfolder->created_at->format('d M Y') }}<br>
-                            <span class="folder-description">{{ $subfolder->description ?? 'Tidak ada keterangan' }}</span>
-                        </p>
-                    </a>
-                    <!-- Tombol Titik Tiga -->
-                    <div class="dropdown position-absolute top-0 end-0 m-2">
-                        <button class="custom-toggle" onclick="toggleMenu(this)">
-                            <span class="material-icons">more_vert</span>
-                        </button>
-                        <div class="dropdown-menu">
-                            <button onclick="renameFolder({{ $subfolder->id }})">Rename</button>
-                            <button onclick="shareFolder({{ $subfolder->id }})">Share</button>
-                            <button onclick="deleteFolder({{ $subfolder->id }})">Delete</button>
-                            <button onclick="copyFolder({{ $subfolder->id }})">Copy</button>
+                            <p class="folder-meta">
+                                Anda membuatnya · {{ $subfolder->created_at->format('d M Y') }}<br>
+                                <span class="folder-description">{{ $subfolder->description ?? 'Tidak ada keterangan' }}</span>
+                            </p>
+                        </a>
+                        <!-- Tombol Titik Tiga -->
+                        <div class="dropdown position-absolute top-0 end-0 m-2">
+                            <button class="custom-toggle" onclick="toggleMenu(this)">
+                                <span class="material-icons">more_vert</span>
+                            </button>
+                            <div class="dropdown-menu">
+                                <button onclick="renameFolder({{ $subfolder->id }})">Rename</button>
+                                <button onclick="shareFolder({{ $subfolder->id }})">Share</button>
+                                <button onclick="deleteFolder({{ $subfolder->id }})">Delete</button>
+                                <button onclick="copyFolder({{ $subfolder->id }})">Copy</button>
+                            </div>
                         </div>
                     </div>
-                </div>
-            @endforeach
+                @endforeach
+            @endif
         </div>
 
         <!-- List View for Folders -->
@@ -252,50 +261,54 @@
         <div class="media-list">
             <h5>Media Files</h5>
             <div id="gridViewFiles" class="file-grid">
-                @foreach($folder->mediaItems as $media)
-                    <div class="file-card position-relative">
-                        <div class="file-info text-center">
-                            @if(Str::startsWith($media->type, 'image/'))
-                                <span class="material-icons media-icon">image</span>
-                            @elseif(Str::startsWith($media->type, 'audio/'))
-                                <span class="material-icons media-icon">music_note</span>
-                            @elseif(Str::startsWith($media->type, 'video/'))
-                                <span class="material-icons media-icon">videocam</span>
-                            @endif
-                            <p>{{ $media->name }}</p>
-                        </div>
-                        <div class="media-container"
-                            onclick="handleMediaClick('{{ $media->id }}', '{{ Storage::url($media->path) }}', '{{ $media->type }}')">
-                            @if(Str::startsWith($media->type, 'image/'))
-                                <img src="{{ Storage::url($media->path) }}" alt="{{ $media->name }}" class="media-preview"
-                                    id="media-{{ $media->id }}">
-                            @elseif(Str::startsWith($media->type, 'audio/'))
-                                <div class="audio-container">
-                                    <span class="material-icons audio-icon">play_arrow</span>
-                                    <audio id="audio-{{ $media->id }}" preload="none" class="audio-player">
+                @if($mediaItems->isEmpty())
+                    <p>No media found.</p>
+                @else
+                    @foreach($folder->mediaItems as $media)
+                        <div class="file-card position-relative">
+                            <div class="file-info text-center">
+                                @if(Str::startsWith($media->type, 'image/'))
+                                    <span class="material-icons media-icon">image</span>
+                                @elseif(Str::startsWith($media->type, 'audio/'))
+                                    <span class="material-icons media-icon">music_note</span>
+                                @elseif(Str::startsWith($media->type, 'video/'))
+                                    <span class="material-icons media-icon">videocam</span>
+                                @endif
+                                <p>{{ $media->name }}</p>
+                            </div>
+                            <div class="media-container"
+                                onclick="handleMediaClick('{{ $media->id }}', '{{ Storage::url($media->path) }}', '{{ $media->type }}')">
+                                @if(Str::startsWith($media->type, 'image/'))
+                                    <img src="{{ Storage::url($media->path) }}" alt="{{ $media->name }}" class="media-preview"
+                                        id="media-{{ $media->id }}">
+                                @elseif(Str::startsWith($media->type, 'audio/'))
+                                    <div class="audio-container">
+                                        <span class="material-icons audio-icon">play_arrow</span>
+                                        <audio id="audio-{{ $media->id }}" preload="none" class="audio-player">
+                                            <source src="{{ Storage::url($media->path) }}" type="{{ $media->type }}">
+                                        </audio>
+                                    </div>
+                                @elseif(Str::startsWith($media->type, 'video/'))
+                                    <video class="media-preview video-player" id="video-{{ $media->id }}" preload="none" controls>
                                         <source src="{{ Storage::url($media->path) }}" type="{{ $media->type }}">
-                                    </audio>
-                                </div>
-                            @elseif(Str::startsWith($media->type, 'video/'))
-                                <video class="media-preview video-player" id="video-{{ $media->id }}" preload="none" controls>
-                                    <source src="{{ Storage::url($media->path) }}" type="{{ $media->type }}">
-                                    Your browser does not support the vi deo tag.
-                                </video>
-                            @endif
-                        </div>
+                                        Your browser does not support the vi deo tag.
+                                    </video>
+                                @endif
+                            </div>
 
-                        <div class="dropdown position-absolute top-0 end-0 m-2">
-                            <button class="custom-toggle" onclick="toggleMenu(this)">
-                                <span class="material-icons">more_vert</span>
-                            </button>
-                            <div class="dropdown-menu">
-                                <a href="{{ route('media.edit', $media->id) }}" class="dropdown-item">Edit</a>
-                                <button onclick="deleteMedia({{ $media->id }})"
-                                    class="dropdown-item text-danger">Delete</button>
+                            <div class="dropdown position-absolute top-0 end-0 m-2">
+                                <button class="custom-toggle" onclick="toggleMenu(this)">
+                                    <span class="material-icons">more_vert</span>
+                                </button>
+                                <div class="dropdown-menu">
+                                    <a href="{{ route('media.edit', $media->id) }}" class="dropdown-item">Edit</a>
+                                    <button onclick="deleteMedia({{ $media->id }})"
+                                        class="dropdown-item text-danger">Delete</button>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                @endforeach
+                    @endforeach
+                @endif
             </div>
         </div>
 

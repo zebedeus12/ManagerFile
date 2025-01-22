@@ -12,7 +12,7 @@
         <div class="header d-flex align-items-center justify-content-between mb-4">
             <h2>Media Manager</h2>
             <!-- Search Form -->
-            <form method="GET" action="{{ route('media.folders.search') }}" class="d-flex mb-3">
+            <form method="GET" action="{{ route('media.index') }}" class="d-flex mb-3">
                 <input type="text" name="search" value="{{ request('search') }}" class="form-control me-2"
                     placeholder="Search folders...">
                 <button type="submit" class="btn btn-primary">Search</button>
