@@ -82,24 +82,85 @@
         }
 
         /* Tombol Tambah Folder/File */
-        .add-folder,
-        .add-file {
-            background-color: #007bff;
-            color: white;
+        .buttons {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            /* Mengurangi jarak antar tombol */
+        }
+
+        .buttons .btn {
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background-color: #b3e6b1;
+            color: #4caf50;
             border: none;
-            padding: 10px 20px;
-            border-radius: 8px;
-            transition: background-color 0.3s;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
         }
 
-        .add-folder:hover,
-        .add-file:hover {
-            background-color: #0056b3;
+        .buttons .btn:hover {
+            background-color: #a3d6a1;
         }
 
+        .btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
 
-        .header .buttons {
-            margin-left: auto;
+        /* Rounded Buttons */
+        .btn.rounded-circle {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            padding: 0;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+            background-color: #b3e6b1;
+            color: #4caf50;
+        }
+
+        .btn.rounded-circle:hover {
+            background-color: #a3d6a1;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Search Input Styling */
+        .input-group .form-control {
+            height: 45px;
+            border: none;
+            background-color: #d8f5d5;
+            color: #6b8e62;
+            border-radius: 50px;
+            padding-left: 20px;
+        }
+
+        .input-group .form-control:focus {
+            box-shadow: none;
+            outline: none;
+        }
+
+        /* Search Button Styling */
+        .input-group .btn {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background-color: #b3e6b1;
+            color: #4caf50;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .input-group .btn:hover {
+            background-color: #a3d6a1;
         }
 
         /* Dropdown Container */
@@ -188,23 +249,6 @@
             font-size: 20px;
         }
 
-        .btn {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        .btn-secondary {
-            background-color: #ccc;
-            margin-right: 10px;
-        }
-
-        .btn-danger {
-            background-color: #d9534f;
-            color: white;
-        }
-
         .icon-container {
             text-align: center;
             flex-shrink: 0;
@@ -213,7 +257,8 @@
         /* folder dan subfolder */
         .folder-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            /* Ukuran minimum menjadi 200px */
             gap: 20px;
             margin-top: 20px;
         }
@@ -313,24 +358,28 @@
 
         .file-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            /* Lebar minimum 180px */
             gap: 15px;
+            /* Jarak antar file card */
             margin-top: 20px;
         }
 
         .file-card {
             background-color: #f0fdf4;
             border-radius: 8px;
-            width: 300px;
+            width: 100%;
+            /* Sesuaikan dengan grid */
             color: #333;
             font-family: 'Poppins', sans-serif;
-            padding: 15px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 10px;
+            /* Kurangi padding */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 5px;
+            /* Kurangi jarak antar elemen */
             position: relative;
-            margin: 10px;
         }
 
         .file-header {
@@ -345,12 +394,14 @@
         }
 
         .file-name {
-            font-size: 14px;
+            font-size: 13px;
+            /* Ukuran teks lebih kecil */
             font-weight: bold;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-            max-width: 200px;
+            max-width: 100%;
+            /* Batasi lebar nama file */
             margin: 0;
         }
 

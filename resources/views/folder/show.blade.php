@@ -1,6 +1,6 @@
 @extends('layouts.manager')
 
-@section('title', 'Folder: {{ $folder->name }}')
+@section('title', 'Files')
 
 @section('content')
 <!-- Navbar -->
@@ -11,7 +11,7 @@
     <div class="container content-container">
         <div class="header d-flex align-items-center justify-content-between mb-4">
             <div>
-                <h1 class="mb-0">{{ $folder->name }}</h1>
+                <h3 class="mb-0">{{ $folder->name }}</h3>
                 <!-- Breadcrumb untuk jalur folder -->
                 <div class="breadcrumb mt-2">
                     <a href="{{ route('file.index') }}">File Manager</a>
@@ -26,18 +26,28 @@
                 </div>
             </div>
             <div class="buttons">
-                <form action="{{ route('folder.show', $folder->id) }}" method="GET" class="d-flex me-3">
-                    <input type="text" name="search" class="form-control" placeholder="Search subfolders and files..."
-                        value="{{ request('search') }}">
-                    <button type="submit" class="btn btn-primary ms-2">Search</button>
+                <form action="{{ route('folder.show', $folder->id) }}" method="GET" class="d-flex me-3 align-items-center">
+                    <div class="input-group">
+                        <input type="text" name="search" class="form-control rounded-pill"
+                            placeholder="Search subfolders and files..." value="{{ request('search') }}"
+                            style="background-color: #d8f5d5; color: #6b8e62; border: none;">
+                        <button type="submit" class="btn btn-success rounded-circle" style="background-color: #b3e6b1; border: none;">
+                            <span class="material-icons">search</span>
+                        </button>
+                    </div>
                 </form>
-                <button class="add-folder ms-auto"
-                    onclick="location.href='{{ route('folder.create', $folder->id) }}'">Add Folder</button>
-                <button class="add-file ms-2"
-                    onclick="location.href='{{ route('files.create', ['folder' => $folder->id]) }}'">
-                    Add File
+                <button class="btn rounded-circle ms-2" onclick="location.href='{{ route('folder.create', $folder->id) }}'"
+                    style="background-color: #b3e6b1; border: none;">
+                    <span class="material-icons">create_new_folder</span>
                 </button>
-                <button class="ms-2 btn btn-secondary" onclick="toggleView()">Toggle View</button>
+                <button class="btn rounded-circle ms-2"
+                    onclick="location.href='{{ route('files.create', ['folder' => $folder->id]) }}'"
+                    style="background-color: #b3e6b1; border: none;">
+                    <span class="material-icons">upload_file</span>
+                </button>
+                <button class="btn rounded-circle ms-2" onclick="toggleView()" style="background-color: #b3e6b1; border: none;">
+                    <span class="material-icons">grid_view</span>
+                </button>
             </div>
         </div>
 
@@ -231,9 +241,6 @@
                                 </form>
                             </div>
                         </div>
-                    </div>
-                    <div class="file-preview">
-                        <img src="{{ $file->thumbnail ?? 'default-thumbnail.jpg' }}" alt="File Preview">
                     </div>
                     <div class="file-footer">
                         <span class="file-info">
