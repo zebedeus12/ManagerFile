@@ -15,6 +15,7 @@
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
 
     <!-- Google Icons -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -463,7 +464,7 @@
             cursor: pointer;
         }
 
-        /* Table Styles */
+        /* Table List */
         .table {
             width: 100%;
             border-collapse: collapse;
@@ -488,6 +489,32 @@
 
         .table tr:hover {
             background-color: #d1e7dd;
+        }
+
+        .button {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #d4f8d4;
+            /* Warna hijau muda */
+            color: #4caf50;
+            /* Warna hijau tua */
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .button:hover {
+            background-color: #b2e8b2;
+            /* Warna hijau sedikit lebih gelap saat hover */
+        }
+
+        .button i {
+            font-size: 16px;
+            /* Ukuran ikon */
         }
     </style>
     @stack('styles')

@@ -79,6 +79,7 @@
                                     <button onclick="openRenameModal({{ $folder->id }}, '{{ $folder->name }}')">Rename</button>
                                     <button onclick="openShareModal({{ $folder->id }}, '{{ url('/folder/' . $folder->id . '/share') }}')">Share</button>
                                     <button onclick="openDeleteModal({{ $subFolder->id }})">Delete</button>
+                                    <button onclick="openCopyModal({{ $folder->id }})">Copy</button>
                                 </div>
                             </div>
                         </div>
@@ -94,7 +95,16 @@
 
         <!-- List View for Folders --> 
         <div id="listViewFolders" class="folder-list mt-4" style="display: none;"> 
-            <table class="table table-striped"> 
+            <table class="table table-striped">
+            <button class="button" onclick="openDeleteModal({{ $folder->id }})" title="Delete">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                            <button class="button" onclick="openShareModal({{ $folder->id }}, '{{ url('/folder/' . $folder->id . '/share') }}')" title="Share">
+                                <i class="fas fa-share-alt"></i>
+                            </button>
+                            <button class="button" onclick="openCopyModal({{ $folder->id }})">
+                            <i class="fas fa-copy"></i>
+                            </button>
                 <thead> 
                     <tr> 
                         <th>Name</th>
@@ -110,9 +120,10 @@
                             <td>{{ $subFolder->created_at->format('d M Y') }}</td> 
                             <td>{{ $subFolder->keterangan ?? 'Tidak ada keterangan' }}</td> 
                             <td> 
-                                <button onclick="openRenameModal({{ $folder->id }}, '{{ $folder->name }}')">Rename</button> 
-                                <button onclick="openShareModal({{ $folder->id }}, '{{ url('/folder/' . $folder->id . '/share') }}')">Share</button> 
-                                <button onclick="openDeleteModal({{ $subFolder->id }})">Delete</button> 
+                            <button class="button" onclick="openRenameModal({{ $folder->id }}, '{{ $folder->name }}')"
+                                        title="Rename">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
                             </td> 
                         </tr> 
                     @endforeach 
@@ -255,6 +266,8 @@
         <!-- List View for Files --> 
         <div id="listViewFiles" class="file-list mt-4" style="display: none;"> 
             <table class="table table-striped"> 
+            <form action="{{ route('file.destroy', $file->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus file ini?')"> @csrf @method('DELETE') <button class="button" type="submit"><i class="fas fa-trash"></i></button> </form> 
+            <button class="button" onclick="openShareFileModal('{{ route('file.share', $file->id) }}')"><i class="fas fa-share-alt"></i></button> 
                 <thead> 
                     <tr> 
                         <th>Name</th> 
@@ -270,9 +283,7 @@
                             <td>{{ $file->created_at->format('d M Y') }}</td> 
                             <td>{{ $file->type }}</td> 
                             <td> 
-                                <button onclick="openRenameFileModal({{ $file->id }}, '{{ $file->name }}')">Rename</button> 
-                                <button onclick="openShareFileModal('{{ route('file.share', $file->id) }}')">Share</button> 
-                                <form action="{{ route('file.destroy', $file->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus file ini?')"> @csrf @method('DELETE') <button type="submit">Delete</button> </form> 
+                                <button class="button" onclick="openRenameFileModal({{ $file->id }}, '{{ $file->name }}')"><i class="fas fa-edit"></i></button> 
                             </td> 
                         </tr>
                     @endforeach 
@@ -417,9 +428,13 @@
         const listViewFiles = document.getElementById('listViewFiles'); 
         
         if (gridViewFolders.style.display === 'none') { 
-            gridViewFolders.style.display = 'flex'; 
+            gridViewFolders.style.display = 'grid';
+            gridViewFolders.style.gridTemplateColumns = 'repeat(auto-fill, minmax(200px, 1fr))';
+            gridViewFolders.style.gap = '20px'; 
             listViewFolders.style.display = 'none'; 
-            gridViewFiles.style.display = 'flex'; 
+            gridViewFiles.style.display = 'grid';
+            gridViewFiles.style.gridTemplateColumns = 'repeat(auto-fill, minmax(220px, 1fr));';
+            gridViewFiles.style.gap = '20px';
             listViewFiles.style.display = 'none'; 
         } else { 
             gridViewFolders.style.display = 'none'; 

@@ -36,7 +36,7 @@
         <p class="text-muted">Terdapat {{ $folders->count() }} Folders.</p>
 
         <!-- Grid View -->
-        <div id="gridView" class="folder-grid mt-4">
+        <div id="gridView" class="folder-grid mt-6">
             @if($folders->isEmpty())
                 <p>No folders found.</p>
             @else
@@ -76,12 +76,20 @@
                 <p>No folders found.</p>
             @else
                 <table class="table table-striped">
+                    <button class="button" onclick="openDeleteModal({{ $folder->id }})" title="Delete">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                    <button class="button"
+                        onclick="openShareModal({{ $folder->id }}, '{{ url('/folder/' . $folder->id . '/share') }}')"
+                        title="Share">
+                        <i class="fas fa-share-alt"></i>
+                    </button>
                     <thead>
                         <tr>
                             <th>Name</th>
                             <th>Created At</th>
                             <th>Description</th>
-                            <th>Actions</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -91,16 +99,66 @@
                                 <td>{{ $folder->created_at->format('d M Y') }}</td>
                                 <td>{{ $folder->keterangan ?? 'Tidak ada keterangan' }}</td>
                                 <td>
-                                    <button onclick="openRenameModal({{ $folder->id }}, '{{ $folder->name }}')">Rename</button>
-                                    <button
-                                        onclick="openShareModal({{ $folder->id }}, '{{ url('/folder/' . $folder->id . '/share') }}')">Share</button>
-                                    <button onclick="openDeleteModal({{ $folder->id }})">Delete</button>
+                                    <button class="button" onclick="openRenameModal({{ $folder->id }}, '{{ $folder->name }}')"
+                                        title="Rename">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
                                 </td>
                             </tr>
                         @endforeach
                     </tbody>
                 </table>
             @endif
+        </div>
+
+        <!-- Rename Folder-->
+        <div id="renameFolderModal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <span class="close" onclick="closeRenameModal()">&times;</span>
+                <h2>Rename Folder</h2>
+                <form id="renameFolderForm" method="POST">
+                    @csrf
+                    <div class="form-group">
+                        <label for="newFolderName">Nama Folder Baru</label>
+                        <input type="text" id="newFolderName" name="name" class="form-control" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Delete -->
+        <div id="deleteModal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <span class="close" onclick="closeDeleteModal()">&times;</span>
+                <h2>Delete?</h2>
+                <p>Anda yakin ingin menghapus folder tersebut?</p>
+                <form id="deleteForm" method="POST">
+                    @csrf
+                    @method('DELETE')
+                    <button type="button" class="btn btn-secondary" onclick="closeDeleteModal()">Cancel</button>
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+            </div>
+        </div>
+
+        <div id="warningModal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <span class="close" onclick="closeWarningModal()">&times;</span>
+                <h2>Peringatan!!</h2>
+                <p id="warningMessage"></p>
+                <button class="btn btn-primary" onclick="closeWarningModal()">OK</button>
+            </div>
+        </div>
+
+        <!-- Share -->
+        <div id="shareModal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <span class="close" onclick="closeShareModal()">&times;</span>
+                <h2>Share Folder Link</h2>
+                <input type="text" id="shareUrlInput" class="form-control" readonly>
+                <button id="copyLinkButton" class="btn btn-primary mt-2">Copy Link</button>
+            </div>
         </div>
     </div>
 </div>
@@ -110,7 +168,9 @@
         const gridView = document.getElementById('gridView');
         const listView = document.getElementById('listView');
         if (gridView.style.display === 'none') {
-            gridView.style.display = 'flex';
+            gridView.style.display = 'grid'; // Pastikan menggunakan grid layout
+            gridView.style.gridTemplateColumns = 'repeat(auto-fill, minmax(200px, 1fr))';
+            gridView.style.gap = '20px';
             listView.style.display = 'none';
         } else {
             gridView.style.display = 'none';
