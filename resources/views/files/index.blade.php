@@ -78,7 +78,7 @@
                 <form id="deleteMultipleForm" action="{{ route('folders.deleteMultiple') }}" method="POST">
                     @csrf
                     <table class="table table-striped">
-                        <button type="button" class="button" onclick="confirmDeleteMultiple()">
+                        <button class="button" onclick="openDeleteModal({{ $folder->id }})" title="Delete">
                             <i class="fas fa-trash"></i>
                         </button>
                         <button class="button"
