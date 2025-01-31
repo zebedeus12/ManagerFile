@@ -64,6 +64,9 @@ Route::delete('/folder/{id}', [FolderController::class, 'destroy'])->name('folde
 Route::post('/folder/copy/{id}', [FolderController::class, 'copy'])->name('folder.copy');
 Route::delete('/folder/delete/{id}', [FolderController::class, 'destroy'])->name('folder.delete');
 Route::get('/folder/check/{id}', [FolderController::class, 'checkFolder']);
+Route::post('/folders/deleteMultiple', [FolderController::class, 'deleteMultiple'])->name('folders.deleteMultiple');
+Route::get('/folders', [FolderController::class, 'index'])->name('folder.index');
+
 
 //mediacontroller
 Route::get('/media', [MediaController::class, 'index'])->name('media.index');

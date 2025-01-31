@@ -118,6 +118,29 @@ class FolderController extends Controller
         return redirect()->route('file.index')->with('success', 'Folder berhasil dihapus.');
     }
 
+    public function deleteMultiple(Request $request)
+    {
+        $folderIds = $request->input('folders');
+
+        if ($folderIds) {
+            // Ensure the folders exist and are deletable (e.g., not containing files)
+            foreach ($folderIds as $folderId) {
+                $folder = Folder::find($folderId);
+
+                if ($folder && $folder->files()->count() == 0) {
+                    $folder->delete();
+                } else {
+                    // Handle error if folder is not empty or does not exist
+                    return back()->with('error', "Some folders could not be deleted because they contain files or do not exist.");
+                }
+            }
+
+            return redirect()->route('folder.index')->with('success', 'Selected folders have been deleted.');
+        }
+
+        return back()->with('error', 'No folders selected for deletion.');
+    }
+
     public function checkFolder($id)
     {
         $folder = Folder::findOrFail($id);

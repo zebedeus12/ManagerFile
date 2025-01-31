@@ -75,39 +75,44 @@
             @if($folders->isEmpty())
                 <p>No folders found.</p>
             @else
-                <table class="table table-striped">
-                    <button class="button" onclick="openDeleteModal({{ $folder->id }})" title="Delete">
-                        <i class="fas fa-trash"></i>
-                    </button>
-                    <button class="button"
-                        onclick="openShareModal({{ $folder->id }}, '{{ url('/folder/' . $folder->id . '/share') }}')"
-                        title="Share">
-                        <i class="fas fa-share-alt"></i>
-                    </button>
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Created At</th>
-                            <th>Description</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($folders as $folder)
+                <form id="deleteMultipleForm" action="{{ route('folders.deleteMultiple') }}" method="POST">
+                    @csrf
+                    <table class="table table-striped">
+                        <button type="button" class="button" onclick="confirmDeleteMultiple()">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                        <button class="button"
+                            onclick="openShareModal({{ $folder->id }}, '{{ url('/folder/' . $folder->id . '/share') }}')"
+                            title="Share">
+                            <i class="fas fa-share-alt"></i>
+                        </button>
+                        <thead>
                             <tr>
-                                <td>{{ $folder->name }}</td>
-                                <td>{{ $folder->created_at->format('d M Y') }}</td>
-                                <td>{{ $folder->keterangan ?? 'Tidak ada keterangan' }}</td>
-                                <td>
-                                    <button class="button" onclick="openRenameModal({{ $folder->id }}, '{{ $folder->name }}')"
-                                        title="Rename">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
-                                </td>
+                                <th><input type="checkbox" id="selectAll" onclick="toggleSelectAll()"> Select All</th>
+                                <th>Name</th>
+                                <th>Created At</th>
+                                <th>Description</th>
+                                <th>Action</th>
                             </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            @foreach ($folders as $folder)
+                                <tr>
+                                    <td><input type="checkbox" name="folders[]" value="{{ $folder->id }}"></td>
+                                    <td>{{ $folder->name }}</td>
+                                    <td>{{ $folder->created_at->format('d M Y') }}</td>
+                                    <td>{{ $folder->keterangan ?? 'Tidak ada keterangan' }}</td>
+                                    <td>
+                                        <button class="button"
+                                            onclick="openRenameModal({{ $folder->id }}, '{{ $folder->name }}')" title="Rename">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </form>
             @endif
         </div>
 
@@ -177,5 +182,29 @@
             listView.style.display = 'block';
         }
     }
+
+    // Toggle select all checkboxes
+    function toggleSelectAll() {
+        const selectAllCheckbox = document.getElementById("selectAll");
+        const checkboxes = document.querySelectorAll("input[name='folders[]']");
+        checkboxes.forEach(checkbox => {
+            checkbox.checked = selectAllCheckbox.checked;
+        });
+    }
+
+    // Confirm delete multiple folders
+    function confirmDeleteMultiple() {
+        const form = document.getElementById("deleteMultipleForm");
+        const selectedFolders = document.querySelectorAll("input[name='folders[]']:checked");
+
+        if (selectedFolders.length > 0) {
+            if (confirm('Are you sure you want to delete the selected folders?')) {
+                form.submit();
+            }
+        } else {
+            alert("Please select at least one folder to delete.");
+        }
+    }
+
 </script>
 @endsection
