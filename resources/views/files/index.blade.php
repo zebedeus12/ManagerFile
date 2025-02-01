@@ -182,29 +182,5 @@
             listView.style.display = 'block';
         }
     }
-
-    // Toggle select all checkboxes
-    function toggleSelectAll() {
-        const selectAllCheckbox = document.getElementById("selectAll");
-        const checkboxes = document.querySelectorAll("input[name='folders[]']");
-        checkboxes.forEach(checkbox => {
-            checkbox.checked = selectAllCheckbox.checked;
-        });
-    }
-
-    // Confirm delete multiple folders
-    function confirmDeleteMultiple() {
-        const form = document.getElementById("deleteMultipleForm");
-        const selectedFolders = document.querySelectorAll("input[name='folders[]']:checked");
-
-        if (selectedFolders.length > 0) {
-            if (confirm('Are you sure you want to delete the selected folders?')) {
-                form.submit();
-            }
-        } else {
-            alert("Please select at least one folder to delete.");
-        }
-    }
-
 </script>
 @endsection

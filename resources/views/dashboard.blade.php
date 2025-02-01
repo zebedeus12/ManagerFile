@@ -47,7 +47,8 @@
     .sidebar {
         background-color: #188A98;
         color: white;
-        width: 250px; /* Lebar sidebar tetap */
+        width: 250px;
+        /* Lebar sidebar tetap */
         position: fixed;
         height: 100vh;
         box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.1);
@@ -60,17 +61,23 @@
 
     /* Konten Dashboard */
     .dashboard-content {
-        margin-left: 240px; /* Sama dengan lebar sidebar */
+        margin-left: 240px;
+        /* Sama dengan lebar sidebar */
         padding: 20px;
-        height: calc(100vh - 60px); /* Sesuaikan dengan tinggi header jika ada */
-        overflow-y: auto; /* Aktifkan scroll vertikal */
-        overflow-x: hidden; /* Hilangkan scroll horizontal */
+        height: calc(100vh - 60px);
+        /* Sesuaikan dengan tinggi header jika ada */
+        overflow-y: auto;
+        /* Aktifkan scroll vertikal */
+        overflow-x: hidden;
+        /* Hilangkan scroll horizontal */
         background-color: #ffffff;
-        width: calc(100% - 240px); /* Ambil sisa lebar layar */
-        box-sizing: border-box; /* Sertakan padding dalam ukuran total elemen */
+        width: calc(100% - 240px);
+        /* Ambil sisa lebar layar */
+        box-sizing: border-box;
+        /* Sertakan padding dalam ukuran total elemen */
     }
 
-    .sidebar.collapsed ~ .dashboard-content {
+    .sidebar.collapsed~.dashboard-content {
         margin-left: 70px;
     }
 
@@ -79,22 +86,6 @@
     .dashboard-content .date-group,
     .dashboard-content .file-grid {
         margin-left: 20px;
-    }
-
-    .file-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-        gap: 20px;
-        margin-top: 20px;
-    }
-
-    .file-card {
-        background-color: #ffffff;
-        border-radius: 8px;
-        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-        padding: 15px;
-        text-align: center;
-        transition: transform 0.2s;
     }
 
     .file-card:hover {

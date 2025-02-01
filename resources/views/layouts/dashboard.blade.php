@@ -39,164 +39,72 @@
             display: flex;
         }
 
-        /* Sidebar styling */
-        .sidebar {
-            width: 70px;
-            background-color: white;
-        }
-
-        /* Main content styling */
-        .main-content {
-            flex-grow: 1;
-            background-color: #ffffff;
-        }
-
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .add-folder-btn {
-            padding: 10px 20px;
-        }
-
-        .tools {
-            display: flex;
-            align-items: center;
-        }
-
-        .tools .add-folder-btn {
-            background-color: #007bff;
-            color: white;
-            border-radius: 8px;
-            padding: 8px 15px;
-            transition: background-color 0.3s;
-            margin-right: 10px;
-        }
-
-        .tools .add-folder-btn:hover {
-            background-color: #0056b3;
-        }
-
-        .layout-tools {
-            display: flex;
-            gap: 10px;
-        }
-
-        .layout-tools .btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 40px;
-            height: 40px;
-            border-radius: 8px;
-            transition: background-color 0.3s, transform 0.2s;
-            margin-right: 5px;
-        }
-
-        .layout-tools .btn .material-icons {
-            font-size: 24px;
-            color: #6c757d;
-        }
-
-        .layout-tools .btn:hover {
-            background-color: #e2e6ea;
-            transform: scale(1.1);
-        }
-
-        /* Tampilan tombol aktif (Grid atau List yang sedang dipilih) */
-        .layout-tools .btn.active {
-            background-color: #007bff;
-            color: white;
-        }
-
-        .layout-tools .btn.active .material-icons {
-            color: white;
-        }
-
-        .tools .layout-tools .btn:hover .material-icons {
-            color: #495057;
-        }
-
-        .layout-tools .btn:last-child {
-            margin-right: 0;
-            /* Menghapus margin kanan pada tombol terakhir */
-        }
-
-        .folder-date-group {
-            margin-bottom: 30px;
-        }
-
-        .folder-date-group h4 {
-            margin-bottom: 20px;
-            font-size: 18px;
-        }
-
         .file-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+            /* Adjust column size */
             gap: 20px;
             margin-top: 20px;
         }
 
-        .file-card,
-        .sub-folder-card {
+        /* Folder Card Styling */
+        .file-card {
+            background-color: #e8f5e9;
+            border-radius: 12px;
+            padding: 12px;
+            /* Reduced padding */
+            min-height: 100px;
+            /* Reduced minimum height */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
             position: relative;
-            background-color: #ffffff;
-            border-radius: 8px;
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-            padding: 15px;
+            transition: box-shadow 0.3s ease, transform 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             text-align: center;
-            transition: transform 0.2s;
         }
 
-        .file-card:hover,
-        .sub-folder-card:hover {
-            transform: translateY(-5px);
+        .file-card:hover {
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+            transform: translateY(-3px);
         }
 
         .icon-container {
             display: flex;
             justify-content: center;
             align-items: center;
-            margin-bottom: 10px;
-            text-decoration: none;
+            margin-bottom: -1px;
+            /* Adjusted spacing */
         }
 
         .folder-icon {
-            font-size: 48px;
-            color: #FFB400;
+            font-size: 40px;
+            /* Smaller icon size */
+            color: #43a047;
+            margin-bottom: 8px;
         }
 
-        .file-icon {
-            width: 40px;
-            height: 40px;
+        /* Ensure anchor tags don't have an underline */
+        .file-card a {
+            text-decoration: none;
+            /* Remove underline from link */
         }
 
+        /* File info styling */
         .file-info {
             font-size: 14px;
-            color: #6c757d;
-        }
-
-        .add-folder,
-        .add-file {
-            background-color: #007bff;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 8px;
-            transition: background-color 0.3s;
-        }
-
-        .add-folder:hover,
-        .add-file:hover {
-            background-color: #0056b3;
+            /* Smaller font size */
+            font-weight: bold;
+            color: #1b5e20;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+            max-width: 100%;
         }
 
         .header .buttons {
             margin-left: auto;
-            /* Menarik tombol Add Folder ke kanan */
         }
     </style>
 
