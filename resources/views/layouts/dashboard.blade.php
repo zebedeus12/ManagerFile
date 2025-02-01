@@ -39,12 +39,85 @@
             display: flex;
         }
 
+        /* Menyelaraskan tombol dan filter tanggal */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: -40px;
+            padding: 20px;
+            /* Memberikan ruang lebih di bawah header */
+        }
+
+        .date-filter {
+            display: flex;
+            align-items: center;
+        }
+
+        .date-filter select {
+            max-width: 180px;
+            padding: 5px 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+            background-color: #f9f9f9;
+            margin-left: -1px;
+        }
+
+        .layout-buttons {
+            display: flex;
+            align-items: center;
+        }
+
+        .layout-buttons button {
+            margin-left: 10px;
+            padding: 3px 3px 3px 3px;
+            font-size: 14px;
+            background-color: #43a047;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .layout-buttons button:hover {
+            background-color: #388e3c;
+            transform: scale(1.05);
+        }
+
+        .date-filter::after {
+            content: '';
+            width: 1px;
+            height: 30px;
+            background-color: #ccc;
+            margin-left: 10px;
+        }
+
+        .date-group h3 {
+            font-size: 16px;
+            margin-bottom: -5px;
+            padding-left: 10px;
+        }
+
+        .date-group {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 20px;
+            border-left: 2px solid #ccc;
+            padding-left: 20px;
+        }
+
+        .date-group:last-child {
+            margin-bottom: 40px;
+        }
+
+        /* grid */
         .file-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
             /* Adjust column size */
             gap: 20px;
-            margin-top: 20px;
+            margin-top: 5px;
         }
 
         /* Folder Card Styling */
@@ -52,17 +125,14 @@
             background-color: #e8f5e9;
             border-radius: 12px;
             padding: 12px;
-            /* Reduced padding */
             min-height: 100px;
-            /* Reduced minimum height */
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            position: relative;
-            transition: box-shadow 0.3s ease, transform 0.3s ease;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             text-align: center;
+            transition: box-shadow 0.3s ease, transform 0.3s ease;
         }
 
         .file-card:hover {
@@ -94,7 +164,6 @@
         /* File info styling */
         .file-info {
             font-size: 14px;
-            /* Smaller font size */
             font-weight: bold;
             color: #1b5e20;
             text-overflow: ellipsis;
@@ -105,6 +174,22 @@
 
         .header .buttons {
             margin-left: auto;
+        }
+
+        /* Responsive styling */
+        @media (max-width: 768px) {
+            .file-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .layout-buttons {
+                margin-top: 10px;
+            }
         }
     </style>
 
@@ -124,19 +209,38 @@
     @stack('scripts')
 </body>
 <script>
-    document.querySelector('.grid-layout').addEventListener('click', function () {
-        document.querySelector('.file-grid').style.display = 'grid';
-        this.classList.add('active');
-        document.querySelector('.list-layout').classList.remove('active');
+    document.addEventListener('DOMContentLoaded', function () {
+        const gridButton = document.querySelector('.grid-layout');
+        const listButton = document.querySelector('.list-layout');
+        const fileGrid = document.querySelector('.file-grid');
+
+        gridButton.addEventListener('click', function () {
+            fileGrid.style.display = 'grid';
+            gridButton.classList.add('active');
+            listButton.classList.remove('active');
+        });
+
+        listButton.addEventListener('click', function () {
+            fileGrid.style.display = 'block';
+            listButton.classList.add('active');
+            gridButton.classList.remove('active');
+        });
     });
 
-    document.querySelector('.list-layout').addEventListener('click', function () {
-        document.querySelector('.file-grid').style.display = 'block';
-        this.classList.add('active');
-        document.querySelector('.grid-layout').classList.remove('active');
+    document.getElementById('date-filter').addEventListener('change', function () {
+        const selectedDate = this.value;
+        const allDateGroups = document.querySelectorAll('.date-group');
+
+        allDateGroups.forEach(group => {
+            const groupDate = group.id.replace('date-', '');
+            if (groupDate === selectedDate || selectedDate === '') {
+                group.style.display = 'block';
+            } else {
+                group.style.display = 'none';
+            }
+        });
     });
-
-
 </script>
+
 
 </html>

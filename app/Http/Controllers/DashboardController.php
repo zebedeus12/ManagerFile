@@ -25,7 +25,7 @@ class DashboardController extends Controller
         // Kelompokkan berdasarkan tanggal
         $foldersGroupedByDate = $allFolders->groupBy(function ($folder) {
             return $folder->created_at->format('Y-m-d');  // Kelompokkan berdasarkan tanggal
-        });
+        })->sortKeysDesc();
 
         // Kirim data folder yang telah dikelompokkan ke view
         return view('dashboard', compact('foldersGroupedByDate'));

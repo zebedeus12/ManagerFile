@@ -12,9 +12,27 @@
     <!-- Konten Dashboard -->
     <div class="dashboard-content">
         <h2 class="mb-0">Dashboard</h2>
+        <div class="header d-flex justify-content-between align-items-center mb-4">
+            <div class="date-filter">
+                <select class="form-select" aria-label="Pilih Tanggal" id="date-filter">
+                    <option selected>Pilih Tanggal</option>
+                    @foreach ($foldersGroupedByDate as $date => $folders)
+                        <option value="{{ $date }}">{{ \Carbon\Carbon::parse($date)->format('d F Y') }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="layout-buttons">
+                <button class="btn grid-layout">
+                    <span class="material-icons">grid_view</span>
+                </button>
+                <button class="btn list-layout">
+                    <span class="material-icons">view_list</span>
+                </button>
+            </div>
+        </div>
         @foreach ($foldersGroupedByDate as $date => $folders)
-            <div class="date-group">
-                <h3>{{ $date }}</h3>
+            <div class="date-group" id="date-{{ $date }}">
+                <h3>{{ \Carbon\Carbon::parse($date)->format('d F Y') }}</h3>
                 <div class="file-grid mt-4">
                     @foreach ($folders as $folder)
                         <div class="file-card">
