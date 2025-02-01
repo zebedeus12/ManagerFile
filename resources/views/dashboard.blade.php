@@ -12,21 +12,34 @@
     <!-- Konten Dashboard -->
     <div class="dashboard-content">
         <h2 class="mb-0">Dashboard</h2>
-
         @foreach ($foldersGroupedByDate as $date => $folders)
             <div class="date-group">
                 <h3>{{ $date }}</h3>
                 <div class="file-grid mt-4">
                     @foreach ($folders as $folder)
                         <div class="file-card">
-                            <a href="{{ route('folder.show', $folder->id) }}" class="folder-link">
-                                <div class="icon-container">
-                                    <span class="material-icons folder-icon">folder</span>
-                                </div>
-                                <div class="file-info">
-                                    <span class="fw-bold">{{ $folder->name }}</span>
-                                </div>
-                            </a>
+                            <!-- Untuk Folder -->
+                            @if ($folder instanceof App\Models\Folder)
+                                <a href="{{ route('folder.show', $folder->id) }}" class="folder-link">
+                                    <div class="icon-container">
+                                        <span class="material-icons folder-icon">folder</span>
+                                    </div>
+                                    <div class="file-info">
+                                        <span class="fw-bold">{{ $folder->name }}</span>
+                                    </div>
+                                </a>
+                            @endif
+                            <!-- Untuk MediaFolder -->
+                            @if ($folder instanceof App\Models\MediaFolder)
+                                <a href="{{ route('media.folder.show', $folder->id) }}" class="folder-link">
+                                    <div class="icon-container">
+                                        <span class="material-icons folder-icon">folder</span>
+                                    </div>
+                                    <div class="file-info">
+                                        <span class="fw-bold">{{ $folder->name }}</span>
+                                    </div>
+                                </a>
+                            @endif
                         </div>
                     @endforeach
                 </div>
