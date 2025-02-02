@@ -68,10 +68,13 @@
 
 <!-- Styling Khusus -->
 <style>
+    .html {}
+
     .main-layout {
         display: flex;
         width: 100vw;
         height: 100vh;
+
     }
 
     /* Sidebar styling */

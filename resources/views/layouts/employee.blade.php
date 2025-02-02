@@ -35,7 +35,8 @@
             padding: 0;
             width: 100%;
             height: 100%;
-            overflow: hidden; /* Mencegah scroll di body */
+            overflow: hidden;
+            /* Mencegah scroll di body */
         }
 
         .main-content {
@@ -56,14 +57,20 @@
         }
 
         .employee-content {
-            margin-left: 240px; /* Sama dengan lebar sidebar */
+            margin-left: 240px;
+            /* Sama dengan lebar sidebar */
             padding: 20px;
-            height: calc(100vh - 60px); /* Sesuaikan dengan tinggi header jika ada */
-            overflow-y: auto; /* Aktifkan scroll vertikal */
-            overflow-x: hidden; /* Hilangkan scroll horizontal */
+            height: calc(100vh - 60px);
+            /* Sesuaikan dengan tinggi header jika ada */
+            overflow-y: auto;
+            /* Aktifkan scroll vertikal */
+            overflow-x: hidden;
+            /* Hilangkan scroll horizontal */
             background-color: #ffffff;
-            width: calc(100% - 240px); /* Ambil sisa lebar layar */
-            box-sizing: border-box; /* Sertakan padding dalam ukuran total elemen */
+            width: calc(100% - 240px);
+            /* Ambil sisa lebar layar */
+            box-sizing: border-box;
+            /* Sertakan padding dalam ukuran total elemen */
         }
 
         .table {

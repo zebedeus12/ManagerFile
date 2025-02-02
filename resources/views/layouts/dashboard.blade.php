@@ -33,10 +33,18 @@
             height: 100%;
             overflow: hidden;
             font-family: 'Poppins', sans-serif;
-            background-color: #f5f5f5;
             margin: 0;
             padding: 0;
             display: flex;
+        }
+
+        .dashboard-content {
+            background-image: url('{{ asset('img/dashboard.jpeg') }}');
+            background-size: cover;
+            /* Menyesuaikan gambar dengan ukuran layar */
+            background-position: center;
+            /* Menjaga gambar tetap di tengah */
+            background-repeat: no-repeat;
         }
 
         /* Menyelaraskan tombol dan filter tanggal */
@@ -46,6 +54,7 @@
             align-items: center;
             margin-bottom: -40px;
             padding: 20px;
+
             /* Memberikan ruang lebih di bawah header */
         }
 
@@ -133,6 +142,7 @@
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             text-align: center;
             transition: box-shadow 0.3s ease, transform 0.3s ease;
+            overflow: hidden;
         }
 
         .file-card:hover {
@@ -163,6 +173,9 @@
 
         /* File info styling */
         .file-info {
+            font-size: 14px;
+            font-weight: bold;
+            color: #1b5e20;
             font-size: 14px;
             font-weight: bold;
             color: #1b5e20;
