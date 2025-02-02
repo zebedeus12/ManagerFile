@@ -42,20 +42,25 @@
 <style>
     /* Sidebar Default (Collapsed) */
     .sidebar {
-        width: 260px; /* Lebar sidebar tetap penuh */
-    height: 100vh;
-    background-color: #188A98; /* Warna sidebar */
-    color: white;
-    position: fixed;
-    transition: none; /* Tidak ada animasi hover */
-}
+        width: 260px;
+        /* Lebar sidebar tetap penuh */
+        height: 100vh;
+        background: linear-gradient(180deg, #4CAF50, #2E7D32);
+        /* Gradasi hijau */
+        /* Warna sidebar */
+        color: white;
+        position: fixed;
+        transition: none;
+        /* Tidak ada animasi hover */
+    }
 
     /* Logo Styling */
     .logo {
         font-size: 20px;
         text-align: center;
         padding: 20px 0;
-        display: block; /* Selalu tampilkan logo */
+        display: block;
+        /* Selalu tampilkan logo */
     }
 
     /* Menu Item Styling */
@@ -76,17 +81,19 @@
     }
 
     .menu-item:hover {
-        background-color: white;
-        color: #188A98;
+        background: rgba(255, 255, 255, 0.2);
+        transform: scale(1.05);
+        color: #fff;
     }
 
     /* Menu Text (Judul Menu) */
     .menu-text {
-        display: inline; /* Selalu tampilkan judul menu */
+        display: inline;
+        /* Selalu tampilkan judul menu */
         opacity: 1;
-        margin-left: 10px; /* Tambahkan jarak agar lebih rapi */ 
+        margin-left: 10px;
+        /* Tambahkan jarak agar lebih rapi */
     }
-
 
     /* Icon Styling */
     .material-icons {
@@ -109,7 +116,8 @@
     }
 
     .logout-btn:hover {
-        background-color: white;
-        color: #188A98;
+        background: rgba(255, 255, 255, 0.2);
+        transform: scale(1.05);
+        color: white;
     }
 </style>
