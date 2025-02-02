@@ -1,7 +1,7 @@
 <div class="sidebar" id="sidebar">
     <!-- Header Sidebar -->
     <div class="sidebar-header">
-        <h3 class="logo">BBSPJIS</h3>
+        <img src="{{ asset('img/logo.png') }}" alt="Logo">
     </div>
 
     <!-- Menu Navigasi -->
@@ -51,6 +51,7 @@
         color: white;
         position: fixed;
         transition: none;
+        align-items: center;
         /* Tidak ada animasi hover */
     }
 
@@ -119,5 +120,22 @@
         background: rgba(255, 255, 255, 0.2);
         transform: scale(1.05);
         color: white;
+    }
+
+    .sidebar-header {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        padding: 20px 0;
+    }
+
+    .sidebar-header img {
+        width: 80px;
+        /* Perbesar ukuran logo */
+        height: 80px;
+        border-radius: 50%;
+        display: block;
+        background-color: whitesmoke;
     }
 </style>

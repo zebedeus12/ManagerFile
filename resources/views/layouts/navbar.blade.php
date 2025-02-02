@@ -2,8 +2,6 @@
 <nav class="navbar navbar-expand-lg">
     <div class="container-fluid align-items-center">
         <div class="d-flex align-items-center">
-            <img src="{{ asset('img/logo.png') }}" alt="Logo"
-                style="width: 50px; height: 50px; border-radius: 50%; margin-right: 15px;">
             <a class="navbar-brand fw-bold" href="{{ route('dashboard') }}">BBSPJIS File Manager</a>
         </div>
         <div class="d-flex align-items-center user-info-notification">
