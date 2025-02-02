@@ -87,6 +87,13 @@
             /* Jarak default konten dari sidebar */
             padding: 20px;
             transition: margin-left 0.3s ease;
+            background-image: url('{{ asset('img/dashboard.jpeg') }}');
+            box-sizing: border-box;
+            background-size: cover;
+            /* Menyesuaikan gambar dengan ukuran layar */
+            background-position: center;
+            /* Menjaga gambar tetap di tengah */
+            background-repeat: no-repeat;
             /* Transisi saat sidebar berubah */
         }
 

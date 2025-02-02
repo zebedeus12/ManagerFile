@@ -66,10 +66,15 @@
             /* Aktifkan scroll vertikal */
             overflow-x: hidden;
             /* Hilangkan scroll horizontal */
-            background-color: #ffffff;
+            background-image: url('{{ asset('img/dashboard.jpeg') }}');
             width: calc(100% - 240px);
             /* Ambil sisa lebar layar */
             box-sizing: border-box;
+            background-size: cover;
+            /* Menyesuaikan gambar dengan ukuran layar */
+            background-position: center;
+            /* Menjaga gambar tetap di tengah */
+            background-repeat: no-repeat;
             /* Sertakan padding dalam ukuran total elemen */
         }
 
