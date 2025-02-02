@@ -105,6 +105,81 @@
             /* Lebar kolom Password tetap */
             max-width: 150px;
         }
+
+        .search-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            /* Jarak antara tombol search dan tombol add employee */
+        }
+
+        .search-form {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            /* Rapatkan tombol search ke input */
+        }
+
+        .search-container {
+            background-color: #d4f8d4;
+            border-radius: 50px;
+            padding: 10px 15px;
+            width: 200px;
+            /* Lebih kecil agar proporsional */
+            display: flex;
+            align-items: center;
+        }
+
+        .search-input {
+            border: none;
+            background: transparent;
+            outline: none;
+            flex-grow: 1;
+            font-size: 14px;
+        }
+
+        .search-button {
+            background-color: #a5e6a5;
+            border: none;
+            border-radius: 50%;
+            width: 38px;
+            /* Ukuran disesuaikan dengan add employee */
+            height: 38px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+            margin-left: -5px;
+            /* Sedikit tumpang tindih untuk merapatkan */
+        }
+
+        .search-button .material-icons {
+            font-size: 20px;
+            color: #2c662d;
+        }
+
+        .add-employee-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 42px;
+            height: 42px;
+            background-color: #a5e6a5;
+            border-radius: 50%;
+            text-decoration: none;
+            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+            transition: background 0.3s ease;
+        }
+
+        .add-employee-button:hover {
+            background-color: #b8e6b8;
+        }
+
+        .add-employee-button .material-icons {
+            font-size: 24px;
+            color: #2c662d;
+        }
     </style>
     @stack('styles')
 </head>

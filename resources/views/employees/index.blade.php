@@ -10,13 +10,19 @@
     <div class="employee-content p-4">
         <div class="header d-flex align-items-center justify-content-between mb-4">
             <h2>Employee List</h2>
-            <div class="d-flex">
-                <form action="{{ route('employees.index') }}" method="GET" class="d-flex me-3">
-                    <input type="text" name="search" class="form-control" placeholder="Search..."
-                        value="{{ request('search') }}">
-                    <button type="submit" class="btn btn-primary ms-2">Search</button>
+            <div class="d-flex search-wrapper">
+                <form action="{{ route('employees.index') }}" method="GET" class="search-form">
+                    <div class="search-container">
+                        <input type="text" name="search" class="search-input" placeholder="Search folders..."
+                            value="{{ request('search') }}">
+                    </div>
+                    <button type="submit" class="search-button">
+                        <span class="material-icons">search</span>
+                    </button>
                 </form>
-                <a href="{{ route('employees.create') }}" class="btn btn-primary">Add Employee</a>
+                <a href="{{ route('employees.create') }}" class="add-employee-button">
+                    <span class="material-icons">person_add</span>
+                </a>
             </div>
         </div>
 
