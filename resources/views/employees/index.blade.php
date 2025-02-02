@@ -13,7 +13,7 @@
             <div class="d-flex search-wrapper">
                 <form action="{{ route('employees.index') }}" method="GET" class="search-form">
                     <div class="search-container">
-                        <input type="text" name="search" class="search-input" placeholder="Search folders..."
+                        <input type="text" name="search" class="search-input" placeholder="Search Karyawan..."
                             value="{{ request('search') }}">
                     </div>
                     <button type="submit" class="search-button">
@@ -47,20 +47,21 @@
                         <td>{{ $employee->login }}</td>
                         <td>
                             <span class="password-mask" data-password="{{ $employee->password }}">******</span>
-                            <button type="button" class="btn btn-link toggle-password" onclick="togglePassword(this)">
-                                <span class="material-icons">visibility</span>
-                            </button>
                         </td>
                         <td>{{ ucfirst($employee->role) }}</td>
                         <td>
                             <a href="{{ route('employees.edit', ['employee' => $employee->id_user]) }}"
-                                class="btn btn-warning btn-sm">Edit</a>
+                                class="action-button edit-button">
+                                <span class="material-icons">edit</span>
+                            </a>
                             <form action="{{ route('employees.destroy', $employee) }}" method="POST"
                                 style="display:inline;">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn btn-danger btn-sm"
-                                    onclick="return confirm('Are you sure?')">Delete</button>
+                                <button type="submit" class="action-button delete-button"
+                                    onclick="return confirm('Are you sure?')">
+                                    <span class="material-icons">person_remove</span>
+                                </button>
                             </form>
                         </td>
                     </tr>

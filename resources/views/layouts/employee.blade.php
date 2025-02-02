@@ -57,53 +57,57 @@
         }
 
         .employee-content {
-            margin-left: 240px;
-            /* Sama dengan lebar sidebar */
+            margin-left: 260px;
             padding: 20px;
             height: calc(100vh - 60px);
-            /* Sesuaikan dengan tinggi header jika ada */
             overflow-y: auto;
-            /* Aktifkan scroll vertikal */
             overflow-x: hidden;
-            /* Hilangkan scroll horizontal */
             background-image: url('{{ asset('img/dashboard.jpeg') }}');
             width: calc(100% - 240px);
-            /* Ambil sisa lebar layar */
             box-sizing: border-box;
             background-size: cover;
-            /* Menyesuaikan gambar dengan ukuran layar */
             background-position: center;
-            /* Menjaga gambar tetap di tengah */
             background-repeat: no-repeat;
-            /* Sertakan padding dalam ukuran total elemen */
         }
 
+        /* Warna background tabel lebih gelap agar kontras dengan halaman */
         .table {
-            width: 100%;
-            /* Table mengambil seluruh lebar kontainer *
-        }
-
-        .table th,
-        .table td {
-            white-space: nowrap;
-            /* Mencegah wrapping */
+            background-color: #7cbf7c;
+            /* Hijau tua */
+            border-radius: 8px;
+            /* Membuat sudut lebih lembut */
             overflow: hidden;
-            /* Sembunyikan konten yang meluap */
-            text-overflow: ellipsis;
-            /* Tampilkan ... untuk konten panjang */
+            border-collapse: separate;
+            border-spacing: 0;
         }
 
-        .table thead {
-            /* position: sticky; Sticky header */
-            top: 0;
-            background-color: #ffffff;
-            z-index: 1;
+        /* Header tabel dengan warna hijau lebih gelap */
+        .table th {
+            background-color: rgb(114, 180, 114);
+            /* Hijau lebih gelap untuk header */
+            color: white;
+            padding: 12px;
+            text-align: left;
         }
 
-        .table .password-column {
-            width: 150px;
-            /* Lebar kolom Password tetap */
-            max-width: 150px;
+        /* Warna sel tabel */
+        .table td {
+            background-color: #a3d9a5;
+            /* Hijau tua lebih terang dari header */
+            color: black;
+            padding: 10px;
+        }
+
+        /* Tambahkan border putih untuk lebih rapi */
+        .table-bordered th,
+        .table-bordered td {
+            border: 1px solid white;
+        }
+
+        /* Efek hover agar lebih interaktif */
+        .table tbody tr:hover {
+            background-color: rgb(141, 202, 141);
+            /* Hijau sedikit lebih gelap saat hover */
         }
 
         .search-wrapper {
@@ -179,6 +183,98 @@
         .add-employee-button .material-icons {
             font-size: 24px;
             color: #2c662d;
+        }
+
+        /* Membuat tabel lebih rapat dan tidak terlalu besar */
+        .table-container {
+            max-width: 100%;
+            margin: 0 auto;
+            /* Posisi tabel di tengah */
+            padding: 15px;
+            background-color: #5a9c5a;
+            /* Hijau tua lebih gelap */
+            border-radius: 10px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Warna background tabel */
+        .table {
+            background-color: #6bbf6b;
+            /* Hijau sedikit lebih gelap */
+            border-radius: 8px;
+            overflow: hidden;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        /* Header tabel lebih gelap */
+        .table th {
+            background-color: #4d8f4d;
+            color: white;
+            padding: 12px;
+            text-align: left;
+        }
+
+        /* Warna sel tabel */
+        .table td {
+            background-color: #a3d9a5;
+            /* Hijau lebih terang */
+            color: black;
+            padding: 10px;
+        }
+
+        /* Tambahkan border untuk tampilan lebih jelas */
+        .table-bordered th,
+        .table-bordered td {
+            border: 1px solid white;
+        }
+
+        /* Hover efek agar lebih terlihat */
+        .table tbody tr:hover {
+            background-color: #5fa85f;
+        }
+
+        /* Mengatur ukuran kolom Action agar tidak terlalu besar */
+        .table td:last-child,
+        .table th:last-child {
+            width: 90px;
+            text-align: center;
+        }
+
+        /* Tombol Edit dan Delete lebih kecil agar tidak melebar */
+        .action-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            background-color: #d4f8d4;
+            border-radius: 50%;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Hover efek */
+        .action-button:hover {
+            background-color: #b8e6b8;
+        }
+
+        /* Ukuran ikon di dalam tombol */
+        .action-button .material-icons {
+            font-size: 18px;
+            color: #2c662d;
+        }
+
+        /* Style spesifik untuk tombol Delete */
+        .delete-button {
+            background-color: #f8d4d4;
+        }
+
+        .delete-button:hover {
+            background-color: #e6b8b8;
         }
     </style>
     @stack('styles')
