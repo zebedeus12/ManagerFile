@@ -660,7 +660,6 @@
         }
     }
 
-
     function openImageModal(imageUrl) {
         const modal = document.createElement('div');
         modal.innerHTML = `

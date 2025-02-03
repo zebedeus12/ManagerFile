@@ -250,23 +250,32 @@
 </div>
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        // Mencegah tombol toggle view melakukan refresh halaman
-        document.getElementById("toggleViewBtn").addEventListener("click", function (event) {
-            event.preventDefault(); // Mencegah reload halaman
+        const gridView = document.getElementById('gridView');
+        const listView = document.getElementById('listView');
+        const toggleButton = document.getElementById('toggleViewBtn');
 
-            const gridView = document.getElementById('gridView');
-            const listView = document.getElementById('listView');
+        // Set default mode ke Grid
+        let isGridView = true;
 
-            if (gridView.style.display === 'none') {
-                gridView.style.display = 'flex';
-                listView.style.display = 'none';
-            } else {
+        // Event listener untuk tombol Grid/List
+        toggleButton.addEventListener("click", function (event) {
+            event.preventDefault(); // Mencegah halaman reload
+
+            if (isGridView) {
+                // Jika dalam mode Grid, ubah ke List
                 gridView.style.display = 'none';
                 listView.style.display = 'block';
+                toggleButton.innerHTML = '<i class="material-icons">view_list</i>'; // Ubah ikon ke List View
+            } else {
+                // Jika dalam mode List, ubah ke Grid
+                gridView.style.display = 'flex';
+                listView.style.display = 'none';
+                toggleButton.innerHTML = '<i class="material-icons">grid_view</i>'; // Ubah ikon ke Grid View
             }
+
+            isGridView = !isGridView; // Toggle state
         });
     });
-
 
     function toggleMenu(button) {
         // Tutup semua dropdown lainnya
