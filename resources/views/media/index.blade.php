@@ -13,13 +13,30 @@
             <h2>Media Manager</h2>
             <!-- Search Form -->
             <form method="GET" action="{{ route('media.index') }}" class="d-flex mb-3">
-                <input type="text" name="search" value="{{ request('search') }}" class="form-control me-2"
-                    placeholder="Search folders...">
-                <button type="submit" class="btn btn-primary">Search</button>
+                <div class="d-flex align-items-center gap-2 justify-content-end">
+                    <!-- SEARCH INPUT -->
+                    <div class="search-container">
+                        <input type="text" name="search" value="{{ request('search') }}" class="search-input"
+                            placeholder="Search folders...">
+                    </div>
+
+                    <!-- SEARCH BUTTON -->
+                    <button type="submit" class="search-btn">
+                        <i class="material-icons">search</i>
+                    </button>
+
+                    <!-- BUTTON ADD FOLDER -->
+                    <button type="button" class="btn btn-custom" data-bs-toggle="modal"
+                        data-bs-target="#addFolderModal">
+                        <i class="material-icons">create_new_folder</i>
+                    </button>
+
+                    <!-- BUTTON GRID VIEW -->
+                    <button type="button" class="btn btn-custom" id="toggleViewBtn">
+                        <i class="material-icons">grid_view</i>
+                    </button>
+                </div>
             </form>
-            <!-- Button untuk Add Folder -->
-            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addFolderModal">Add Folder</button>
-            <button class="ms-2 btn btn-secondary" onclick="toggleView()">Toggle View</button>
         </div>
 
         <!-- Modal untuk Add Folder -->
@@ -232,6 +249,25 @@
     </div>
 </div>
 <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Mencegah tombol toggle view melakukan refresh halaman
+        document.getElementById("toggleViewBtn").addEventListener("click", function (event) {
+            event.preventDefault(); // Mencegah reload halaman
+
+            const gridView = document.getElementById('gridView');
+            const listView = document.getElementById('listView');
+
+            if (gridView.style.display === 'none') {
+                gridView.style.display = 'flex';
+                listView.style.display = 'none';
+            } else {
+                gridView.style.display = 'none';
+                listView.style.display = 'block';
+            }
+        });
+    });
+
+
     function toggleMenu(button) {
         // Tutup semua dropdown lainnya
         document.querySelectorAll('.dropdown-menu').forEach(menu => {

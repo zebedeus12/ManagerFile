@@ -95,6 +95,8 @@
             /* Menjaga gambar tetap di tengah */
             background-repeat: no-repeat;
             /* Transisi saat sidebar berubah */
+            max-height: calc(100vh - 80px);
+            overflow-y: auto;
         }
 
         .content-container {
@@ -104,31 +106,83 @@
             overflow-y: auto;
         }
 
-        /* Filter buttons styling */
-        .btn {
-            margin-right: 10px;
+        /* ========== SEARCH BAR STYLING ========== */
+        .search-container {
+            display: flex;
+            align-items: center;
+            background-color: #b3e6b1;
+            border-radius: 300px;
+            padding: 14px 25px;
+            width: 200px;
         }
 
-        .btn-primary,
-        .btn-success {
-            font-size: 16px;
+        .search-input {
+            border: none;
+            outline: none;
+            background: transparent;
+            flex: 1;
+            font-size: 14px;
+            color: #388e3c;
         }
 
-        .filter-buttons .btn-filter {
-            margin-right: 10px;
-            background-color: #f8f9fa;
-            border: 1px solid #ced4da;
-            color: #495057;
-            padding: 6px 12px;
-            border-radius: 4px;
-            cursor: pointer;
+        /* ========== SEARCH BUTTON ========== */
+        .search-btn {
+            background-color: #b3e6b1;
+            border: none;
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: background-color 0.3s ease;
         }
 
-        .filter-buttons .btn-filter.active {
-            background-color: #007bff;
-            color: #fff;
+        .search-btn i {
+            color: #4caf50;
+            font-size: 30px;
         }
 
+        .search-btn:hover {
+            background-color: #c8e6c9;
+        }
+
+        /* ========== CUSTOM BUTTONS (Add Folder & Grid View) ========== */
+        .btn-custom {
+            background-color: #b3e6b1;
+            border: none;
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-custom i {
+            color: #66bb6a;
+            font-size: 30px;
+        }
+
+        .btn-custom:hover {
+            background-color: #c8e6c9;
+        }
+
+        /* ========== RESPONSIVE ========== */
+        @media (max-width: 768px) {
+            .search-container {
+                width: 200px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .search-container {
+                width: 150px;
+            }
+        }
+
+        /* ========== MEDIA ========== */
         .media-container {
             width: 100%;
             aspect-ratio: 4 / 3;
@@ -332,9 +386,10 @@
         /* folder dan subfolder */
         .folder-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
             gap: 20px;
             margin-top: 20px;
+            padding: 0 20px;
         }
 
         .folder-card {
