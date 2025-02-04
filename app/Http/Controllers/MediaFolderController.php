@@ -152,6 +152,33 @@ class MediaFolderController extends Controller
         return redirect()->route('media.index')->with('success', 'Folder deleted successfully!');
     }
 
+    public function destroyMultiple(Request $request)
+    {
+        $folderIds = $request->input('folders'); // Ambil daftar folder_id dari request
+
+        if (!$folderIds || count($folderIds) === 0) {
+            return redirect()->route('media.index')->with('error', 'Tidak ada folder yang dipilih.');
+        }
+
+        // Loop untuk memeriksa setiap folder sebelum dihapus
+        foreach ($folderIds as $id) {
+            $folder = MediaFolder::with(['subfolders', 'mediaItems'])->find($id);
+
+            if (!$folder)
+                continue; // Jika folder tidak ditemukan, lanjut ke berikutnya
+
+            // Cek jika folder memiliki subfolder atau media
+            if ($folder->subfolders->isNotEmpty() || $folder->mediaItems->isNotEmpty()) {
+                return redirect()->route('media.index')->with('error', 'Pastikan folder kosong sebelum menghapus.');
+            }
+
+            // Hapus folder jika kosong
+            $folder->delete();
+        }
+
+        return redirect()->route('media.index')->with('success', 'Folder yang dipilih berhasil dihapus.');
+    }
+
     public function checkFolder($id)
     {
         $folder = MediaFolder::with(['subfolders', 'mediaItems'])->findOrFail($id);

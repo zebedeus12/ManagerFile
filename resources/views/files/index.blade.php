@@ -27,10 +27,12 @@
                     style="background-color: #b3e6b1; border: none;">
                     <span class="material-icons">create_new_folder</span>
                 </button>
-                <button class="btn rounded-circle ms-2" onclick="toggleView()"
+                <!-- BUTTON GRID VIEW -->
+                <button type="button" class="btn rounded-circle ms-2" id="toggleViewBtn"
                     style="background-color: #b3e6b1; border: none;">
-                    <span class="material-icons">grid_view</span>
+                    <span class="material-icons" id="toggleIcon">grid_view</span>
                 </button>
+
             </div>
         </div>
         <p class="text-muted">Terdapat {{ $folders->count() }} Folders.</p>
@@ -169,18 +171,44 @@
 </div>
 
 <script>
-    function toggleView() {
+    document.addEventListener("DOMContentLoaded", function () {
         const gridView = document.getElementById('gridView');
         const listView = document.getElementById('listView');
-        if (gridView.style.display === 'none') {
-            gridView.style.display = 'grid'; // Pastikan menggunakan grid layout
-            gridView.style.gridTemplateColumns = 'repeat(auto-fill, minmax(200px, 1fr))';
-            gridView.style.gap = '20px';
-            listView.style.display = 'none';
-        } else {
-            gridView.style.display = 'none';
-            listView.style.display = 'block';
+        const toggleButton = document.getElementById('toggleViewBtn');
+        const toggleIcon = document.getElementById('toggleIcon');
+
+        // Cek apakah ada preferensi tampilan sebelumnya di localStorage
+        let isGridView = localStorage.getItem('viewMode') !== 'list'; // Default ke Grid
+
+        // Atur tampilan sesuai preferensi yang tersimpan
+        updateView();
+
+        // Event listener untuk tombol toggle tampilan
+        toggleButton.addEventListener("click", function (event) {
+            event.preventDefault();
+
+            // Toggle tampilan
+            isGridView = !isGridView;
+            updateView();
+
+            // Simpan preferensi ke localStorage agar tetap setelah reload
+            localStorage.setItem('viewMode', isGridView ? 'grid' : 'list');
+        });
+
+        function updateView() {
+            if (isGridView) {
+                gridView.style.display = 'grid';
+                gridView.style.gridTemplateColumns = 'repeat(auto-fill, minmax(250px, 1fr))';
+                gridView.style.gap = '20px';
+                listView.style.display = 'none';
+                toggleIcon.textContent = 'grid_view'; // Ubah ikon ke List View
+            } else {
+                gridView.style.display = 'none';
+                listView.style.display = 'block';
+                toggleIcon.textContent = 'view_list'; // Ubah ikon ke Grid View
+            }
         }
-    }
+    });
 </script>
+
 @endsection

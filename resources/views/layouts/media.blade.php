@@ -713,6 +713,30 @@
             button.textContent = 'Play'; // Change button text to "Play"
         }
     }
+
+    // Fungsi untuk memilih semua checkbox
+    function toggleSelectAll() {
+        const checkboxes = document.querySelectorAll('input[name="folders[]"]');
+        const selectAllCheckbox = document.getElementById('selectAll');
+        checkboxes.forEach(checkbox => checkbox.checked = selectAllCheckbox.checked);
+    }
+
+    function confirmDelete() {
+        const selectedFolders = getSelectedFolders();
+        if (selectedFolders.length === 0) {
+            alert('Pilih minimal satu folder untuk dihapus.');
+            return;
+        }
+
+        if (confirm(`Anda yakin ingin menghapus ${selectedFolders.length} folder?`)) {
+            document.getElementById('deleteMultipleForm').submit();
+        }
+    }
+
+    function getSelectedFolders() {
+        return Array.from(document.querySelectorAll('input[name="folders[]"]:checked'))
+            .map(checkbox => checkbox.value);
+    }
 </script>
 
 </html>

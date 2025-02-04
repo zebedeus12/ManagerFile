@@ -79,6 +79,8 @@ Route::put('/media/{media}', [MediaController::class, 'update'])->name('media.up
 Route::delete('/media/folder/{id}', [MediaFolderController::class, 'destroy'])->name('media.folder.destroy');
 Route::get('/media/folder/check/{id}', [MediaFolderController::class, 'checkFolder']);
 Route::get('/media/folders/search', [MediaController::class, 'searchFolders'])->name('media.folders.search');
+Route::post('/media/folder/delete-multiple', [MediaFolderController::class, 'destroyMultiple'])
+    ->name('media.folder.deleteMultiple');
 
 
 //foldercontroller

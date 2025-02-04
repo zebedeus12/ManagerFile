@@ -118,35 +118,51 @@
             @endif
         </div>
 
+        <!-- List View -->
         <div id="listView" class="folder-list mt-4" style="display: none;">
             @if($folders->isEmpty())
                 <p>No folders found.</p>
             @else
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Created At</th>
-                            <th>Description</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($folders as $folder)
+                <form id="deleteMultipleForm" action="{{ route('media.folder.deleteMultiple') }}" method="POST">
+                    @csrf
+                    <div class="mb-3 d-flex gap-2">
+                        <button type="button" class="btn btn-danger" onclick="confirmDelete()">
+                            <i class="fas fa-trash"></i> Delete
+                        </button>
+                        <button type="button" class="btn btn-primary" onclick="shareSelectedFolders()">
+                            <i class="fas fa-share-alt"></i> Share
+                        </button>
+                    </div>
+
+                    <!-- Table -->
+                    <table class="table table-striped">
+                        <thead>
                             <tr>
-                                <td>{{ $folder->name }}</td>
-                                <td>{{ $folder->created_at->format('d M Y') }}</td>
-                                <td>{{ $folder->keterangan ?? 'Tidak ada keterangan' }}</td>
-                                <td>
-                                    <button onclick="openRenameModal({{ $folder->id }}, '{{ $folder->name }}')">Rename</button>
-                                    <button
-                                        onclick="openShareModal({{ $folder->id }}, '{{ url('/folder/' . $folder->id . '/share') }}')">Share</button>
-                                    <button onclick="openDeleteModal({{ $folder->id }})">Delete</button>
-                                </td>
+                                <th><input type="checkbox" id="selectAll" onclick="toggleSelectAll()"></th>
+                                <th>Name</th>
+                                <th>Created At</th>
+                                <th>Description</th>
+                                <th>Action</th>
                             </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            @foreach ($folders as $folder)
+                                <tr>
+                                    <td><input type="checkbox" name="folders[]" value="{{ $folder->id }}"></td>
+                                    <td>{{ $folder->name }}</td>
+                                    <td>{{ $folder->created_at->format('d M Y') }}</td>
+                                    <td>{{ $folder->keterangan ?? 'Tidak ada keterangan' }}</td>
+                                    <td>
+                                        <button class="btn btn-warning"
+                                            onclick="openRenameModal({{ $folder->id }}, '{{ $folder->name }}')">
+                                            <i class="fas fa-edit"></i> Rename
+                                        </button>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </form>
             @endif
         </div>
 
