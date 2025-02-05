@@ -21,7 +21,10 @@ class FileController extends Controller
 
         $folders = $query->whereNull('parent_id')->get(); // Ambil folder root saja
 
-        return view('files.index', compact('folders'));
+        // Ambil semua file
+        $files = File::all(); // Ambil semua file
+
+        return view('files.index', compact('folders', 'files')); // Kirim folders dan files ke tampilan
     }
 
     public function create($folder = null)

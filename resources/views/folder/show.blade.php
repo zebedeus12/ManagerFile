@@ -263,33 +263,42 @@
             @endif
         </div>
 
-        <!-- List View for Files --> 
-        <div id="listViewFiles" class="file-list mt-4" style="display: none;"> 
-            <table class="table table-striped"> 
-            <form action="{{ route('file.destroy', $file->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus file ini?')"> @csrf @method('DELETE') <button class="button" type="submit"><i class="fas fa-trash"></i></button> </form> 
-            <button class="button" onclick="openShareFileModal('{{ route('file.share', $file->id) }}')"><i class="fas fa-share-alt"></i></button> 
-                <thead> 
-                    <tr> 
-                        <th>Name</th> 
-                        <th>Created At</th> 
-                        <th>Type</th> 
-                        <th>Actions</th> 
-                    </tr> 
-                </thead> 
-                <tbody> 
-                    @foreach ($files as $file) 
-                        <tr> 
-                            <td>{{ $file->name }}</td> 
-                            <td>{{ $file->created_at->format('d M Y') }}</td> 
-                            <td>{{ $file->type }}</td> 
-                            <td> 
-                                <button class="button" onclick="openRenameFileModal({{ $file->id }}, '{{ $file->name }}')"><i class="fas fa-edit"></i></button> 
-                            </td> 
+        <!-- List View -->
+<div id="listView" class="folder-list mt-4" style="display: none;">
+    @if($files->isEmpty())
+        <p>No files found.</p>
+    @else
+        <form id="deleteMultipleForm" action="{{ route('files.deleteMultiple') }}" method="POST">
+            @csrf
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th><input type="checkbox" id="selectAll" onclick="toggleSelectAll()"> Select All</th>
+                        <th>Name</th>
+                        <th>Created At</th>
+                        <th>Description</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($files as $file)
+                        <tr>
+                            <td><input type="checkbox" name="files[]" value="{{ $file->id }}"></td>
+                            <td>{{ $file->name }}</td>
+                            <td>{{ $file->created_at->format('d M Y') }}</td>
+                            <td>{{ $file->keterangan ?? 'No description' }}</td>
+                            <td>
+                                <button class="button" onclick="openRenameModal({{ $file->id }}, '{{ $file->name }}')" title="Rename">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                            </td>
                         </tr>
-                    @endforeach 
-                </tbody> 
-            </table> 
-        </div>
+                    @endforeach
+                </tbody>
+            </table>
+        </form>
+    @endif
+</div>
 
         {{-- rename file --}}
         <div id="renameFileModal" class="modal" style="display: none;">

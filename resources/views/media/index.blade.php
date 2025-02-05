@@ -154,9 +154,7 @@
                                     <td>{{ $folder->keterangan ?? 'Tidak ada keterangan' }}</td>
                                     <td>
                                         <button class="btn btn-warning"
-                                            onclick="openRenameModal({{ $folder->id }}, '{{ $folder->name }}')">
-                                            <i class="fas fa-edit"></i> Rename
-                                        </button>
+                                            onclick="renameFolder({{ $folder->id }})">Rename</button>
                                     </td>
                                 </tr>
                             @endforeach
