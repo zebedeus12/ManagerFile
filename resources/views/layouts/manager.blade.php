@@ -80,6 +80,15 @@
             background-color: #ffffff;
             min-height: 100vh;
             overflow-y: auto;
+            background-image: url('{{ asset('img/dashboard.jpeg') }}');
+            background-size: cover;
+            /* Menyesuaikan gambar dengan ukuran layar */
+            background-position: center;
+            /* Menjaga gambar tetap di tengah */
+            background-repeat: no-repeat;
+            /* Transisi saat sidebar berubah */
+            max-height: calc(100vh - 80px);
+            overflow-y: auto;
         }
 
         /* Tombol Tambah Folder/File */
