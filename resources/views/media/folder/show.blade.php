@@ -17,12 +17,14 @@
                         placeholder="Search subfolders and media...">
                     <button type="submit" class="btn btn-primary">Search</button>
                 </form>
-                <!-- Button to add subfolder -->
-                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addSubfolderModal">Add
-                    Folder</button>
-                <!-- Button to add media -->
-                <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addMediaModal">Create
-                    Media</button>
+                @if(auth()->user()->role === 'super_admin')
+                    <!-- Button to add subfolder -->
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addSubfolderModal">Add
+                        Folder</button>
+                    <!-- Button to add media -->
+                    <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addMediaModal">Create
+                        Media</button>
+                @endif
                 <button class="ms-2 btn btn-secondary" onclick="toggleView()">Toggle View</button>
             </div>
         </div>
@@ -99,10 +101,14 @@
                                 <span class="material-icons">more_vert</span>
                             </button>
                             <div class="dropdown-menu">
-                                <button onclick="renameFolder({{ $subfolder->id }})">Rename</button>
+                                @if(auth()->user()->role === 'super_admin')
+                                    <button onclick="renameFolder({{ $subfolder->id }})">Rename</button>
+                                @endif
                                 <button onclick="shareFolder({{ $subfolder->id }})">Share</button>
-                                <button onclick="deleteFolder({{ $subfolder->id }})">Delete</button>
-                                <button onclick="copyFolder({{ $subfolder->id }})">Copy</button>
+                                @if(auth()->user()->role === 'super_admin')
+                                    <button onclick="deleteFolder({{ $subfolder->id }})">Delete</button>
+                                    <button onclick="copyFolder({{ $subfolder->id }})">Copy</button>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -118,7 +124,9 @@
                         <th>Name</th>
                         <th>Created At</th>
                         <th>Description</th>
-                        <th>Actions</th>
+                        @if(auth()->user()->role === 'super_admin')
+                            <th>Actions</th>
+                        @endif
                     </tr>
                 </thead>
                 <tbody>
@@ -128,10 +136,14 @@
                             <td>{{ $subfolder->created_at->format('d M Y') }}</td>
                             <td>{{ $subfolder->keterangan ?? 'Tidak ada keterangan' }}</td>
                             <td>
-                                <button onclick="renameFolder({{ $subfolder->id }})">Rename</button>
+                                @if(auth()->user()->role === 'super_admin')
+                                    <button onclick="renameFolder({{ $subfolder->id }})">Rename</button>
+                                @endif
                                 <button onclick="shareFolder({{ $subfolder->id }})">Share</button>
-                                <button onclick="deleteFolder({{ $subfolder->id }})">Delete</button>
-                                <button onclick="copyFolder({{ $subfolder->id }})">Copy</button>
+                                @if(auth()->user()->role === 'super_admin')
+                                    <button onclick="deleteFolder({{ $subfolder->id }})">Delete</button>
+                                    <button onclick="copyFolder({{ $subfolder->id }})">Copy</button>
+                                @endif
                             </td>
                         </tr>
                     @endforeach
@@ -296,16 +308,18 @@
                                 @endif
                             </div>
 
-                            <div class="dropdown position-absolute top-0 end-0 m-2">
-                                <button class="custom-toggle" onclick="toggleMenu(this)">
-                                    <span class="material-icons">more_vert</span>
-                                </button>
-                                <div class="dropdown-menu">
-                                    <a href="{{ route('media.edit', $media->id) }}" class="dropdown-item">Edit</a>
-                                    <button onclick="deleteMedia({{ $media->id }})"
-                                        class="dropdown-item text-danger">Delete</button>
+                            @if(auth()->user()->role === 'super_admin')
+                                <div class="dropdown position-absolute top-0 end-0 m-2">
+                                    <button class="custom-toggle" onclick="toggleMenu(this)">
+                                        <span class="material-icons">more_vert</span>
+                                    </button>
+                                    <div class="dropdown-menu">
+                                        <a href="{{ route('media.edit', $media->id) }}" class="dropdown-item">Edit</a>
+                                        <button onclick="deleteMedia({{ $media->id }})"
+                                            class="dropdown-item text-danger">Delete</button>
+                                    </div>
                                 </div>
-                            </div>
+                            @endif
                         </div>
                     @endforeach
                 @endif

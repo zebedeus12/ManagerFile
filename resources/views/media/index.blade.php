@@ -25,11 +25,13 @@
                         <i class="material-icons">search</i>
                     </button>
 
-                    <!-- BUTTON ADD FOLDER -->
-                    <button type="button" class="btn btn-custom" data-bs-toggle="modal"
-                        data-bs-target="#addFolderModal">
-                        <i class="material-icons">create_new_folder</i>
-                    </button>
+                    @if(auth()->user()->role === 'super_admin')
+                        <!-- BUTTON ADD FOLDER -->
+                        <button type="button" class="btn btn-custom" data-bs-toggle="modal"
+                            data-bs-target="#addFolderModal">
+                            <i class="material-icons">create_new_folder</i>
+                        </button>
+                    @endif
 
                     <!-- BUTTON GRID VIEW -->
                     <button type="button" class="btn btn-custom" id="toggleViewBtn">
@@ -108,9 +110,13 @@
                                 <span class="material-icons">more_vert</span>
                             </button>
                             <div class="dropdown-menu">
-                                <button onclick="renameFolder({{ $folder->id }})">Rename</button>
+                                @if(auth()->user()->role === 'super_admin')
+                                    <button onclick="renameFolder({{ $folder->id }})">Rename</button>
+                                @endif
                                 <button onclick="shareFolder({{ $folder->id }})">Share</button>
-                                <button onclick="deleteFolder({{ $folder->id }})">Delete</button>
+                                @if(auth()->user()->role === 'super_admin')
+                                    <button onclick="deleteFolder({{ $folder->id }})">Delete</button>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -126,9 +132,11 @@
                 <form id="deleteMultipleForm" action="{{ route('media.folder.deleteMultiple') }}" method="POST">
                     @csrf
                     <div class="mb-3 d-flex gap-2">
-                        <button type="button" class="btn btn-danger" onclick="confirmDelete()">
-                            <i class="fas fa-trash"></i> Delete
-                        </button>
+                        @if(auth()->user()->role === 'super_admin')
+                            <button type="button" class="btn btn-danger" onclick="confirmDelete()">
+                                <i class="fas fa-trash"></i> Delete
+                            </button>
+                        @endif
                         <button type="button" class="btn btn-primary" onclick="shareSelectedFolders()">
                             <i class="fas fa-share-alt"></i> Share
                         </button>
@@ -142,7 +150,9 @@
                                 <th>Name</th>
                                 <th>Created At</th>
                                 <th>Description</th>
-                                <th>Action</th>
+                                @if(auth()->user()->role === 'super_admin')
+                                    <th>Action</th>
+                                @endif
                             </tr>
                         </thead>
                         <tbody>
@@ -152,10 +162,12 @@
                                     <td>{{ $folder->name }}</td>
                                     <td>{{ $folder->created_at->format('d M Y') }}</td>
                                     <td>{{ $folder->keterangan ?? 'Tidak ada keterangan' }}</td>
-                                    <td>
-                                        <button class="btn btn-warning"
-                                            onclick="renameFolder({{ $folder->id }})">Rename</button>
-                                    </td>
+                                    @if(auth()->user()->role === 'super_admin')
+                                        <td>
+                                            <button class="btn btn-warning"
+                                                onclick="renameFolder({{ $folder->id }})">Rename</button>
+                                        </td>
+                                    @endif
                                 </tr>
                             @endforeach
                         </tbody>

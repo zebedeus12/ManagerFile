@@ -36,6 +36,7 @@
                         </button>
                     </div>
                 </form>
+                @if(auth()->user()->role === 'super_admin')
                 <button class="btn rounded-circle ms-2" onclick="location.href='{{ route('folder.create', $folder->id) }}'"
                     style="background-color: #b3e6b1; border: none;">
                     <span class="material-icons">create_new_folder</span>
@@ -45,6 +46,7 @@
                     style="background-color: #b3e6b1; border: none;">
                     <span class="material-icons">upload_file</span>
                 </button>
+                @endif
                 <button class="btn rounded-circle ms-2" onclick="toggleView()" style="background-color: #b3e6b1; border: none;">
                     <span class="material-icons">grid_view</span>
                 </button>
@@ -76,10 +78,14 @@
                                     <span class="material-icons">more_vert</span>
                                 </button>
                                 <div class="dropdown-menu">
-                                    <button onclick="openRenameModal({{ $folder->id }}, '{{ $folder->name }}')">Rename</button>
+                                    @if(auth()->user()->role === 'super_admin')
+                                        <button onclick="openRenameModal({{ $folder->id }}, '{{ $folder->name }}')">Rename</button>
+                                    @endif
                                     <button onclick="openShareModal({{ $folder->id }}, '{{ url('/folder/' . $folder->id . '/share') }}')">Share</button>
-                                    <button onclick="openDeleteModal({{ $subFolder->id }})">Delete</button>
-                                    <button onclick="openCopyModal({{ $folder->id }})">Copy</button>
+                                    @if(auth()->user()->role === 'super_admin')
+                                        <button onclick="openDeleteModal({{ $subFolder->id }})">Delete</button>
+                                        <button onclick="openCopyModal({{ $folder->id }})">Copy</button>
+                                    @endif
                                 </div>
                             </div>
                         </div>
@@ -96,21 +102,27 @@
         <!-- List View for Folders --> 
         <div id="listViewFolders" class="folder-list mt-4" style="display: none;"> 
             <table class="table table-striped">
+            @if(auth()->user()->role === 'super_admin')
             <button class="button" onclick="openDeleteModal({{ $folder->id }})" title="Delete">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                            <button class="button" onclick="openShareModal({{ $folder->id }}, '{{ url('/folder/' . $folder->id . '/share') }}')" title="Share">
-                                <i class="fas fa-share-alt"></i>
-                            </button>
-                            <button class="button" onclick="openCopyModal({{ $folder->id }})">
-                            <i class="fas fa-copy"></i>
-                            </button>
+                <i class="fas fa-trash"></i>
+            </button>
+            @endif
+            <button class="button" onclick="openShareModal({{ $folder->id }}, '{{ url('/folder/' . $folder->id . '/share') }}')" title="Share">
+                <i class="fas fa-share-alt"></i>
+            </button>
+            @if(auth()->user()->role === 'super_admin')
+                <button class="button" onclick="openCopyModal({{ $folder->id }})">
+                    <i class="fas fa-copy"></i>
+                </button>
+            @endif
                 <thead> 
                     <tr> 
                         <th>Name</th>
                         <th>Created At</th> 
-                        <th>Description</th> 
-                        <th>Actions</th> 
+                        <th>Description</th>
+                        @if(auth()->user()->role === 'super_admin') 
+                            <th>Actions</th> 
+                        @endif
                     </tr> 
                 </thead> 
                 <tbody> 
@@ -119,12 +131,14 @@
                             <td>{{ $subFolder->name }}</td> 
                             <td>{{ $subFolder->created_at->format('d M Y') }}</td> 
                             <td>{{ $subFolder->keterangan ?? 'Tidak ada keterangan' }}</td> 
+                            @if(auth()->user()->role === 'super_admin')
                             <td> 
-                            <button class="button" onclick="openRenameModal({{ $folder->id }}, '{{ $folder->name }}')"
-                                        title="Rename">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
+                                <button class="button" onclick="openRenameModal({{ $folder->id }}, '{{ $folder->name }}')"
+                                title="Rename">
+                                <i class="fas fa-edit"></i>
+                            </button>
                             </td> 
+                            @endif
                         </tr> 
                     @endforeach 
                 </tbody>           
@@ -243,13 +257,17 @@
                                 <span class="material-icons">more_vert</span>
                             </button>
                             <div class="dropdown-menu">
-                                <button onclick="openRenameFileModal({{ $file->id }}, '{{ $file->name }}')">Rename</button>
+                                @if(auth()->user()->role === 'super_admin')
+                                    <button onclick="openRenameFileModal({{ $file->id }}, '{{ $file->name }}')">Rename</button>
+                                @endif
                                 <button onclick="openShareFileModal('{{ route('file.share', $file->id) }}')">Share</button>
+                                @if(auth()->user()->role === 'super_admin')
                                 <form action="{{ route('file.destroy', $file->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus file ini?')">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit">Delete</button>
                                 </form>
+                                @endif
                             </div>
                         </div>
                     </div>
