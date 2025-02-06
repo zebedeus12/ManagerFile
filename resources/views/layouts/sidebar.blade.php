@@ -7,12 +7,14 @@
     <!-- Menu Navigasi -->
     <nav class="menu">
         <ul class="list-unstyled">
-            <li>
-                <a href="{{ route('employees.index') }}" class="menu-item">
-                    <span class="material-icons">admin_panel_settings</span>
-                    <span class="menu-text">Employees</span>
-                </a>
-            </li>
+            @if(auth()->user()->role === 'super_admin')
+                <li>
+                    <a href="{{ route('employees.index') }}" class="menu-item">
+                        <span class="material-icons">admin_panel_settings</span>
+                        <span class="menu-text">Employees</span>
+                    </a>
+                </li>
+            @endif
             <li>
                 <a href="{{ route('file.index') }}" class="menu-item">
                     <span class="material-icons">folder</span>

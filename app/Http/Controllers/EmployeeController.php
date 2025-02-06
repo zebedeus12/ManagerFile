@@ -10,7 +10,10 @@ class EmployeeController extends Controller
 {
     public function index(Request $request)
     {
-        $employees = Employee::all();
+        // Pastikan hanya super admin yang bisa mengakses
+        if (auth()->user()->role !== 'super_admin') {
+            abort(403, 'Anda tidak memiliki izin untuk mengakses halaman ini.');
+        }
 
         $query = Employee::query();
 

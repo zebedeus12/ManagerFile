@@ -18,4 +18,10 @@ class User extends Authenticatable
     {
         return $this->password;
     }
+
+    public function isSuperAdmin()
+    {
+        return $this->role === 'super_admin';
+    }
+
 }
