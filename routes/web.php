@@ -53,6 +53,7 @@ Route::prefix('files')->group(function () {
 
 // Preview file
 Route::get('/file/preview/{id}', [FileController::class, 'preview'])->name('files.preview');
+Route::delete('/files/delete-multiple', [FileController::class, 'deleteMultiple'])->name('files.deleteMultiple');
 
 // Mengelola folder
 Route::get('/folder/create/{parentId?}', [FolderController::class, 'showForm'])->name('folder.create'); // Form tambah folder
