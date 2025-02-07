@@ -29,4 +29,9 @@ class File extends Model
         $folders = Folder::with('files')->get(); // Ambil folder beserta file-nya
         return view('file_manager.index', compact('folders'));
     }
+
+    public function isAdmin()
+    {
+        return $this->role === 'admin';
+    }
 }

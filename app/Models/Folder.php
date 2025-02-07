@@ -28,4 +28,9 @@ class Folder extends Model
     {
         return $this->hasMany(File::class);
     }
+
+    public function isAdmin()
+    {
+        return $this->role === 'admin';
+    }
 }
