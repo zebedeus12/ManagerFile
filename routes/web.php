@@ -11,25 +11,35 @@ use App\Http\Controllers\FileController;
 use App\Http\Controllers\PricingController;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Auth;
 
 
 Route::get('/', function () {
     return view('/auth.login');
 });
 
-//login
+// Menampilkan form login
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
-Route::post('/login', [LoginController::class, 'login']);
-Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
-Route::get('/home', function () {
-    return view('home');
-})->middleware('auth');
 
-//dashboard
+// Menampilkan halaman OTP
+Route::get('/otp', [LoginController::class, 'showOTPForm'])->name('otp.form');
+
+// Verifikasi OTP
+Route::post('/verify-otp', [LoginController::class, 'verifyOTP'])->name('verify.otp');
+
+// Logout
+Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+
+// Rute untuk autentikasi standar (melalui Auth::routes)
+Auth::routes(); // Pastikan ini ada setelah rute login Anda
+
+// Dashboard
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware('auth');
+
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
 
 //princing
 Route::get('/pricing', [PricingController::class, 'index'])->name('pricing.index');
