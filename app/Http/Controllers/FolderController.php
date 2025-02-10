@@ -93,6 +93,10 @@ class FolderController extends Controller
 
     public function rename(Request $request, $id)
     {
+        if (auth()->user()->role !== 'admin') {
+            return response()->json(['error' => 'Unauthorized'], 403);
+        }
+
         $request->validate(['name' => 'required|string|max:255']);
         $folder = Folder::findOrFail($id);
         $folder->name = $request->input('name');
@@ -112,6 +116,10 @@ class FolderController extends Controller
 
     public function destroy($id)
     {
+        if (auth()->user()->role !== 'admin') {
+            return response()->json(['error' => 'Unauthorized'], 403);
+        }
+
         $folder = Folder::findOrFail($id);
         $folder->delete();
 

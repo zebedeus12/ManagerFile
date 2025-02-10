@@ -58,12 +58,14 @@
                                     <span class="material-icons">more_vert</span>
                                 </button>
                                 <div class="dropdown-menu">
-                                    @if(auth()->user()->role === 'super_admin')
+                                    @if(in_array(auth()->user()->role, ['super_admin', 'admin']))
                                         <button onclick="openRenameModal({{ $folder->id }}, '{{ $folder->name }}')">Rename</button>
                                     @endif
+
                                     <button
                                         onclick="openShareModal({{ $folder->id }}, '{{ url('/folder/' . $folder->id . '/share') }}')">Share</button>
-                                    @if(auth()->user()->role === 'super_admin')
+
+                                    @if(in_array(auth()->user()->role, ['super_admin', 'admin']))
                                         <button onclick="openDeleteModal({{ $folder->id }})">Delete</button>
                                     @endif
                                 </div>
