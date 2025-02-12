@@ -21,18 +21,6 @@ class FolderController extends Controller
         return view('files.index', compact('folders', 'files'));
     }
 
-    public function showForm($parentId = null)
-    {
-        $employees = Employee::where('role', 'admin')->get();
-
-        $parentFolder = null;
-        if ($parentId) {
-            $parentFolder = Folder::find($parentId);
-        }
-
-        return view('folder.form', compact('parentFolder', 'employees'));
-    }
-
     public function store(Request $request, $parentId = null)
     {
         $request->validate([
@@ -60,9 +48,14 @@ class FolderController extends Controller
             ]);
         }
 
-        return redirect()->route('file.index')->with('success', 'Folder berhasil dibuat');
-    }
+        // Redirect back to the parent folder's show page
+        if ($parentId) {
+            return redirect()->route('folder.show', ['folder' => $parentId])->with('success', 'Subfolder berhasil dibuat');
+        }
 
+        // If no parent, redirect to the main folder page (index or a top-level folder)
+        return redirect()->route('folder.index')->with('success', 'Folder berhasil dibuat');
+    }
 
     public function show(Request $request, Folder $folder)
     {

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\File;
 use App\Models\Folder;
+use App\Models\Employee;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
@@ -21,10 +22,11 @@ class FileController extends Controller
 
         $folders = $query->whereNull('parent_id')->get(); // Ambil folder root saja
 
+        $employees = Employee::where('role', 'admin')->get();
         // Ambil semua file
         $files = File::all(); // Ambil semua file
 
-        return view('files.index', compact('folders', 'files')); // Kirim folders dan files ke tampilan
+        return view('files.index', compact('folders', 'files', 'employees')); // Kirim folders dan files ke tampilan
     }
 
     public function create($folder = null)

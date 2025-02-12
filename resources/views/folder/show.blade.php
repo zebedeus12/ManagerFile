@@ -37,7 +37,7 @@
                     </div>
                 </form>
                 @if(auth()->user()->role === 'super_admin')
-                <button class="btn rounded-circle ms-2" onclick="location.href='{{ route('folder.create', $folder->id) }}'"
+                <button class="btn rounded-circle ms-2" data-bs-toggle="modal" data-bs-target="#addSubfolderModal"
                     style="background-color: #b3e6b1; border: none;">
                     <span class="material-icons">create_new_folder</span>
                 </button>
@@ -144,6 +144,40 @@
                 </tbody>           
             </table>
         </div>
+
+        <!-- Modal add folder-->
+<div class="modal fade" id="addSubfolderModal" tabindex="-1" aria-labelledby="addSubfolderModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addSubfolderModalLabel">Create Subfolder</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+      <form action="{{ route('folder.store', ['parentId' => $folder->id]) }}" method="POST">
+    @csrf
+    <div class="mb-3">
+        <label for="folder_name" class="form-label">Folder Name</label>
+        <input type="text" class="form-control" id="folder_name" name="folder_name" required>
+    </div>
+    <div class="mb-3">
+        <label for="accessibility" class="form-label">Accessibility</label>
+        <select class="form-select" id="accessibility" name="accessibility" required>
+            <option value="public">Public</option>
+            <option value="private">Private</option>
+        </select>
+    </div>
+    <div class="mb-3">
+                                    <label for="keterangan" class="form-label">Keterangan</label>
+                                    <textarea class="form-control" id="keterangan" name="keterangan" rows="3"></textarea>
+                                </div>
+    <button type="submit" class="btn btn-primary">Create Folder</button>
+</form>
+      </div>
+    </div>
+  </div>
+</div>
+
 
         <!-- Rename Folder-->
         <div id="renameFolderModal" class="modal" style="display: none;">

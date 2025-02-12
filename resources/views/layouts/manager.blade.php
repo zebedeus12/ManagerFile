@@ -230,38 +230,29 @@
             z-index: 10;
         }
 
-        /* style  */
-        .modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
+        /* Modal pop up*/
         .modal-content {
-            background: #fff;
+            border-radius: 8px;
+        }
+
+        .modal-header {
+            background-color: #f8f9fa;
+        }
+
+        .modal-body {
             padding: 20px;
-            border-radius: 5px;
-            width: 400px;
-            position: relative;
         }
 
-        .close {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            cursor: pointer;
-            font-size: 20px;
+        /* Form Styling */
+        .form-group label {
+            font-size: 14px;
+            font-weight: bold;
         }
 
-        .icon-container {
-            text-align: center;
-            flex-shrink: 0;
+        .form-control {
+            font-size: 14px;
+            padding: 10px;
+            margin-top: 5px;
         }
 
         /* folder dan subfolder */
@@ -434,45 +425,6 @@
             color: #999;
         }
 
-        /* modal */
-        .modal {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 1000;
-        }
-
-        .modal-content {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 5px;
-            width: 400px;
-            position: relative;
-        }
-
-        .modal-content .close {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            font-size: 20px;
-            cursor: pointer;
-        }
-
-        .btn-primary {
-            background-color: #007bff;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
         /* Table List */
         .table {
             width: 100%;
@@ -563,6 +515,24 @@
         document.querySelectorAll('.dropdown-menu').forEach(menu => {
             menu.classList.remove('show');
         });
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+        var addFolderModal = new bootstrap.Modal(document.getElementById("addFolderModal"));
+
+        document.getElementById("openAddFolderModal").addEventListener("click", function () {
+            addFolderModal.show();
+        });
+
+        document.querySelectorAll('[data-bs-dismiss="modal"]').forEach(function (btn) {
+            btn.addEventListener("click", function () {
+                addFolderModal.hide();
+            });
+        });
+    });
+
+    document.getElementById('closeModalButton').addEventListener('click', function () {
+        document.getElementById('addFolderModal').style.display = 'none';
     });
 
     //RENAME
@@ -672,6 +642,13 @@
         });
     }
 
+    document.addEventListener("DOMContentLoaded", function () {
+        var addFolderModal = new bootstrap.Modal(document.getElementById("addFolderModal"));
+
+        document.getElementById("openAddFolderModal").addEventListener("click", function () {
+            addFolderModal.show();
+        });
+    });
 
 </script>
 
