@@ -18,7 +18,9 @@ class FolderController extends Controller
         // Ambil semua file
         $files = File::all();
 
-        return view('files.index', compact('folders', 'files'));
+        $employees = Employee::where('role', 'admin')->get();
+
+        return view('files.index', compact('folders', 'files', 'employees'));
     }
 
     public function store(Request $request, $parentId = null)
@@ -204,8 +206,6 @@ class FolderController extends Controller
         // Redirect ke halaman folder tujuan yang baru
         return redirect()->route('folder.show', ['folder' => $destinationFolderId])
             ->with('success', 'Folder berhasil disalin.');
-
-
     }
 
     protected function copySubFolder($subFolder, $newParentId)
@@ -228,5 +228,4 @@ class FolderController extends Controller
             }
         }
     }
-
 }

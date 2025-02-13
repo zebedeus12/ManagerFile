@@ -80,15 +80,14 @@
             background-color: #ffffff;
             min-height: 100vh;
             overflow-y: auto;
+            overflow-x: hidden;
             background-image: url('{{ asset('img/dashboard.jpeg') }}');
             background-size: cover;
-            /* Menyesuaikan gambar dengan ukuran layar */
             background-position: center;
-            /* Menjaga gambar tetap di tengah */
             background-repeat: no-repeat;
-            /* Transisi saat sidebar berubah */
             max-height: calc(100vh - 80px);
-            overflow-y: auto;
+            min-height: 100vh;
+            padding-bottom: 80px;
         }
 
         /* Tombol Tambah Folder/File */
@@ -535,45 +534,40 @@
         document.getElementById('addFolderModal').style.display = 'none';
     });
 
-    //RENAME
+    // RENAME
     function openRenameModal(folderId, currentName) {
         event.preventDefault();
         event.stopPropagation();
 
-        const modal = document.getElementById("renameFolderModal");
-        modal.style.display = "block";
+        const modal = new bootstrap.Modal(document.getElementById("renameFolderModal"));
+        modal.show();
 
-        // Set action pada form
+        // Set action on the form
         const form = document.getElementById("renameFolderForm");
         form.action = `/folder/rename/${folderId}`;
 
-        // Isi input dengan nama folder saat ini
+        // Set the current folder name in the input field
         document.getElementById("newFolderName").value = currentName;
     }
 
-    function closeRenameModal() {
-        const modal = document.getElementById("renameFolderModal");
-        modal.style.display = "none";
-    }
-
-    //DELETE
+    // DELETE
     function openDeleteModal(folderId) {
         event.preventDefault();
         event.stopPropagation();
 
-        // Fetch API untuk memeriksa apakah folder kosong
+        // Fetch API to check if the folder is empty
         fetch(`/folder/check/${folderId}`)
             .then(response => response.json())
             .then(data => {
                 if (data.status === 'error') {
-                    // Jika folder tidak kosong, tampilkan modal peringatan
+                    // If folder is not empty, show the warning modal
                     showWarningModal(data.message);
                 } else {
-                    // Jika folder kosong, tampilkan modal delete
-                    const modal = document.getElementById("deleteModal");
-                    modal.style.display = "block";
+                    // If folder is empty, show the delete modal
+                    const modal = new bootstrap.Modal(document.getElementById("deleteModal"));
+                    modal.show();
 
-                    // Set action form untuk menghapus folder
+                    // Set the action for the delete form
                     const deleteForm = document.getElementById("deleteForm");
                     deleteForm.action = `/folder/delete/${folderId}`;
                 }
@@ -584,47 +578,43 @@
     }
 
     function showWarningModal(message) {
-        const warningModal = document.getElementById("warningModal");
+        const warningModal = new bootstrap.Modal(document.getElementById("warningModal"));
         const warningMessage = document.getElementById("warningMessage");
         warningMessage.textContent = message;
-        warningModal.style.display = "block";
+        warningModal.show();
     }
 
-    function closeWarningModal() {
-        const warningModal = document.getElementById("warningModal");
-        warningModal.style.display = "none";
-    }
-
-    //COPY
+    // COPY
     function openCopyModal(folderId) {
         event.preventDefault();
         event.stopPropagation();
-        const modal = document.getElementById("copyModal");
-        modal.style.display = "block";
+        const modal = new bootstrap.Modal(document.getElementById("copyModal"));
+        modal.show();
 
-        // Set form action untuk copy folder
+        // Set form action for copying the folder
         const copyForm = document.getElementById("copyForm");
         copyForm.action = `/folder/copy/${folderId}`;
     }
 
     function closeCopyModal() {
-        const modal = document.getElementById("copyModal");
-        modal.style.display = "none";
+        const modal = new bootstrap.Modal(document.getElementById("copyModal"));
+        modal.hide();
     }
 
-    //SHARE
+    // SHARE
     function openShareModal(folderId, shareUrl) {
         event.preventDefault();
         event.stopPropagation();
-        // Show the modal (if you have a modal to show the share URL)
-        const modal = document.getElementById("shareModal");
-        modal.style.display = "block";
 
-        // Show the URL in the modal (optional)
+        // Show the share modal using Bootstrap
+        const modal = new bootstrap.Modal(document.getElementById("shareModal"));
+        modal.show();
+
+        // Display the share URL in the modal
         const shareUrlInput = document.getElementById("shareUrlInput");
         shareUrlInput.value = shareUrl;
 
-        // Add an event listener for the "Copy Link" button
+        // Add event listener to "Copy Link" button
         const copyButton = document.getElementById("copyLinkButton");
         copyButton.addEventListener('click', function () {
             copyToClipboard(shareUrlInput.value);

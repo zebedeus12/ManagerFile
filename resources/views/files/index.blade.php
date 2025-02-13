@@ -175,53 +175,81 @@
                 </div>
             </div>
 
-            <!-- Rename Folder-->
-            <div id="renameFolderModal" class="modal" style="display: none;">
-                <div class="modal-content">
-                    <span class="close" onclick="closeRenameModal()">&times;</span>
-                    <h2>Rename Folder</h2>
-                    <form id="renameFolderForm" method="POST">
-                        @csrf
-                        <div class="form-group">
-                            <label for="newFolderName">Nama Folder Baru</label>
-                            <input type="text" id="newFolderName" name="name" class="form-control" required>
+            <!-- Rename Folder -->
+            <div class="modal" id="renameFolderModal" tabindex="-1" aria-labelledby="renameFolderModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="renameFolderModalLabel">Rename Folder</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        <button type="submit" class="btn btn-primary">Save</button>
-                    </form>
+                        <div class="modal-body">
+                            <form id="renameFolderForm" method="POST">
+                                @csrf
+                                <div class="mb-3">
+                                    <label for="newFolderName" class="form-label">New Folder Name</label>
+                                    <input type="text" id="newFolderName" name="name" class="form-control" required>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Save</button>
+                            </form>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <!-- Delete -->
-            <div id="deleteModal" class="modal" style="display: none;">
-                <div class="modal-content">
-                    <span class="close" onclick="closeDeleteModal()">&times;</span>
-                    <h2>Delete?</h2>
-                    <p>Anda yakin ingin menghapus folder tersebut?</p>
-                    <form id="deleteForm" method="POST">
-                        @csrf
-                        @method('DELETE')
-                        <button type="button" class="btn btn-secondary" onclick="closeDeleteModal()">Cancel</button>
-                        <button type="submit" class="btn btn-danger">Delete</button>
-                    </form>
+            <!-- Delete Folder -->
+            <div class="modal" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="deleteModalLabel">Delete Folder</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p>Are you sure you want to delete this folder?</p>
+                            <form id="deleteForm" method="POST">
+                                @csrf
+                                @method('DELETE')
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                <button type="submit" class="btn btn-danger">Delete</button>
+                            </form>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <div id="warningModal" class="modal" style="display: none;">
-                <div class="modal-content">
-                    <span class="close" onclick="closeWarningModal()">&times;</span>
-                    <h2>Peringatan!!</h2>
-                    <p id="warningMessage"></p>
-                    <button class="btn btn-primary" onclick="closeWarningModal()">OK</button>
+            <!-- Warning Modal -->
+            <div class="modal" id="warningModal" tabindex="-1" aria-labelledby="warningModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="warningModalLabel">Warning</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p id="warningMessage"></p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">OK</button>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <!-- Share -->
-            <div id="shareModal" class="modal" style="display: none;">
-                <div class="modal-content">
-                    <span class="close" onclick="closeShareModal()">&times;</span>
-                    <h2>Share Folder Link</h2>
-                    <input type="text" id="shareUrlInput" class="form-control" readonly>
-                    <button id="copyLinkButton" class="btn btn-primary mt-2">Copy Link</button>
+            <!-- Share Folder -->
+            <div class="modal" id="shareModal" tabindex="-1" aria-labelledby="shareModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="shareModalLabel">Share Folder Link</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <input type="text" id="shareUrlInput" class="form-control" readonly>
+                            <button id="copyLinkButton" class="btn btn-primary mt-2">Copy Link</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -255,14 +283,14 @@
             function updateView() {
                 if (isGridView) {
                     gridView.style.display = 'grid';
-                    gridView.style.gridTemplateColumns = 'repeat(auto-fill, minmax(250px, 1fr))';
-                    gridView.style.gap = '20px';
+                    gridView.style.gridTemplateColumns = 'repeat(auto-fill, minmax(200px, 1fr))';
+                    gridView.style.gap = '20px';  // Ensure consistent gap in grid view
                     listView.style.display = 'none';
-                    toggleIcon.textContent = 'grid_view'; // Ubah ikon ke List View
+                    toggleIcon.textContent = 'grid_view'; // Change icon to List View
                 } else {
                     gridView.style.display = 'none';
                     listView.style.display = 'block';
-                    toggleIcon.textContent = 'view_list'; // Ubah ikon ke Grid View
+                    toggleIcon.textContent = 'view_list'; // Change icon to Grid View
                 }
             }
         });
