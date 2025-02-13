@@ -41,8 +41,7 @@
                     style="background-color: #b3e6b1; border: none;">
                     <span class="material-icons">create_new_folder</span>
                 </button>
-                <button class="btn rounded-circle ms-2"
-                    onclick="location.href='{{ route('files.create', ['folder' => $folder->id]) }}'"
+                <button class="btn rounded-circle ms-2" data-bs-toggle="modal" data-bs-target="#uploadFileModal"
                     style="background-color: #b3e6b1; border: none;">
                     <span class="material-icons">upload_file</span>
                 </button>
@@ -386,6 +385,42 @@
             </table>
         </form>
     @endif
+</div>
+
+        <!-- Modal for Upload File -->
+<div class="modal fade" id="uploadFileModal" tabindex="-1" aria-labelledby="uploadFileModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="uploadFileModalLabel">Upload File</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="{{ route('files.store', $folder->id ?? null) }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    @if ($folder)
+                        <input type="hidden" name="folder_id" value="{{ $folder->id }}">
+                        <p class="text-muted">Mengunggah file ke folder: <strong>{{ $folder->name }}</strong></p>
+                    @else
+                        <p class="text-muted">Mengunggah file ke root directory.</p>
+                    @endif
+
+                    <div class="mb-3">
+                        <label for="file" class="form-label">Pilih File</label>
+                        <input type="file" class="form-control" id="file" name="file[]" multiple required
+                            accept=".pdf, .doc, .docx, .xls, .xlsx, .ppt, .pptx">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="keterangan" class="form-label">Keterangan</label>
+                        <textarea class="form-control" id="keterangan" name="keterangan" rows="3"></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Upload</button>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
 
         {{-- rename file --}}

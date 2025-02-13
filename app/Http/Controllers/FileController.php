@@ -71,6 +71,7 @@ class FileController extends Controller
             ? redirect()->route('folder.show', $folderId)->with('success', 'File berhasil diunggah.')
             : redirect()->route('file.index')->with('success', 'File berhasil diunggah.');
     }
+
     public function show($folderId)
     {
         $folder = Folder::with(['children', 'files'])->findOrFail($folderId); // Temukan folder berdasarkan ID
