@@ -93,14 +93,9 @@
                                     <i class="fas fa-trash"></i>
                                 </button>
                             @endif
-                            <button class="button"
-                                onclick="openShareModal({{ $folder->id }}, '{{ url('/folder/' . $folder->id . '/share') }}')"
-                                title="Share">
-                                <i class="fas fa-share-alt"></i>
-                            </button>
                             <thead>
                                 <tr>
-                                    <th><input type="checkbox" id="selectAll" onclick="toggleSelectAll()"> Select All</th>
+                                    <th><input type="checkbox" id="selectAll" onclick="toggleSelectAll()"></th>
                                     <th>Name</th>
                                     <th>Created At</th>
                                     <th>Description</th>
@@ -121,6 +116,11 @@
                                                 <button class="button"
                                                     onclick="openRenameModal({{ $folder->id }}, '{{ $folder->name }}')" title="Rename">
                                                     <i class="fas fa-edit"></i>
+                                                </button>
+                                                <button class="button"
+                                                    onclick="openShareModal({{ $folder->id }}, '{{ url('/folder/' . $folder->id . '/share') }}')"
+                                                    title="Share">
+                                                    <i class="fas fa-share-alt"></i>
                                                 </button>
                                             </td>
                                         @endif
