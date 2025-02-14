@@ -584,6 +584,15 @@
         warningModal.show();
     }
 
+    // This function can be used to select all checkboxes
+    function toggleSelectAll() {
+        var checkboxes = document.querySelectorAll('input[name="folders[]"]');
+        var selectAllCheckbox = document.getElementById('selectAll');
+        checkboxes.forEach(function (checkbox) {
+            checkbox.checked = selectAllCheckbox.checked;
+        });
+    }
+
     // COPY
     function openCopyModal(folderId) {
         event.preventDefault();

@@ -61,123 +61,131 @@
 
         <h6>Folders</h6>
         <div id="gridViewFolders" class="folder-grid mt-4">
-        @if($subFolders->isEmpty())
-        <p>No subfolders found.</p>
-    @else
-            @foreach ($subFolders as $subFolder)
-                <div class="folder-card">
-                    <a href="{{ route('folder.show', $subFolder->id) }}" class="folder-link">
-                        <div class="folder-header">
-                            <div class="folder-icon">
-                                <span class="material-icons">folder</span>
-                            </div>
-                            <div class="folder-name">{{ $subFolder->name }}</div>
-                            <div class="dropdown">
-                                <button class="custom-toggle" onclick="toggleMenu(this, event)">
-                                    <span class="material-icons">more_vert</span>
-                                </button>
-                                <div class="dropdown-menu">
-                                    @if(auth()->user()->role === 'super_admin')
-                                        <button onclick="openRenameModal({{ $folder->id }}, '{{ $folder->name }}')">Rename</button>
-                                    @endif
-                                    <button onclick="openShareModal({{ $folder->id }}, '{{ url('/folder/' . $folder->id . '/share') }}')">Share</button>
-                                    @if(auth()->user()->role === 'super_admin')
-                                        <button onclick="openDeleteModal({{ $subFolder->id }})">Delete</button>
-                                        <button onclick="openCopyModal({{ $folder->id }})">Copy</button>
-                                    @endif
+            @if($subFolders->isEmpty())
+                <p>No subfolders found.</p>
+            @else
+                @foreach ($subFolders as $subFolder)
+                    <div class="folder-card">
+                        <a href="{{ route('folder.show', $subFolder->id) }}" class="folder-link">
+                            <div class="folder-header">
+                                <div class="folder-icon">
+                                    <span class="material-icons">folder</span>
+                                </div>
+                                <div class="folder-name">{{ $subFolder->name }}</div>
+                                <div class="dropdown">
+                                    <button class="custom-toggle" onclick="toggleMenu(this, event)">
+                                        <span class="material-icons">more_vert</span>
+                                    </button>
+                                    <div class="dropdown-menu">
+                                        @if(auth()->user()->role === 'super_admin')
+                                            <button onclick="openRenameModal({{ $folder->id }}, '{{ $folder->name }}')">Rename</button>
+                                        @endif
+                                        <button onclick="openShareModal({{ $folder->id }}, '{{ url('/folder/' . $folder->id . '/share') }}')">Share</button>
+                                        @if(auth()->user()->role === 'super_admin')
+                                            <button onclick="openDeleteModal({{ $subFolder->id }})">Delete</button>
+                                            <button onclick="openCopyModal({{ $folder->id }})">Copy</button>
+                                        @endif
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <p class="folder-meta">
-                            Anda membuatnya · {{ $subFolder->created_at->format('d M Y') }}<br>
-                            <span class="folder-description">{{ $subFolder->keterangan ?? 'Tidak ada keterangan' }}</span>
-                        </p>
-                    </a>
-                </div>
-            @endforeach
+                            <p class="folder-meta">
+                                Anda membuatnya · {{ $subFolder->created_at->format('d M Y') }}<br>
+                                <span class="folder-description">{{ $subFolder->keterangan ?? 'Tidak ada keterangan' }}</span>
+                            </p>
+                        </a>
+                    </div>
+                @endforeach
             @endif
         </div>
 
         <!-- List View for Folders --> 
-        <div id="listViewFolders" class="folder-list mt-4" style="display: none;"> 
-            <table class="table table-striped">
-            @if(auth()->user()->role === 'super_admin')
-            <button class="button" onclick="openDeleteModal({{ $folder->id }})" title="Delete">
-                <i class="fas fa-trash"></i>
-            </button>
-            @endif
-                        <thead> 
-                    <tr> 
-                    <th><input type="checkbox" id="selectAll" onclick="toggleSelectAll()"></th>
-                        <th>Name</th>
-                        <th>Created At</th> 
-                        <th>Description</th>
-                        @if(auth()->user()->role === 'super_admin') 
-                            <th>Actions</th> 
-                        @endif
-                    </tr> 
-                </thead> 
-                <tbody> 
-                    @foreach ($subFolders as $subFolder) 
-                        <tr> 
-                        <td><input type="checkbox" name="folders[]" value="{{ $folder->id }}"></td>
-                            <td>{{ $subFolder->name }}</td> 
-                            <td>{{ $subFolder->created_at->format('d M Y') }}</td> 
-                            <td>{{ $subFolder->keterangan ?? 'Tidak ada keterangan' }}</td> 
-                            @if(auth()->user()->role === 'super_admin')
-                            <td> 
-                                <button class="button" onclick="openRenameModal({{ $folder->id }}, '{{ $folder->name }}')"
-                                title="Rename">
-                                    <i class="fas fa-edit"></i>
-                                <button class="button" onclick="openShareModal({{ $folder->id }}, '{{ url('/folder/' . $folder->id . '/share') }}')" title="Share">
-                                    <i class="fas fa-share-alt"></i>
+        <div id="listViewFolders" class="folder-list mt-4" style="display: none;">
+            @if($subFolders->isEmpty())
+                <p>No folders found.</p>
+            @else
+                <form id="deleteMultipleForm" action="{{ route('folders.deleteMultiple') }}" method="POST">
+                    @csrf
+                    <table class="table table-striped">
+                        @if(auth()->user()->role === 'super_admin')
+                            <!-- Delete button placed outside the loop -->
+            
+                                <button class="button" onclick="openDeleteModal({{ $subFolder->id }})" title="Delete">
+                                    <i class="fas fa-trash"></i>
                                 </button>
+            
+                        @endif
+                        <thead>
+                            <tr>
+                                <th><input type="checkbox" id="selectAll" onclick="toggleSelectAll()"></th>
+                                <th>Name</th>
+                                <th>Created At</th>
+                                <th>Description</th>
                                 @if(auth()->user()->role === 'super_admin')
-                                    <button class="button" onclick="openCopyModal({{ $folder->id }})">
-                                        <i class="fas fa-copy"></i>
-                                    </button>
+                                    <th>Actions</th> 
                                 @endif
-                            </button>
-                            </td> 
-                            @endif
-                        </tr> 
-                    @endforeach 
-                </tbody>           
-            </table>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($subFolders as $subFolder)
+                                <tr>
+                                    <td><input type="checkbox" name="folders[]" value="{{ $subFolder->id }}"></td>
+                                    <td>{{ $subFolder->name }}</td>
+                                    <td>{{ $subFolder->created_at->format('d M Y') }}</td>
+                                    <td>{{ $subFolder->keterangan ?? 'Tidak ada keterangan' }}</td>
+                                    @if(auth()->user()->role === 'super_admin')
+                                        <td>
+                                            <button class="button" onclick="openRenameModal({{ $subFolder->id }}, '{{ $subFolder->name }}')" title="Rename">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <button class="button" onclick="openShareModal({{ $subFolder->id }}, '{{ url('/folder/' . $subFolder->id . '/share') }}')" title="Share">
+                                                <i class="fas fa-share-alt"></i>
+                                            </button>
+                                            <button class="button" onclick="openCopyModal({{ $subFolder->id }})" title="Copy">
+                                                <i class="fas fa-copy"></i>
+                                            </button>
+                                        </td>
+                                    @endif
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </form>
+            @endif
         </div>
+
 
         <!-- Modal add folder-->
         <div class="modal fade" id="addSubfolderModal" tabindex="-1" aria-labelledby="addSubfolderModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="addSubfolderModalLabel">Create Subfolder</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addSubfolderModalLabel">Create Subfolder</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="{{ route('folder.store', ['parentId' => $folder->id]) }}" method="POST">
+                            @csrf
+                            <div class="mb-3">
+                                <label for="folder_name" class="form-label">Folder Name</label>
+                                <input type="text" class="form-control" id="folder_name" name="folder_name" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="accessibility" class="form-label">Accessibility</label>
+                                <select class="form-select" id="accessibility" name="accessibility" required>
+                                    <option value="public">Public</option>
+                                    <option value="private">Private</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="keterangan" class="form-label">Keterangan</label>
+                                <textarea class="form-control" id="keterangan" name="keterangan" rows="3"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Create Folder</button>
+                        </form>
+                    </div>
                 </div>
-                <div class="modal-body">
-                <form action="{{ route('folder.store', ['parentId' => $folder->id]) }}" method="POST">
-                @csrf
-                <div class="mb-3">
-                    <label for="folder_name" class="form-label">Folder Name</label>
-                    <input type="text" class="form-control" id="folder_name" name="folder_name" required>
-                </div>
-                <div class="mb-3">
-                    <label for="accessibility" class="form-label">Accessibility</label>
-                    <select class="form-select" id="accessibility" name="accessibility" required>
-                        <option value="public">Public</option>
-                        <option value="private">Private</option>
-                    </select>
-                </div>
-                <div class="mb-3">
-                    <label for="keterangan" class="form-label">Keterangan</label>
-                    <textarea class="form-control" id="keterangan" name="keterangan" rows="3"></textarea>
-                </div>
-                <button type="submit" class="btn btn-primary">Create Folder</button>
-            </form>
+            </div>
         </div>
-    </div>
-  </div>
-</div>
 
 
         <!-- Rename Folder -->
