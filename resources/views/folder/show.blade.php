@@ -108,9 +108,11 @@
                     <table class="table table-striped">
                         @if(auth()->user()->role === 'super_admin')
                             <!-- Delete button placed outside the loop -->
-                            <button class="button" onclick="openDeleteModal{{ ($subFolder->id) }}" title="Delete">
-                                <i class="fas fa-trash"></i>
-                            </button>
+            
+                                <button class="button" onclick="openDeleteModal({{ $subFolder->id }})" title="Delete">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+            
                         @endif
                         <thead>
                             <tr>
