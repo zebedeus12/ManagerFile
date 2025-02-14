@@ -102,7 +102,7 @@
         <div id="listViewFolders" class="folder-list mt-4" style="display: none;"> 
             <table class="table table-striped">
             @if(auth()->user()->role === 'super_admin')
-            <button class="button" onclick="openDeleteModal({{ $folder->id }})" title="Delete">
+            <button class="button" onclick="openDeleteModal({{ $subFolder->id }})" title="Delete">
                 <i class="fas fa-trash"></i>
             </button>
             @endif
