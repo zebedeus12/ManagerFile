@@ -95,7 +95,7 @@ class MediaController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'type' => 'required|string|max:255',
-            'file' => 'nullable|file|mimes:jpeg,png,jpg,gif,mp3,mp4,mkv',
+            'file' => 'nullable|file|mimes:jpeg,png,jpg,gif,mp3,mp4,mkv,avi',
         ]);
 
         // Periksa apakah ada file baru yang diunggah
@@ -135,4 +135,17 @@ class MediaController extends Controller
 
         return redirect()->route('media.index')->with('success', 'Media berhasil dihapus.');
     }
+    
+    public function show($id)
+{
+    $media = Media::findOrFail($id);
+    $path = storage_path('app/public/' . $media->path);
+
+    if (!file_exists($path)) {
+        abort(404, 'File not found');
+    }
+
+    return response()->file($path);
+}
+
 }

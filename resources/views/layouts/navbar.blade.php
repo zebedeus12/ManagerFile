@@ -10,10 +10,10 @@
             @else
                 <span class="fw-bold">Guest</span>
             @endif
-            <a href="#" class="notification-link me-3" title="Notifications">
+            {{-- <a href="#" class="notification-link me-3" title="Notifications">
                 <span class="material-icons">notifications</span>
                 <span class="notification-count">3</span> <!-- Bisa diubah sesuai jumlah notifikasi -->
-            </a>
+            </a> --}}
         </div>
     </div>
 </nav>

@@ -88,6 +88,7 @@ Route::get('/media/{media}', [MediaController::class, 'show'])->name('media.show
 Route::get('/media/{media}/edit', [MediaController::class, 'edit'])->name('media.edit');
 Route::put('/media/{media}', [MediaController::class, 'update'])->name('media.update');
 Route::delete('/media/folder/{id}', [MediaFolderController::class, 'destroy'])->name('media.folder.destroy');
+Route::delete('/media/{id}', [MediaController::class, 'destroy'])->name('media.destroy');
 Route::get('/media/folder/check/{id}', [MediaFolderController::class, 'checkFolder']);
 Route::get('/media/folders/search', [MediaController::class, 'searchFolders'])->name('media.folders.search');
 Route::post('/media/folder/delete-multiple', [MediaFolderController::class, 'destroyMultiple'])

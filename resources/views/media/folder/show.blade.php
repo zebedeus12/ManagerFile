@@ -315,8 +315,7 @@
                                     </button>
                                     <div class="dropdown-menu">
                                         <a href="{{ route('media.edit', $media->id) }}" class="dropdown-item">Edit</a>
-                                        <button onclick="deleteMedia({{ $media->id }})"
-                                            class="dropdown-item text-danger">Delete</button>
+                                        <button onclick="deleteMedia({{ $media->id }})" class="dropdown-item text-danger">Delete</button>
                                     </div>
                                 </div>
                             @endif
