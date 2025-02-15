@@ -187,118 +187,116 @@
             </div>
         </div>
 
-
         <!-- Rename Folder -->
-        <div class="modal" id="renameFolderModal" tabindex="-1" aria-labelledby="renameFolderModalLabel"
-                aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="renameFolderModalLabel">Rename Folder</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <form id="renameFolderForm" method="POST">
-                                @csrf
-                                <div class="mb-3">
-                                    <label for="newFolderName" class="form-label">New Folder Name</label>
-                                    <input type="text" id="newFolderName" name="name" class="form-control" required>
-                                </div>
-                                <button type="submit" class="btn btn-primary">Save</button>
-                            </form>
-                        </div>
+        <div class="modal" id="renameFolderModal" tabindex="-1" aria-labelledby="renameFolderModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="renameFolderModalLabel">Rename Folder</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="renameFolderForm" method="POST">
+                            @csrf
+                            <div class="mb-3">
+                                <label for="newFolderName" class="form-label">New Folder Name</label>
+                                <input type="text" id="newFolderName" name="name" class="form-control" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Save</button>
+                        </form>
                     </div>
                 </div>
             </div>
+        </div>
 
         <!-- Delete Folder -->
         <div class="modal" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="deleteModalLabel">Delete Folder</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <p>Are you sure you want to delete this folder?</p>
-                            <form id="deleteForm" method="POST">
-                                @csrf
-                                @method('DELETE')
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                <button type="submit" class="btn btn-danger">Delete</button>
-                            </form>
-                        </div>
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deleteModalLabel">Delete Folder</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Are you sure you want to delete this folder?</p>
+                        <form id="deleteForm" method="POST">
+                            @csrf
+                            @method('DELETE')
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </form>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <!-- Warning Modal -->
-            <div class="modal" id="warningModal" tabindex="-1" aria-labelledby="warningModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="warningModalLabel">Warning</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <p id="warningMessage"></p>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">OK</button>
-                        </div>
+        <!-- Warning Modal -->
+        <div class="modal" id="warningModal" tabindex="-1" aria-labelledby="warningModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="warningModalLabel">Warning</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p id="warningMessage"></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">OK</button>
                     </div>
                 </div>
-            </div>
+            </div>            
+        </div>
 
         <!-- Share Folder -->
-            <div class="modal" id="shareModal" tabindex="-1" aria-labelledby="shareModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="shareModalLabel">Share Folder Link</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <input type="text" id="shareUrlInput" class="form-control" readonly>
-                            <button id="copyLinkButton" class="btn btn-primary mt-2">Copy Link</button>
-                        </div>
+        <div class="modal" id="shareModal" tabindex="-1" aria-labelledby="shareModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="shareModalLabel">Share Folder Link</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="text" id="shareUrlInput" class="form-control" readonly>
+                        <button id="copyLinkButton" class="btn btn-primary mt-2">Copy Link</button>
                     </div>
                 </div>
             </div>
+        </div>           
 
         <!-- Copy Folder Modal -->
-<div class="modal" id="copyModal" tabindex="-1" aria-labelledby="copyModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="copyModalLabel">Copy Folder</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <p>Are you sure you want to copy this folder?</p>
-                <form id="copyForm" method="POST" action="{{ route('folder.copy', $folder->id) }}">
-                    @csrf
-                    <div class="mb-3">
-                        <label for="destination_folder_id" class="form-label">Select Destination Folder</label>
-                        <select id="destination_folder_id" name="destination_folder_id" class="form-select">
-                            <option value="">Select Destination Folder</option>
-                            @foreach($allFolders as $folderOption)
-                                <option value="{{ $folderOption->id }}" @if($folderOption->id == $folder->id) selected @endif>
-                                    {{ $folderOption->name }}
-                                </option>
-                            @endforeach
-                            <option value="new">Create New Folder</option>
-                        </select>
+        <div class="modal" id="copyModal" tabindex="-1" aria-labelledby="copyModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="copyModalLabel">Copy Folder</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
+                    <div class="modal-body">
+                        <p>Are you sure you want to copy this folder?</p>
+                        <form id="copyForm" method="POST" action="{{ route('folder.copy', $folder->id) }}">
+                            @csrf
+                            <div class="mb-3">
+                                <label for="destination_folder_id" class="form-label">Select Destination Folder</label>
+                                <select id="destination_folder_id" name="destination_folder_id" class="form-select">
+                                    <option value="">Select Destination Folder</option>
+                                    @foreach($allFolders as $folderOption)
+                                        <option value="{{ $folderOption->id }}" @if($folderOption->id == $folder->id) selected @endif>
+                                            {{ $folderOption->name }}
+                                        </option>
+                                    @endforeach
+                                    <option value="new">Create New Folder</option>
+                                </select>
+                            </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Copy</button>
+                    </div>
+                </form>
+                </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="submit" class="btn btn-primary">Copy</button>
-            </div>
-        </form>
         </div>
-    </div>
-</div>
 
         <!-- Bagian untuk File -->
         <h6>Files</h6>
@@ -341,11 +339,7 @@
                                 @endif
                                 <button onclick="openShareFileModal('{{ route('file.share', $file->id) }}')">Share</button>
                                 @if(auth()->user()->role === 'super_admin')
-                                <form action="{{ route('file.destroy', $file->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus file ini?')">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit">Delete</button>
-                                </form>
+                                <button class="delete-file-btn" data-file-id="{{ $file->id }}" onclick="openDeleteFileModal({{ $file->id }})">Delete</button>
                                 @endif
                             </div>
                         </div>
@@ -370,7 +364,7 @@
             <table class="table table-striped">
                 <thead>
                     <tr>
-                        <th><input type="checkbox" id="selectAll" onclick="toggleSelectAll()"> Select All</th>
+                        <th><input type="checkbox" id="selectAll" onclick="toggleSelectAll()"></th>
                         <th>Name</th>
                         <th>Created At</th>
                         <th>Description</th>
@@ -388,6 +382,7 @@
                                 <button class="button" onclick="openRenameModal({{ $file->id }}, '{{ $file->name }}')" title="Rename">
                                     <i class="fas fa-edit"></i>
                                 </button>
+                                <button class="button" onclick="openShareFileModal('{{ route('file.share', $file->id) }}')"><i class="fas fa-share-alt"></i></button>
                             </td>
                         </tr>
                     @endforeach
@@ -433,11 +428,37 @@
     </div>
 </div>
 
-        {{-- rename file --}}
-        <div id="renameFileModal" class="modal" style="display: none;">
-            <div class="modal-content">
-                <span class="close" onclick="closeRenameFileModal()">&times;</span>
-                <h2>Rename File</h2>
+<!-- Modal Delete File -->
+<div class="modal" id="deleteFileModal" tabindex="-1" aria-labelledby="deleteFileModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteFileModalLabel">Delete File</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete this file?</p>
+                <form id="deleteFileForm" action="" method="POST">
+                    @csrf
+                    @method('DELETE')
+                    <input type="hidden" name="file_id" id="deleteFileId">
+                    <button type="submit" class="btn btn-danger">Yes, Delete</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">Cancel</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Rename File -->
+<div class="modal" id="renameFileModal" tabindex="-1" aria-labelledby="renameFileModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="renameFileModalLabel">Rename File</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
                 <form id="renameFileForm" method="POST">
                     @csrf
                     <div class="form-group">
@@ -448,18 +469,25 @@
                 </form>
             </div>
         </div>
+    </div>
+</div>
 
-        {{-- share file --}}
-        <div id="shareFileModal" class="modal" style="display: none;">
-            <div class="modal-content">
-                <span class="close" onclick="closeShareFileModal()">&times;</span>
-                <h2>Share File Link</h2>
+<!-- Modal Share File -->
+<div class="modal" id="shareFileModal" tabindex="-1" aria-labelledby="shareFileModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="shareFileModalLabel">Share File Link</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
                 <input type="text" id="shareFileUrlInput" class="form-control" readonly>
                 <button id="copyFileLinkButton" class="btn btn-primary mt-2">Copy Link</button>
             </div>
         </div>
     </div>
 </div>
+
 
 <script>
    function toggleMenu(button) {
@@ -551,40 +579,44 @@
         modal.style.display = 'none';
     }
 
+    // Fungsi untuk membuka modal delete file
     function openDeleteFileModal(fileId) {
-        const modal = document.getElementById('deleteFileModal');
-        modal.style.display = 'block';
-        const form = document.getElementById('deleteFileForm');
-        form.action = `/file/delete/${fileId}`;
-    }
+    const modal = new bootstrap.Modal(document.getElementById('deleteFileModal'));
+    modal.show(); // Show the modal
+    const form = document.getElementById('deleteFileForm');
+    form.action = `/files/delete/${fileId}`; // Set the action URL for the form
+    document.getElementById('deleteFileId').value = fileId;  // Set the file ID to be deleted
+}
 
-    function closeDeleteFileModal() {
-        const modal = document.getElementById('deleteFileModal');
-        modal.style.display = 'none';
-    }
+// Fungsi untuk menutup modal delete file
+function closeDeleteFileModal() {
+    const modal = new bootstrap.Modal(document.getElementById('deleteFileModal'));
+    modal.hide(); // Menyembunyikan modal
+}
 
-    function toggleView() { 
-        const gridViewFolders = document.getElementById('gridViewFolders'); 
-        const listViewFolders = document.getElementById('listViewFolders'); 
-        const gridViewFiles = document.getElementById('gridViewFiles'); 
-        const listViewFiles = document.getElementById('listViewFiles'); 
-        
-        if (gridViewFolders.style.display === 'none') { 
-            gridViewFolders.style.display = 'grid';
-            gridViewFolders.style.gridTemplateColumns = 'repeat(auto-fill, minmax(200px, 1fr))';
-            gridViewFolders.style.gap = '20px'; 
-            listViewFolders.style.display = 'none'; 
-            gridViewFiles.style.display = 'grid';
-            gridViewFiles.style.gridTemplateColumns = 'repeat(auto-fill, minmax(220px, 1fr));';
-            gridViewFiles.style.gap = '20px';
-            listViewFiles.style.display = 'none'; 
-        } else { 
-            gridViewFolders.style.display = 'none'; 
-            listViewFolders.style.display = 'block'; 
-            gridViewFiles.style.display = 'none'; 
-            listViewFiles.style.display = 'block'; 
-        } 
-    }
+    function toggleView() {
+    const gridViewFolders = document.getElementById('gridViewFolders');
+    const listViewFolders = document.getElementById('listViewFolders');
+    const gridViewFiles = document.getElementById('gridViewFiles');
+    const listViewFiles = document.getElementById('listView');
 
+    // Cek apakah tampilan grid aktif
+    if (gridViewFiles.style.display === 'none') {
+        gridViewFolders.style.display = 'grid';
+        gridViewFolders.style.gridTemplateColumns = 'repeat(auto-fill, minmax(200px, 1fr))';
+        gridViewFolders.style.gap = '20px';
+        listViewFolders.style.display = 'none';
+        gridViewFiles.style.display = 'grid';
+        gridViewFiles.style.gridTemplateColumns = 'repeat(auto-fill, minmax(220px, 1fr));';
+        gridViewFiles.style.gap = '20px';
+        listViewFiles.style.display = 'none';
+    } else {
+        gridViewFolders.style.display = 'none';
+        listViewFolders.style.display = 'block';
+        gridViewFiles.style.display = 'none';
+        gridViewFiles.style.display = 'list';
+        listViewFiles.style.display = 'block';
+    }
+}
 </script>
 @endsection

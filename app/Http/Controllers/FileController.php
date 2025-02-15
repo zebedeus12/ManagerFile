@@ -98,17 +98,20 @@ class FileController extends Controller
     // Fungsi Delete File
     public function destroy($fileId)
     {
-        $file = File::findOrFail($fileId); // Temukan file berdasarkan ID
-
-        if ($file->path && Storage::disk('public')->exists($file->path)) {
-            Storage::disk('public')->delete($file->path); // Hapus file dari storage
+        $file = File::find($fileId); // Find the file by ID
+        if (!$file) {
+            return redirect()->back()->with('error', 'File not found.'); // Redirect back with error message
         }
 
-        $file->delete(); // Hapus metadata dari database
+        // Check if the file exists in storage and delete it
+        if ($file->path && Storage::disk('public')->exists($file->path)) {
+            Storage::disk('public')->delete($file->path); // Delete the file from storage
+        }
 
-        return redirect()->back()->with('success', 'File berhasil dihapus.');
+        $file->delete(); // Delete the file metadata from the database
+
+        return redirect()->back()->with('success', 'File berhasil dihapus.'); // Redirect back with success message
     }
-
 
     // Fungsi Share File
     public function share($fileId)
