@@ -355,42 +355,50 @@
         </div>
 
         <!-- List View -->
-<div id="listView" class="folder-list mt-4" style="display: none;">
+        <div id="listView" class="folder-list mt-4" style="display: none;">
     @if($files->isEmpty())
         <p>No files found.</p>
     @else
-        <form id="deleteMultipleForm" action="{{ route('files.deleteMultiple') }}" method="POST">
-            @csrf
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th><input type="checkbox" id="selectAll" onclick="toggleSelectAll()"></th>
-                        <th>Name</th>
-                        <th>Created At</th>
-                        <th>Description</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($files as $file)
-                        <tr>
-                            <td><input type="checkbox" name="files[]" value="{{ $file->id }}"></td>
-                            <td>{{ $file->name }}</td>
-                            <td>{{ $file->created_at->format('d M Y') }}</td>
-                            <td>{{ $file->keterangan ?? 'No description' }}</td>
-                            <td>
-                                <button class="button" onclick="openRenameModal({{ $file->id }}, '{{ $file->name }}')" title="Rename">
-                                    <i class="fas fa-edit"></i>
-                                </button>
-                                <button class="button" onclick="openShareFileModal('{{ route('file.share', $file->id) }}')"><i class="fas fa-share-alt"></i></button>
-                            </td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </form>
+    <form id="deleteMultipleForm" action="{{ route('files.deleteMultiple') }}" method="POST">
+    @csrf
+    <div class="mb-3">
+        <button type="submit" class="btn btn-danger" id="deleteMultipleButton" disabled>
+            Delete Selected Files
+        </button>
+    </div>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th><input type="checkbox" id="selectAll" onclick="toggleSelectAll()"></th>
+                <th>Name</th>
+                <th>Created At</th>
+                <th>Description</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach ($files as $file)
+                <tr>
+                    <td><input type="checkbox" name="files[]" value="{{ $file->id }}" class="file-checkbox" onchange="toggleDeleteButton()"></td>
+                    <td>{{ $file->name }}</td>
+                    <td>{{ $file->created_at->format('d M Y') }}</td>
+                    <td>{{ $file->keterangan ?? 'No description' }}</td>
+                    <td>
+                        <button class="button" onclick="openRenameFileModal({{ $file->id }}, '{{ $file->name }}')" title="Rename">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="button" onclick="openShareFileModal('{{ route('file.share', $file->id) }}')"><i class="fas fa-share-alt"></i></button>
+                    </td>
+                </tr>
+            @endforeach
+        </tbody>
+    </table>
+</form>
+
     @endif
 </div>
+
 
         <!-- Modal for Upload File -->
 <div class="modal fade" id="uploadFileModal" tabindex="-1" aria-labelledby="uploadFileModalLabel" aria-hidden="true">
@@ -502,6 +510,34 @@
         const menu = button.nextElementSibling;
         menu.classList.toggle('show');
     }
+
+    // Fungsi untuk menampilkan tombol Delete saat ada file yang dipilih
+    function toggleDeleteButton() {
+    const selectedFiles = document.querySelectorAll('.file-checkbox:checked');
+    const deleteButton = document.getElementById('deleteMultipleButton');
+    
+    // Mengaktifkan tombol delete hanya jika ada file yang dipilih
+    if (selectedFiles.length > 0) {
+        deleteButton.disabled = false;  // Mengaktifkan tombol delete
+    } else {
+        deleteButton.disabled = true;  // Menonaktifkan tombol delete
+    }
+}
+
+
+// Fungsi untuk memilih semua checkbox
+function toggleSelectAll() {
+    const selectAllCheckbox = document.getElementById('selectAll');
+    const fileCheckboxes = document.querySelectorAll('.file-checkbox');
+    const isChecked = selectAllCheckbox.checked;
+
+    fileCheckboxes.forEach(checkbox => {
+        checkbox.checked = isChecked;
+    });
+
+    toggleDeleteButton(); // Memanggil kembali fungsi untuk memeriksa status tombol delete
+}
+
 
     // Tutup dropdown saat klik di luar
     document.addEventListener('click', function (event) {

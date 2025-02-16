@@ -63,7 +63,8 @@ Route::delete('/files/delete/{fileId}', [FileController::class, 'destroy'])->nam
 
 // Preview file
 Route::get('/file/preview/{id}', [FileController::class, 'preview'])->name('files.preview');
-Route::delete('/files/delete-multiple', [FileController::class, 'deleteMultiple'])->name('files.deleteMultiple');
+// In routes/web.php
+Route::post('files/delete-multiple', [FileController::class, 'deleteMultiple'])->name('files.deleteMultiple');
 
 // Mengelola folder
 Route::get('/folder/create/{parentId?}', [FolderController::class, 'showForm'])->name('folder.create'); // Form tambah folder

@@ -115,25 +115,43 @@ class FolderController extends Controller
 
     public function deleteMultiple(Request $request)
     {
+        // Mengambil ID folder yang dipilih dari form
         $folderIds = $request->input('folders');
 
+        // Pastikan ada folder yang dipilih
         if ($folderIds) {
-            // Ensure the folders exist and are deletable (e.g., not containing files)
+            $deletedFolders = [];
+            $failedFolders = [];
+
             foreach ($folderIds as $folderId) {
+                // Cari folder berdasarkan ID
                 $folder = Folder::find($folderId);
 
-                if ($folder && $folder->files()->count() == 0) {
-                    $folder->delete();
+                if ($folder) {
+                    if ($folder->files()->count() == 0) {
+                        // Hapus folder jika tidak ada file di dalamnya
+                        $folder->delete();
+                        $deletedFolders[] = $folder->name; // Simpan nama folder yang dihapus
+                    } else {
+                        // Jika folder berisi file, simpan ke daftar gagal
+                        $failedFolders[] = $folder->name;
+                    }
                 } else {
-                    // Handle error if folder is not empty or does not exist
-                    return back()->with('error', "Some folders could not be deleted because they contain files or do not exist.");
+                    // Jika folder tidak ditemukan, simpan ke daftar gagal
+                    $failedFolders[] = "Folder ID {$folderId} tidak ditemukan.";
                 }
             }
 
-            return redirect()->route('folder.index')->with('success', 'Selected folders have been deleted.');
+            // Buat pesan untuk hasil penghapusan
+            $successMessage = count($deletedFolders) > 0 ? 'Folder yang dihapus: ' . implode(', ', $deletedFolders) : '';
+            $errorMessage = count($failedFolders) > 0 ? 'Gagal menghapus folder: ' . implode(', ', $failedFolders) : '';
+
+            // Redirect dengan pesan sukses dan error jika ada
+            return redirect()->route('folder.index')->with('success', $successMessage)->with('error', $errorMessage);
         }
 
-        return back()->with('error', 'No folders selected for deletion.');
+        // Jika tidak ada folder yang dipilih
+        return back()->with('error', 'Tidak ada folder yang dipilih untuk dihapus.');
     }
 
     public function checkFolder($id)
