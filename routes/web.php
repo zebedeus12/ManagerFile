@@ -56,10 +56,11 @@ Route::prefix('files')->group(function () {
     Route::get('/create/{folder?}', [FileController::class, 'create'])->name('files.create'); // Form upload file
     Route::post('/store/{folder?}', [FileController::class, 'store'])->name('files.store'); // Menyimpan file
     Route::get('/{id}', [FileController::class, 'show'])->name('files.show'); // Menampilkan detail file
-    Route::post('/rename/{fileId}', [FileController::class, 'rename'])->name('files.rename'); // Rename file
-    Route::get('/file/share/{fileId}', [FileController::class, 'share'])->name('file.share');
 });
 Route::delete('/files/delete/{fileId}', [FileController::class, 'destroy'])->name('file.delete');
+// routes/web.php
+Route::post('/file/rename/{fileId}', [FileController::class, 'rename'])->name('file.rename');
+Route::get('/file/share/{fileId}', [FileController::class, 'share'])->name('file.share');
 
 // Preview file
 Route::get('/file/preview/{id}', [FileController::class, 'preview'])->name('files.preview');

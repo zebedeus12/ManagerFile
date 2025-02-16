@@ -107,12 +107,9 @@
                     @csrf
                     <table class="table table-striped">
                         @if(auth()->user()->role === 'super_admin')
-                            <!-- Delete button placed outside the loop -->
-            
-                                <button class="button" onclick="openDeleteModal({{ $subFolder->id }})" title="Delete">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-            
+                            <button class="button" onclick="openDeleteModal({{ $subFolder->id }})" title="Delete">
+                                <i class="fas fa-trash"></i>
+                            </button>
                         @endif
                         <thead>
                             <tr>
@@ -301,202 +298,199 @@
         <!-- Bagian untuk File -->
         <h6>Files</h6>
         <div id="gridViewFiles" class="file-grid">
-        @if($files->isEmpty())
-        <p>No files found.</p>
-    @else
-            @foreach ($files as $file)
-                <div class="file-card">
-                    <div class="file-header">
-                        <span class="file-icon">
-                            @switch($file->type)
-                                @case('pdf')
-                                    <i class="fas fa-file-pdf" style="color: #E74C3C;"></i>
-                                    @break
-                                @case('xls')
-                                @case('xlsx')
-                                    <i class="fas fa-file-excel" style="color: #28A745;"></i>
-                                    @break
-                                @case('doc')
-                                @case('docx')
-                                    <i class="fas fa-file-word" style="color: #3498DB;"></i>
-                                    @break
-                                @case('ppt')
-                                @case('pptx')
-                                    <i class="fas fa-file-powerpoint" style="color: #FF5733;"></i>
-                                    @break
-                                @default
-                                    <i class="fas fa-file" style="color: #BDC3C7;"></i>
-                            @endswitch
-                        </span>
-                        <span class="file-name">{{ $file->name }}</span>
-                        <div class="dropdown">
-                            <button class="custom-toggle" onclick="toggleMenu(this, event)">
-                                <span class="material-icons">more_vert</span>
-                            </button>
-                            <div class="dropdown-menu">
-                                @if(auth()->user()->role === 'super_admin')
-                                    <button onclick="openRenameFileModal({{ $file->id }}, '{{ $file->name }}')">Rename</button>
-                                @endif
-                                <button onclick="openShareFileModal('{{ route('file.share', $file->id) }}')">Share</button>
-                                @if(auth()->user()->role === 'super_admin')
-                                <button class="delete-file-btn" data-file-id="{{ $file->id }}" onclick="openDeleteFileModal({{ $file->id }})">Delete</button>
-                                @endif
+            @if($files->isEmpty())
+                <p>No files found.</p>
+            @else
+                @foreach ($files as $file)
+                    <div class="file-card">
+                        <div class="file-header">
+                            <span class="file-icon">
+                                @switch($file->type)
+                                    @case('pdf')
+                                        <i class="fas fa-file-pdf" style="color: #E74C3C;"></i>
+                                        @break
+                                    @case('xls')
+                                    @case('xlsx')
+                                        <i class="fas fa-file-excel" style="color: #28A745;"></i>
+                                        @break
+                                    @case('doc')
+                                    @case('docx')
+                                        <i class="fas fa-file-word" style="color: #3498DB;"></i>
+                                        @break
+                                    @case('ppt')
+                                    @case('pptx')
+                                        <i class="fas fa-file-powerpoint" style="color: #FF5733;"></i>
+                                        @break
+                                    @default
+                                        <i class="fas fa-file" style="color: #BDC3C7;"></i>
+                                @endswitch
+                            </span>
+                            <span class="file-name">{{ $file->name }}</span>
+                            <div class="dropdown">
+                                <button class="custom-toggle" onclick="toggleMenu(this, event)">
+                                    <span class="material-icons">more_vert</span>
+                                </button>
+                                <div class="dropdown-menu">
+                                    @if(auth()->user()->role === 'super_admin')
+                                        <button onclick="openRenameFileModal({{ $file->id }}, '{{ $file->name }}')">Rename</button>
+                                    @endif
+                                    <button onclick="openShareFileModal('{{ route('file.share', $file->id) }}')">Share</button>
+                                    @if(auth()->user()->role === 'super_admin')
+                                    <button class="delete-file-btn" data-file-id="{{ $file->id }}" onclick="openDeleteFileModal({{ $file->id }})">Delete</button>
+                                    @endif
+                                </div>
                             </div>
                         </div>
+                        <div class="file-footer">
+                            <span class="file-info">
+                                Anda membuatnya • {{ $file->created_at->format('d M Y') }}
+                            </span>
+                        </div>
                     </div>
-                    <div class="file-footer">
-                        <span class="file-info">
-                            Anda membuatnya • {{ $file->created_at->format('d M Y') }}
-                        </span>
-                    </div>
-                </div>
-            @endforeach
+                @endforeach
             @endif
         </div>
 
         <!-- List View -->
         <div id="listView" class="folder-list mt-4" style="display: none;">
-    @if($files->isEmpty())
-        <p>No files found.</p>
-    @else
-    <form id="deleteMultipleForm" action="{{ route('files.deleteMultiple') }}" method="POST">
-    @csrf
-    <div class="mb-3">
-        <button type="submit" class="btn btn-danger" id="deleteMultipleButton" disabled>
-            Delete Selected Files
-        </button>
-    </div>
-
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th><input type="checkbox" id="selectAll" onclick="toggleSelectAll()"></th>
-                <th>Name</th>
-                <th>Created At</th>
-                <th>Description</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach ($files as $file)
-                <tr>
-                    <td><input type="checkbox" name="files[]" value="{{ $file->id }}" class="file-checkbox" onchange="toggleDeleteButton()"></td>
-                    <td>{{ $file->name }}</td>
-                    <td>{{ $file->created_at->format('d M Y') }}</td>
-                    <td>{{ $file->keterangan ?? 'No description' }}</td>
-                    <td>
-                        <button class="button" onclick="openRenameFileModal({{ $file->id }}, '{{ $file->name }}')" title="Rename">
-                            <i class="fas fa-edit"></i>
+            @if($files->isEmpty())
+                <p>No files found.</p>
+            @else
+                <form id="deleteMultipleForm" action="{{ route('files.deleteMultiple') }}" method="POST">
+                    @csrf
+                    <div class="mb-3">
+                        <button type="submit" class="btn btn-danger" id="deleteMultipleButton" disabled>
+                            Delete Selected Files
                         </button>
-                        <button class="button" onclick="openShareFileModal('{{ route('file.share', $file->id) }}')"><i class="fas fa-share-alt"></i></button>
-                    </td>
-                </tr>
-            @endforeach
-        </tbody>
-    </table>
-</form>
-
-    @endif
-</div>
-
+                    </div>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th><input type="checkbox" id="selectAll" onclick="toggleSelectAll()"></th>
+                                <th>Name</th>
+                                <th>Created At</th>
+                                <th>Description</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($files as $file)
+                                <tr>
+                                    <td><input type="checkbox" name="files[]" value="{{ $file->id }}" class="file-checkbox" onchange="toggleDeleteButton()"></td>
+                                    <td>{{ $file->name }}</td>
+                                    <td>{{ $file->created_at->format('d M Y') }}</td>
+                                    <td>{{ $file->keterangan ?? 'No description' }}</td>
+                                    <td>
+                                        <button class="button" onclick="openRenameFileModal({{ $file->id }}, '{{ $file->name }}')" title="Rename">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="button" onclick="openShareFileModal('{{ route('file.share', $file->id) }}')"><i class="fas fa-share-alt"></i></button>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </form>
+            @endif
+        </div>
 
         <!-- Modal for Upload File -->
-<div class="modal fade" id="uploadFileModal" tabindex="-1" aria-labelledby="uploadFileModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="uploadFileModalLabel">Upload File</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form action="{{ route('files.store', $folder->id ?? null) }}" method="POST" enctype="multipart/form-data">
-                    @csrf
-                    @if ($folder)
-                        <input type="hidden" name="folder_id" value="{{ $folder->id }}">
-                        <p class="text-muted">Mengunggah file ke folder: <strong>{{ $folder->name }}</strong></p>
-                    @else
-                        <p class="text-muted">Mengunggah file ke root directory.</p>
-                    @endif
-
-                    <div class="mb-3">
-                        <label for="file" class="form-label">Pilih File</label>
-                        <input type="file" class="form-control" id="file" name="file[]" multiple required
-                            accept=".pdf, .doc, .docx, .xls, .xlsx, .ppt, .pptx">
+        <div class="modal fade" id="uploadFileModal" tabindex="-1" aria-labelledby="uploadFileModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="uploadFileModalLabel">Upload File</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
+                    <div class="modal-body">
+                    <form action="{{ route('files.store', $folder->id ?? null) }}" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            @if ($folder)
+                                <input type="hidden" name="folder_id" value="{{ $folder->id }}">
+                                <p class="text-muted">Mengunggah file ke folder: <strong>{{ $folder->name }}</strong></p>
+                            @else
+                                <p class="text-muted">Mengunggah file ke root directory.</p>
+                            @endif
 
-                    <div class="mb-3">
-                        <label for="keterangan" class="form-label">Keterangan</label>
-                        <textarea class="form-control" id="keterangan" name="keterangan" rows="3"></textarea>
+                            <div class="mb-3">
+                                <label for="file" class="form-label">Pilih File</label>
+                                <input type="file" class="form-control" id="file" name="file[]" multiple required
+                                    accept=".pdf, .doc, .docx, .xls, .xlsx, .ppt, .pptx">
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="keterangan" class="form-label">Keterangan</label>
+                                <textarea class="form-control" id="keterangan" name="keterangan" rows="3"></textarea>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary">Upload</button>
+                        </form>
                     </div>
-
-                    <button type="submit" class="btn btn-primary">Upload</button>
-                </form>
+                </div>
             </div>
         </div>
-    </div>
-</div>
 
-<!-- Modal Delete File -->
-<div class="modal" id="deleteFileModal" tabindex="-1" aria-labelledby="deleteFileModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="deleteFileModalLabel">Delete File</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <p>Are you sure you want to delete this file?</p>
-                <form id="deleteFileForm" action="" method="POST">
-                    @csrf
-                    @method('DELETE')
-                    <input type="hidden" name="file_id" id="deleteFileId">
-                    <button type="submit" class="btn btn-danger">Yes, Delete</button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">Cancel</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Modal Rename File -->
-<div class="modal" id="renameFileModal" tabindex="-1" aria-labelledby="renameFileModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="renameFileModalLabel">Rename File</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form id="renameFileForm" method="POST">
-                    @csrf
-                    <div class="form-group">
-                        <label for="newFileName">Nama File Baru</label>
-                        <input type="text" id="newFileName" name="name" class="form-control" required>
+        <!-- Modal Delete File -->
+        <div class="modal" id="deleteFileModal" tabindex="-1" aria-labelledby="deleteFileModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deleteFileModalLabel">Delete File</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <button type="submit" class="btn btn-primary">Save</button>
-                </form>
+                    <div class="modal-body">
+                        <p>Are you sure you want to delete this file?</p>
+                        <form id="deleteFileForm" action="" method="POST">
+                            @csrf
+                            @method('DELETE')
+                            <input type="hidden" name="file_id" id="deleteFileId">
+                            <button type="submit" class="btn btn-danger">Yes, Delete</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">Cancel</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Rename File -->
+        <div class="modal" id="renameFileModal" tabindex="-1" aria-labelledby="renameFileModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="renameFileModalLabel">Rename File</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="closeRenameFileModal()"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="renameFileForm" method="POST">
+                            @csrf
+                            <div class="form-group">
+                                <label for="newFileName">Nama File Baru</label>
+                                <input type="text" id="newFileName" name="name" class="form-control" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Save</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Share File -->
+        <div class="modal" id="shareFileModal" tabindex="-1" aria-labelledby="shareFileModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="shareFileModalLabel">Share File Link</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="closeShareFileModal()"></button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="text" id="shareFileUrlInput" class="form-control" readonly>
+                        <button id="copyFileLinkButton" class="btn btn-primary mt-2">Copy Link</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
-
-<!-- Modal Share File -->
-<div class="modal" id="shareFileModal" tabindex="-1" aria-labelledby="shareFileModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="shareFileModalLabel">Share File Link</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <input type="text" id="shareFileUrlInput" class="form-control" readonly>
-                <button id="copyFileLinkButton" class="btn btn-primary mt-2">Copy Link</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-
 <script>
    function toggleMenu(button) {
         // Tutup semua dropdown lainnya
@@ -584,36 +578,40 @@ function toggleSelectAll() {
         window.open(fileUrl, '_blank');
     }
 
+    // Open Rename File Modal
     function openRenameFileModal(fileId, currentName) {
-        const modal = document.getElementById('renameFileModal');
-        modal.style.display = 'block';
-        const form = document.getElementById('renameFileForm');
-        form.action = `/file/rename/${fileId}`;
-        document.getElementById('newFileName').value = currentName;
-    }
+    const modal = new bootstrap.Modal(document.getElementById('renameFileModal'));
+    modal.show();
+    const form = document.getElementById('renameFileForm');
+    form.action = `/file/rename/${fileId}`; // Pastikan URL ini sesuai dengan rute di backend
+    document.getElementById('newFileName').value = currentName;
+}
 
-    function closeRenameFileModal() {
-        const modal = document.getElementById('renameFileModal');
-        modal.style.display = 'none';
-    }
+function closeRenameFileModal() {
+    const modal = new bootstrap.Modal(document.getElementById('renameFileModal'));
+    modal.hide();
+}
 
-    function openShareFileModal(fileUrl) {
-        const modal = document.getElementById('shareFileModal');
-        modal.style.display = 'block';
-        const shareUrlInput = document.getElementById('shareFileUrlInput');
-        shareUrlInput.value = fileUrl;
-        const copyButton = document.getElementById('copyFileLinkButton');
-        copyButton.addEventListener('click', function () {
-            navigator.clipboard.writeText(shareUrlInput.value).then(() => {
-                alert('Link copied to clipboard!');
-            });
+function openShareFileModal(fileUrl) {
+    const modal = new bootstrap.Modal(document.getElementById('shareFileModal'));
+    modal.show();
+    const shareUrlInput = document.getElementById('shareFileUrlInput');
+    shareUrlInput.value = fileUrl;
+
+    const copyButton = document.getElementById('copyFileLinkButton');
+    copyButton.onclick = function () {
+        navigator.clipboard.writeText(shareUrlInput.value).then(() => {
+            alert('Link copied to clipboard!');
+        }).catch(err => {
+            console.error('Could not copy text: ', err);
         });
-    }
+    };
+}
 
-    function closeShareFileModal() {
-        const modal = document.getElementById('shareFileModal');
-        modal.style.display = 'none';
-    }
+function closeShareFileModal() {
+    const modal = new bootstrap.Modal(document.getElementById('shareFileModal'));
+    modal.hide();
+}
 
     // Fungsi untuk membuka modal delete file
     function openDeleteFileModal(fileId) {
