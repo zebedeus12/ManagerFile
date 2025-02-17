@@ -352,47 +352,45 @@
         </div>
 
         <!-- List View -->
-        <div id="listView" class="folder-list mt-4" style="display: none;">
-            @if($files->isEmpty())
-                <p>No files found.</p>
-            @else
-                <form id="deleteMultipleForm" action="{{ route('files.deleteMultiple') }}" method="POST">
-                    @csrf
-                    <div class="mb-3">
-                        <button type="submit" class="btn btn-danger" id="deleteMultipleButton" disabled>
-                            Delete Selected Files
-                        </button>
-                    </div>
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th><input type="checkbox" id="selectAll" onclick="toggleSelectAll()"></th>
-                                <th>Name</th>
-                                <th>Created At</th>
-                                <th>Description</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($files as $file)
-                                <tr>
-                                    <td><input type="checkbox" name="files[]" value="{{ $file->id }}" class="file-checkbox" onchange="toggleDeleteButton()"></td>
-                                    <td>{{ $file->name }}</td>
-                                    <td>{{ $file->created_at->format('d M Y') }}</td>
-                                    <td>{{ $file->keterangan ?? 'No description' }}</td>
-                                    <td>
-                                        <button class="button" onclick="openRenameFileModal({{ $file->id }}, '{{ $file->name }}')" title="Rename">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                        <button class="button" onclick="openShareFileModal('{{ route('file.share', $file->id) }}')"><i class="fas fa-share-alt"></i></button>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </form>
-            @endif
-        </div>
+<div id="listView" class="folder-list mt-4" style="display: none;">
+    @if($files->isEmpty())
+        <p>No files found.</p>
+    @else
+        <form id="deleteMultipleForm" action="{{ route('files.deleteMultiple') }}" method="POST">
+            @csrf
+            <div class="mb-3">
+                <button type="submit" class="btn btn-danger" id="deleteMultipleButton" disabled>
+                    Delete Selected Files
+                </button>
+            </div>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th><input type="checkbox" id="selectAll" onclick="toggleSelectAll()"></th>
+                        <th>Name</th>
+                        <th>Created At</th>
+                        <th>Description</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($files as $file)
+                        <tr>
+                            <td><input type="checkbox" name="files[]" value="{{ $file->id }}" class="file-checkbox" onchange="toggleDeleteButton()"></td>
+                            <td>{{ $file->name }}</td>
+                            <td>{{ $file->created_at->format('d M Y') }}</td>
+                            <td>{{ $file->keterangan ?? 'No description' }}</td>
+                            <td>
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#renameFileModal" onclick="document.getElementById('newFileName').value='{{ $file->name }}'; document.getElementById('renameFileForm').action='/file/rename/{{ $file->id }}';"><i class="fas fa-edit"></i></button>
+                                <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#shareFileModal" onclick="document.getElementById('shareFileUrlInput').value='{{ route('file.share', $file->id) }}';"><i class="fas fa-share-alt"></i></button>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </form>
+    @endif
+</div>
 
         <!-- Modal for Upload File -->
         <div class="modal fade" id="uploadFileModal" tabindex="-1" aria-labelledby="uploadFileModalLabel" aria-hidden="true">
@@ -453,42 +451,42 @@
         </div>
 
         <!-- Modal Rename File -->
-        <div class="modal" id="renameFileModal" tabindex="-1" aria-labelledby="renameFileModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="renameFileModalLabel">Rename File</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="closeRenameFileModal()"></button>
+<div class="modal" id="renameFileModal" tabindex="-1" aria-labelledby="renameFileModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="renameFileModalLabel">Rename File</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="renameFileForm" method="POST">
+                    @csrf
+                    <div class="form-group">
+                        <label for="newFileName">Nama File Baru</label>
+                        <input type="text" id="newFileName" name="name" class="form-control" required>
                     </div>
-                    <div class="modal-body">
-                        <form id="renameFileForm" method="POST">
-                            @csrf
-                            <div class="form-group">
-                                <label for="newFileName">Nama File Baru</label>
-                                <input type="text" id="newFileName" name="name" class="form-control" required>
-                            </div>
-                            <button type="submit" class="btn btn-primary">Save</button>
-                        </form>
-                    </div>
-                </div>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </form>
             </div>
         </div>
+    </div>
+</div>
 
-        <!-- Modal Share File -->
-        <div class="modal" id="shareFileModal" tabindex="-1" aria-labelledby="shareFileModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="shareFileModalLabel">Share File Link</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="closeShareFileModal()"></button>
-                    </div>
-                    <div class="modal-body">
-                        <input type="text" id="shareFileUrlInput" class="form-control" readonly>
-                        <button id="copyFileLinkButton" class="btn btn-primary mt-2">Copy Link</button>
-                    </div>
-                </div>
+<!-- Modal Share File -->
+<div class="modal" id="shareFileModal" tabindex="-1" aria-labelledby="shareFileModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="shareFileModalLabel">Share File Link</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <input type="text" id="shareFileUrlInput" class="form-control" readonly>
+                <button id="copyFileLinkButton" class="btn btn-primary mt-2">Copy Link</button>
             </div>
         </div>
+    </div>
+</div>
     </div>
 </div>
 <script>
@@ -578,40 +576,71 @@ function toggleSelectAll() {
         window.open(fileUrl, '_blank');
     }
 
+    document.addEventListener('DOMContentLoaded', function() {
     // Open Rename File Modal
-    function openRenameFileModal(fileId, currentName) {
-    const modal = new bootstrap.Modal(document.getElementById('renameFileModal'));
-    modal.show();
-    const form = document.getElementById('renameFileForm');
-    form.action = `/file/rename/${fileId}`; // Pastikan URL ini sesuai dengan rute di backend
-    document.getElementById('newFileName').value = currentName;
-}
+    window.openRenameFileModal = function(fileId, currentName) {
+        const renameModal = new bootstrap.Modal(document.getElementById('renameFileModal'));
+        renameModal.show();
+        const form = document.getElementById('renameFileForm');
+        form.action = `/file/rename/${fileId}`; // Ensure this URL matches the route in your backend
+        document.getElementById('newFileName').value = currentName;
 
-function closeRenameFileModal() {
-    const modal = new bootstrap.Modal(document.getElementById('renameFileModal'));
-    modal.hide();
-}
+        form.onsubmit = function(event) {
+            event.preventDefault(); // Prevent default form submission
 
-function openShareFileModal(fileUrl) {
-    const modal = new bootstrap.Modal(document.getElementById('shareFileModal'));
-    modal.show();
-    const shareUrlInput = document.getElementById('shareFileUrlInput');
-    shareUrlInput.value = fileUrl;
-
-    const copyButton = document.getElementById('copyFileLinkButton');
-    copyButton.onclick = function () {
-        navigator.clipboard.writeText(shareUrlInput.value).then(() => {
-            alert('Link copied to clipboard!');
-        }).catch(err => {
-            console.error('Could not copy text: ', err);
-        });
+            const formData = new FormData(form);
+            fetch(form.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                }
+            }).then(response => response.json())
+            .then(data => {
+                // Handle success response
+                if (data.success) {
+                    alert('File renamed successfully');
+                    renameModal.hide();
+                    location.reload(); // Reload the page to reflect changes
+                } else {
+                    alert('Error renaming file');
+                }
+            }).catch(error => {
+                console.error('Error:', error);
+                alert('Error renaming file');
+            });
+        };
     };
-}
 
-function closeShareFileModal() {
-    const modal = new bootstrap.Modal(document.getElementById('shareFileModal'));
-    modal.hide();
-}
+    // Open Share File Modal
+    window.openShareFileModal = function(fileUrl) {
+        const shareModal = new bootstrap.Modal(document.getElementById('shareFileModal'));
+        shareModal.show();
+        const shareUrlInput = document.getElementById('shareFileUrlInput');
+        shareUrlInput.value = fileUrl;
+
+        const copyButton = document.getElementById('copyFileLinkButton');
+        copyButton.onclick = function () {
+            navigator.clipboard.writeText(shareUrlInput.value).then(() => {
+                alert('Link copied to clipboard!');
+            }).catch(err => {
+                console.error('Could not copy text: ', err);
+            });
+        };
+    };
+
+    // Close Rename File Modal
+    window.closeRenameFileModal = function() {
+        const renameModal = bootstrap.Modal.getInstance(document.getElementById('renameFileModal'));
+        renameModal.hide();
+    };
+
+    // Close Share File Modal
+    window.closeShareFileModal = function() {
+        const shareModal = bootstrap.Modal.getInstance(document.getElementById('shareFileModal'));
+        shareModal.hide();
+    };
+});
 
     // Fungsi untuk membuka modal delete file
     function openDeleteFileModal(fileId) {
