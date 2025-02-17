@@ -492,30 +492,26 @@
     @stack('scripts')
 </body>
 <script>
+    //DROPDOWN
     function toggleMenu(button, event) {
-        // Mencegah aksi default (navigasi ke folder) dan propagasi event
         event.preventDefault();
         event.stopPropagation();
-
-        // Tutup semua dropdown lainnya
         document.querySelectorAll('.dropdown-menu').forEach(menu => {
             if (menu !== button.nextElementSibling) {
                 menu.classList.remove('show');
             }
         });
-
-        // Toggle dropdown saat ini
         const menu = button.nextElementSibling;
         menu.classList.toggle('show');
     }
 
-    // Tutup dropdown saat klik di luar
     document.addEventListener('click', function () {
         document.querySelectorAll('.dropdown-menu').forEach(menu => {
             menu.classList.remove('show');
         });
     });
 
+    //MODAL ADD FOLDER
     document.addEventListener("DOMContentLoaded", function () {
         var addFolderModal = new bootstrap.Modal(document.getElementById("addFolderModal"));
 
@@ -584,7 +580,7 @@
         warningModal.show();
     }
 
-    // This function can be used to select all checkboxes
+    //CHECKLIST BUTTON
     function toggleSelectAll() {
         var checkboxes = document.querySelectorAll('input[name="folders[]"]');
         var selectAllCheckbox = document.getElementById('selectAll');

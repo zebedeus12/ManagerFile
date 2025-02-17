@@ -352,45 +352,45 @@
         </div>
 
         <!-- List View -->
-<div id="listView" class="folder-list mt-4" style="display: none;">
-    @if($files->isEmpty())
-        <p>No files found.</p>
-    @else
-        <form id="deleteMultipleForm" action="{{ route('files.deleteMultiple') }}" method="POST">
-            @csrf
-            <div class="mb-3">
-                <button type="submit" class="btn btn-danger" id="deleteMultipleButton" disabled>
-                    Delete Selected Files
-                </button>
-            </div>
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th><input type="checkbox" id="selectAll" onclick="toggleSelectAll()"></th>
-                        <th>Name</th>
-                        <th>Created At</th>
-                        <th>Description</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($files as $file)
-                        <tr>
-                            <td><input type="checkbox" name="files[]" value="{{ $file->id }}" class="file-checkbox" onchange="toggleDeleteButton()"></td>
-                            <td>{{ $file->name }}</td>
-                            <td>{{ $file->created_at->format('d M Y') }}</td>
-                            <td>{{ $file->keterangan ?? 'No description' }}</td>
-                            <td>
-                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#renameFileModal" onclick="document.getElementById('newFileName').value='{{ $file->name }}'; document.getElementById('renameFileForm').action='/file/rename/{{ $file->id }}';"><i class="fas fa-edit"></i></button>
-                                <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#shareFileModal" onclick="document.getElementById('shareFileUrlInput').value='{{ route('file.share', $file->id) }}';"><i class="fas fa-share-alt"></i></button>
-                            </td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </form>
-    @endif
-</div>
+        <div id="listView" class="folder-list mt-4" style="display: none;">
+            @if($files->isEmpty())
+                <p>No files found.</p>
+            @else
+                <form id="deleteMultipleForm" action="{{ route('files.deleteMultiple') }}" method="POST">
+                    @csrf
+                    <div class="mb-3">
+                        <button type="submit" class="btn btn-danger" id="deleteMultipleButton" disabled>
+                            Delete Selected Files
+                        </button>
+                    </div>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th><input type="checkbox" id="selectAll" onclick="toggleSelectAll()"></th>
+                                <th>Name</th>
+                                <th>Created At</th>
+                                <th>Description</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($files as $file)
+                                <tr>
+                                    <td><input type="checkbox" name="files[]" value="{{ $file->id }}" class="file-checkbox" onchange="toggleDeleteButton()"></td>
+                                    <td>{{ $file->name }}</td>
+                                    <td>{{ $file->created_at->format('d M Y') }}</td>
+                                    <td>{{ $file->keterangan ?? 'No description' }}</td>
+                                    <td>
+                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#renameFileModal" onclick="document.getElementById('newFileName').value='{{ $file->name }}'; document.getElementById('renameFileForm').action='/file/rename/{{ $file->id }}';"><i class="fas fa-edit"></i></button>
+                                        <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#shareFileModal" onclick="document.getElementById('shareFileUrlInput').value='{{ route('file.share', $file->id) }}';"><i class="fas fa-share-alt"></i></button>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </form>
+            @endif
+        </div>
 
         <!-- Modal for Upload File -->
         <div class="modal fade" id="uploadFileModal" tabindex="-1" aria-labelledby="uploadFileModalLabel" aria-hidden="true">
@@ -489,64 +489,31 @@
 </div>
     </div>
 </div>
-<script>
-   function toggleMenu(button) {
-        // Tutup semua dropdown lainnya
-        document.querySelectorAll('.dropdown-menu').forEach(menu => {
-            if (menu !== button.nextElementSibling) {
-                menu.classList.remove('show');
-            }
+<script>  
+    function toggleDeleteButton() {
+        const selectedFiles = document.querySelectorAll('.file-checkbox:checked');
+        const deleteButton = document.getElementById('deleteMultipleButton');
+        if (selectedFiles.length > 0) {
+            deleteButton.disabled = false; 
+        } else {
+            deleteButton.disabled = true;  
+        }
+    }
+
+    //CHECKLISTBUTTONFILE
+    function toggleSelectAll() {
+        const selectAllCheckbox = document.getElementById('selectAll');
+        const fileCheckboxes = document.querySelectorAll('.file-checkbox');
+        const isChecked = selectAllCheckbox.checked;
+
+        fileCheckboxes.forEach(checkbox => {
+            checkbox.checked = isChecked;
         });
 
-        // Toggle dropdown saat ini
-        const menu = button.nextElementSibling;
-        menu.classList.toggle('show');
+        toggleDeleteButton(); 
     }
 
-    // Fungsi untuk menampilkan tombol Delete saat ada file yang dipilih
-    function toggleDeleteButton() {
-    const selectedFiles = document.querySelectorAll('.file-checkbox:checked');
-    const deleteButton = document.getElementById('deleteMultipleButton');
-    
-    // Mengaktifkan tombol delete hanya jika ada file yang dipilih
-    if (selectedFiles.length > 0) {
-        deleteButton.disabled = false;  // Mengaktifkan tombol delete
-    } else {
-        deleteButton.disabled = true;  // Menonaktifkan tombol delete
-    }
-}
-
-
-// Fungsi untuk memilih semua checkbox
-function toggleSelectAll() {
-    const selectAllCheckbox = document.getElementById('selectAll');
-    const fileCheckboxes = document.querySelectorAll('.file-checkbox');
-    const isChecked = selectAllCheckbox.checked;
-
-    fileCheckboxes.forEach(checkbox => {
-        checkbox.checked = isChecked;
-    });
-
-    toggleDeleteButton(); // Memanggil kembali fungsi untuk memeriksa status tombol delete
-}
-
-
-    // Tutup dropdown saat klik di luar
-    document.addEventListener('click', function (event) {
-        if (!event.target.closest('.dropdown')) {
-            document.querySelectorAll('.dropdown-menu').forEach(menu => {
-                menu.classList.remove('show');
-            });
-        }
-    });
-
-    //SHARE
-    function closeShareModal() {
-        const modal = document.getElementById("shareModal");
-        modal.style.display = "none";
-    }
-
-    // fungsi dropdown titik tiga file
+    //DROPDOWNFILE
     function toggleDropdown(button) {
         const dropdownMenu = button.nextElementSibling;
 
@@ -565,121 +532,116 @@ function toggleSelectAll() {
         event.stopPropagation();
     }
 
-    // Tutup dropdown saat klik di luar area
     window.addEventListener('click', function () {
         document.querySelectorAll('.dropdown-menu').forEach(menu => {
             menu.style.display = 'none';
         });
     });
 
-    function downloadFile(fileUrl) {
-        window.open(fileUrl, '_blank');
+    //RENAMEFILE & SHAREFILE
+    document.addEventListener('DOMContentLoaded', function() {
+        // Open Rename File Modal
+        window.openRenameFileModal = function(fileId, currentName) {
+            const renameModal = new bootstrap.Modal(document.getElementById('renameFileModal'));
+            renameModal.show();
+            const form = document.getElementById('renameFileForm');
+            form.action = `/file/rename/${fileId}`; // Ensure this URL matches the route in your backend
+            document.getElementById('newFileName').value = currentName;
+
+            form.onsubmit = function(event) {
+                event.preventDefault(); // Prevent default form submission
+
+                const formData = new FormData(form);
+                fetch(form.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    }
+                }).then(response => response.json())
+                .then(data => {
+                    // Handle success response
+                    if (data.success) {
+                        alert('File renamed successfully');
+                        renameModal.hide();
+                        location.reload(); // Reload the page to reflect changes
+                    } else {
+                        alert('Error renaming file');
+                    }
+                }).catch(error => {
+                    console.error('Error:', error);
+                    alert('Error renaming file');
+                });
+            };
+        };
+
+        // Close Rename File Modal
+        window.closeRenameFileModal = function() {
+            const renameModal = bootstrap.Modal.getInstance(document.getElementById('renameFileModal'));
+            renameModal.hide();
+        };
+
+        // Open Share File Modal
+        window.openShareFileModal = function(fileUrl) {
+            const shareModal = new bootstrap.Modal(document.getElementById('shareFileModal'));
+            shareModal.show();
+            const shareUrlInput = document.getElementById('shareFileUrlInput');
+            shareUrlInput.value = fileUrl;
+
+            const copyButton = document.getElementById('copyFileLinkButton');
+            copyButton.onclick = function () {
+                navigator.clipboard.writeText(shareUrlInput.value).then(() => {
+                    alert('Link copied to clipboard!');
+                }).catch(err => {
+                    console.error('Could not copy text: ', err);
+                });
+            };
+        };
+
+        // Close Share File Modal
+        window.closeShareFileModal = function() {
+            const shareModal = bootstrap.Modal.getInstance(document.getElementById('shareFileModal'));
+            shareModal.hide();
+        };
+    });
+
+    //DELETEFILE
+    function openDeleteFileModal(fileId) {
+        const modal = new bootstrap.Modal(document.getElementById('deleteFileModal'));
+        modal.show(); // Show the modal
+        const form = document.getElementById('deleteFileForm');
+        form.action = `/files/delete/${fileId}`; // Set the action URL for the form
+        document.getElementById('deleteFileId').value = fileId;  // Set the file ID to be deleted
     }
 
-    document.addEventListener('DOMContentLoaded', function() {
-    // Open Rename File Modal
-    window.openRenameFileModal = function(fileId, currentName) {
-        const renameModal = new bootstrap.Modal(document.getElementById('renameFileModal'));
-        renameModal.show();
-        const form = document.getElementById('renameFileForm');
-        form.action = `/file/rename/${fileId}`; // Ensure this URL matches the route in your backend
-        document.getElementById('newFileName').value = currentName;
-
-        form.onsubmit = function(event) {
-            event.preventDefault(); // Prevent default form submission
-
-            const formData = new FormData(form);
-            fetch(form.action, {
-                method: 'POST',
-                body: formData,
-                headers: {
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                }
-            }).then(response => response.json())
-            .then(data => {
-                // Handle success response
-                if (data.success) {
-                    alert('File renamed successfully');
-                    renameModal.hide();
-                    location.reload(); // Reload the page to reflect changes
-                } else {
-                    alert('Error renaming file');
-                }
-            }).catch(error => {
-                console.error('Error:', error);
-                alert('Error renaming file');
-            });
-        };
-    };
-
-    // Open Share File Modal
-    window.openShareFileModal = function(fileUrl) {
-        const shareModal = new bootstrap.Modal(document.getElementById('shareFileModal'));
-        shareModal.show();
-        const shareUrlInput = document.getElementById('shareFileUrlInput');
-        shareUrlInput.value = fileUrl;
-
-        const copyButton = document.getElementById('copyFileLinkButton');
-        copyButton.onclick = function () {
-            navigator.clipboard.writeText(shareUrlInput.value).then(() => {
-                alert('Link copied to clipboard!');
-            }).catch(err => {
-                console.error('Could not copy text: ', err);
-            });
-        };
-    };
-
-    // Close Rename File Modal
-    window.closeRenameFileModal = function() {
-        const renameModal = bootstrap.Modal.getInstance(document.getElementById('renameFileModal'));
-        renameModal.hide();
-    };
-
-    // Close Share File Modal
-    window.closeShareFileModal = function() {
-        const shareModal = bootstrap.Modal.getInstance(document.getElementById('shareFileModal'));
-        shareModal.hide();
-    };
-});
-
-    // Fungsi untuk membuka modal delete file
-    function openDeleteFileModal(fileId) {
-    const modal = new bootstrap.Modal(document.getElementById('deleteFileModal'));
-    modal.show(); // Show the modal
-    const form = document.getElementById('deleteFileForm');
-    form.action = `/files/delete/${fileId}`; // Set the action URL for the form
-    document.getElementById('deleteFileId').value = fileId;  // Set the file ID to be deleted
-}
-
-// Fungsi untuk menutup modal delete file
-function closeDeleteFileModal() {
-    const modal = new bootstrap.Modal(document.getElementById('deleteFileModal'));
-    modal.hide(); // Menyembunyikan modal
-}
+    function closeDeleteFileModal() {
+        const modal = new bootstrap.Modal(document.getElementById('deleteFileModal'));
+        modal.hide(); 
+    }
 
     function toggleView() {
-    const gridViewFolders = document.getElementById('gridViewFolders');
-    const listViewFolders = document.getElementById('listViewFolders');
-    const gridViewFiles = document.getElementById('gridViewFiles');
-    const listViewFiles = document.getElementById('listView');
+        const gridViewFolders = document.getElementById('gridViewFolders');
+        const listViewFolders = document.getElementById('listViewFolders');
+        const gridViewFiles = document.getElementById('gridViewFiles');
+        const listViewFiles = document.getElementById('listView');
 
-    // Cek apakah tampilan grid aktif
-    if (gridViewFiles.style.display === 'none') {
-        gridViewFolders.style.display = 'grid';
-        gridViewFolders.style.gridTemplateColumns = 'repeat(auto-fill, minmax(200px, 1fr))';
-        gridViewFolders.style.gap = '20px';
-        listViewFolders.style.display = 'none';
-        gridViewFiles.style.display = 'grid';
-        gridViewFiles.style.gridTemplateColumns = 'repeat(auto-fill, minmax(220px, 1fr));';
-        gridViewFiles.style.gap = '20px';
-        listViewFiles.style.display = 'none';
-    } else {
-        gridViewFolders.style.display = 'none';
-        listViewFolders.style.display = 'block';
-        gridViewFiles.style.display = 'none';
-        gridViewFiles.style.display = 'list';
-        listViewFiles.style.display = 'block';
+        // Cek apakah tampilan grid aktif
+        if (gridViewFiles.style.display === 'none') {
+            gridViewFolders.style.display = 'grid';
+            gridViewFolders.style.gridTemplateColumns = 'repeat(auto-fill, minmax(200px, 1fr))';
+            gridViewFolders.style.gap = '20px';
+            listViewFolders.style.display = 'none';
+            gridViewFiles.style.display = 'grid';
+            gridViewFiles.style.gridTemplateColumns = 'repeat(auto-fill, minmax(220px, 1fr));';
+            gridViewFiles.style.gap = '20px';
+            listViewFiles.style.display = 'none';
+        } else {
+            gridViewFolders.style.display = 'none';
+            listViewFolders.style.display = 'block';
+            gridViewFiles.style.display = 'none';
+            gridViewFiles.style.display = 'list';
+            listViewFiles.style.display = 'block';
+        }
     }
-}
 </script>
 @endsection
