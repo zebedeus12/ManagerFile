@@ -148,6 +148,21 @@
         }
 
         /* ========== CUSTOM BUTTONS (Add Folder & Grid View) ========== */
+        .header .d-flex {
+            align-items: center;
+            /* Pastikan semua elemen di tengah secara vertikal */
+        }
+
+        .header .search-container {
+            margin-right: 10px;
+            /* Tambahkan jarak antara search dan tombol */
+        }
+
+        .header .btn-custom {
+            margin-left: 5px;
+            /* Tambahkan jarak antara tombol */
+        }
+
         .btn-custom {
             background-color: #b3e6b1;
             border: none;
