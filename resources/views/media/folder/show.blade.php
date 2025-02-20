@@ -118,6 +118,37 @@
                 </div>
             </div>
 
+            <!-- Add Media Modal -->
+<div class="modal fade" id="addMediaModal" tabindex="-1" aria-labelledby="addMediaModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addMediaModalLabel">Add Media</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="{{ route('media.store') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <div class="form-group mb-3">
+                        <label for="mediaFile">Media File</label>
+                        <input type="file" class="form-control" name="file" id="mediaFile"
+                            accept="image/*,audio/*,video/*" required>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="mediaDescription">Keterangan</label>
+                        <textarea class="form-control" name="description" id="mediaDescription"
+                            rows="3"></textarea>
+                    </div>
+                    <input type="hidden" name="folder_id" value="{{ $folder->id }}">
+                    <div class="form-group mt-3">
+                        <button type="submit" class="btn btn-primary">Create Media</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
             <!-- Media List -->
             <div class="media-list">
                 <h5>Media Files</h5>
