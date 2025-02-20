@@ -103,10 +103,10 @@
                                     <label for="mediaType">Media Type</label>
                                     <input type="text" class="form-control" id="mediaType" name="type" required>
                                 </div>
-                                <div class="form-group mt-3">
+                                {{-- <div class="form-group mt-3">
                                     <label for="mediaFile">Upload New Media File (Optional)</label>
                                     <input type="file" class="form-control" name="file" id="mediaFile" accept="image/*,audio/*,video/*">
-                                </div>
+                                </div> --}}
                                 <input type="hidden" name="folder_id" id="editFolderId">
                                 <div class="form-group mt-4">
                                     <button type="submit" class="btn btn-primary">Save Changes</button>
