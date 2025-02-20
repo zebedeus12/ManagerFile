@@ -147,4 +147,6 @@ class MediaController extends Controller
 
         return response()->file($path);
     }
+
 }
+
