@@ -135,17 +135,16 @@ class MediaController extends Controller
 
         return redirect()->route('media.index')->with('success', 'Media berhasil dihapus.');
     }
-    
+
     public function show($id)
-{
-    $media = Media::findOrFail($id);
-    $path = storage_path('app/public/' . $media->path);
+    {
+        $media = Media::findOrFail($id);
+        $path = storage_path('app/public/uploads' . $media->path);
 
-    if (!file_exists($path)) {
-        abort(404, 'File not found');
+        if (!file_exists($path)) {
+            abort(404, 'File not found');
+        }
+
+        return response()->file($path);
     }
-
-    return response()->file($path);
-}
-
 }
