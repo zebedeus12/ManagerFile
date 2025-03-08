@@ -73,26 +73,37 @@
             margin-left: -1px;
         }
 
-        .layout-buttons {
+        /* Tombol Layout Grid/List */
+        .layout-buttons button {
             display: flex;
             align-items: center;
-        }
-
-        .layout-buttons button {
-            margin-left: 10px;
-            padding: 3px 3px 3px 3px;
-            font-size: 14px;
-            background-color: #43a047;
-            color: white;
+            justify-content: center;
+            width: 50px;
+            /* Ukuran tombol lebih besar */
+            height: 50px;
+            background-color: #C8E6C9;
+            /* Warna hijau muda */
             border: none;
-            border-radius: 4px;
+            border-radius: 50%;
             cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
         }
 
         .layout-buttons button:hover {
-            background-color: #388e3c;
+            background-color: #A5D6A7;
+            /* Warna hijau hover */
             transform: scale(1.05);
         }
+
+        /* Ikon dalam tombol */
+        .layout-buttons button .material-icons {
+            font-size: 28px;
+            /* Perkecil ukuran ikon */
+            color: #2E7D32;
+            /* Warna hijau tua */
+        }
+
 
         .date-filter::after {
             content: '';
@@ -225,22 +236,27 @@
     document.addEventListener('DOMContentLoaded', function () {
         const layoutToggle = document.getElementById('layout-toggle');
         const layoutIcon = document.getElementById('layout-icon');
-        const fileGrid = document.querySelector('.file-grid');
+        const fileGrid = document.querySelectorAll('.file-grid');
+        const fileList = document.querySelectorAll('.file-list');
+
         let isGrid = true; // Default tampilan adalah grid
 
         layoutToggle.addEventListener('click', function () {
+            isGrid = !isGrid; // Toggle mode
+
             if (isGrid) {
-                fileGrid.style.display = 'block'; // Mengubah ke list
-                layoutIcon.textContent = 'view_list'; // Ganti ikon
+                // Tampilkan grid, sembunyikan list
+                fileGrid.forEach(el => el.style.display = 'grid');
+                fileList.forEach(el => el.style.display = 'none');
+                layoutIcon.textContent = 'grid_view'; // Ubah ikon jadi grid
             } else {
-                fileGrid.style.display = 'grid'; // Mengembalikan ke grid
-                fileGrid.style.gridTemplateColumns = 'repeat(auto-fill, minmax(170px, 1fr))';
-                layoutIcon.textContent = 'grid_view'; // Ganti ikon
+                // Tampilkan list, sembunyikan grid
+                fileGrid.forEach(el => el.style.display = 'none');
+                fileList.forEach(el => el.style.display = 'block');
+                layoutIcon.textContent = 'view_list'; // Ubah ikon jadi list
             }
-            isGrid = !isGrid;
         });
     });
-
 
     document.getElementById('date-filter').addEventListener('change', function () {
         const selectedDate = this.value;

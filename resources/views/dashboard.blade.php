@@ -58,6 +58,28 @@
                             </div>
                         @endforeach
                     </div>
+
+                    <!-- Tampilan List (Disembunyikan Awal) -->
+                    <div class="file-list mt-4" style="display: none;">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Created At</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($folders as $folder)
+                                    <tr>
+                                        <td>{{ $folder->name }}</td>
+                                        <td>{{ date('d M Y', strtotime($folder->created_at)) }}</td>
+                                        <td>{{ $folder->description ?? 'Tidak ada keterangan' }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             @endforeach
         </div>
@@ -65,7 +87,23 @@
 
     <!-- Styling Khusus -->
     <style>
-        .html {}
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #fff;
+        }
+
+        .table th,
+        .table td {
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+
+        .table th {
+            background: #4CAF50;
+            color: white;
+            text-align: left;
+        }
 
         .main-layout {
             display: flex;
