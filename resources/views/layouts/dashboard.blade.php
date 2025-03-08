@@ -223,22 +223,24 @@
 </body>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        const gridButton = document.querySelector('.grid-layout');
-        const listButton = document.querySelector('.list-layout');
+        const layoutToggle = document.getElementById('layout-toggle');
+        const layoutIcon = document.getElementById('layout-icon');
         const fileGrid = document.querySelector('.file-grid');
+        let isGrid = true; // Default tampilan adalah grid
 
-        gridButton.addEventListener('click', function () {
-            fileGrid.style.display = 'grid';
-            gridButton.classList.add('active');
-            listButton.classList.remove('active');
-        });
-
-        listButton.addEventListener('click', function () {
-            fileGrid.style.display = 'block';
-            listButton.classList.add('active');
-            gridButton.classList.remove('active');
+        layoutToggle.addEventListener('click', function () {
+            if (isGrid) {
+                fileGrid.style.display = 'block'; // Mengubah ke list
+                layoutIcon.textContent = 'view_list'; // Ganti ikon
+            } else {
+                fileGrid.style.display = 'grid'; // Mengembalikan ke grid
+                fileGrid.style.gridTemplateColumns = 'repeat(auto-fill, minmax(170px, 1fr))';
+                layoutIcon.textContent = 'grid_view'; // Ganti ikon
+            }
+            isGrid = !isGrid;
         });
     });
+
 
     document.getElementById('date-filter').addEventListener('change', function () {
         const selectedDate = this.value;
