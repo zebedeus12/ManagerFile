@@ -23,7 +23,7 @@
                         <button type="submit" class="search-btn">
                             <i class="material-icons">search</i>
                         </button>
-                        @if(auth()->user()->role === 'super_admin')
+                        @if(in_array(auth()->user()->role, ['super_admin', 'admin']))
                             <!-- BUTTON ADD FOLDER -->
                             <button type="button" class="btn btn-custom" data-bs-toggle="modal"
                                 data-bs-target="#addFolderModal">

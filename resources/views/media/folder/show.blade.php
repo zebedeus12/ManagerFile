@@ -21,7 +21,7 @@
                             <i class="material-icons">search</i>
                         </button>
                     </form>
-                    @if(auth()->user()->role === 'super_admin')
+                    @if(in_array(auth()->user()->role, ['super_admin', 'admin']))
                         <button class="btn btn-custom" data-bs-toggle="modal" data-bs-target="#addSubfolderModal">
                             <i class="material-icons">create_new_folder</i>
                         </button>
@@ -107,11 +107,11 @@
                                     <span class="material-icons">more_vert</span>
                                 </button>
                                 <div class="dropdown-menu">
-                                    @if(auth()->user()->role === 'super_admin')
+                                    @if(in_array(auth()->user()->role, ['super_admin', 'admin']))
                                         <button onclick="renameFolder({{ $subfolder->id }})">Rename</button>
                                     @endif
                                     <button onclick="shareFolder({{ $subfolder->id }})">Share</button>
-                                    @if(auth()->user()->role === 'super_admin')
+                                    @if(in_array(auth()->user()->role, ['super_admin', 'admin']))
                                         <button onclick="deleteFolder({{ $subfolder->id }})">Delete</button>
                                         <!--<button onclick="copyFolder({{ $subfolder->id }})">Copy</button>-->
                                     @endif
@@ -130,7 +130,7 @@
                             <th>Name</th>
                             <th>Created At</th>
                             <th>Description</th>
-                            @if(auth()->user()->role === 'super_admin')
+                            @if(in_array(auth()->user()->role, ['super_admin', 'admin']))
                                 <th>Actions</th>
                             @endif
                         </tr>
@@ -142,11 +142,13 @@
                                 <td>{{ $subfolder->created_at->format('d M Y') }}</td>
                                 <td>{{ $subfolder->keterangan ?? 'Tidak ada keterangan' }}</td>
                                 <td>
-                                    @if(auth()->user()->role === 'super_admin')
-                                        <button onclick="renameFolder({{ $subfolder->id }})">Rename</button>
+                                    @if(in_array(auth()->user()->role, ['super_admin', 'admin']))
+                                        <button class="button" onclick="renameFolder({{ $subfolder->id }})"><span
+                                                class="material-icons">edit</span></button>
                                     @endif
-                                    <button onclick="shareFolder({{ $subfolder->id }})">Share</button>
-                                    @if(auth()->user()->role === 'super_admin')
+                                    <button class="button" onclick="shareFolder({{ $subfolder->id }})"><span
+                                            class="material-icons">share</span></button>
+                                    @if(in_array(auth()->user()->role, ['super_admin', 'admin']))
                                         <button onclick="deleteFolder({{ $subfolder->id }})">Delete</button>
                                         <!--<button onclick="copyFolder({{ $subfolder->id }})">Copy</button>-->
                                     @endif
@@ -351,17 +353,19 @@
                                     @endif
                                 </div>
 
-                                @if(auth()->user()->role === 'super_admin')
+                                @if(in_array(auth()->user()->role, ['super_admin', 'admin']))
                                     <div class="dropdown position-absolute top-0 end-0 m-2">
                                         <button class="custom-toggle" onclick="toggleMenu(this)">
                                             <span class="material-icons">more_vert</span>
                                         </button>
                                         <div class="dropdown-menu">
-                                            <button
-                                                onclick="openEditMediaModal({{ $media->id }}, '{{ $media->name }}', '{{ $media->type }}', '{{ $media->folder_id }}')"
-                                                class="dropdown-item">Edit</button>
-                                            <button onclick="deleteMedia({{ $media->id }})"
-                                                class="dropdown-item text-danger">Delete</button>
+                                            @if(in_array(auth()->user()->role, ['super_admin', 'admin']))
+                                                <button
+                                                    onclick="openEditMediaModal({{ $media->id }}, '{{ $media->name }}', '{{ $media->type }}', '{{ $media->folder_id }}')"
+                                                    class="dropdown-item">Edit</button>
+                                                <button onclick="deleteMedia({{ $media->id }})"
+                                                    class="dropdown-item text-danger">Delete</button>
+                                            @endif
                                         </div>
                                     </div>
                                 @endif
@@ -379,7 +383,9 @@
                             <th>Name</th>
                             <th>Created At</th>
                             <th>Type</th>
-                            <th>Actions</th>
+                            @if(in_array(auth()->user()->role, ['super_admin', 'admin']))
+                                <th>Actions</th>
+                            @endif
                         </tr>
                     </thead>
                     <tbody>
@@ -388,11 +394,15 @@
                                 <td>{{ $media->name }}</td>
                                 <td>{{ $media->created_at->format('d M Y') }}</td>
                                 <td>{{ $media->type }}</td>
-                                <td>
-                                    <a href="{{ route('media.edit', $media->id) }}" class="dropdown-item">Edit</a>
-                                    <button onclick="deleteMedia({{ $media->id }})"
-                                        class="dropdown-item text-danger">Delete</button>
-                                </td>
+                                @if(in_array(auth()->user()->role, ['super_admin', 'admin']))
+                                    <td>
+                                        <button class="button"
+                                            onclick="openEditMediaModal({{ $media->id }}, '{{ $media->name }}', '{{ $media->type }}', '{{ $media->folder_id }}')"
+                                            class="dropdown-item"><span class="material-icons">edit</span></button>
+                                        <button onclick="deleteMedia({{ $media->id }})"
+                                            class="dropdown-item text-danger">Delete</button>
+                                    </td>
+                                @endif
                             </tr>
                         @endforeach
                     </tbody>
