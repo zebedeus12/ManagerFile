@@ -134,9 +134,6 @@
                                     <i class="fas fa-trash"></i> Delete
                                 </button>
                             @endif
-                            <button type="button" class="btn btn-primary" onclick="shareSelectedFolders()">
-                                <i class="fas fa-share-alt"></i> Share
-                            </button>
                         </div>
 
                         <!-- Table -->
@@ -159,12 +156,12 @@
                                         <td>{{ $folder->name }}</td>
                                         <td>{{ $folder->created_at->format('d M Y') }}</td>
                                         <td>{{ $folder->keterangan ?? 'Tidak ada keterangan' }}</td>
-                                        @if(auth()->user()->role === 'super_admin')
-                                            <td>
-                                                <button class="btn btn-warning"
-                                                    onclick="renameFolder({{ $folder->id }})">Rename</button>
-                                            </td>
-                                        @endif
+                                        <td>
+                                            <button class="button" onclick="renameFolder({{ $folder->id }})" title="Rename"><span
+                                                    class="material-icons">edit</span></button>
+                                            <button class="button" onclick="shareFolder({{ $folder->id }})" title="Share"><span
+                                                    class="material-icons">share</span></button>
+                                        </td>
                                     </tr>
                                 @endforeach
                             </tbody>

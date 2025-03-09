@@ -16,12 +16,11 @@
     <!-- Google Icons -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700&display=swap">
+    <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=grid_view" />
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=view_list" />
-
-    <!-- Tambahkan di dalam <head> jika belum ada -->
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
     <!-- Custom CSS -->
     <style>
@@ -546,6 +545,32 @@
 
         .table tr:hover {
             background-color: #d1e7dd;
+        }
+
+        .button {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #d4f8d4;
+            /* Warna hijau muda */
+            color: #4caf50;
+            /* Warna hijau tua */
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .button:hover {
+            background-color: #b2e8b2;
+            /* Warna hijau sedikit lebih gelap saat hover */
+        }
+
+        .button span {
+            font-size: 17px;
+            /* Ukuran ikon */
         }
     </style>
 
