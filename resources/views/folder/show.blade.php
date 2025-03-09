@@ -506,79 +506,25 @@
     </div>
 </div>
 <script>  
-  
-    /// Fungsi untuk mengaktifkan tombol delete jika ada folder yang dipilih
-function toggleDeleteButton() {
-    const selectedFolders = document.querySelectorAll('input[name="folders[]"]:checked');
-    const deleteButton = document.getElementById('deleteMultipleButton');
-    
-    deleteButton.disabled = selectedFolders.length === 0;  // Hanya aktif jika ada folder yang dipilih
-}
+    // Fungsi untuk mengaktifkan tombol delete jika ada file yang dipilih
+    function toggleDeleteButton() {
+        const selectedFiles = document.querySelectorAll('input[name="files[]"]:checked');
+        const deleteButton = document.getElementById('deleteMultipleButton');
 
-// Fungsi untuk memilih semua folder
-function toggleSelectAll() {
-    const selectAllCheckbox = document.getElementById('selectAll');
-    const folderCheckboxes = document.querySelectorAll('input[name="folders[]"]');
-    
-    folderCheckboxes.forEach(checkbox => {
-        checkbox.checked = selectAllCheckbox.checked;
-    });
-
-    toggleDeleteButton();
-}
-
-// Pastikan tombol delete tetap aktif saat ada folder dipilih
-document.querySelectorAll('input[name="folders[]"]').forEach(checkbox => {
-    checkbox.addEventListener('change', toggleDeleteButton);
-});
-
-// Event listener untuk membuka modal delete multiple
-function openDeleteMultipleModal() {
-    const selectedFolders = document.querySelectorAll('input[name="folders[]"]:checked');
-    
-    if (selectedFolders.length > 0) {
-        // Menambahkan folder yang dipilih ke dalam form sebelum mengirim
-        const deleteForm = document.getElementById('deleteMultipleForm');
-        deleteForm.querySelector('input[name="folders[]"]').remove();  // Menghapus input lama jika ada
-
-        selectedFolders.forEach(folder => {
-            const hiddenInput = document.createElement('input');
-            hiddenInput.type = 'hidden';
-            hiddenInput.name = 'folders[]';
-            hiddenInput.value = folder.value;
-            deleteForm.appendChild(hiddenInput);
-        });
-
-        const modal = new bootstrap.Modal(document.getElementById('deleteMultipleModal'));
-        modal.show();  // Menampilkan modal konfirmasi
-    }
-}
-
-    function toggleMenu(button, event) {
-        event.preventDefault();
-        event.stopPropagation(); // Mencegah event lain menutup dropdown
-
-        const dropdownMenu = button.nextElementSibling;
-
-        // Tutup semua dropdown lain sebelum membuka yang ini
-        document.querySelectorAll('.dropdown-menu').forEach(menu => {
-            if (menu !== dropdownMenu) {
-                menu.classList.remove('show');
-            }
-        });
-
-        // Toggle status dropdown (buka/tutup)
-        dropdownMenu.classList.toggle('show');
+        // Hanya aktifkan tombol delete jika ada file yang dipilih
+        deleteButton.disabled = selectedFiles.length === 0;
     }
 
-    // Event global untuk menutup dropdown saat klik di luar
-    document.addEventListener('click', function (event) {
-        document.querySelectorAll('.dropdown-menu').forEach(menu => {
-            if (!menu.contains(event.target)) {
-                menu.classList.remove('show');
-            }
+    function toggleSelectAll() {
+        const selectAllCheckbox = document.getElementById('selectAll');
+        const fileCheckboxes = document.querySelectorAll('input[name="files[]"]');
+        
+        fileCheckboxes.forEach(checkbox => {
+            checkbox.checked = selectAllCheckbox.checked;
         });
-    });
+
+        toggleDeleteButton(); // Menangani pengaktifan tombol delete
+    }
 
     //RENAMEFILE & SHAREFILE
     document.addEventListener('DOMContentLoaded', function() {
