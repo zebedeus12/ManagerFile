@@ -36,15 +36,15 @@
                         </button>
                     </div>
                 </form>
-                @if(auth()->user()->role === 'super_admin')
-                <button class="btn rounded-circle ms-2" data-bs-toggle="modal" data-bs-target="#addSubfolderModal"
-                    style="background-color: #b3e6b1; border: none;">
-                    <span class="material-icons">create_new_folder</span>
-                </button>
-                <button class="btn rounded-circle ms-2" data-bs-toggle="modal" data-bs-target="#uploadFileModal"
-                    style="background-color: #b3e6b1; border: none;">
-                    <span class="material-icons">upload_file</span>
-                </button>
+                @if(in_array(auth()->user()->role, ['super_admin', 'admin']))
+                    <button class="btn rounded-circle ms-2" data-bs-toggle="modal" data-bs-target="#addSubfolderModal"
+                        style="background-color: #b3e6b1; border: none;">
+                        <span class="material-icons">create_new_folder</span>
+                    </button>
+                    <button class="btn rounded-circle ms-2" data-bs-toggle="modal" data-bs-target="#uploadFileModal"
+                        style="background-color: #b3e6b1; border: none;">
+                        <span class="material-icons">upload_file</span>
+                    </button>
                 @endif
                 <button class="btn rounded-circle ms-2" onclick="toggleView()" style="background-color: #b3e6b1; border: none;">
                     <span class="material-icons">grid_view</span>
@@ -77,11 +77,11 @@
                                         <span class="material-icons">more_vert</span>
                                     </button>
                                     <div class="dropdown-menu">
-                                        @if(auth()->user()->role === 'super_admin')
+                                        @if(in_array(auth()->user()->role, ['super_admin', 'admin']))
                                             <button onclick="openRenameModal({{ $folder->id }}, '{{ $folder->name }}')">Rename</button>
                                         @endif
                                         <button onclick="openShareModal({{ $folder->id }}, '{{ url('/folder/' . $folder->id . '/share') }}')">Share</button>
-                                        @if(auth()->user()->role === 'super_admin')
+                                        @if(in_array(auth()->user()->role, ['super_admin', 'admin']))
                                             <button onclick="openDeleteModal({{ $subFolder->id }})">Delete</button>
                                             <button onclick="openCopyModal({{ $folder->id }})">Copy</button>
                                         @endif
@@ -100,52 +100,52 @@
 
         <!-- List View for Folders --> 
         <div id="listViewFolders" class="folder-list mt-4" style="display: none;">
-    @if($subFolders->isEmpty())
-        <p>No subfolders found.</p>
-    @else
-        <form id="deleteMultipleForm" action="{{ route('folders.deleteMultiple') }}" method="POST">
-            @csrf
-            <div class="mb-3">
-                <button type="submit" class="btn btn-danger" id="deleteMultipleButton" disabled>
-                                Delete Selected Folders
-                            </button>
-            </div>
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th><input type="checkbox" id="selectAll" onclick="toggleSelectAll()"></th>
-                        <th>Name</th>
-                        <th>Created At</th>
-                        <th>Description</th>
-                        @if(auth()->user()->role === 'super_admin')
-                            <th>Actions</th>
-                        @endif
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($subFolders as $subFolder)
-                        <tr>
-                            <td><input type="checkbox" name="folders[]" value="{{ $subFolder->id }}" class="folder-checkbox"></td>
-                            <td>{{ $subFolder->name }}</td>
-                            <td>{{ $subFolder->created_at->format('d M Y') }}</td>
-                            <td>{{ $subFolder->keterangan ?? 'Tidak ada keterangan' }}</td>
-                            @if(auth()->user()->role === 'super_admin')
-                                <td>
-                                    <button class="button" onclick="openRenameModal({{ $subFolder->id }}, '{{ $subFolder->name }}')" title="Rename">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
-                                    <button class="button" onclick="openShareModal({{ $subFolder->id }}, '{{ url('/folder/' . $subFolder->id . '/share') }}')" title="Share">
-                                        <i class="fas fa-share-alt"></i>
-                                    </button>
-                                </td>
-                            @endif
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </form>
-    @endif
-</div>
+            @if($subFolders->isEmpty())
+                <p>No subfolders found.</p>
+            @else
+                <form id="deleteMultipleForm" action="{{ route('folders.deleteMultiple') }}" method="POST">
+                    @csrf
+                    <div class="mb-3">
+                        <button type="submit" class="btn btn-danger" id="deleteMultipleButton" disabled>
+                            Delete Selected Folders
+                        </button>
+                    </div>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th><input type="checkbox" id="selectAll" onclick="toggleSelectAll()"></th>
+                                <th>Name</th>
+                                <th>Created At</th>
+                                <th>Description</th>
+                                @if(in_array(auth()->user()->role, ['super_admin', 'admin']))
+                                    <th>Actions</th>
+                                @endif
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($subFolders as $subFolder)
+                                <tr>
+                                    <td><input type="checkbox" name="folders[]" value="{{ $subFolder->id }}" class="folder-checkbox"></td>
+                                    <td>{{ $subFolder->name }}</td>
+                                    <td>{{ $subFolder->created_at->format('d M Y') }}</td>
+                                    <td>{{ $subFolder->keterangan ?? 'Tidak ada keterangan' }}</td>
+                                    @if(in_array(auth()->user()->role, ['super_admin', 'admin']))
+                                        <td>
+                                            <button class="button" onclick="openRenameModal({{ $subFolder->id }}, '{{ $subFolder->name }}')" title="Rename">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <button class="button" onclick="openShareModal({{ $subFolder->id }}, '{{ url('/folder/' . $subFolder->id . '/share') }}')" title="Share">
+                                                <i class="fas fa-share-alt"></i>
+                                            </button>
+                                        </td>
+                                    @endif
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </form>
+            @endif
+        </div>
 
         <!-- Modal add folder-->
         <div class="modal fade" id="addSubfolderModal" tabindex="-1" aria-labelledby="addSubfolderModalLabel" aria-hidden="true">
@@ -203,45 +203,45 @@
         </div>
 
         <!-- Modal Delete Folder -->
-<div class="modal" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="deleteModalLabel">Delete Folder</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <p>Are you sure you want to delete this folder?</p>
-                <form id="deleteForm" method="POST">
-                    @csrf
-                    @method('DELETE')
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-danger">Delete</button>
-                </form>
+        <div class="modal" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deleteModalLabel">Delete Folder</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Are you sure you want to delete this folder?</p>
+                        <form id="deleteForm" method="POST">
+                            @csrf
+                            @method('DELETE')
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-</div>
 
         <!-- Modal untuk mengonfirmasi penghapusan multiple folder -->
-<div class="modal" id="deleteMultipleModal" tabindex="-1" aria-labelledby="deleteMultipleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="deleteMultipleModalLabel">Delete Folders</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <p>Are you sure you want to delete the selected folders?</p>
-                <form id="deleteMultipleForm" action="{{ route('folders.deleteMultiple') }}" method="POST">
-                    @csrf
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-danger">Delete</button>
-                </form>
+        <div class="modal" id="deleteMultipleModal" tabindex="-1" aria-labelledby="deleteMultipleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deleteMultipleModalLabel">Delete Folders</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Are you sure you want to delete the selected folders?</p>
+                        <form id="deleteMultipleForm" action="{{ route('folders.deleteMultiple') }}" method="POST">
+                            @csrf
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-</div>
 
         <!-- Warning Modal -->
         <div class="modal" id="warningModal" tabindex="-1" aria-labelledby="warningModalLabel" aria-hidden="true">
@@ -306,7 +306,6 @@
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                         <button type="submit" class="btn btn-primary">Copy</button>
                     </div>
-                </form>
                 </div>
             </div>
         </div>
@@ -347,12 +346,12 @@
                                     <span class="material-icons">more_vert</span>
                                 </button>
                                 <div class="dropdown-menu">
-                                    @if(auth()->user()->role === 'super_admin')
+                                    @if(in_array(auth()->user()->role, ['super_admin', 'admin']))
                                         <button onclick="openRenameFileModal({{ $file->id }}, '{{ $file->name }}')">Rename</button>
                                     @endif
                                     <button onclick="openShareFileModal('{{ route('file.share', $file->id) }}')">Share</button>
-                                    @if(auth()->user()->role === 'super_admin')
-                                    <button class="delete-file-btn" data-file-id="{{ $file->id }}" onclick="openDeleteFileModal({{ $file->id }})">Delete</button>
+                                    @if(in_array(auth()->user()->role, ['super_admin', 'admin']))
+                                        <button class="delete-file-btn" data-file-id="{{ $file->id }}" onclick="openDeleteFileModal({{ $file->id }})">Delete</button>
                                     @endif
                                 </div>
                             </div>
@@ -374,11 +373,13 @@
             @else
                 <form id="deleteMultipleForm" action="{{ route('files.deleteMultiple') }}" method="POST">
                     @csrf
-                    <div class="mb-3">
-                        <button type="submit" class="btn btn-danger" id="deleteMultipleButton" disabled>
-                            Delete Selected Files
-                        </button>
-                    </div>
+                    @if(in_array(auth()->user()->role, ['super_admin', 'admin']))
+                        <div class="mb-3">
+                            <button type="submit" class="btn btn-danger" id="deleteMultipleButton" disabled>
+                                Delete Selected Files
+                            </button>
+                        </div>
+                    @endif
                     <table class="table table-striped">
                         <thead>
                             <tr>
@@ -397,7 +398,9 @@
                                     <td>{{ $file->created_at->format('d M Y') }}</td>
                                     <td>{{ $file->keterangan ?? 'No description' }}</td>
                                     <td>
-                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#renameFileModal" onclick="document.getElementById('newFileName').value='{{ $file->name }}'; document.getElementById('renameFileForm').action='/file/rename/{{ $file->id }}';"><i class="fas fa-edit"></i></button>
+                                        @if(in_array(auth()->user()->role, ['super_admin', 'admin']))
+                                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#renameFileModal" onclick="document.getElementById('newFileName').value='{{ $file->name }}'; document.getElementById('renameFileForm').action='/file/rename/{{ $file->id }}';"><i class="fas fa-edit"></i></button>
+                                        @endif
                                         <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#shareFileModal" onclick="document.getElementById('shareFileUrlInput').value='{{ route('file.share', $file->id) }}';"><i class="fas fa-share-alt"></i></button>
                                     </td>
                                 </tr>
@@ -467,42 +470,42 @@
         </div>
 
         <!-- Modal Rename File -->
-<div class="modal" id="renameFileModal" tabindex="-1" aria-labelledby="renameFileModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="renameFileModalLabel">Rename File</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form id="renameFileForm" method="POST">
-                    @csrf
-                    <div class="form-group">
-                        <label for="newFileName">Nama File Baru</label>
-                        <input type="text" id="newFileName" name="name" class="form-control" required>
+        <div class="modal" id="renameFileModal" tabindex="-1" aria-labelledby="renameFileModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="renameFileModalLabel">Rename File</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <button type="submit" class="btn btn-primary">Save</button>
-                </form>
+                    <div class="modal-body">
+                        <form id="renameFileForm" method="POST">
+                            @csrf
+                            <div class="form-group">
+                                <label for="newFileName">Nama File Baru</label>
+                                <input type="text" id="newFileName" name="name" class="form-control" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Save</button>
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-</div>
 
-<!-- Modal Share File -->
-<div class="modal" id="shareFileModal" tabindex="-1" aria-labelledby="shareFileModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="shareFileModalLabel">Share File Link</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <input type="text" id="shareFileUrlInput" class="form-control" readonly>
-                <button id="copyFileLinkButton" class="btn btn-primary mt-2">Copy Link</button>
+        <!-- Modal Share File -->
+        <div class="modal" id="shareFileModal" tabindex="-1" aria-labelledby="shareFileModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="shareFileModalLabel">Share File Link</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="text" id="shareFileUrlInput" class="form-control" readonly>
+                        <button id="copyFileLinkButton" class="btn btn-primary mt-2">Copy Link</button>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-</div>
     </div>
 </div>
 <script>  
