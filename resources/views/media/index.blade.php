@@ -107,11 +107,11 @@
                                     <span class="material-icons">more_vert</span>
                                 </button>
                                 <div class="dropdown-menu">
-                                    @if(auth()->user()->role === 'super_admin')
+                                    @if(in_array(auth()->user()->role, ['super_admin', 'admin']))
                                         <button onclick="renameFolder({{ $folder->id }})">Rename</button>
                                     @endif
                                     <button onclick="shareFolder({{ $folder->id }})">Share</button>
-                                    @if(auth()->user()->role === 'super_admin')
+                                    @if(in_array(auth()->user()->role, ['super_admin', 'admin']))
                                         <button onclick="deleteFolder({{ $folder->id }})">Delete</button>
                                     @endif
                                 </div>
@@ -129,7 +129,7 @@
                     <form id="deleteMultipleForm" action="{{ route('media.folder.deleteMultiple') }}" method="POST">
                         @csrf
                         <div class="mb-3 d-flex gap-2">
-                            @if(auth()->user()->role === 'super_admin')
+                            @if(in_array(auth()->user()->role, ['super_admin', 'admin']))
                                 <button type="button" class="btn btn-danger" onclick="confirmDelete()">
                                     <i class="fas fa-trash"></i> Delete
                                 </button>
@@ -144,7 +144,7 @@
                                     <th>Name</th>
                                     <th>Created At</th>
                                     <th>Description</th>
-                                    @if(auth()->user()->role === 'super_admin')
+                                    @if(in_array(auth()->user()->role, ['super_admin', 'admin']))
                                         <th>Action</th>
                                     @endif
                                 </tr>
@@ -156,14 +156,18 @@
                                         <td>{{ $folder->name }}</td>
                                         <td>{{ $folder->created_at->format('d M Y') }}</td>
                                         <td>{{ $folder->keterangan ?? 'Tidak ada keterangan' }}</td>
-                                        <td>
-                                            <button type="button" class="button" onclick="renameFolder({{ $folder->id }})" title="Rename">
-                                                <span class="material-icons">edit</span>
-                                            </button>
-                                            <button type="button" class="button" onclick="shareFolder({{ $folder->id }})" title="Share">
-                                                <span class="material-icons">share</span>
-                                            </button>
-                                        </td>                                        
+                                        @if(in_array(auth()->user()->role, ['super_admin', 'admin']))
+                                            <td>
+                                                <button type="button" class="button" onclick="renameFolder({{ $folder->id }})"
+                                                    title="Rename">
+                                                    <span class="material-icons">edit</span>
+                                                </button>
+                                                <button type="button" class="button" onclick="shareFolder({{ $folder->id }})"
+                                                    title="Share">
+                                                    <span class="material-icons">share</span>
+                                                </button>
+                                            </td>
+                                        @endif
                                     </tr>
                                 @endforeach
                             </tbody>
