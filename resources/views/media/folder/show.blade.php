@@ -113,7 +113,7 @@
                                     <button onclick="shareFolder({{ $subfolder->id }})">Share</button>
                                     @if(auth()->user()->role === 'super_admin')
                                         <button onclick="deleteFolder({{ $subfolder->id }})">Delete</button>
-                                        <button onclick="copyFolder({{ $subfolder->id }})">Copy</button>
+                                        <!--<button onclick="copyFolder({{ $subfolder->id }})">Copy</button>-->
                                     @endif
                                 </div>
                             </div>
@@ -148,7 +148,7 @@
                                     <button onclick="shareFolder({{ $subfolder->id }})">Share</button>
                                     @if(auth()->user()->role === 'super_admin')
                                         <button onclick="deleteFolder({{ $subfolder->id }})">Delete</button>
-                                        <button onclick="copyFolder({{ $subfolder->id }})">Copy</button>
+                                        <!--<button onclick="copyFolder({{ $subfolder->id }})">Copy</button>-->
                                     @endif
                                 </td>
                             </tr>
@@ -276,39 +276,41 @@
             </div>
 
             <!-- Edit Media Modal -->
-<div class="modal fade" id="editMediaModal" tabindex="-1" aria-labelledby="editMediaModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="editMediaModalLabel">Edit Media</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class="modal fade" id="editMediaModal" tabindex="-1" aria-labelledby="editMediaModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editMediaModalLabel">Edit Media</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="editMediaForm" method="POST" enctype="multipart/form-data">
+                                @csrf
+                                @method('PUT')
+                                <div class="form-group">
+                                    <label for="mediaName">Media Name</label>
+                                    <input type="text" class="form-control" id="mediaName" name="name" required>
+                                </div>
+                                <div class="form-group mt-3">
+                                    <label for="mediaType">Media Type</label>
+                                    <input type="text" class="form-control" id="mediaType" name="type" required>
+                                </div>
+                                <div class="form-group mt-3">
+                                    <label for="mediaFile">Upload New Media File (Optional)</label>
+                                    <input type="file" class="form-control" name="file" id="mediaFile"
+                                        accept="image/*,audio/*,video/*">
+                                </div>
+                                <input type="hidden" name="folder_id" id="editFolderId">
+                                <div class="form-group mt-4">
+                                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="modal-body">
-                <form id="editMediaForm" method="POST" enctype="multipart/form-data">
-                    @csrf
-                    @method('PUT')
-                    <div class="form-group">
-                        <label for="mediaName">Media Name</label>
-                        <input type="text" class="form-control" id="mediaName" name="name" required>
-                    </div>
-                    <div class="form-group mt-3">
-                        <label for="mediaType">Media Type</label>
-                        <input type="text" class="form-control" id="mediaType" name="type" required>
-                    </div>
-                    <div class="form-group mt-3">
-                        <label for="mediaFile">Upload New Media File (Optional)</label>
-                        <input type="file" class="form-control" name="file" id="mediaFile" accept="image/*,audio/*,video/*">
-                    </div>
-                    <input type="hidden" name="folder_id" id="editFolderId">
-                    <div class="form-group mt-4">
-                        <button type="submit" class="btn btn-primary">Save Changes</button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
 
             <!-- Media List -->
             <div class="media-list">
@@ -350,16 +352,19 @@
                                 </div>
 
                                 @if(auth()->user()->role === 'super_admin')
-                                <div class="dropdown position-absolute top-0 end-0 m-2">
-                                    <button class="custom-toggle" onclick="toggleMenu(this)">
-                                        <span class="material-icons">more_vert</span>
-                                    </button>
-                                    <div class="dropdown-menu">
-                                        <button onclick="openEditMediaModal({{ $media->id }}, '{{ $media->name }}', '{{ $media->type }}', '{{ $media->folder_id }}')" class="dropdown-item">Edit</button>
-                                        <button onclick="deleteMedia({{ $media->id }})" class="dropdown-item text-danger">Delete</button>
+                                    <div class="dropdown position-absolute top-0 end-0 m-2">
+                                        <button class="custom-toggle" onclick="toggleMenu(this)">
+                                            <span class="material-icons">more_vert</span>
+                                        </button>
+                                        <div class="dropdown-menu">
+                                            <button
+                                                onclick="openEditMediaModal({{ $media->id }}, '{{ $media->name }}', '{{ $media->type }}', '{{ $media->folder_id }}')"
+                                                class="dropdown-item">Edit</button>
+                                            <button onclick="deleteMedia({{ $media->id }})"
+                                                class="dropdown-item text-danger">Delete</button>
+                                        </div>
                                     </div>
-                                </div>
-                            @endif
+                                @endif
                             </div>
                         @endforeach
                     @endif
@@ -397,12 +402,12 @@
     </div>
     <script>
         function openEditMediaModal(id, name, type, folderId) {
-        document.getElementById('mediaName').value = name;
-        document.getElementById('mediaType').value = type;
-        document.getElementById('editFolderId').value = folderId;
-        document.getElementById('editMediaForm').action = `/media/${id}`;
-        new bootstrap.Modal(document.getElementById('editMediaModal')).show();
-    }
+            document.getElementById('mediaName').value = name;
+            document.getElementById('mediaType').value = type;
+            document.getElementById('editFolderId').value = folderId;
+            document.getElementById('editMediaForm').action = `/media/${id}`;
+            new bootstrap.Modal(document.getElementById('editMediaModal')).show();
+        }
 
         function toggleMenu(button) {
             // Get the dropdown menu associated with the button
