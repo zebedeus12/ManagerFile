@@ -157,11 +157,13 @@
                                         <td>{{ $folder->created_at->format('d M Y') }}</td>
                                         <td>{{ $folder->keterangan ?? 'Tidak ada keterangan' }}</td>
                                         <td>
-                                            <button class="button" onclick="renameFolder({{ $folder->id }})" title="Rename"><span
-                                                    class="material-icons">edit</span></button>
-                                            <button class="button" onclick="shareFolder({{ $folder->id }})" title="Share"><span
-                                                    class="material-icons">share</span></button>
-                                        </td>
+                                            <button type="button" class="button" onclick="renameFolder({{ $folder->id }})" title="Rename">
+                                                <span class="material-icons">edit</span>
+                                            </button>
+                                            <button type="button" class="button" onclick="shareFolder({{ $folder->id }})" title="Share">
+                                                <span class="material-icons">share</span>
+                                            </button>
+                                        </td>                                        
                                     </tr>
                                 @endforeach
                             </tbody>
