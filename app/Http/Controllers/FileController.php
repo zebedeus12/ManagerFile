@@ -37,39 +37,50 @@ class FileController extends Controller
 
     public function store(Request $request, $folder = null)
     {
+        // Debug tahap awal
+        \Log::info("Memulai proses upload file", ['folder' => $folder]);
+
         $request->validate([
-            'file.*' => 'required|file|max:2048|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx',
+            'file.*' => 'required|file|max:50000|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx',
             'keterangan' => 'nullable|string|max:255',
         ]);
 
-        // Ambil folder_id dari request atau gunakan nilai dari parameter
         $folderId = $request->input('folder_id') ?? $folder;
-
         if (!$folderId) {
-            $folderId = null; // Jika tidak ada folder, masukkan ke root
+            $folderId = null;
         }
 
         if ($request->hasFile('file')) {
             foreach ($request->file('file') as $uploadedFile) {
-                $filePath = $uploadedFile->store('uploads', 'public');
+                if (!$uploadedFile->isValid()) {
+                    return redirect()->back()->with('error', 'File tidak valid atau terjadi kesalahan saat mengunggah.');
+                }
 
-                // Simpan metadata file ke database
+                // Buat nama file unik
+                $uniqueName = time() . '-' . $uploadedFile->getClientOriginalName();
+                $filePath = $uploadedFile->storeAs('uploads', $uniqueName, 'public');
+
+                if (!$filePath) {
+                    return redirect()->back()->with('error', 'Gagal menyimpan file.');
+                }
+
                 File::create([
                     'name' => $uploadedFile->getClientOriginalName(),
                     'size' => $uploadedFile->getSize() / 1024, // dalam KB
                     'type' => $uploadedFile->extension(),
                     'path' => $filePath,
-                    'folder_id' => $folderId, // Simpan folder_id agar masuk ke dalam folder
+                    'folder_id' => $folderId,
                     'created_by' => auth()->id(),
                     'keterangan' => $request->input('keterangan'),
                 ]);
             }
         }
 
-        // Redirect ke halaman folder atau index jika tidak ada folder
-        return $folderId
-            ? redirect()->route('folder.show', $folderId)->with('success', 'File berhasil diunggah.')
-            : redirect()->route('file.index')->with('success', 'File berhasil diunggah.');
+        if ($folderId && Folder::find($folderId)) {
+            return redirect()->route('folder.show', $folderId)->with('success', 'File berhasil diunggah.');
+        }
+
+        return redirect()->route('file.index')->with('success', 'File berhasil diunggah.');
     }
 
     public function show($folderId)

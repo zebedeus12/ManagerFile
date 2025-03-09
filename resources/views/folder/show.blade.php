@@ -513,28 +513,29 @@
         toggleDeleteButton(); 
     }
 
-    //DROPDOWNFILE
-    function toggleDropdown(button) {
+    function toggleMenu(button, event) {
+        event.preventDefault();
+        event.stopPropagation(); // Mencegah event lain menutup dropdown
+
         const dropdownMenu = button.nextElementSibling;
 
+        // Tutup semua dropdown lain sebelum membuka yang ini
         document.querySelectorAll('.dropdown-menu').forEach(menu => {
             if (menu !== dropdownMenu) {
-                menu.style.display = 'none';
+                menu.classList.remove('show');
             }
         });
 
-        if (dropdownMenu.style.display === 'block') {
-            dropdownMenu.style.display = 'none';
-        } else {
-            dropdownMenu.style.display = 'block';
-        }
-
-        event.stopPropagation();
+        // Toggle status dropdown (buka/tutup)
+        dropdownMenu.classList.toggle('show');
     }
 
-    window.addEventListener('click', function () {
+    // Event global untuk menutup dropdown saat klik di luar
+    document.addEventListener('click', function (event) {
         document.querySelectorAll('.dropdown-menu').forEach(menu => {
-            menu.style.display = 'none';
+            if (!menu.contains(event.target)) {
+                menu.classList.remove('show');
+            }
         });
     });
 
