@@ -100,56 +100,52 @@
 
         <!-- List View for Folders --> 
         <div id="listViewFolders" class="folder-list mt-4" style="display: none;">
-            @if($subFolders->isEmpty())
-                <p>No folders found.</p>
-            @else
-                <form id="deleteMultipleForm" action="{{ route('folders.deleteMultiple') }}" method="POST">
-                    @csrf
-                    <table class="table table-striped">
-                        @if(auth()->user()->role === 'super_admin')
-                            <button class="button" onclick="openDeleteModal({{ $subFolder->id }})" title="Delete">
-                                <i class="fas fa-trash"></i>
+    @if($subFolders->isEmpty())
+        <p>No subfolders found.</p>
+    @else
+        <form id="deleteMultipleForm" action="{{ route('folders.deleteMultiple') }}" method="POST">
+            @csrf
+            <div class="mb-3">
+                <button type="submit" class="btn btn-danger" id="deleteMultipleButton" disabled>
+                                Delete Selected Folders
                             </button>
+            </div>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th><input type="checkbox" id="selectAll" onclick="toggleSelectAll()"></th>
+                        <th>Name</th>
+                        <th>Created At</th>
+                        <th>Description</th>
+                        @if(auth()->user()->role === 'super_admin')
+                            <th>Actions</th>
                         @endif
-                        <thead>
-                            <tr>
-                                <th><input type="checkbox" id="selectAll" onclick="toggleSelectAll()"></th>
-                                <th>Name</th>
-                                <th>Created At</th>
-                                <th>Description</th>
-                                @if(auth()->user()->role === 'super_admin')
-                                    <th>Actions</th> 
-                                @endif
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($subFolders as $subFolder)
-                                <tr>
-                                    <td><input type="checkbox" name="folders[]" value="{{ $subFolder->id }}"></td>
-                                    <td>{{ $subFolder->name }}</td>
-                                    <td>{{ $subFolder->created_at->format('d M Y') }}</td>
-                                    <td>{{ $subFolder->keterangan ?? 'Tidak ada keterangan' }}</td>
-                                    @if(auth()->user()->role === 'super_admin')
-                                        <td>
-                                            <button class="button" onclick="openRenameModal({{ $subFolder->id }}, '{{ $subFolder->name }}')" title="Rename">
-                                                <i class="fas fa-edit"></i>
-                                            </button>
-                                            <button class="button" onclick="openShareModal({{ $subFolder->id }}, '{{ url('/folder/' . $subFolder->id . '/share') }}')" title="Share">
-                                                <i class="fas fa-share-alt"></i>
-                                            </button>
-                                            <button class="button" onclick="openCopyModal({{ $subFolder->id }})" title="Copy">
-                                                <i class="fas fa-copy"></i>
-                                            </button>
-                                        </td>
-                                    @endif
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </form>
-            @endif
-        </div>
-
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($subFolders as $subFolder)
+                        <tr>
+                            <td><input type="checkbox" name="folders[]" value="{{ $subFolder->id }}" class="folder-checkbox"></td>
+                            <td>{{ $subFolder->name }}</td>
+                            <td>{{ $subFolder->created_at->format('d M Y') }}</td>
+                            <td>{{ $subFolder->keterangan ?? 'Tidak ada keterangan' }}</td>
+                            @if(auth()->user()->role === 'super_admin')
+                                <td>
+                                    <button class="button" onclick="openRenameModal({{ $subFolder->id }}, '{{ $subFolder->name }}')" title="Rename">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="button" onclick="openShareModal({{ $subFolder->id }}, '{{ url('/folder/' . $subFolder->id . '/share') }}')" title="Share">
+                                        <i class="fas fa-share-alt"></i>
+                                    </button>
+                                </td>
+                            @endif
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </form>
+    @endif
+</div>
 
         <!-- Modal add folder-->
         <div class="modal fade" id="addSubfolderModal" tabindex="-1" aria-labelledby="addSubfolderModalLabel" aria-hidden="true">
@@ -206,26 +202,46 @@
             </div>
         </div>
 
-        <!-- Delete Folder -->
-        <div class="modal" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="deleteModalLabel">Delete Folder</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <p>Are you sure you want to delete this folder?</p>
-                        <form id="deleteForm" method="POST">
-                            @csrf
-                            @method('DELETE')
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                            <button type="submit" class="btn btn-danger">Delete</button>
-                        </form>
-                    </div>
-                </div>
+        <!-- Modal Delete Folder -->
+<div class="modal" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Delete Folder</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete this folder?</p>
+                <form id="deleteForm" method="POST">
+                    @csrf
+                    @method('DELETE')
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
             </div>
         </div>
+    </div>
+</div>
+
+        <!-- Modal untuk mengonfirmasi penghapusan multiple folder -->
+<div class="modal" id="deleteMultipleModal" tabindex="-1" aria-labelledby="deleteMultipleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteMultipleModalLabel">Delete Folders</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete the selected folders?</p>
+                <form id="deleteMultipleForm" action="{{ route('folders.deleteMultiple') }}" method="POST">
+                    @csrf
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
         <!-- Warning Modal -->
         <div class="modal" id="warningModal" tabindex="-1" aria-labelledby="warningModalLabel" aria-hidden="true">
@@ -490,28 +506,53 @@
     </div>
 </div>
 <script>  
-    function toggleDeleteButton() {
-        const selectedFiles = document.querySelectorAll('.file-checkbox:checked');
-        const deleteButton = document.getElementById('deleteMultipleButton');
-        if (selectedFiles.length > 0) {
-            deleteButton.disabled = false; 
-        } else {
-            deleteButton.disabled = true;  
-        }
-    }
+  
+    /// Fungsi untuk mengaktifkan tombol delete jika ada folder yang dipilih
+function toggleDeleteButton() {
+    const selectedFolders = document.querySelectorAll('input[name="folders[]"]:checked');
+    const deleteButton = document.getElementById('deleteMultipleButton');
+    
+    deleteButton.disabled = selectedFolders.length === 0;  // Hanya aktif jika ada folder yang dipilih
+}
 
-    //CHECKLISTBUTTONFILE
-    function toggleSelectAll() {
-        const selectAllCheckbox = document.getElementById('selectAll');
-        const fileCheckboxes = document.querySelectorAll('.file-checkbox');
-        const isChecked = selectAllCheckbox.checked;
+// Fungsi untuk memilih semua folder
+function toggleSelectAll() {
+    const selectAllCheckbox = document.getElementById('selectAll');
+    const folderCheckboxes = document.querySelectorAll('input[name="folders[]"]');
+    
+    folderCheckboxes.forEach(checkbox => {
+        checkbox.checked = selectAllCheckbox.checked;
+    });
 
-        fileCheckboxes.forEach(checkbox => {
-            checkbox.checked = isChecked;
+    toggleDeleteButton();
+}
+
+// Pastikan tombol delete tetap aktif saat ada folder dipilih
+document.querySelectorAll('input[name="folders[]"]').forEach(checkbox => {
+    checkbox.addEventListener('change', toggleDeleteButton);
+});
+
+// Event listener untuk membuka modal delete multiple
+function openDeleteMultipleModal() {
+    const selectedFolders = document.querySelectorAll('input[name="folders[]"]:checked');
+    
+    if (selectedFolders.length > 0) {
+        // Menambahkan folder yang dipilih ke dalam form sebelum mengirim
+        const deleteForm = document.getElementById('deleteMultipleForm');
+        deleteForm.querySelector('input[name="folders[]"]').remove();  // Menghapus input lama jika ada
+
+        selectedFolders.forEach(folder => {
+            const hiddenInput = document.createElement('input');
+            hiddenInput.type = 'hidden';
+            hiddenInput.name = 'folders[]';
+            hiddenInput.value = folder.value;
+            deleteForm.appendChild(hiddenInput);
         });
 
-        toggleDeleteButton(); 
+        const modal = new bootstrap.Modal(document.getElementById('deleteMultipleModal'));
+        modal.show();  // Menampilkan modal konfirmasi
     }
+}
 
     function toggleMenu(button, event) {
         event.preventDefault();

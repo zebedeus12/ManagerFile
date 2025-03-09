@@ -87,12 +87,12 @@
                 @else
                     <form id="deleteMultipleForm" action="{{ route('folders.deleteMultiple') }}" method="POST">
                         @csrf
+                        <div class="mb-3">
+                            <button type="submit" class="btn btn-danger" id="deleteMultipleButton" disabled>
+                                Delete Selected Folders
+                            </button>
+                        </div>
                         <table class="table table-striped">
-                            @if(auth()->user()->role === 'super_admin')
-                                <button class="button" onclick="openDeleteModal({{ $folder->id }})" title="Delete">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            @endif
                             <thead>
                                 <tr>
                                     <th><input type="checkbox" id="selectAll" onclick="toggleSelectAll()"></th>
@@ -107,7 +107,8 @@
                             <tbody>
                                 @foreach ($folders as $folder)
                                     <tr>
-                                        <td><input type="checkbox" name="folders[]" value="{{ $folder->id }}"></td>
+                                        <td><input type="checkbox" name="folders[]" value="{{ $folder->id }}"
+                                                class="folder-checkbox"></td>
                                         <td>{{ $folder->name }}</td>
                                         <td>{{ $folder->created_at->format('d M Y') }}</td>
                                         <td>{{ $folder->keterangan ?? 'Tidak ada keterangan' }}</td>
@@ -294,5 +295,35 @@
                 }
             }
         });
+
+        // Fungsi untuk mengaktifkan tombol delete jika ada folder yang dipilih
+        function toggleDeleteButton() {
+            const selectedFolders = document.querySelectorAll('input[name="folders[]"]:checked');
+            const deleteButton = document.getElementById('deleteMultipleButton');
+
+            if (selectedFolders.length > 0) {
+                deleteButton.disabled = false;
+            } else {
+                deleteButton.disabled = true;
+            }
+        }
+
+        // Fungsi untuk memilih semua folder
+        function toggleSelectAll() {
+            const selectAllCheckbox = document.getElementById('selectAll');
+            const folderCheckboxes = document.querySelectorAll('input[name="folders[]"]');
+
+            folderCheckboxes.forEach(checkbox => {
+                checkbox.checked = selectAllCheckbox.checked;
+            });
+
+            toggleDeleteButton();
+        }
+
+        // Pastikan tombol delete tetap aktif saat ada folder dipilih
+        document.querySelectorAll('input[name="folders[]"]').forEach(checkbox => {
+            checkbox.addEventListener('change', toggleDeleteButton);
+        });
+
     </script>
 @endsection
