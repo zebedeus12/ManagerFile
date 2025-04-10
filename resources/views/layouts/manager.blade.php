@@ -589,23 +589,6 @@
         });
     }
 
-    // COPY
-    function openCopyModal(folderId) {
-        event.preventDefault();
-        event.stopPropagation();
-        const modal = new bootstrap.Modal(document.getElementById("copyModal"));
-        modal.show();
-
-        // Set form action for copying the folder
-        const copyForm = document.getElementById("copyForm");
-        copyForm.action = `/folder/copy/${folderId}`;
-    }
-
-    function closeCopyModal() {
-        const modal = new bootstrap.Modal(document.getElementById("copyModal"));
-        modal.hide();
-    }
-
     // SHARE
     function openShareModal(folderId, shareUrl) {
         event.preventDefault();
