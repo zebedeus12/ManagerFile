@@ -113,42 +113,6 @@ class FolderController extends Controller
         return redirect()->route('file.index')->with('success', 'Folder berhasil dihapus.');
     }
 
-    public function deleteMultiple(Request $request)
-    {
-        // Ambil semua folder yang dipilih
-        $folderIds = $request->input('folders');
-
-        if ($folderIds) {
-            $deletedFolders = [];
-            $failedFolders = [];
-
-            foreach ($folderIds as $folderId) {
-                $folder = Folder::find($folderId);
-
-                if ($folder) {
-                    if ($folder->files()->count() == 0 && $folder->children()->count() == 0) {
-                        // Hapus folder jika kosong
-                        $folder->delete();
-                        $deletedFolders[] = $folder->name;
-                    } else {
-                        // Jika ada isi, beri peringatan
-                        $failedFolders[] = $folder->name;
-                    }
-                } else {
-                    $failedFolders[] = "Folder ID {$folderId} tidak ditemukan.";
-                }
-            }
-
-            // Kirim feedback ke user
-            $successMessage = count($deletedFolders) > 0 ? 'Folder yang dihapus: ' . implode(', ', $deletedFolders) : '';
-            $errorMessage = count($failedFolders) > 0 ? 'Tidak dapat menghapus folder: ' . implode(', ', $failedFolders) : '';
-
-            return redirect()->route('folder.index')->with('success', $successMessage)->with('error', $errorMessage);
-        }
-
-        return back()->with('error', 'Tidak ada folder yang dipilih untuk dihapus.');
-    }
-
     public function checkFolder($id)
     {
         $folder = Folder::findOrFail($id);
@@ -170,5 +134,4 @@ class FolderController extends Controller
             'message' => 'Folder kosong dan siap untuk dihapus.',
         ], 200); // HTTP 200 untuk sukses
     }
-
 }

@@ -97,52 +97,42 @@
             @endif
         </div>
 
-        <!-- List View for Folders --> 
+        <!-- List View for Folders -->
         <div id="listViewFolders" class="folder-list mt-4" style="display: none;">
             @if($subFolders->isEmpty())
                 <p>No subfolders found.</p>
             @else
-                <form id="deleteMultipleForm" action="{{ route('folders.deleteMultiple') }}" method="POST">
-                    @csrf
-                    <div class="mb-3">
-                        <button type="submit" class="btn btn-danger" id="deleteMultipleButton" disabled>
-                            Delete Selected Folders
-                        </button>
-                    </div>
-                    <table class="table table-striped">
-                        <thead>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Created At</th>
+                            <th>Description</th>
+                            @if(in_array(auth()->user()->role, ['super_admin', 'admin']))
+                                <th>Actions</th>
+                            @endif
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($subFolders as $subFolder)
                             <tr>
-                                <th><input type="checkbox" id="selectAll" onclick="toggleSelectAll()"></th>
-                                <th>Name</th>
-                                <th>Created At</th>
-                                <th>Description</th>
+                                <td>{{ $subFolder->name }}</td>
+                                <td>{{ $subFolder->created_at->format('d M Y') }}</td>
+                                <td>{{ $subFolder->keterangan ?? 'Tidak ada keterangan' }}</td>
                                 @if(in_array(auth()->user()->role, ['super_admin', 'admin']))
-                                    <th>Actions</th>
+                                    <td>
+                                        <button class="button" onclick="openRenameModal({{ $subFolder->id }}, '{{ $subFolder->name }}')" title="Rename">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="button" onclick="openShareModal({{ $subFolder->id }}, '{{ url('/folder/' . $subFolder->id . '/share') }}')" title="Share">
+                                            <i class="fas fa-share-alt"></i>
+                                        </button>
+                                    </td>
                                 @endif
                             </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($subFolders as $subFolder)
-                                <tr>
-                                    <td><input type="checkbox" name="folders[]" value="{{ $subFolder->id }}" class="folder-checkbox"></td>
-                                    <td>{{ $subFolder->name }}</td>
-                                    <td>{{ $subFolder->created_at->format('d M Y') }}</td>
-                                    <td>{{ $subFolder->keterangan ?? 'Tidak ada keterangan' }}</td>
-                                    @if(in_array(auth()->user()->role, ['super_admin', 'admin']))
-                                        <td>
-                                            <button class="button" onclick="openRenameModal({{ $subFolder->id }}, '{{ $subFolder->name }}')" title="Rename">
-                                                <i class="fas fa-edit"></i>
-                                            </button>
-                                            <button class="button" onclick="openShareModal({{ $subFolder->id }}, '{{ url('/folder/' . $subFolder->id . '/share') }}')" title="Share">
-                                                <i class="fas fa-share-alt"></i>
-                                            </button>
-                                        </td>
-                                    @endif
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </form>
+                        @endforeach
+                    </tbody>
+                </table>
             @endif
         </div>
 
@@ -222,44 +212,6 @@
             </div>
         </div>
 
-        <!-- Modal untuk mengonfirmasi penghapusan multiple folder -->
-        <div class="modal" id="deleteMultipleModal" tabindex="-1" aria-labelledby="deleteMultipleModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="deleteMultipleModalLabel">Delete Folders</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <p>Are you sure you want to delete the selected folders?</p>
-                        <form id="deleteMultipleForm" action="{{ route('folders.deleteMultiple') }}" method="POST">
-                            @csrf
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                            <button type="submit" class="btn btn-danger">Delete</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Warning Modal -->
-        <div class="modal" id="warningModal" tabindex="-1" aria-labelledby="warningModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="warningModalLabel">Warning</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <p id="warningMessage"></p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">OK</button>
-                    </div>
-                </div>
-            </div>            
-        </div>
-
         <!-- Share Folder -->
         <div class="modal" id="shareModal" tabindex="-1" aria-labelledby="shareModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
@@ -274,7 +226,7 @@
                     </div>
                 </div>
             </div>
-        </div>           
+        </div>   
 
         <!-- Bagian untuk File -->
         <h6>Files</h6>
@@ -337,43 +289,31 @@
             @if($files->isEmpty())
                 <p>No files found.</p>
             @else
-                <form id="deleteMultipleForm" action="{{ route('files.deleteMultiple') }}" method="POST">
-                    @csrf
-                    @if(in_array(auth()->user()->role, ['super_admin', 'admin']))
-                        <div class="mb-3">
-                            <button type="submit" class="btn btn-danger" id="deleteMultipleButton" disabled>
-                                Delete Selected Files
-                            </button>
-                        </div>
-                    @endif
-                    <table class="table table-striped">
-                        <thead>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Created At</th>
+                            <th>Description</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($files as $file)
                             <tr>
-                                <th><input type="checkbox" id="selectAll" onclick="toggleSelectAll()"></th>
-                                <th>Name</th>
-                                <th>Created At</th>
-                                <th>Description</th>
-                                <th>Action</th>
+                                <td>{{ $file->name }}</td>
+                                <td>{{ $file->created_at->format('d M Y') }}</td>
+                                <td>{{ $file->keterangan ?? 'No description' }}</td>
+                                <td>
+                                    @if(in_array(auth()->user()->role, ['super_admin', 'admin']))
+                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#renameFileModal" onclick="document.getElementById('newFileName').value='{{ $file->name }}'; document.getElementById('renameFileForm').action='/file/rename/{{ $file->id }}';"><i class="fas fa-edit"></i></button>
+                                    @endif
+                                    <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#shareFileModal" onclick="document.getElementById('shareFileUrlInput').value='{{ route('file.share', $file->id) }}';"><i class="fas fa-share-alt"></i></button>
+                                </td>
                             </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($files as $file)
-                                <tr>
-                                    <td><input type="checkbox" name="files[]" value="{{ $file->id }}" class="file-checkbox" onchange="toggleDeleteButton()"></td>
-                                    <td>{{ $file->name }}</td>
-                                    <td>{{ $file->created_at->format('d M Y') }}</td>
-                                    <td>{{ $file->keterangan ?? 'No description' }}</td>
-                                    <td>
-                                        @if(in_array(auth()->user()->role, ['super_admin', 'admin']))
-                                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#renameFileModal" onclick="document.getElementById('newFileName').value='{{ $file->name }}'; document.getElementById('renameFileForm').action='/file/rename/{{ $file->id }}';"><i class="fas fa-edit"></i></button>
-                                        @endif
-                                        <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#shareFileModal" onclick="document.getElementById('shareFileUrlInput').value='{{ route('file.share', $file->id) }}';"><i class="fas fa-share-alt"></i></button>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </form>
+                        @endforeach
+                    </tbody>
+                </table>
             @endif
         </div>
 
@@ -386,7 +326,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                    <form action="{{ route('files.store', $folder->id ?? null) }}" method="POST" enctype="multipart/form-data">
+                        <form action="{{ route('files.store', $folder->id ?? null) }}" method="POST" enctype="multipart/form-data">
                             @csrf
                             @if ($folder)
                                 <input type="hidden" name="folder_id" value="{{ $folder->id }}">
@@ -474,115 +414,16 @@
         </div>
     </div>
 </div>
-<script>  
-    // Fungsi untuk mengaktifkan tombol delete jika ada file yang dipilih
-    function toggleDeleteButton() {
-        const selectedFiles = document.querySelectorAll('input[name="files[]"]:checked');
-        const deleteButton = document.getElementById('deleteMultipleButton');
 
-        // Hanya aktifkan tombol delete jika ada file yang dipilih
-        deleteButton.disabled = selectedFiles.length === 0;
-    }
-
-    function toggleSelectAll() {
-        const selectAllCheckbox = document.getElementById('selectAll');
-        const fileCheckboxes = document.querySelectorAll('input[name="files[]"]');
-        
-        fileCheckboxes.forEach(checkbox => {
-            checkbox.checked = selectAllCheckbox.checked;
-        });
-
-        toggleDeleteButton(); // Menangani pengaktifan tombol delete
-    }
-
-    //RENAMEFILE & SHAREFILE
-    document.addEventListener('DOMContentLoaded', function() {
-        // Open Rename File Modal
-        window.openRenameFileModal = function(fileId, currentName) {
-            const renameModal = new bootstrap.Modal(document.getElementById('renameFileModal'));
-            renameModal.show();
-            const form = document.getElementById('renameFileForm');
-            form.action = `/file/rename/${fileId}`; // Ensure this URL matches the route in your backend
-            document.getElementById('newFileName').value = currentName;
-
-            form.onsubmit = function(event) {
-                event.preventDefault(); // Prevent default form submission
-
-                const formData = new FormData(form);
-                fetch(form.action, {
-                    method: 'POST',
-                    body: formData,
-                    headers: {
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                    }
-                }).then(response => response.json())
-                .then(data => {
-                    // Handle success response
-                    if (data.success) {
-                        alert('File renamed successfully');
-                        renameModal.hide();
-                        location.reload(); // Reload the page to reflect changes
-                    } else {
-                        alert('Error renaming file');
-                    }
-                }).catch(error => {
-                    console.error('Error:', error);
-                    alert('Error renaming file');
-                });
-            };
-        };
-
-        // Close Rename File Modal
-        window.closeRenameFileModal = function() {
-            const renameModal = bootstrap.Modal.getInstance(document.getElementById('renameFileModal'));
-            renameModal.hide();
-        };
-
-        // Open Share File Modal
-        window.openShareFileModal = function(fileUrl) {
-            const shareModal = new bootstrap.Modal(document.getElementById('shareFileModal'));
-            shareModal.show();
-            const shareUrlInput = document.getElementById('shareFileUrlInput');
-            shareUrlInput.value = fileUrl;
-
-            const copyButton = document.getElementById('copyFileLinkButton');
-            copyButton.onclick = function () {
-                navigator.clipboard.writeText(shareUrlInput.value).then(() => {
-                    alert('Link copied to clipboard!');
-                }).catch(err => {
-                    console.error('Could not copy text: ', err);
-                });
-            };
-        };
-
-        // Close Share File Modal
-        window.closeShareFileModal = function() {
-            const shareModal = bootstrap.Modal.getInstance(document.getElementById('shareFileModal'));
-            shareModal.hide();
-        };
-    });
-
-    //DELETEFILE
-    function openDeleteFileModal(fileId) {
-        const modal = new bootstrap.Modal(document.getElementById('deleteFileModal'));
-        modal.show(); // Show the modal
-        const form = document.getElementById('deleteFileForm');
-        form.action = `/files/delete/${fileId}`; // Set the action URL for the form
-        document.getElementById('deleteFileId').value = fileId;  // Set the file ID to be deleted
-    }
-
-    function closeDeleteFileModal() {
-        const modal = new bootstrap.Modal(document.getElementById('deleteFileModal'));
-        modal.hide(); 
-    }
-
+<script>
+    // Function to toggle between grid view and list view
     function toggleView() {
         const gridViewFolders = document.getElementById('gridViewFolders');
         const listViewFolders = document.getElementById('listViewFolders');
         const gridViewFiles = document.getElementById('gridViewFiles');
         const listViewFiles = document.getElementById('listView');
 
-        // Cek apakah tampilan grid aktif
+        // Check if grid view is currently active
         if (gridViewFiles.style.display === 'none') {
             gridViewFolders.style.display = 'grid';
             gridViewFolders.style.gridTemplateColumns = 'repeat(auto-fill, minmax(200px, 1fr))';
@@ -596,7 +437,6 @@
             gridViewFolders.style.display = 'none';
             listViewFolders.style.display = 'block';
             gridViewFiles.style.display = 'none';
-            gridViewFiles.style.display = 'list';
             listViewFiles.style.display = 'block';
         }
     }

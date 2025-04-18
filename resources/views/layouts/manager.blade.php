@@ -8,21 +8,16 @@
     <title>@yield('title') - File Manager</title>
 
     {{-- tampilan icon file --}}
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
 
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
 
     <!-- Google Icons -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=grid_view" />
-    <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=view_list" />
 
     <!-- Custom CSS -->
     <style>
@@ -60,15 +55,11 @@
             z-index: 1000;
         }
 
-
         /* Kontainer Konten Utama */
         .container {
             transition: none;
-            /* Hilangkan efek transisi */
             margin-left: 250px;
-            /* Sesuai dengan lebar sidebar */
             width: calc(100% - 250px);
-            /* Sisa lebar layar */
             padding: 25px;
         }
 
@@ -86,7 +77,6 @@
             background-position: center;
             background-repeat: no-repeat;
             max-height: calc(100vh - 80px);
-            min-height: 100vh;
             padding-bottom: 80px;
         }
 
@@ -95,7 +85,6 @@
             display: flex;
             align-items: center;
             gap: 3px;
-            /* Mengurangi jarak antar tombol */
         }
 
         .buttons .btn {
@@ -258,7 +247,6 @@
         .folder-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            /* Ukuran minimum menjadi 200px */
             gap: 20px;
             margin-top: 20px;
         }
@@ -308,7 +296,6 @@
 
         .folder-name {
             font-size: 14px;
-            /* Nama folder */
             font-weight: bold;
             color: #1b5e20;
             text-overflow: ellipsis;
@@ -359,9 +346,7 @@
         .file-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-            /* Lebar minimum 180px */
             gap: 15px;
-            /* Jarak antar file card */
             margin-top: 20px;
         }
 
@@ -369,16 +354,13 @@
             background-color: #f0fdf4;
             border-radius: 8px;
             width: 100%;
-            /* Sesuaikan dengan grid */
             color: #333;
             font-family: 'Poppins', sans-serif;
             padding: 10px;
-            /* Kurangi padding */
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             display: flex;
             flex-direction: column;
             gap: 5px;
-            /* Kurangi jarak antar elemen */
             position: relative;
         }
 
@@ -390,18 +372,15 @@
 
         .file-icon i {
             font-size: 24px;
-
         }
 
         .file-name {
             font-size: 13px;
-            /* Ukuran teks lebih kecil */
             font-weight: bold;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
             max-width: 100%;
-            /* Batasi lebar nama file */
             margin: 0;
         }
 
@@ -459,9 +438,7 @@
             height: 40px;
             border-radius: 50%;
             background-color: #d4f8d4;
-            /* Warna hijau muda */
             color: #4caf50;
-            /* Warna hijau tua */
             border: none;
             cursor: pointer;
             transition: background-color 0.3s ease;
@@ -469,12 +446,10 @@
 
         .button:hover {
             background-color: #b2e8b2;
-            /* Warna hijau sedikit lebih gelap saat hover */
         }
 
         .button i {
             font-size: 16px;
-            /* Ukuran ikon */
         }
     </style>
     @stack('styles')
@@ -526,16 +501,13 @@
         });
     });
 
-    document.getElementById('closeModalButton').addEventListener('click', function () {
-        document.getElementById('addFolderModal').style.display = 'none';
-    });
-
     // RENAME
     function openRenameModal(folderId, currentName) {
         event.preventDefault();
         event.stopPropagation();
 
-        const modal = new bootstrap.Modal(document.getElementById("renameFolderModal"));
+        const modal =
+            new bootstrap.Modal(document.getElementById("renameFolderModal"));
         modal.show();
 
         // Set action on the form
@@ -551,42 +523,12 @@
         event.preventDefault();
         event.stopPropagation();
 
-        // Fetch API to check if the folder is empty
-        fetch(`/folder/check/${folderId}`)
-            .then(response => response.json())
-            .then(data => {
-                if (data.status === 'error') {
-                    // If folder is not empty, show the warning modal
-                    showWarningModal(data.message);
-                } else {
-                    // If folder is empty, show the delete modal
-                    const modal = new bootstrap.Modal(document.getElementById("deleteModal"));
-                    modal.show();
+        const modal = new bootstrap.Modal(document.getElementById("deleteModal"));
+        modal.show();
 
-                    // Set the action for the delete form
-                    const deleteForm = document.getElementById("deleteForm");
-                    deleteForm.action = `/folder/delete/${folderId}`;
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
-    }
-
-    function showWarningModal(message) {
-        const warningModal = new bootstrap.Modal(document.getElementById("warningModal"));
-        const warningMessage = document.getElementById("warningMessage");
-        warningMessage.textContent = message;
-        warningModal.show();
-    }
-
-    //CHECKLIST BUTTON
-    function toggleSelectAll() {
-        var checkboxes = document.querySelectorAll('input[name="folders[]"]');
-        var selectAllCheckbox = document.getElementById('selectAll');
-        checkboxes.forEach(function (checkbox) {
-            checkbox.checked = selectAllCheckbox.checked;
-        });
+        // Set the action for the delete form
+        const deleteForm = document.getElementById("deleteForm");
+        deleteForm.action = `/folder/delete/${folderId}`;
     }
 
     // SHARE
@@ -594,15 +536,12 @@
         event.preventDefault();
         event.stopPropagation();
 
-        // Show the share modal using Bootstrap
         const modal = new bootstrap.Modal(document.getElementById("shareModal"));
         modal.show();
 
-        // Display the share URL in the modal
         const shareUrlInput = document.getElementById("shareUrlInput");
         shareUrlInput.value = shareUrl;
 
-        // Add event listener to "Copy Link" button
         const copyButton = document.getElementById("copyLinkButton");
         copyButton.addEventListener('click', function () {
             copyToClipboard(shareUrlInput.value);
@@ -619,15 +558,6 @@
             alert('Failed to copy the link: ' + err);
         });
     }
-
-    document.addEventListener("DOMContentLoaded", function () {
-        var addFolderModal = new bootstrap.Modal(document.getElementById("addFolderModal"));
-
-        document.getElementById("openAddFolderModal").addEventListener("click", function () {
-            addFolderModal.show();
-        });
-    });
-
 </script>
 
 </html>

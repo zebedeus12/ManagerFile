@@ -124,29 +124,6 @@ class FileController extends Controller
         return redirect()->back()->with('success', 'File berhasil dihapus.'); // Redirect back with success message
     }
 
-    public function deleteMultiple(Request $request)
-    {
-        // Ambil ID file yang dikirimkan
-        $fileIds = $request->input('files');
-
-        // Pastikan ada file yang dipilih
-        if ($fileIds) {
-            foreach ($fileIds as $fileId) {
-                $file = File::find($fileId);  // Temukan file berdasarkan ID
-                if ($file) {
-                    // Hapus file
-                    $file->delete();
-                }
-            }
-
-            // Redirect dengan pesan sukses
-            return redirect()->route('file.index')->with('success', 'Files deleted successfully.');
-        }
-
-        // Jika tidak ada file yang dipilih
-        return redirect()->back()->with('error', 'No files selected.');
-    }
-
     // Fungsi Share File
     public function share($fileId)
     {

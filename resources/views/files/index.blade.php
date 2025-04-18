@@ -29,12 +29,10 @@
                             <span class="material-icons">create_new_folder</span>
                         </button>
                     @endif
-                    <!-- BUTTON GRID VIEW -->
                     <button type="button" class="btn rounded-circle ms-2" id="toggleViewBtn"
                         style="background-color: #b3e6b1; border: none;">
                         <span class="material-icons" id="toggleIcon">grid_view</span>
                     </button>
-
                 </div>
             </div>
             <p class="text-muted">Terdapat {{ $folders->count() }} Folders.</p>
@@ -61,10 +59,7 @@
                                         @if(in_array(auth()->user()->role, ['super_admin', 'admin']))
                                             <button onclick="openRenameModal({{ $folder->id }}, '{{ $folder->name }}')">Rename</button>
                                         @endif
-
-                                        <button
-                                            onclick="openShareModal({{ $folder->id }}, '{{ url('/folder/' . $folder->id . '/share') }}')">Share</button>
-
+                                        <button onclick=" openShareModal({{ $folder->id }}, '{{ url('/folder/' . $folder->id . '/share') }}')">Share</button>
                                         @if(in_array(auth()->user()->role, ['super_admin', 'admin']))
                                             <button onclick="openDeleteModal({{ $folder->id }})">Delete</button>
                                         @endif
@@ -85,51 +80,37 @@
                 @if($folders->isEmpty())
                     <p>No folders found.</p>
                 @else
-                    <form id="deleteMultipleForm" action="{{ route('folders.deleteMultiple') }}" method="POST">
-                        @csrf
-                        <div class="mb-3">
-                            <button type="submit" class="btn btn-danger" id="deleteMultipleButton" disabled>
-                                Delete Selected Folders
-                            </button>
-                        </div>
-                        <table class="table table-striped">
-                            <thead>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Created At</th>
+                                <th>Description</th>
+                                @if(auth()->user()->role === 'super_admin')
+                                    <th>Actions</th>
+                                @endif
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($folders as $folder)
                                 <tr>
-                                    <th><input type="checkbox" id="selectAll" onclick="toggleSelectAll()"></th>
-                                    <th>Name</th>
-                                    <th>Created At</th>
-                                    <th>Description</th>
+                                    <td>{{ $folder->name }}</td>
+                                    <td>{{ $folder->created_at->format('d M Y') }}</td>
+                                    <td>{{ $folder->keterangan ?? 'Tidak ada keterangan' }}</td>
                                     @if(auth()->user()->role === 'super_admin')
-                                        <th>Actions</th>
+                                        <td>
+                                            <button class="button" onclick="openRenameModal({{ $folder->id }}, '{{ $folder->name }}')" title="Rename">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <button class="button" onclick="openShareModal({{ $folder->id }}, '{{ url('/folder/' . $folder->id . '/share') }}')" title="Share">
+                                                <i class="fas fa-share-alt"></i>
+                                            </button>
+                                        </td>
                                     @endif
                                 </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($folders as $folder)
-                                    <tr>
-                                        <td><input type="checkbox" name="folders[]" value="{{ $folder->id }}"
-                                                class="folder-checkbox"></td>
-                                        <td>{{ $folder->name }}</td>
-                                        <td>{{ $folder->created_at->format('d M Y') }}</td>
-                                        <td>{{ $folder->keterangan ?? 'Tidak ada keterangan' }}</td>
-                                        @if(auth()->user()->role === 'super_admin')
-                                            <td>
-                                                <button class="button"
-                                                    onclick="openRenameModal({{ $folder->id }}, '{{ $folder->name }}')" title="Rename">
-                                                    <i class="fas fa-edit"></i>
-                                                </button>
-                                                <button class="button"
-                                                    onclick="openShareModal({{ $folder->id }}, '{{ url('/folder/' . $folder->id . '/share') }}')"
-                                                    title="Share">
-                                                    <i class="fas fa-share-alt"></i>
-                                                </button>
-                                            </td>
-                                        @endif
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </form>
+                            @endforeach
+                        </tbody>
+                    </table>
                 @endif
             </div>
 
@@ -156,16 +137,6 @@
                                     </select>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="hak-akses" class="form-label">Hak Akses</label>
-                                    <select class="form-select" id="hak-akses" name="hak-akses" required>
-                                        @foreach ($employees as $employee)
-                                            <option value="{{ $employee->id_user }}">{{ $employee->nama_user }} -
-                                                {{ ucfirst($employee->role) }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="mb-3">
                                     <label for="keterangan" class="form-label">Keterangan</label>
                                     <textarea class="form-control" id="keterangan" name="keterangan" rows="3"></textarea>
                                 </div>
@@ -177,8 +148,7 @@
             </div>
 
             <!-- Rename Folder -->
-            <div class="modal" id="renameFolderModal" tabindex="-1" aria-labelledby="renameFolderModalLabel"
-                aria-hidden="true">
+            <div class="modal" id="renameFolderModal" tabindex="-1" aria-labelledby="renameFolderModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -189,7 +159,7 @@
                             <form id="renameFolderForm" method="POST">
                                 @csrf
                                 <div class="mb-3">
-                                    <label for="newFolderName" class="form-label">New Folder Name</label>
+                                    <label for="newFolderName" class="form -label">New Folder Name</label>
                                     <input type="text" id="newFolderName" name="name" class="form-control" required>
                                 </div>
                                 <button type="submit" class="btn btn-primary">Save</button>
@@ -220,24 +190,6 @@
                 </div>
             </div>
 
-            <!-- Warning Modal -->
-            <div class="modal" id="warningModal" tabindex="-1" aria-labelledby="warningModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="warningModalLabel">Warning</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <p id="warningMessage"></p>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">OK</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
             <!-- Share Folder -->
             <div class="modal" id="shareModal" tabindex="-1" aria-labelledby="shareModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered">
@@ -263,67 +215,28 @@
             const toggleButton = document.getElementById('toggleViewBtn');
             const toggleIcon = document.getElementById('toggleIcon');
 
-            // Cek apakah ada preferensi tampilan sebelumnya di localStorage
-            let isGridView = localStorage.getItem('viewMode') !== 'list'; // Default ke Grid
+            let isGridView = localStorage.getItem('viewMode') !== 'list';
 
-            // Atur tampilan sesuai preferensi yang tersimpan
             updateView();
 
-            // Event listener untuk tombol toggle tampilan
             toggleButton.addEventListener("click", function (event) {
                 event.preventDefault();
-
-                // Toggle tampilan
                 isGridView = !isGridView;
                 updateView();
-
-                // Simpan preferensi ke localStorage agar tetap setelah reload
                 localStorage.setItem('viewMode', isGridView ? 'grid' : 'list');
             });
 
             function updateView() {
                 if (isGridView) {
                     gridView.style.display = 'grid';
-                    gridView.style.gridTemplateColumns = 'repeat(auto-fill, minmax(200px, 1fr))';
-                    gridView.style.gap = '20px';  // Ensure consistent gap in grid view
                     listView.style.display = 'none';
-                    toggleIcon.textContent = 'grid_view'; // Change icon to List View
+                    toggleIcon.textContent = 'grid_view';
                 } else {
                     gridView.style.display = 'none';
                     listView.style.display = 'block';
-                    toggleIcon.textContent = 'view_list'; // Change icon to Grid View
+                    toggleIcon.textContent = 'view_list';
                 }
             }
         });
-
-        // Fungsi untuk mengaktifkan tombol delete jika ada folder yang dipilih
-        function toggleDeleteButton() {
-            const selectedFolders = document.querySelectorAll('input[name="folders[]"]:checked');
-            const deleteButton = document.getElementById('deleteMultipleButton');
-
-            if (selectedFolders.length > 0) {
-                deleteButton.disabled = false;
-            } else {
-                deleteButton.disabled = true;
-            }
-        }
-
-        // Fungsi untuk memilih semua folder
-        function toggleSelectAll() {
-            const selectAllCheckbox = document.getElementById('selectAll');
-            const folderCheckboxes = document.querySelectorAll('input[name="folders[]"]');
-
-            folderCheckboxes.forEach(checkbox => {
-                checkbox.checked = selectAllCheckbox.checked;
-            });
-
-            toggleDeleteButton();
-        }
-
-        // Pastikan tombol delete tetap aktif saat ada folder dipilih
-        document.querySelectorAll('input[name="folders[]"]').forEach(checkbox => {
-            checkbox.addEventListener('change', toggleDeleteButton);
-        });
-
     </script>
 @endsection
