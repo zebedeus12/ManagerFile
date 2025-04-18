@@ -83,7 +83,6 @@
                                         <button onclick="openShareModal({{ $folder->id }}, '{{ url('/folder/' . $folder->id . '/share') }}')">Share</button>
                                         @if(in_array(auth()->user()->role, ['super_admin', 'admin']))
                                             <button onclick="openDeleteModal({{ $subFolder->id }})">Delete</button>
-                                            <!--<button onclick="openCopyModal({{ $folder->id }})">Copy</button>-->
                                         @endif
                                     </div>
                                 </div>
@@ -276,39 +275,6 @@
                 </div>
             </div>
         </div>           
-
-        <!-- Copy Folder Modal -->
-        <div class="modal" id="copyModal" tabindex="-1" aria-labelledby="copyModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="copyModalLabel">Copy Folder</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <p>Are you sure you want to copy this folder?</p>
-                        <form id="copyForm" method="POST" action="{{ route('folder.copy', $folder->id) }}">
-                            @csrf
-                            <div class="mb-3">
-                                <label for="destination_folder_id" class="form-label">Select Destination Folder</label>
-                                <select id="destination_folder_id" name="destination_folder_id" class="form-select">
-                                    <option value="">Select Destination Folder</option>
-                                    @foreach($allFolders as $folderOption)
-                                        <option value="{{ $folderOption->id }}" @if($folderOption->id == $folder->id) selected @endif>
-                                            {{ $folderOption->name }}
-                                        </option>
-                                    @endforeach
-                                    <option value="new">Create New Folder</option>
-                                </select>
-                            </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-primary">Copy</button>
-                    </div>
-                </div>
-            </div>
-        </div>
 
         <!-- Bagian untuk File -->
         <h6>Files</h6>
