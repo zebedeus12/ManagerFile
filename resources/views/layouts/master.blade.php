@@ -17,7 +17,7 @@
     <style>
         body {
             font-family: 'Poppins', sans-serif;
-            background-image: url('{{ asset('img/Selulosa.png') }}');
+            background-image: url('{{ asset('img/login.jpeg') }}');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
@@ -47,7 +47,7 @@
         /* Left Side of Card (Welcome Message) */
         .card-left {
             flex: 1;
-            background-color: #188A98;
+            background-color: #4caf50;
             color: white;
             display: flex;
             flex-direction: column;
@@ -95,7 +95,7 @@
         .form-title {
             font-size: 20px;
             font-weight: 600;
-            color: #188A98;
+            color: #4caf50;
             text-align: center;
             margin-bottom: 20px;
         }
@@ -107,7 +107,7 @@
         }
 
         .btn-primary {
-            background-color: #188A98;
+            background-color: #4caf50;
             border: none;
             border-radius: 5px;
             padding: 8px 16px;
@@ -117,7 +117,7 @@
         }
 
         .btn-primary:hover {
-            background-color: #146B75;
+            background-color: #4caf50;
         }
     </style>
 
