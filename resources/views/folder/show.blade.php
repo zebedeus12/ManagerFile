@@ -288,7 +288,7 @@
         <div id="listView" class="folder-list mt-4" style="display: none;">
             @if($files->isEmpty())
                 <p>No files found.</p>
-            @else
+            @else 
                 <table class="table table-striped">
                     <thead>
                         <tr>

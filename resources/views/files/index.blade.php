@@ -81,6 +81,10 @@
                     <p>No folders found.</p>
                 @else
                     <table class="table table-striped">
+                        <!-- Trash Icon (Drag Area) -->
+                        <div id="trashArea" class="trash-icon" style="width: 50px; height: 50px; background-color: #81C784; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+                            <span class="material-icons" style="color: #388E3C;">delete</span>
+                        </div>
                         <thead>
                             <tr>
                                 <th>Name</th>
@@ -93,7 +97,7 @@
                         </thead>
                         <tbody>
                             @foreach ($folders as $folder)
-                                <tr>
+                                <tr draggable="true" ondragstart="startDrag(event, {{ $folder->id }})">
                                     <td>{{ $folder->name }}</td>
                                     <td>{{ $folder->created_at->format('d M Y') }}</td>
                                     <td>{{ $folder->keterangan ?? 'Tidak ada keterangan' }}</td>
@@ -134,6 +138,16 @@
                                     <select class="form-select" id="accessibility" name="accessibility" required>
                                         <option value="public">Publik</option>
                                         <option value="private">Rahasia</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="hak-akses" class="form-label">Hak Akses</label>
+                                    <select class="form-select" id="hak-akses" name="hak-akses" required>
+                                        @foreach ($employees as $employee)
+                                            <option value="{{ $employee->id_user }}">{{ $employee->nama_user }} -
+                                                {{ ucfirst($employee->role) }}
+                                            </option>
+                                        @endforeach
                                     </select>
                                 </div>
                                 <div class="mb-3">
@@ -238,5 +252,6 @@
                 }
             }
         });
+
     </script>
 @endsection

@@ -518,6 +518,52 @@
         document.getElementById("newFolderName").value = currentName;
     }
 
+    // Handle dragging files/folders
+    let draggedItemId = null;
+
+    function startDrag(event, itemId) {
+        draggedItemId = itemId;
+        event.dataTransfer.setData('text', itemId);
+    }
+
+    const trashArea = document.getElementById('trashArea');
+
+    trashArea.addEventListener('dragover', function (event) {
+        event.preventDefault();
+    });
+
+    trashArea.addEventListener('drop', function (event) {
+        event.preventDefault();
+
+        // Tampilkan modal konfirmasi penghapusan
+        openDeleteModal(draggedItemId);
+    });
+
+    function deleteItem(itemId) {
+        const url = `/folder/${itemId}/delete`; // Modify according to your folder deletion route
+
+        fetch(url, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            },
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Item deleted successfully');
+                    location.reload();
+                } else {
+                    alert('Failed to delete item');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred');
+            });
+    }
+
     // DELETE
     function openDeleteModal(folderId) {
         event.preventDefault();
