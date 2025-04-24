@@ -604,6 +604,51 @@
             alert('Failed to copy the link: ' + err);
         });
     }
+
+    // Function to open the rename modal for file
+    function openRenameFileModal(fileId, fileName) {
+        event.preventDefault();
+        event.stopPropagation();
+
+        // Get the modal element
+        const modal = new bootstrap.Modal(document.getElementById('renameFileModal'));
+        modal.show();
+
+        // Set the action URL for the form
+        const form = document.getElementById('renameFileForm');
+        form.action = `/file/rename/${fileId}`;
+
+        // Set the current file name in the input field
+        document.getElementById('newFileName').value = fileName;
+    }
+
+    // Function to open the share modal for file
+    function openShareFileModal(shareUrl) {
+        event.preventDefault();
+        event.stopPropagation();
+
+        // Get the modal element
+        const modal = new bootstrap.Modal(document.getElementById('shareFileModal'));
+        modal.show();
+
+        // Set the share URL in the input field
+        const shareUrlInput = document.getElementById('shareFileUrlInput');
+        shareUrlInput.value = shareUrl;
+
+        // Copy URL button functionality
+        const copyButton = document.getElementById('copyFileLinkButton');
+        copyButton.addEventListener('click', function () {
+            copyToClipboard(shareUrlInput.value);
+        });
+    }
+
+    // Function to open the delete modal for file
+    function openDeleteFileModal(fileId) {
+        const form = document.getElementById('deleteFileForm');
+        form.action = `/files/delete/${fileId}`; // Set action ke URL delete file
+        const modal = new bootstrap.Modal(document.getElementById('deleteFileModal'));
+        modal.show(); // Tampilkan modal
+    }
 </script>
 
 </html>

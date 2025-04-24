@@ -110,9 +110,6 @@ class FileController extends Controller
     public function destroy($fileId)
     {
         $file = File::find($fileId); // Find the file by ID
-        if (!$file) {
-            return redirect()->back()->with('error', 'File not found.'); // Redirect back with error message
-        }
 
         // Check if the file exists in storage and delete it
         if ($file->path && Storage::disk('public')->exists($file->path)) {
@@ -121,7 +118,7 @@ class FileController extends Controller
 
         $file->delete(); // Delete the file metadata from the database
 
-        return redirect()->back()->with('success', 'File berhasil dihapus.'); // Redirect back with success message
+        return redirect()->route('file.index')->with('success', 'File successfully deleted.'); // Redirect back with success message
     }
 
     // Fungsi Share File

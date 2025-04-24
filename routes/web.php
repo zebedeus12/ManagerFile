@@ -58,14 +58,9 @@ Route::prefix('files')->group(function () {
     Route::get('/{id}', [FileController::class, 'show'])->name('files.show'); // Menampilkan detail file
 });
 Route::delete('/files/delete/{fileId}', [FileController::class, 'destroy'])->name('file.delete');
-// routes/web.php
 Route::post('/file/rename/{fileId}', [FileController::class, 'rename'])->name('file.rename');
 Route::get('/file/share/{fileId}', [FileController::class, 'share'])->name('file.share');
-
-// Preview file
 Route::get('/file/preview/{id}', [FileController::class, 'preview'])->name('files.preview');
-// In routes/web.php
-Route::post('files/delete-multiple', [FileController::class, 'deleteMultiple'])->name('files.deleteMultiple');
 
 // Mengelola folder
 Route::get('/folder/create/{parentId?}', [FolderController::class, 'showForm'])->name('folder.create'); // Form tambah folder
@@ -76,7 +71,6 @@ Route::post('/folder/share/{id}', [FolderController::class, 'share'])->name('fol
 Route::delete('/folder/{id}', [FolderController::class, 'destroy'])->name('folder.destroy');
 Route::delete('/folder/delete/{id}', [FolderController::class, 'destroy'])->name('folder.delete');
 Route::get('/folder/check/{id}', [FolderController::class, 'checkFolder']);
-Route::post('/folders/deleteMultiple', [FolderController::class, 'deleteMultiple'])->name('folders.deleteMultiple');
 Route::get('/folders', [FolderController::class, 'index'])->name('folder.index');
 
 
@@ -100,7 +94,7 @@ Route::delete('media/{media}', [MediaController::class, 'destroy'])->name('media
 Route::get('media/{id}', [MediaController::class, 'show']);
 
 
-//foldercontroller
+//mediafoldercontroller
 Route::get('/media/folder/create/{parentId?}', [MediaFolderController::class, 'create'])->name('media.folder.create');
 Route::post('/media/folder/store/{parentId?}', [MediaFolderController::class, 'store'])->name('media.folder.store');
 Route::get('media/folder/{id}', [MediaFolderController::class, 'show'])->name('media.folder.show');
