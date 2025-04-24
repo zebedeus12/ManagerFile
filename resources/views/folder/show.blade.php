@@ -78,9 +78,9 @@
                                     </button>
                                     <div class="dropdown-menu">
                                         @if(in_array(auth()->user()->role, ['super_admin', 'admin']))
-                                            <button onclick="openRenameModal({{ $folder->id }}, '{{ $folder->name }}')">Rename</button>
+                                            <button onclick="openRenameModal({{ $subFolder->id }}, '{{ $subFolder->name }}')">Rename</button>
                                         @endif
-                                        <button onclick="openShareModal({{ $folder->id }}, '{{ url('/folder/' . $folder->id . '/share') }}')">Share</button>
+                                        <button onclick="openShareModal({{ $subFolder->id }}, '{{ url('/folder/' . $subFolder->id . '/share') }}')">Share</button>
                                         @if(in_array(auth()->user()->role, ['super_admin', 'admin']))
                                             <button onclick="openDeleteModal({{ $subFolder->id }})">Delete</button>
                                         @endif
