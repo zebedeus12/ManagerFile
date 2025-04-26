@@ -51,7 +51,7 @@ Route::get('/pricing', function () {
 Route::resource('employees', EmployeeController::class);
 
 // Mengelola file
-Route::prefix('files')->group(function () {
+Route::prefix('files')->middleware('auth')->group(function () {
     Route::get('/files', [FileController::class, 'index'])->name('file.index');
     Route::get('/create/{folder?}', [FileController::class, 'create'])->name('files.create'); // Form upload file
     Route::post('/store/{folder?}', [FileController::class, 'store'])->name('files.store'); // Menyimpan file
@@ -60,7 +60,9 @@ Route::prefix('files')->group(function () {
 Route::delete('/files/delete/{fileId}', [FileController::class, 'destroy'])->name('file.delete');
 Route::post('/file/rename/{fileId}', [FileController::class, 'rename'])->name('file.rename');
 Route::get('/file/share/{fileId}', [FileController::class, 'share'])->name('file.share');
-Route::get('/file/preview/{id}', [FileController::class, 'preview'])->name('files.preview');
+Route::post('/file/download/{file}', [FileController::class, 'download'])->name('files.download');
+Route::post('/files/bulk-delete', [FileController::class, 'bulkDelete'])->name('files.bulkDelete');
+
 
 // Mengelola folder
 Route::get('/folder/create/{parentId?}', [FolderController::class, 'showForm'])->name('folder.create'); // Form tambah folder
@@ -72,6 +74,10 @@ Route::delete('/folder/{id}', [FolderController::class, 'destroy'])->name('folde
 Route::delete('/folder/delete/{id}', [FolderController::class, 'destroy'])->name('folder.delete');
 Route::get('/folder/check/{id}', [FolderController::class, 'checkFolder']);
 Route::get('/folders', [FolderController::class, 'index'])->name('folder.index');
+
+Route::post('/folders/bulk-delete', [FolderController::class, 'bulkDelete'])->name('folders.bulkDelete');
+Route::post('/folders/download/{folder}', [FolderController::class, 'download'])->name('folders.download');
+Route::patch('/folders/{id}/toggle-accessibility', [FolderController::class, 'toggleAccessibility'])->name('folders.toggle-accessibility');
 
 
 //mediacontroller
@@ -92,6 +98,12 @@ Route::delete('media/{media}', [MediaController::class, 'destroy'])->name('media
 // Route::delete('/media/delete/{media}', [MediaController::class, 'destroy'])->name('media.destroy');
 
 Route::get('media/{id}', [MediaController::class, 'show']);
+
+Route::post('/media-folder/download/{mediaFolder}', [MediaFolderController::class, 'download'])->name('mediaFolder.download');
+Route::patch('/media/{id}/toggle-accessibility', [MediaFolderController::class, 'toggleAccessibility'])->name('media.toggle-accessibility');
+Route::post('/media/download/{media}', [MediaController::class, 'download'])->name('media.download');
+Route::post('/media-folder/bulk-delete', [MediaFolderController::class, 'bulkDelete'])->name('media.folder.bulkDelete');
+Route::post('/media/bulk-delete', [MediaController::class, 'bulkDelete'])->name('media.bulkDelete');
 
 
 //mediafoldercontroller

@@ -14,15 +14,31 @@ class FileController extends Controller
     public function index(Request $request)
     {
         $query = Folder::query();
-
+        $user = Auth()->user();
+        
         if ($request->has('search')) {
-            $query->where('name', 'like', '%' . $request->search . '%')
-                ->orWhere('keterangan', 'like', '%' . $request->search . '%');
+            $query->where(function($q) use ($request) {
+                $q->where('name', 'like', '%' . $request->search . '%')
+                  ->orWhere('keterangan', 'like', '%' . $request->search . '%');
+            });
         }
 
-        $folders = $query->whereNull('parent_id')->get(); // Ambil folder root saja
+        if ($user->role === 'super_admin') {
+            // Tidak perlu filter, bisa lihat semua
+        } elseif ($user->role === 'admin') {
+            // Bisa lihat public + milik sendiri (private/public)
+            $query->where(function ($q) use ($user) {
+                $q->where('accessibility', 'public')
+                  ->orWhere('owner_id', $user->id_user);
+            });
+        } else {
+            // User biasa: hanya bisa lihat yang public
+            $query->where('accessibility', 'public');
+        }
 
-        $employees = Employee::where('role', 'admin')->get();
+        $folders = $query->whereNull('parent_id')->get();
+
+        $employees = Employee::whereIn('role', ['admin', 'super_admin'])->get();
         // Ambil semua file
         $files = File::all(); // Ambil semua file
 
@@ -66,6 +82,7 @@ class FileController extends Controller
 
                 File::create([
                     'name' => $uploadedFile->getClientOriginalName(),
+                    'original_name' => $uniqueName,
                     'size' => $uploadedFile->getSize() / 1024, // dalam KB
                     'type' => $uploadedFile->extension(),
                     'path' => $filePath,
@@ -130,24 +147,44 @@ class FileController extends Controller
         return response()->json(['url' => $shareUrl]); // Kembalikan URL sebagai respons JSON
     }
 
-    public function preview($id)
+    public function download(File $file)
     {
-        // Ambil path file dari database berdasarkan ID
-        $file = File::findOrFail($id);
-        $filePath = 'public/' . $file->path;
+        $filePath = 'uploads/' . $file->original_name;
 
-        // Periksa apakah file ada
-        if (!Storage::exists($filePath)) {
+        // Mengecek apakah file ada di storage public
+        if (!Storage::disk('public')->exists($filePath)) {
             abort(404, 'File not found');
         }
 
-        // Tentukan MIME type dan tampilkan file
-        $fileContent = Storage::get($filePath);
-        $mimeType = Storage::mimeType($filePath);
+        // Tentukan MIME type file
+        $mimeType = Storage::disk('public')->mimeType($filePath);
 
-        return Response::make($fileContent, 200, [
-            'Content-Type' => $mimeType,
-            'Content-Disposition' => 'inline; filename="' . $file->name . '"',
-        ]);
+        // Ambil isi file
+        $fileContent = Storage::disk('public')->get($filePath);
+
+        // Mengatur header untuk mengunduh file
+        return response()->stream(
+            function () use ($fileContent) {
+                echo $fileContent;
+            },
+            200,
+            [
+                'Content-Type' => $mimeType,
+                'Content-Disposition' => 'attachment; filename="' . $file->original_name . '"',  // Mengunduh file, bukan menampilkannya
+                'Content-Length' => strlen($fileContent),  // Menentukan ukuran file
+            ]
+        );
+    }
+
+    public function bulkDelete(Request $request)
+    {
+        $ids = json_decode($request->input('ids'), true);
+
+        if (is_array($ids)) {
+            File::whereIn('id', $ids)->delete();
+            return redirect()->back()->with('success', 'File berhasil dihapus.');
+        }
+
+        return redirect()->back()->with('error', 'Tidak ada file yang dipilih.');
     }
 }

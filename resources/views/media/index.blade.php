@@ -23,7 +23,7 @@
                         <button type="submit" class="search-btn">
                             <i class="material-icons">search</i>
                         </button>
-                        @if(in_array(auth()->user()->role, ['super_admin', 'admin']))
+                        @if(in_array(auth()->user()->role, ['super_admin']))
                             <!-- BUTTON ADD FOLDER -->
                             <button type="button" class="btn btn-custom" data-bs-toggle="modal"
                                 data-bs-target="#addFolderModal">
@@ -56,14 +56,14 @@
                                 </div>
                                 <div class="form-group mt-3">
                                     <label for="folderAccessibility">Accessibility</label>
-                                    <select class="form-control" name="accessibility" id="folderAccessibility" required>
+                                    <select class="form-select" name="accessibility" id="folderAccessibility" required>
                                         <option value="public">Public</option>
                                         <option value="private">Private</option>
                                     </select>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="hak-akses" class="form-label">Hak Akses</label>
-                                    <select class="form-select" id="hak-akses" name="hak-akses" required>
+                                    <label for="owner_id" class="form-label">Hak Akses</label>
+                                    <select class="form-select" id="owner_id" name="owner_id" required>
                                         @foreach ($employees as $employee)
                                             <option value="{{ $employee->id_user }}">{{ $employee->nama_user }} -
                                                 {{ ucfirst($employee->role) }}
@@ -85,6 +85,8 @@
                 </div>
             </div>
 
+            @include('layouts.index')
+
             <!-- Media Grid Display -->
             <div id="gridView" class="folder-grid mt-4">
                 @if($folders->isEmpty())
@@ -92,6 +94,14 @@
                 @else
                     @foreach ($folders as $folder)
                         <div class="folder-card">
+                            @if($folder->accessibility === 'private')
+                                <span title="Private" class="ms-1 align-middle text-muted">
+                                    <i class="material-icons" style="font-size: 18px;">lock</i> 
+                                </span>
+                            @endif
+                            <form id="downloadForm-{{ $folder->id }}" action="{{ route('mediaFolder.download', $folder->id) }}" method="POST">
+                                @csrf
+                            </form>
                             <a href="{{ route('media.folder.show', $folder->id) }}" class="folder-link d-flex align-items-center">
                                 <div class="folder-icon">
                                     <span class="material-icons">folder</span>
@@ -107,11 +117,17 @@
                                     <span class="material-icons">more_vert</span>
                                 </button>
                                 <div class="dropdown-menu">
-                                    @if(in_array(auth()->user()->role, ['super_admin', 'admin']))
-                                        <button onclick="renameFolder({{ $folder->id }})">Rename</button>
-                                    @endif
+                                    <button onclick="submitDownloadForm(event, {{ $folder->id }})">Download</button>
                                     <button onclick="shareFolder({{ $folder->id }})">Share</button>
-                                    @if(in_array(auth()->user()->role, ['super_admin', 'admin']))
+                                    @if(auth()->user()->id_user == $folder->owner_id || auth()->user()->role == 'super_admin')
+                                    <button onclick="renameFolder({{ $folder->id }})">Rename</button>
+                                    <form action="{{ route('media.toggle-accessibility', $folder->id) }}" method="POST" onsubmit="return confirm('Ubah akses folder ini?')">
+                                        @csrf
+                                        @method('PATCH')
+                                        <button type="submit">
+                                            {{ $folder->accessibility === 'private' ? 'Ubah ke Public' : 'Ubah ke Private' }}
+                                        </button>
+                                    </form>
                                         <button onclick="deleteFolder({{ $folder->id }})">Delete</button>
                                     @endif
                                 </div>
@@ -126,52 +142,58 @@
                 @if($folders->isEmpty())
                     <p>No folders found.</p>
                 @else
-                    <form id="deleteMultipleForm" action="{{ route('media.folder.deleteMultiple') }}" method="POST">
-                        @csrf
-                        <div class="mb-3 d-flex gap-2">
-                            @if(in_array(auth()->user()->role, ['super_admin', 'admin']))
-                                <button type="button" class="btn btn-danger" onclick="confirmDelete()">
-                                    <i class="fas fa-trash"></i> Delete
-                                </button>
-                            @endif
-                        </div>
-
+                
+                    @if(in_array(auth()->user()->role, ['super_admin', 'admin']))
+                    <button id="bulkDeleteBtn" class="btn btn-danger" onclick="bulkDelete()" style="margin: 10px;">
+                        <i class="fas fa-trash-alt"></i> &nbsp; Hapus yang Dipilih
+                    </button>
+                    @endif
                         <!-- Table -->
-                        <table class="table table-striped">
-                            <thead>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                @if(in_array(auth()->user()->role, ['super_admin', 'admin']))
+                                <th><input class="form-check-input" type="checkbox" id="selectAll"></th>
+                                @endif
+                                <th>Name</th>
+                                <th>Created At</th>
+                                <th>Description</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($folders as $folder)
                                 <tr>
-                                    <th><input type="checkbox" id="selectAll" onclick="toggleSelectAll()"></th>
-                                    <th>Name</th>
-                                    <th>Created At</th>
-                                    <th>Description</th>
                                     @if(in_array(auth()->user()->role, ['super_admin', 'admin']))
-                                        <th>Action</th>
+                                    @if(auth()->user()->id_user == $folder->owner_id || auth()->user()->role == 'super_admin')
+                                    <td><input type="checkbox" class="folder-checkbox form-check-input" value="{{ $folder->id }}"></td>
+                                    @else
+                                    <td></td>
                                     @endif
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($folders as $folder)
-                                    <tr>
-                                        <td><input type="checkbox" name="folders[]" value="{{ $folder->id }}"></td>
-                                        <td>{{ $folder->name }}</td>
-                                        <td>{{ $folder->created_at->format('d M Y') }}</td>
-                                        <td>{{ $folder->keterangan ?? 'Tidak ada keterangan' }}</td>
-                                        @if(in_array(auth()->user()->role, ['super_admin', 'admin']))
-                                            <td>
-                                                <button type="button" class="button" onclick="renameFolder({{ $folder->id }})"
-                                                    title="Rename">
-                                                    <span class="material-icons">edit</span>
-                                                </button>
-                                                <button type="button" class="button" onclick="shareFolder({{ $folder->id }})"
-                                                    title="Share">
-                                                    <span class="material-icons">share</span>
-                                                </button>
-                                            </td>
+                                    @endif
+                                    <td>{{ $folder->name }}</td>
+                                    <td>{{ $folder->created_at->format('d M Y') }}</td>
+                                    <td>{{ $folder->keterangan ?? 'Tidak ada keterangan' }}</td>
+                                    <td>
+                                        @if(auth()->user()->id_user == $folder->owner_id || auth()->user()->role == 'super_admin')
+                                        <button type="button" class="button" onclick="renameFolder({{ $folder->id }})"
+                                            title="Rename">
+                                            <span class="material-icons">edit</span>
+                                        </button>
                                         @endif
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+                                        <button type="button" class="button" onclick="shareFolder({{ $folder->id }})"
+                                            title="Share">
+                                            <span class="material-icons">share</span>
+                                        </button>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                
+                    <form id="bulkDeleteForm" action="{{ route('media.folder.bulkDelete') }}" method="POST" style="display: none;">
+                        @csrf
+                        <input type="hidden" name="ids" id="bulkDeleteIds">
                     </form>
                 @endif
             </div>
@@ -266,11 +288,7 @@
             </div>
 
 
-            @if(session('success'))
-                <div class="alert alert-success">
-                    {{ session('success') }}
-                </div>
-            @endif
+            @include('layouts.index')
 
         </div>
     </div>
@@ -294,7 +312,7 @@
                     toggleButton.innerHTML = '<i class="material-icons">view_list</i>'; // Ubah ikon ke List View
                 } else {
                     // Jika dalam mode List, ubah ke Grid
-                    gridView.style.display = 'flex';
+                    gridView.style.display = 'grid';
                     listView.style.display = 'none';
                     toggleButton.innerHTML = '<i class="material-icons">grid_view</i>'; // Ubah ikon ke Grid View
                 }
@@ -338,4 +356,33 @@
         }
     </script>
 
+<script>
+    function submitDownloadForm(event, folderId) {
+        event.preventDefault();
+        document.getElementById('downloadForm-'+ folderId).submit();
+    }
+</script>
+
+<script>
+    document.getElementById('selectAll').addEventListener('change', function () {
+        const checkboxes = document.querySelectorAll('.folder-checkbox');
+        checkboxes.forEach(cb => cb.checked = this.checked);
+    });
+
+    function bulkDelete() {
+        const selected = Array.from(document.querySelectorAll('.folder-checkbox:checked'))
+                            .map(cb => cb.value);
+
+        if (selected.length === 0) {
+            alert('Pilih minimal satu folder untuk dihapus.');
+            return;
+        }
+
+        if (confirm('Apakah Anda yakin ingin menghapus folder yang dipilih?')) {
+            const form = document.getElementById('bulkDeleteForm');
+            document.getElementById('bulkDeleteIds').value = JSON.stringify(selected);
+            form.submit(); // ini akan trigger controller Laravel seperti biasa
+        }
+    }
+</script>
 @endsection

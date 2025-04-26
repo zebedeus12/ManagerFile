@@ -15,27 +15,47 @@ class MediaController extends Controller
      */
     public function index(Request $request, $folderId = null)
     {
-        $employees = Employee::where('role', 'admin')->get();
+        $user = auth()->user();
+        $employees = Employee::whereIn('role', ['admin', 'super_admin'])->get();
         $folderId = $folderId ?? $request->query('folder_id', null);
 
-        // Query media berdasarkan folderId jika tersedia
-        $mediaItems = Media::when($folderId, function ($query) use ($folderId) {
-            return $query->where('folder_id', $folderId);
-        })->get();
+        // Query media sesuai akses user
+        $mediaQuery = Media::query();
 
-        // Tambahkan pencarian folder
-        $foldersQuery = MediaFolder::query();
+        if ($folderId) {
+            $mediaQuery->where('folder_id', $folderId);
+        }
+
+        $mediaItems = $mediaQuery->get();
+
+        // Folder query
+        $foldersQuery = MediaFolder::query()->whereNull('parent_id')->with('subfolders');
 
         if ($request->has('search')) {
             $search = $request->input('search');
-            $foldersQuery->where('name', 'like', '%' . $search . '%')
+            $foldersQuery->where(function ($q) use ($search) {
+                $q->where('name', 'like', '%' . $search . '%')
                 ->orWhere('description', 'like', '%' . $search . '%');
+            });
         }
 
-        $folders = $foldersQuery->whereNull('parent_id')->with('subfolders')->get();
+        // Akses folder berdasarkan role
+        if ($user->role === 'super_admin') {
+            // Semua folder
+        } elseif ($user->role === 'admin') {
+            $foldersQuery->where(function ($q) use ($user) {
+                $q->where('accessibility', 'public')
+                ->orWhere('owner_id', $user->id_user);
+            });
+        } else {
+            $foldersQuery->where('accessibility', 'public');
+        }
+
+        $folders = $foldersQuery->get();
 
         return view('media.index', compact('mediaItems', 'folders', 'employees'));
     }
+
 
 
     public function create(Request $request)
@@ -55,24 +75,25 @@ class MediaController extends Controller
             'description' => 'nullable|string|max:255',
         ]);
 
-        // Ambil nama file
-        $fileName = $request->file('file')->getClientOriginalName();
+        $fileNameOriginalName = $request->file('file')->getClientOriginalName();
+        $fileName = time() . '-' . $request->file('file')->getClientOriginalName();
 
         // Simpan file ke disk 'media'
-        $filePath = $request->file('file')->store('uploads', 'public');
+        $filePath = $request->file('file')->storeAs('uploads', $fileName, 'public');
         $type = $request->file('file')->getClientMimeType();
 
         // Simpan informasi media ke database
         Media::create([
-            'name' => $fileName,
+            'name' => $fileNameOriginalName,
             'path' => $filePath,
             'type' => $type,
             'folder_id' => $request->folder_id,
             'description' => $request->description,
+            'original_name' => $fileName
         ]);
 
         // Redirect dengan pesan sukses
-        return redirect()->route('media.index')->with('success', 'Media berhasil ditambahkan ke folder!');
+        return back()->with('success', 'Media berhasil ditambahkan ke folder!');
     }
 
     /**
@@ -148,5 +169,45 @@ class MediaController extends Controller
         return response()->file($path);
     }
 
+    public function download(Media $media)
+    {
+        $filePath = $media->path;
+
+        // Mengecek apakah file ada di storage public
+        if (!Storage::disk('public')->exists($filePath)) {
+            abort(404, 'File not found');
+        }
+
+        // Tentukan MIME type file
+        $mimeType = Storage::disk('public')->mimeType($filePath);
+        // dd($mimeType);
+        // Ambil isi file
+        $fileContent = Storage::disk('public')->get($filePath);
+
+        // Mengatur header untuk mengunduh file
+        return response()->stream(
+            function () use ($fileContent) {
+                echo $fileContent;
+            },
+            200,
+            [
+                'Content-Type' => $mimeType,
+                'Content-Disposition' => 'attachment; filename="' . $media->original_name . '"',  // Mengunduh file, bukan menampilkannya
+                'Content-Length' => strlen($fileContent),  // Menentukan ukuran file
+            ]
+        );
+    }
+
+    public function bulkDelete(Request $request)
+    {
+        $ids = json_decode($request->input('ids'), true);
+
+        if (is_array($ids)) {
+            MEdia::whereIn('id', $ids)->delete();
+            return redirect()->back()->with('success', 'Media berhasil dihapus.');
+        }
+
+        return redirect()->back()->with('error', 'Tidak ada media yang dipilih.');
+    }
 }
 

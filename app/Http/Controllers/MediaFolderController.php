@@ -6,6 +6,7 @@ use App\Models\MediaFolder;
 use Illuminate\Http\Request;
 use App\Models\Employee;
 use Illuminate\Support\Facades\Storage;
+use ZipArchive;
 
 class MediaFolderController extends Controller
 {
@@ -23,7 +24,7 @@ class MediaFolderController extends Controller
 
     public function create($parentId = null)
     {
-        $employees = Employee::where('role', 'admin')->get();
+        $employees = Employee::whereIn('role', ['admin', 'super_admin'])->get();
         // Menampilkan form untuk membuat folder, bisa subfolder atau folder utama
         return view('media.createFolder', compact('parentId', 'employees'));
     }
@@ -38,14 +39,14 @@ class MediaFolderController extends Controller
 
         // Jika $parentId null, maka folder ini adalah folder utama
         MediaFolder::create([
-            'name' => $request->name,
+            'name'          => $request->name,
             'accessibility' => $request->accessibility,
-            'description' => $request->description,
-            'parent_id' => $parentId, // Jika null, maka parent_id juga null
+            'description'   => $request->description,
+            'parent_id'     => $parentId,
+            'owner_id'      => $request->owner_id ?? auth()->user()->id_user
         ]);
 
-        return redirect()->route('media.index', ['id' => $parentId ?? MediaFolder::latest()->first()->id])
-            ->with('success', 'Folder created successfully!');
+        return back()->with('success', 'Folder created successfully!');
     }
 
     // Menambahkan fungsi untuk membuat media baru di dalam folder
@@ -78,36 +79,46 @@ class MediaFolderController extends Controller
 
     public function show(Request $request, $id)
     {
-        // Ambil folder yang diminta dengan subfolder dan media
         $folder = MediaFolder::findOrFail($id);
 
-        // Query subfolder dengan filter pencarian
+        // Ambil query pencarian
+        $search = $request->input('search');
+
+        // Filter subfolder berdasarkan pencarian
         $subfolderQuery = $folder->subfolders();
-
-        if ($request->has('search')) {
-            $search = $request->input('search');
-            $subfolderQuery->where('name', 'like', '%' . $search . '%')
-                ->orWhere('description', 'like', '%' . $search . '%');
+        if ($search) {
+            $subfolderQuery->where(function ($query) use ($search) {
+                $query->where('name', 'like', '%' . $search . '%')
+                    ->orWhere('description', 'like', '%' . $search . '%');
+            });
         }
-
         $subfolders = $subfolderQuery->get();
 
-        // Query media dengan filter pencarian
+        // Filter media berdasarkan pencarian
         $mediaQuery = $folder->mediaItems();
-
-        if ($request->has('search')) {
-            $search = $request->input('search');
-            $mediaQuery->where('name', 'like', '%' . $search . '%')
-                ->orWhere('type', 'like', '%' . $search . '%');
+        if ($search) {
+            $mediaQuery->where(function ($query) use ($search) {
+                $query->where('name', 'like', '%' . $search . '%')
+                    ->orWhere('type', 'like', '%' . $search . '%');
+            });
         }
-
         $mediaItems = $mediaQuery->get();
 
-        // Ambil data admin
+        // Ambil semua admin
         $employees = Employee::where('role', 'admin')->get();
 
-        return view('media.folder.show', compact('folder', 'subfolders', 'mediaItems', 'employees'));
+        // ===== Breadcrumb building =====
+        $breadcrumbs = [];
+        $current = $folder;
+        while ($current->parent) {
+            $breadcrumbs[] = $current->parent;
+            $current = $current->parent;
+        }
+        $breadcrumbs = array_reverse($breadcrumbs); // urut dari root ke anak
+
+        return view('media.folder.show', compact('folder', 'subfolders', 'mediaItems', 'employees', 'breadcrumbs'));
     }
+
 
     public function rename(Request $request, $id)
     {
@@ -200,5 +211,85 @@ class MediaFolderController extends Controller
         ], 200);
     }
 
+    public function download(MediaFolder $mediaFolder)
+    {
+        $files = Media::where('folder_id', $mediaFolder->id)->get();
+   
+        if ($files->count() == 0) {
+            return back()->with('error', 'Tidak ada file didalam folder.');
+        }
+
+        $zipFileName = $mediaFolder->name . '.zip';
+
+        $zipPath = storage_path("app/temp/{$zipFileName}");
+        
+        if (!file_exists(storage_path('app/temp'))) {
+            mkdir(storage_path('app/temp'), 0755, true);
+        }
+        $zip = new ZipArchive;
+        if ($zip->open($zipPath, ZipArchive::CREATE | ZipArchive::OVERWRITE)) {
+            foreach ($files as $file) {
+          
+                $filePath = storage_path("app/public/{$file->path}");
+                if (file_exists($filePath)) {
+                    $zip->addFile($filePath, basename($filePath));
+                }
+            }
+
+            $zip->close();
+
+            return response()->download($zipPath)->deleteFileAfterSend(true);
+        }
+
+        return back()->with('error', 'Gagal membuat ZIP.');
+    }
+
+    public function toggleAccessibility($id)
+    {
+        $mediaFolder = MediaFolder::findOrFail($id);
+
+        if (auth()->user()->id_user !== $mediaFolder->owner_id && auth()->user()->role !== 'super_admin') {
+            abort(403, 'Tidak diizinkan');
+        }
+
+        $mediaFolder->accessibility = $mediaFolder->accessibility === 'private' ? 'public' : 'private';
+        $mediaFolder->save();
+
+        return redirect()->back()->with('success', 'Akses folder berhasil diubah.');
+    }
+
+    public function bulkDelete(Request $request)
+    {
+        $ids = json_decode($request->input('ids'), true);
+
+        if (!is_array($ids)) {
+            return redirect()->back()->with('error', 'Tidak ada media folder yang dipilih.');
+        }
+
+        $notDeletedFolders = [];
+
+        foreach ($ids as $id) {
+            $folder = MediaFolder::with(['subfolders', 'mediaItems'])->find($id);
+
+            if (!$folder) {
+                continue; // Skip jika folder tidak ditemukan
+            }
+
+            $hasSubfolders = $folder->subfolders->isNotEmpty();
+            $hasMediaItems = $folder->mediaItems->isNotEmpty();
+
+            if ($hasSubfolders || $hasMediaItems) {
+                $notDeletedFolders[] = $folder->name;
+            } else {
+                $folder->delete();
+            }
+        }
+
+        if (count($notDeletedFolders) > 0) {
+            return redirect()->back()->with('error', 'Folder berikut tidak dapat dihapus karena tidak kosong: ' . implode(', ', $notDeletedFolders));
+        }
+
+        return redirect()->back()->with('success', 'Folder kosong berhasil dihapus.');
+    }
 
 }

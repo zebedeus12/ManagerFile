@@ -7,6 +7,7 @@ use App\Models\Folder;
 use App\Models\File;
 use App\Models\Employee;
 use Illuminate\Support\Facades\Log;
+use ZipArchive;
 
 class FolderController extends Controller
 {
@@ -18,7 +19,7 @@ class FolderController extends Controller
         // Ambil semua file
         $files = File::all();
 
-        $employees = Employee::where('role', 'admin')->get();
+        $employees = Employee::whereIn('role', ['admin', 'super_admin'])->get();
 
         return view('files.index', compact('folders', 'files', 'employees'));
     }
@@ -35,6 +36,7 @@ class FolderController extends Controller
         $folder->name = $request->input('folder_name');
         $folder->accessibility = $request->input('accessibility');
         $folder->keterangan = $request->input('keterangan');
+        $folder->owner_id = $request->input('owner_id') ?? auth()->user()->id_user;
 
         if ($parentId) {
             $folder->parent_id = $parentId;
@@ -64,14 +66,31 @@ class FolderController extends Controller
         // Ambil semua sub-folder dan file yang terkait
         $subFolderQuery = $folder->children(); // Relasi ke sub-folder
         $fileQuery = $folder->files(); // Relasi ke file dalam folder ini
+        $user = Auth()->user();
+
+        if ($user->role === 'super_admin') {
+            // Super admin bisa lihat semua (tidak ada filter)
+        } elseif ($user->role === 'admin') {
+            // Admin bisa lihat public dan private milik sendiri
+            $subFolderQuery->where(function ($q) use ($user) {
+                $q->where('accessibility', 'public')
+                    ->orWhere('owner_id', $user->id_user);
+            });
+
+        } else {
+            // User biasa hanya bisa lihat public
+            $subFolderQuery->where('accessibility', 'public');
+        }
 
         // Jika ada parameter pencarian
         if ($request->has('search')) {
             $search = $request->search;
 
             // Filter sub-folder berdasarkan pencarian
-            $subFolderQuery->where('name', 'like', '%' . $search . '%')
-                ->orWhere('keterangan', 'like', '%' . $search . '%');
+            $subFolderQuery->where(function ($q) use ($search) {
+                $q->where('name', 'like', '%' . $search . '%')
+                    ->orWhere('keterangan', 'like', '%' . $search . '%');
+            });
 
             // Filter file berdasarkan pencarian
             $fileQuery->where('name', 'like', '%' . $search . '%');
@@ -108,6 +127,14 @@ class FolderController extends Controller
     public function destroy($id)
     {
         $folder = Folder::findOrFail($id);
+
+        $hasChildren = $folder->children()->exists();
+        $hasFiles = $folder->files()->exists();
+
+        if ($hasChildren || $hasFiles) {
+            return back()->with('error', 'Jika Anda ingin menghapus folder, kosongkan folder terlebih dahulu.');
+        }
+
         $folder->delete();
 
         return redirect()->route('file.index')->with('success', 'Folder berhasil dihapus.');
@@ -134,4 +161,87 @@ class FolderController extends Controller
             'message' => 'Folder kosong dan siap untuk dihapus.',
         ], 200); // HTTP 200 untuk sukses
     }
+
+    public function bulkDelete(Request $request)
+    {
+        $ids = json_decode($request->input('ids'), true);
+
+        if (!is_array($ids)) {
+            return redirect()->back()->with('error', 'Tidak ada folder yang dipilih.');
+        }
+
+        $notDeletedFolders = [];
+
+        foreach ($ids as $id) {
+            $folder = Folder::find($id);
+
+            if (!$folder) {
+                continue;
+            }
+
+            $hasChildren = $folder->children()->exists();
+            $hasFiles = $folder->files()->exists();
+
+            if ($hasChildren || $hasFiles) {
+                $notDeletedFolders[] = $folder->name;
+            } else {
+                $folder->delete(); // Hapus jika kosong
+            }
+        }
+
+        if (count($notDeletedFolders) > 0) {
+            return redirect()->back()->with('error', 'Folder berikut tidak dapat dihapus karena tidak kosong: ' . implode(', ', $notDeletedFolders));
+        }
+
+        return redirect()->back()->with('success', 'Folder kosong berhasil dihapus.');
+    }
+
+
+    public function download(Folder $folder)
+    {
+        $files = File::where('folder_id', $folder->id)->get();
+
+        if ($files->count() == 0) {
+            return back()->with('error', 'Tidak ada file didalam folder.');
+        }
+
+        $zipFileName = $folder->name . '.zip';
+
+        $zipPath = storage_path("app/temp/{$zipFileName}");
+
+        if (!file_exists(storage_path('app/temp'))) {
+            mkdir(storage_path('app/temp'), 0755, true);
+        }
+        $zip = new ZipArchive;
+        if ($zip->open($zipPath, ZipArchive::CREATE | ZipArchive::OVERWRITE)) {
+            foreach ($files as $file) {
+
+                $filePath = storage_path("app/public/uploads/{$file->original_name}");
+                if (file_exists($filePath)) {
+                    $zip->addFile($filePath, basename($filePath));
+                }
+            }
+
+            $zip->close();
+
+            return response()->download($zipPath)->deleteFileAfterSend(true);
+        }
+
+        return back()->with('error', 'Gagal membuat ZIP.');
+    }
+
+    public function toggleAccessibility($id)
+    {
+        $folder = Folder::findOrFail($id);
+
+        if (auth()->user()->id_user !== $folder->owner_id && auth()->user()->role !== 'super_admin') {
+            abort(403, 'Tidak diizinkan');
+        }
+
+        $folder->accessibility = $folder->accessibility === 'private' ? 'public' : 'private';
+        $folder->save();
+
+        return redirect()->back()->with('success', 'Akses folder berhasil diubah.');
+    }
+
 }

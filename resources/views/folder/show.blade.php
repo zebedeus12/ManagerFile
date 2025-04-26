@@ -15,14 +15,24 @@
                 <!-- Breadcrumb untuk jalur folder -->
                 <div class="breadcrumb mt-2">
                     <a href="{{ route('file.index') }}">File Manager</a>
+                
                     @php
+                        $breadcrumbs = [];
                         $current = $folder;
+                
                         while ($current->parent) {
-                            echo ' / <a href="' . route('folder.show', $current->parent->id) . '">' . $current->parent->name . '</a>';
+                            $breadcrumbs[] = '<a href="' . route('folder.show', $current->parent->id) . '">' . $current->parent->name . '</a>';
                             $current = $current->parent;
                         }
+                
+                        $breadcrumbs = array_reverse($breadcrumbs);
                     @endphp
-                    <span> / {{ $folder->name }}</span>
+                
+                    @foreach ($breadcrumbs as $breadcrumb)
+                        <span> / </span>{!! $breadcrumb !!}
+                    @endforeach
+                
+                    <span> /{{ $folder->name }}</span>
                 </div>
             </div>
             <div class="buttons">
@@ -37,6 +47,7 @@
                     </div>
                 </form>
                 @if(in_array(auth()->user()->role, ['super_admin', 'admin']))
+                    @if(auth()->user()->id_user == $folder->owner_id OR auth()->user()->role == 'super_admin')
                     <button class="btn rounded-circle ms-2" data-bs-toggle="modal" data-bs-target="#addSubfolderModal"
                         style="background-color: #b3e6b1; border: none;">
                         <span class="material-icons">create_new_folder</span>
@@ -45,6 +56,7 @@
                         style="background-color: #b3e6b1; border: none;">
                         <span class="material-icons">upload_file</span>
                     </button>
+                    @endif
                 @endif
                 <button class="btn rounded-circle ms-2" onclick="toggleView()" style="background-color: #b3e6b1; border: none;">
                     <span class="material-icons">grid_view</span>
@@ -52,21 +64,24 @@
             </div>
         </div>
 
-        <!-- Tampilkan notifikasi jika ada -->
-        @if (session('success'))
-            <div class="alert alert-success">
-                {{ session('success') }}
-            </div>
-        @endif
-
         <h6>Folders</h6>
         <div id="gridViewFolders" class="folder-grid mt-4">
             @if($subFolders->isEmpty())
                 <p>No subfolders found.</p>
             @else
                 @foreach ($subFolders as $subFolder)
+                    
                     <div class="folder-card">
+                        <form id="downloadForm-{{ $subFolder->id }}" action="{{ route('folders.download', $subFolder->id) }}" method="POST">
+                            @csrf
+                        </form>
+                        
                         <a href="{{ route('folder.show', $subFolder->id) }}" class="folder-link">
+                            @if($subFolder->accessibility === 'private')
+                            <span title="Private" class="ms-1 align-middle text-muted">
+                                <i class="material-icons" style="font-size: 18px;">lock</i> 
+                            </span>
+                            @endif
                             <div class="folder-header">
                                 <div class="folder-icon">
                                     <span class="material-icons">folder</span>
@@ -77,12 +92,20 @@
                                         <span class="material-icons">more_vert</span>
                                     </button>
                                     <div class="dropdown-menu">
-                                        @if(in_array(auth()->user()->role, ['super_admin', 'admin']))
-                                            <button onclick="openRenameModal({{ $subFolder->id }}, '{{ $subFolder->name }}')">Rename</button>
-                                        @endif
                                         <button onclick="openShareModal({{ $subFolder->id }}, '{{ url('/folder/' . $subFolder->id . '/share') }}')">Share</button>
-                                        @if(in_array(auth()->user()->role, ['super_admin', 'admin']))
+                                        <button onclick="submitDownloadForm(event, {{ $subFolder->id }}, 'folder')">Download</button>
+                                        @if(auth()->user()->id_user == $subFolder->owner_id || auth()->user()->role == 'super_admin')
+                                        <button onclick="openRenameModal({{ $subFolder->id }}, '{{ $subFolder->name }}')">Rename</button>
+                                            <form action="{{ route('folders.toggle-accessibility', $subFolder->id) }}" method="POST" onsubmit="return confirm('Ubah akses folder ini?')">
+                                                @csrf
+                                                @method('PATCH')
+                                                <button type="submit">
+                                                    {{ $subFolder->accessibility === 'private' ? 'Ubah ke Public' : 'Ubah ke Private' }}
+                                                </button>
+                                            </form>   
+                                            
                                             <button onclick="openDeleteModal({{ $subFolder->id }})">Delete</button>
+                                            
                                         @endif
                                     </div>
                                 </div>
@@ -93,46 +116,70 @@
                             </p>
                         </a>
                     </div>
+
+                    
                 @endforeach
             @endif
         </div>
+
+        @include('layouts.index')
 
         <!-- List View for Folders -->
         <div id="listViewFolders" class="folder-list mt-4" style="display: none;">
             @if($subFolders->isEmpty())
                 <p>No subfolders found.</p>
             @else
+                @if(in_array(auth()->user()->role, ['super_admin', 'admin']))
+                @if(auth()->user()->id_user == $folder->owner_id || auth()->user()->role == 'super_admin')
+                <button id="bulkDeleteBtn" class="btn btn-danger" onclick="bulkDelete()" >
+                    <i class="fas fa-trash-alt"></i> &nbsp; Hapus yang Dipilih
+                </button>
+                @endif
+                @endif
                 <table class="table table-striped">
                     <thead>
                         <tr>
+                            @if(in_array(auth()->user()->role, ['super_admin', 'admin']))
+                            <th><input class="form-check-input" type="checkbox" id="selectAll"></th>
+                            @endif
                             <th>Name</th>
                             <th>Created At</th>
                             <th>Description</th>
-                            @if(in_array(auth()->user()->role, ['super_admin', 'admin']))
-                                <th>Actions</th>
-                            @endif
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($subFolders as $subFolder)
                             <tr>
+                                @if(in_array(auth()->user()->role, ['super_admin', 'admin']))
+                                    @if(auth()->user()->id_user == $subFolder->owner_id OR auth()->user()->role == 'super_admin')
+                                    <td><input type="checkbox" class="folder-checkbox form-check-input" value="{{ $subFolder->id }}"></td>
+                                    @else
+                                    <td></td>
+                                    @endif
+                                @endif
                                 <td>{{ $subFolder->name }}</td>
                                 <td>{{ $subFolder->created_at->format('d M Y') }}</td>
                                 <td>{{ $subFolder->keterangan ?? 'Tidak ada keterangan' }}</td>
-                                @if(in_array(auth()->user()->role, ['super_admin', 'admin']))
                                     <td>
+                                        @if(auth()->user()->id_user == $subFolder->owner_id OR auth()->user()->role == 'super_admin')
                                         <button class="button" onclick="openRenameModal({{ $subFolder->id }}, '{{ $subFolder->name }}')" title="Rename">
                                             <i class="fas fa-edit"></i>
                                         </button>
+                                        @endif
                                         <button class="button" onclick="openShareModal({{ $subFolder->id }}, '{{ url('/folder/' . $subFolder->id . '/share') }}')" title="Share">
                                             <i class="fas fa-share-alt"></i>
                                         </button>
                                     </td>
-                                @endif
                             </tr>
                         @endforeach
                     </tbody>
                 </table>
+
+            <form id="bulkDeleteForm" action="{{ route('folders.bulkDelete') }}" method="POST" style="display: none;">
+                @csrf
+                <input type="hidden" name="ids" id="bulkDeleteIds">
+            </form>
             @endif
         </div>
 
@@ -199,15 +246,22 @@
                         <h5 class="modal-title" id="deleteModalLabel">Delete Folder</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body">
-                        <p>Are you sure you want to delete this folder?</p>
-                        <form id="deleteForm" method="POST">
+                    <div class="modal-body text-center">
+                        <i class="fas fa-exclamation-triangle fa-3x text-warning mb-3"></i>
+                        <h5 class="mb-3">Konfirmasi Penghapusan</h5>
+                        <p class="text-muted">Apakah kamu yakin ingin menghapus folder ini? Tindakan ini tidak bisa dibatalkan.</p>
+                    
+                        <form id="deleteForm" method="POST" class="d-flex justify-content-center gap-2 mt-4">
                             @csrf
                             @method('DELETE')
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                            <button type="submit" class="btn btn-danger">Delete</button>
+                            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                                <i class="fas fa-times me-1"></i> Batal
+                            </button>
+                            <button type="submit" class="btn btn-danger">
+                                <i class="fas fa-trash-alt me-1"></i> Hapus
+                            </button>
                         </form>
-                    </div>
+                    </div>                    
                 </div>
             </div>
         </div>
@@ -236,6 +290,9 @@
             @else
                 @foreach ($files as $file)
                     <div class="file-card">
+                        <form id="downloadFormFile-{{ $file->id }}" action="{{ route('files.download', $file->id) }}" method="POST">
+                            @csrf
+                        </form>
                         <div class="file-header">
                             <span class="file-icon">
                                 @switch($file->type)
@@ -264,12 +321,11 @@
                                     <span class="material-icons">more_vert</span>
                                 </button>
                                 <div class="dropdown-menu">
-                                    @if(in_array(auth()->user()->role, ['super_admin', 'admin']))
-                                        <button onclick="openRenameFileModal({{ $file->id }}, '{{ $file->name }}')">Rename</button>
-                                    @endif
                                     <button onclick="openShareFileModal('{{ route('file.share', $file->id) }}')">Share</button>
-                                    @if(in_array(auth()->user()->role, ['super_admin', 'admin']))
-                                        <button class="delete-file-btn" data-file-id="{{ $file->id }}" onclick="openDeleteFileModal({{ $file->id }})">Delete</button>
+                                    <button onclick="submitDownloadForm(event, {{ $file->id }}, 'file')">Download</button>
+                                    @if(auth()->user()->id_user == $folder->owner_id || auth()->user()->role == 'super_admin')
+                                    <button onclick="openRenameFileModal({{ $file->id }}, '{{ $file->name }}')">Rename</button>
+                                    <button class="delete-file-btn" data-file-id="{{ $file->id }}" onclick="openDeleteFileModal({{ $file->id }})">Delete</button>
                                     @endif
                                 </div>
                             </div>
@@ -289,9 +345,19 @@
             @if($files->isEmpty())
                 <p>No files found.</p>
             @else 
+                @if(in_array(auth()->user()->role, ['super_admin', 'admin']))
+                @if(auth()->user()->id_user == $folder->owner_id || auth()->user()->role == 'super_admin')
+                <button id="bulkDeleteBtnFile" class="btn btn-danger" onclick="bulkDeleteFile()">
+                    <i class="fas fa-trash-alt"></i> &nbsp; Hapus yang Dipilih
+                </button>
+                @endif
+                @endif
                 <table class="table table-striped">
                     <thead>
                         <tr>
+                            @if(in_array(auth()->user()->role, ['super_admin', 'admin']))
+                            <th><input class="form-check-input" type="checkbox" id="selectAllFile"></th>
+                            @endif
                             <th>Name</th>
                             <th>Created At</th>
                             <th>Description</th>
@@ -301,6 +367,13 @@
                     <tbody>
                         @foreach ($files as $file)
                             <tr>
+                                @if(in_array(auth()->user()->role, ['super_admin', 'admin']))
+                                    @if(auth()->user()->id_user == $folder->owner_id || auth()->user()->role == 'super_admin')
+                                    <td><input type="checkbox" class="file-checkbox form-check-input" value="{{ $file->id }}"></td>
+                                    @else
+                                    <td></td>
+                                    @endif
+                                @endif
                                 <td>{{ $file->name }}</td>
                                 <td>{{ $file->created_at->format('d M Y') }}</td>
                                 <td>{{ $file->keterangan ?? 'No description' }}</td>
@@ -314,6 +387,11 @@
                         @endforeach
                     </tbody>
                 </table>
+
+            <form id="bulkDeleteFormFile" action="{{ route('files.bulkDelete') }}" method="POST" style="display: none;">
+                @csrf
+                <input type="hidden" name="ids" id="bulkDeleteFileIds">
+            </form>
             @endif
         </div>
 
@@ -354,25 +432,32 @@
         </div>
 
        <!-- Modal Delete File -->
-<div class="modal" id="deleteFileModal" tabindex="-1" aria-labelledby="deleteFileModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="deleteFileModalLabel">Delete File</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <p>Are you sure you want to delete this file?</p>
-                <form id="deleteFileForm" action="" method="POST">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="btn btn-danger">Yes, Delete</button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                </form>
+        <div class="modal" id="deleteFileModal" tabindex="-1" aria-labelledby="deleteFileModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deleteFileModalLabel">Delete File</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body text-center">
+                        <i class="fas fa-exclamation-triangle fa-3x text-warning mb-3"></i>
+                        <h5 class="mb-3">Konfirmasi Penghapusan</h5>
+                        <p class="text-muted">Apakah kamu yakin ingin menghapus file ini? Tindakan ini tidak bisa dibatalkan.</p>
+                    
+                        <form id="deleteFileForm" method="POST" class="d-flex justify-content-center gap-2 mt-4">
+                            @csrf
+                            @method('DELETE')
+                            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                                <i class="fas fa-times me-1"></i> Batal
+                            </button>
+                            <button type="submit" class="btn btn-danger">
+                                <i class="fas fa-trash-alt me-1"></i> Hapus
+                            </button>
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-</div>
 
         <!-- Modal Rename File -->
         <div class="modal" id="renameFileModal" tabindex="-1" aria-labelledby="renameFileModalLabel" aria-hidden="true">
@@ -437,6 +522,67 @@
             listViewFolders.style.display = 'block';
             gridViewFiles.style.display = 'none';
             listViewFiles.style.display = 'block';
+        }
+    }
+</script>
+
+<script>
+    document.getElementById('selectAll').addEventListener('change', function () {
+        const checkboxes = document.querySelectorAll('.folder-checkbox');
+        checkboxes.forEach(cb => cb.checked = this.checked);
+    });
+
+    function bulkDelete() {
+        const selected = Array.from(document.querySelectorAll('.folder-checkbox:checked'))
+                            .map(cb => cb.value);
+
+        if (selected.length === 0) {
+            alert('Pilih minimal satu folder untuk dihapus.');
+            return;
+        }
+
+        if (confirm('Apakah Anda yakin ingin menghapus folder yang dipilih?')) {
+            const form = document.getElementById('bulkDeleteForm');
+            document.getElementById('bulkDeleteIds').value = JSON.stringify(selected);
+            form.submit(); // ini akan trigger controller Laravel seperti biasa
+        }
+    }
+</script>
+
+<script>
+    document.getElementById('selectAllFile').addEventListener('change', function () {
+        const checkboxes = document.querySelectorAll('.file-checkbox');
+        checkboxes.forEach(cb => cb.checked = this.checked);
+    });
+
+    function bulkDeleteFile() {
+        const selected = Array.from(document.querySelectorAll('.file-checkbox:checked'))
+                            .map(cb => cb.value);
+
+        if (selected.length === 0) {
+            alert('Pilih minimal satu file untuk dihapus.');
+            return;
+        }
+
+        if (confirm('Apakah Anda yakin ingin menghapus file yang dipilih?')) {
+            const form = document.getElementById('bulkDeleteFormFile');
+            document.getElementById('bulkDeleteFileIds').value = JSON.stringify(selected);
+            form.submit(); // ini akan trigger controller Laravel seperti biasa
+        }
+    }
+</script>
+
+<script>
+    function submitDownloadForm(event, elementId, type) {
+        event.preventDefault();
+
+        let formId = (type == 'file') ? 'downloadFormFile-' + elementId : 'downloadForm-' + elementId;
+        let form = document.getElementById(formId);
+
+        if (form) {
+            form.submit();
+        } else {
+            console.error('Form with ID ' + formId + ' not found.');
         }
     }
 </script>

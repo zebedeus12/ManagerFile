@@ -32,7 +32,14 @@
                     <h3>{{ \Carbon\Carbon::parse($date)->format('d F Y') }}</h3>
                     <div class="file-grid mt-4">
                         @foreach ($folders as $folder)
+                            
                             <div class="file-card">
+                                @if($folder->accessibility === 'private')
+                                <span title="Private" class="align-self-start text-muted">
+                                    <i class="material-icons" style="font-size: 18px;">lock</i> 
+                                </span>
+                                @endif
+                                
                                 <!-- Untuk Folder -->
                                 @if ($folder instanceof App\Models\Folder)
                                     <a href="{{ route('folder.show', $folder->id) }}" class="folder-link">

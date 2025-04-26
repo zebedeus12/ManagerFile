@@ -40,7 +40,6 @@ class EmployeeController extends Controller
             'password' => 'required',
             'role' => 'required|in:super_admin,admin,user',
             'id_struktural_tim' => 'required|integer',
-
         ]);
 
         // Encrypt the password before storing
@@ -49,7 +48,7 @@ class EmployeeController extends Controller
 
         Employee::create($data);
 
-        return redirect()->route('employees.index')->with('success', 'Employee added successfully.');
+        return redirect()->route('employees.index')->with('success', 'Anggota berhasil ditambahkan.');
     }
 
     public function edit(Employee $employee)
@@ -77,13 +76,13 @@ class EmployeeController extends Controller
 
         $employee->update($data);
 
-        return redirect()->route('employees.index')->with('success', 'Employee updated successfully.');
+        return redirect()->route('employees.index')->with('success', 'Anggota berhasil diperbarui.');
     }
 
     public function destroy(Employee $employee)
     {
         $employee->delete();
 
-        return redirect()->route('employees.index')->with('success', 'Employee deleted successfully.');
+        return redirect()->route('employees.index')->with('success', 'Anggota berhasil dihapus.');
     }
 }

@@ -11,7 +11,7 @@ class File extends Model
     use HasFactory;
 
     protected $connection = 'mysql_second';
-    protected $fillable = ['name', 'size', 'type', 'folder_id', 'created_by', 'keterangan'];
+    protected $fillable = ['name', 'size', 'type', 'folder_id', 'created_by', 'keterangan', 'original_name'];
 
     // Relasi ke folder
     public function folder()

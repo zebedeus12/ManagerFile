@@ -27,9 +27,7 @@
                 </div>
             </div>
 
-            @if (session('success'))
-                <div class="alert alert-success">{{ session('success') }}</div>
-            @endif
+            @include('layouts.index')
 
             <table class="table table-bordered">
                 <thead>
