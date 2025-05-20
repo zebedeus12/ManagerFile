@@ -31,7 +31,8 @@ Route::post('/verify-otp', [LoginController::class, 'verifyOTP'])->name('verify.
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 // Rute untuk autentikasi standar (melalui Auth::routes)
-Auth::routes(); // Pastikan ini ada setelah rute login Anda
+Auth::routes(['register' => false, 'reset' => false]);
+// Pastikan ini ada setelah rute login Anda
 
 // Dashboard
 Route::get('/dashboard', function () {

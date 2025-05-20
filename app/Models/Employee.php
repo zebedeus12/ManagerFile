@@ -11,7 +11,7 @@ class Employee extends Authenticatable
     use HasFactory, Notifiable;
 
     // Specify the table to use
-    protected $table = 'tb_arsipuser_copy';
+    protected $table = 'tb_arsipuser';
     protected $primaryKey = 'id_user'; // Sesuaikan dengan nama primary key di tabel Anda
     public $timestamps = false;
 

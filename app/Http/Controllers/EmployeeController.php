@@ -36,7 +36,7 @@ class EmployeeController extends Controller
     {
         $request->validate([
             'nama_user' => 'required',
-            'login' => 'required|unique:tb_arsipuser_copy',
+            'login' => 'required|unique:tb_arsipuser',
             'password' => 'required',
             'role' => 'required|in:super_admin,admin,user',
             'id_struktural_tim' => 'required|integer',
@@ -60,7 +60,7 @@ class EmployeeController extends Controller
     {
         $request->validate([
             'nama_user' => 'required',
-            'login' => 'required|unique:tb_arsipuser_copy,login,' . $employee->id_user . ',id_user',
+            'login' => 'required|unique:tb_arsipuser,login,' . $employee->id_user . ',id_user',
             'role' => 'required|in:super_admin,admin,user', // Validasi role
         ]);
 

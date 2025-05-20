@@ -190,7 +190,7 @@
     </div>
     <script>
         function editEmployee(employee) {
-            document.getElementById("editEmployeeForm").action = `/employees/${employee.id_user}`;
+            document.getElementById("editEmployeeForm").action = `{{ url('employees') }}/${employee.id_user}`;
             document.getElementById("edit_id_user").value = employee.id_user;
             document.getElementById("edit_nama_user").value = employee.nama_user;
             document.getElementById("edit_login").value = employee.login;
@@ -198,7 +198,7 @@
         }
 
         function confirmDelete(id_user) {
-            document.getElementById("deleteEmployeeForm").action = `/employees/${id_user}`;
+            document.getElementById("deleteEmployeeForm").action = `{{ url('employees') }}/${id_user}`;
         }
     </script>
 
