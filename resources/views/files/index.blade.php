@@ -73,7 +73,7 @@
                                         <button onclick=" openShareModal({{ $folder->id }}, '{{ url('/folder/' . $folder->id . '/share') }}')">Share</button>
                                         @if(auth()->user()->id_user == $folder->owner_id || auth()->user()->role == 'super_admin')
 
-                                            <button onclick="openRenameModal({{ $folder->id }}, '{{ $folder->name }}')">Rename</button>
+                                           <button onclick="openRenameModal({{ $folder->id }}, '{{ $folder->name }}')">Rename</button>
                                             <form action="{{ route('folders.toggle-accessibility', $folder->id) }}" method="POST" onsubmit="return confirm('Ubah akses folder ini?')">
                                                 @csrf
                                                 @method('PATCH')

@@ -512,7 +512,7 @@
 
         // Set action on the form
         const form = document.getElementById("renameFolderForm");
-        form.action = `/folder/rename/${folderId}`;
+        form.action = `{{ url('folder/rename') }}/${folderId}`;
 
         // Set the current folder name in the input field
         document.getElementById("newFolderName").value = currentName;
@@ -574,7 +574,7 @@
 
         // Set the action for the delete form
         const deleteForm = document.getElementById("deleteForm");
-        deleteForm.action = `/folder/delete/${folderId}`;
+        deleteForm.action = `{{ url('folder/delete') }}/${folderId}`;
     }
 
     // SHARE
