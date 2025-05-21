@@ -616,7 +616,7 @@
 
         // Set the action URL for the form
         const form = document.getElementById('renameFileForm');
-        form.action = `/file/rename/${fileId}`;
+        form.action = "{{ url('file/rename') }}/" + fileId;
 
         // Set the current file name in the input field
         document.getElementById('newFileName').value = fileName;
@@ -645,7 +645,7 @@
     // Function to open the delete modal for file
     function openDeleteFileModal(fileId) {
         const form = document.getElementById('deleteFileForm');
-        form.action = `/files/delete/${fileId}`; // Set action ke URL delete file
+        form.action = "{{ url('files/delete') }}/" + fileId; // Set action ke URL delete file
         const modal = new bootstrap.Modal(document.getElementById('deleteFileModal'));
         modal.show(); // Tampilkan modal
     }
