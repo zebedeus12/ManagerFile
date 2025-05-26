@@ -595,7 +595,7 @@
         const form = document.getElementById('renameFolderForm');
 
         // Atur action URL form sesuai folder yang akan di-rename
-        form.action = `/media/folder/${folderId}/rename`; // Endpoint untuk rename
+        form.action = "{{ url('media/folder') }}/" + folderId + "/rename"; // Endpoint untuk rename
 
         // Tampilkan modal rename folder
         const renameModal = new bootstrap.Modal(document.getElementById('renameFolderModal'));
@@ -627,7 +627,7 @@
 
     function deleteFolder(folderId) {
         // Panggil endpoint untuk mengecek isi folder
-        fetch(`/media/folder/check/${folderId}`)
+        fetch("{{ url('media/folder/check') }}/" + folderId)
             .then(response => response.json())
             .then(data => {
                 if (data.status === 'error') {
@@ -636,7 +636,7 @@
                 } else {
                     // Jika folder kosong, tampilkan modal konfirmasi penghapusan
                     const deleteForm = document.getElementById('deleteFolderForm');
-                    deleteForm.action = `/media/folder/${folderId}`;
+                    deleteForm.action = "{{ url('media/folder') }}/" + folderId;
                     const deleteModal = new bootstrap.Modal(document.getElementById('deleteFolderModal'));
                     deleteModal.show();
                 }
@@ -657,7 +657,7 @@
     function deleteMedia(mediaId) {
         if (confirm('Are you sure you want to delete this media?')) {
             const form = document.createElement('form');
-            form.action = `/media/${mediaId}`;
+            form.action = "{{ url('media') }}/" + mediaId;
             form.method = 'POST';
             form.style.display = 'none';
 

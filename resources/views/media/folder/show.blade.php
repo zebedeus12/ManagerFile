@@ -14,17 +14,17 @@
                     <h2>Folder: {{ $folder->name }}</h2>
                     <div class="breadcrumb mt-2">
                         <a href="{{ route('media.index') }}">Media Manager</a>
-                    
+
                         @foreach ($breadcrumbs as $breadcrumb)
                             <span> / </span>
                             <a href="{{ route('media.folder.show', $breadcrumb->id) }}">{{ $breadcrumb->name }}</a>
                         @endforeach
-                    
+
                         <span> / {{ $folder->name }}</span>
                     </div>
                 </div>
-                
-                
+
+
                 <div class="d-flex align-items-center gap-2 justify-content-end">
                     <form method="GET" action="{{ route('media.folder.show', $folder->id) }}" class="d-flex mb-3">
                         <div class="search-container">
@@ -37,19 +37,19 @@
                     </form>
                     @if(in_array(auth()->user()->role, ['super_admin', 'admin']))
                         @if(auth()->user()->id_user == $folder->owner_id || auth()->user()->role == 'super_admin')
-                        <button class="btn btn-custom" data-bs-toggle="modal" data-bs-target="#addSubfolderModal">
-                            <i class="material-icons">create_new_folder</i>
-                        </button>
-                        <button class="btn btn-custom" data-bs-toggle="modal" data-bs-target="#addMediaModal">
-                            <i class="material-icons">add_photo_alternate</i>
-                        </button>
+                            <button class="btn btn-custom" data-bs-toggle="modal" data-bs-target="#addSubfolderModal">
+                                <i class="material-icons">create_new_folder</i>
+                            </button>
+                            <button class="btn btn-custom" data-bs-toggle="modal" data-bs-target="#addMediaModal">
+                                <i class="material-icons">add_photo_alternate</i>
+                            </button>
                         @endif
                     @endif
                     <button class="btn btn-custom" onclick="toggleView()">
                         <i class="material-icons">grid_view</i>
                     </button>
                 </div>
-                
+
             </div>
 
             <!-- Add Subfolder Modal -->
@@ -97,14 +97,15 @@
                     <p>No subfolders found.</p>
                 @else
                     @foreach($folder->subfolders as $subfolder)
-                    
+
                         <div class="folder-card">
-                            <form id="downloadForm-{{ $subfolder->id }}" action="{{ route('mediaFolder.download', $subfolder->id) }}" method="POST">
+                            <form id="downloadForm-{{ $subfolder->id }}"
+                                action="{{ route('mediaFolder.download', $subfolder->id) }}" method="POST">
                                 @csrf
                             </form>
                             @if($subfolder->accessibility === 'private')
                                 <span title="Private" class="ms-1 align-middle text-muted">
-                                    <i class="material-icons" style="font-size: 18px;">lock</i> 
+                                    <i class="material-icons" style="font-size: 18px;">lock</i>
                                 </span>
                             @endif
                             <a href="{{ route('media.folder.show', $subfolder->id) }}" class="folder-link">
@@ -127,9 +128,10 @@
                                 <div class="dropdown-menu">
                                     <button onclick="shareFolder({{ $subfolder->id }})">Share</button>
                                     <button onclick="submitDownloadForm(event, {{ $subfolder->id }})">Download</button>
-                                    @if(auth()->user()->id_user == $subfolder->owner_id OR auth()->user()->role == 'super_admin')
-                                        <button onclick="renameFolder({{ $subfolder->id }})">Rename</button>    
-                                        <form action="{{ route('media.toggle-accessibility', $subfolder->id) }}" method="POST" onsubmit="return confirm('Ubah akses folder ini?')">
+                                    @if(auth()->user()->id_user == $subfolder->owner_id or auth()->user()->role == 'super_admin')
+                                        <button onclick="renameFolder({{ $subfolder->id }})">Rename</button>
+                                        <form action="{{ route('media.toggle-accessibility', $subfolder->id) }}" method="POST"
+                                            onsubmit="return confirm('Ubah akses folder ini?')">
                                             @csrf
                                             @method('PATCH')
                                             <button type="submit">
@@ -145,20 +147,20 @@
                     @endforeach
                 @endif
             </div>
-            
+
             <!-- List View for Folders -->
             <div id="listViewFolders" class="folder-list mt-4" style="display: none;">
                 @if(in_array(auth()->user()->role, ['super_admin', 'admin']))
-                <button id="bulkDeleteBtn" class="btn btn-danger" onclick="bulkDelete()" >
-                    <i class="fas fa-trash-alt"></i> &nbsp; Hapus yang Dipilih
-                </button>
+                    <button id="bulkDeleteBtn" class="btn btn-danger" onclick="bulkDelete()">
+                        <i class="fas fa-trash-alt"></i> &nbsp; Hapus yang Dipilih
+                    </button>
                 @endif
 
                 <table class="table table-striped">
                     <thead>
                         <tr>
                             @if(in_array(auth()->user()->role, ['super_admin', 'admin']))
-                            <th><input class="form-check-input" type="checkbox" id="selectAll"></th>
+                                <th><input class="form-check-input" type="checkbox" id="selectAll"></th>
                             @endif
                             <th>Name</th>
                             <th>Created At</th>
@@ -167,20 +169,21 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($folder->subfolders as $subfolder) 
+                        @foreach($folder->subfolders as $subfolder)
                             <tr>
                                 @if(in_array(auth()->user()->role, ['super_admin', 'admin']))
-                                    @if(auth()->user()->id_user == $subfolder->owner_id OR auth()->user()->role == 'super_admin')
-                                    <td><input type="checkbox" class="folder-checkbox form-check-input" value="{{ $subfolder->id }}"></td>
+                                    @if(auth()->user()->id_user == $subfolder->owner_id or auth()->user()->role == 'super_admin')
+                                        <td><input type="checkbox" class="folder-checkbox form-check-input"
+                                                value="{{ $subfolder->id }}"></td>
                                     @else
-                                    <td></td>
+                                        <td></td>
                                     @endif
                                 @endif
                                 <td>{{ $subfolder->name }}</td>
                                 <td>{{ $subfolder->created_at->format('d M Y') }}</td>
                                 <td>{{ $subfolder->keterangan ?? 'Tidak ada keterangan' }}</td>
                                 <td>
-                                    @if(auth()->user()->id_user == $subfolder->owner_id OR auth()->user()->role == 'super_admin')
+                                    @if(auth()->user()->id_user == $subfolder->owner_id or auth()->user()->role == 'super_admin')
                                         <button class="button" onclick="renameFolder({{ $subfolder->id }})"><span
                                                 class="material-icons">edit</span></button>
                                     @endif
@@ -192,7 +195,8 @@
                     </tbody>
                 </table>
 
-                <form id="bulkDeleteForm" action="{{ route('media.folder.bulkDelete') }}" method="POST" style="display: none;">
+                <form id="bulkDeleteForm" action="{{ route('media.folder.bulkDelete') }}" method="POST"
+                    style="display: none;">
                     @csrf
                     <input type="hidden" name="ids" id="bulkDeleteIds">
                 </form>
@@ -362,7 +366,8 @@
                     @else
                         @foreach($folder->mediaItems as $media)
                             <div class="file-card position-relative">
-                                <form id="downloadFormFile-{{ $media->id }}" action="{{ route('media.download', $media->id) }}" method="POST">
+                                <form id="downloadFormFile-{{ $media->id }}" action="{{ route('media.download', $media->id) }}"
+                                    method="POST">
                                     @csrf
                                 </form>
                                 <div class="file-info text-center">
@@ -401,14 +406,13 @@
                                     </button>
                                     <div class="dropdown-menu">
                                         <button onclick="submitDownloadForm(event, {{ $media->id }}, 'file')">Download</button>
-                                        @if(auth()->user()->id_user == $subfolder->owner_id OR auth()->user()->role == 'super_admin')
+                                        @if(auth()->user()->id_user == $folder->owner_id or auth()->user()->role == 'super_admin')
                                             <button
                                                 onclick="openEditMediaModal({{ $media->id }}, '{{ $media->name }}', '{{ $media->type }}', '{{ $media->folder_id }}')"
                                                 class="dropdown-item">Edit</button>
                                             <button onclick="deleteMedia({{ $media->id }})"
                                                 class="dropdown-item text-danger">Delete</button>
                                         @endif
-                                        
                                     </div>
                                 </div>
                             </div>
@@ -420,19 +424,19 @@
             <!-- List View for Files -->
             <div id="listViewFiles" class="file-list mt-4" style="display: none;">
                 @if(in_array(auth()->user()->role, ['super_admin', 'admin']))
-                @if(auth()->user()->id_user == $folder->owner_id || auth()->user()->role == 'super_admin')
-                <button id="bulkDeleteBtnFile" class="btn btn-danger" onclick="bulkDeleteFile()">
-                    <i class="fas fa-trash-alt"></i> &nbsp; Hapus yang Dipilih
-                </button>
-                @endif
+                    @if(auth()->user()->id_user == $folder->owner_id || auth()->user()->role == 'super_admin')
+                        <button id="bulkDeleteBtnFile" class="btn btn-danger" onclick="bulkDeleteFile()">
+                            <i class="fas fa-trash-alt"></i> &nbsp; Hapus yang Dipilih
+                        </button>
+                    @endif
                 @endif
                 <table class="table table-striped">
                     <thead>
                         <tr>
                             @if(in_array(auth()->user()->role, ['super_admin', 'admin']))
-                            @if(auth()->user()->id_user == $folder->owner_id || auth()->user()->role == 'super_admin')
-                            <th><input class="form-check-input" type="checkbox" id="selectAllFile"></th>
-                            @endif
+                                @if(auth()->user()->id_user == $folder->owner_id || auth()->user()->role == 'super_admin')
+                                    <th><input class="form-check-input" type="checkbox" id="selectAllFile"></th>
+                                @endif
                             @endif
                             <th>Name</th>
                             <th>Created At</th>
@@ -441,11 +445,11 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($folder->mediaItems as $media) 
+                        @foreach($folder->mediaItems as $media)
                             <tr>
                                 @if(in_array(auth()->user()->role, ['super_admin', 'admin']))
                                     @if(auth()->user()->id_user == $folder->owner_id || auth()->user()->role == 'super_admin')
-                                    <td><input type="checkbox" class="file-checkbox form-check-input" value="{{ $media->id }}"></td>
+                                        <td><input type="checkbox" class="file-checkbox form-check-input" value="{{ $media->id }}"></td>
                                     @endif
                                 @endif
                                 <td>{{ $media->name }}</td>
@@ -471,10 +475,15 @@
     </div>
     <script>
         function openEditMediaModal(id, name, type, folderId) {
+            // Set nilai inputan form dengan data media yang ingin diedit
             document.getElementById('mediaName').value = name;
             document.getElementById('mediaType').value = type;
             document.getElementById('editFolderId').value = folderId;
-            document.getElementById('editMediaForm').action = `/media/${id}`;
+
+            // Set URL action form edit media secara dinamis
+            document.getElementById('editMediaForm').action = "{{ url('media') }}/" + id;
+
+            // Tampilkan modal edit media
             new bootstrap.Modal(document.getElementById('editMediaModal')).show();
         }
 
@@ -522,64 +531,64 @@
         }
     </script>
 
-<script>
-    function submitDownloadForm(event, elementId, type) {
-        event.preventDefault();
+    <script>
+        function submitDownloadForm(event, elementId, type) {
+            event.preventDefault();
 
-        let formId = (type == 'file') ? 'downloadFormFile-' + elementId : 'downloadForm-' + elementId;
-        let form = document.getElementById(formId);
+            let formId = (type == 'file') ? 'downloadFormFile-' + elementId : 'downloadForm-' + elementId;
+            let form = document.getElementById(formId);
 
-        if (form) {
-            form.submit();
-        } else {
-            console.error('Form with ID ' + formId + ' not found.');
+            if (form) {
+                form.submit();
+            } else {
+                console.error('Form with ID ' + formId + ' not found.');
+            }
         }
-    }
-</script>
+    </script>
 
-<script>
-    document.getElementById('selectAll').addEventListener('change', function () {
-        const checkboxes = document.querySelectorAll('.folder-checkbox');
-        checkboxes.forEach(cb => cb.checked = this.checked);
-    });
+    <script>
+        document.getElementById('selectAll').addEventListener('change', function () {
+            const checkboxes = document.querySelectorAll('.folder-checkbox');
+            checkboxes.forEach(cb => cb.checked = this.checked);
+        });
 
-    function bulkDelete() {
-        const selected = Array.from(document.querySelectorAll('.folder-checkbox:checked'))
-                            .map(cb => cb.value);
+        function bulkDelete() {
+            const selected = Array.from(document.querySelectorAll('.folder-checkbox:checked'))
+                .map(cb => cb.value);
 
-        if (selected.length === 0) {
-            alert('Pilih minimal satu folder untuk dihapus.');
-            return;
+            if (selected.length === 0) {
+                alert('Pilih minimal satu folder untuk dihapus.');
+                return;
+            }
+
+            if (confirm('Apakah Anda yakin ingin menghapus folder yang dipilih?')) {
+                const form = document.getElementById('bulkDeleteForm');
+                document.getElementById('bulkDeleteIds').value = JSON.stringify(selected);
+                form.submit(); // ini akan trigger controller Laravel seperti biasa
+            }
         }
+    </script>
 
-        if (confirm('Apakah Anda yakin ingin menghapus folder yang dipilih?')) {
-            const form = document.getElementById('bulkDeleteForm');
-            document.getElementById('bulkDeleteIds').value = JSON.stringify(selected);
-            form.submit(); // ini akan trigger controller Laravel seperti biasa
+    <script>
+        document.getElementById('selectAllFile').addEventListener('change', function () {
+            const checkboxes = document.querySelectorAll('.file-checkbox');
+            checkboxes.forEach(cb => cb.checked = this.checked);
+        });
+
+        function bulkDeleteFile() {
+            const selected = Array.from(document.querySelectorAll('.file-checkbox:checked'))
+                .map(cb => cb.value);
+
+            if (selected.length === 0) {
+                alert('Pilih minimal satu media untuk dihapus.');
+                return;
+            }
+
+            if (confirm('Apakah Anda yakin ingin menghapus media yang dipilih?')) {
+                const form = document.getElementById('bulkDeleteFormFile');
+                document.getElementById('bulkDeleteFileIds').value = JSON.stringify(selected);
+                form.submit();
+            }
         }
-    }
-</script>
-
-<script>
-    document.getElementById('selectAllFile').addEventListener('change', function () {
-        const checkboxes = document.querySelectorAll('.file-checkbox');
-        checkboxes.forEach(cb => cb.checked = this.checked);
-    });
-
-    function bulkDeleteFile() {
-        const selected = Array.from(document.querySelectorAll('.file-checkbox:checked'))
-                            .map(cb => cb.value);
-
-        if (selected.length === 0) {
-            alert('Pilih minimal satu media untuk dihapus.');
-            return;
-        }
-
-        if (confirm('Apakah Anda yakin ingin menghapus media yang dipilih?')) {
-            const form = document.getElementById('bulkDeleteFormFile');
-            document.getElementById('bulkDeleteFileIds').value = JSON.stringify(selected);
-            form.submit(); 
-        }
-    }
-</script>
+    </script>
 @endsection
