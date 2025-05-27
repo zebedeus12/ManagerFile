@@ -248,23 +248,30 @@
             </div>
 
             <!-- Modal untuk Konfirmasi Delete Folder -->
-            <div class="modal fade" id="deleteFolderModal" tabindex="-1" aria-labelledby="deleteFolderModalLabel"
+            <div class="modal" id="deleteFolderModal" tabindex="-1" aria-labelledby="deleteFolderModalLabel"
                 aria-hidden="true">
-                <div class="modal-dialog">
+                <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="deleteFolderModalLabel">Delete?</h5>
+                            <h5 class="modal-title" id="deleteFolderModalLabel">Delete Folder</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        <div class="modal-body">
-                            <p>Anda yakin ingin menghapus folder tersebut?</p>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                            <form id="deleteFolderForm" action="" method="POST" style="display: inline;">
+                        <div class="modal-body text-center">
+                            <i class="fas fa-exclamation-triangle fa-3x text-warning mb-3"></i>
+                            <h5 class="mb-3">Konfirmasi Penghapusan</h5>
+                            <p class="text-muted">Apakah kamu yakin ingin menghapus folder ini? Tindakan ini tidak bisa
+                                dibatalkan.</p>
+
+                            <form id="deleteFolderForm" action="" method="POST"
+                                class="d-flex justify-content-center gap-2 mt-4">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn btn-danger">Delete</button>
+                                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                                    <i class="fas fa-times me-1"></i> Batal
+                                </button>
+                                <button type="submit" class="btn btn-danger">
+                                    <i class="fas fa-trash-alt me-1"></i> Hapus
+                                </button>
                             </form>
                         </div>
                     </div>
