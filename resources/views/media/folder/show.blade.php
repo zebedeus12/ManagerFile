@@ -371,31 +371,36 @@
                                     @csrf
                                 </form>
                                 <div class="file-info text-center">
-                                    @if(Str::startsWith($media->type, 'image/'))
+                                    @if(Str::startsWith($media->type, 'image'))
                                         <span class="material-icons media-icon">image</span>
-                                    @elseif(Str::startsWith($media->type, 'audio/'))
+                                    @elseif(Str::startsWith($media->type, 'audio'))
                                         <span class="material-icons media-icon">music_note</span>
-                                    @elseif(Str::startsWith($media->type, 'video/'))
+                                    @elseif(Str::startsWith($media->type, 'video'))
                                         <span class="material-icons media-icon">videocam</span>
                                     @endif
                                     <p>{{ $media->name }}</p>
                                 </div>
+
                                 <div class="media-container"
-                                    onclick="handleMediaClick('{{ $media->id }}', '{{ Storage::url($media->path) }}', '{{ $media->type }}')">
-                                    @if(Str::startsWith($media->type, 'image/'))
-                                        <img src="{{ Storage::url($media->path) }}" alt="{{ $media->name }}" class="media-preview"
+                                    onclick="handleMediaClick('{{ $media->id }}', '{{ asset('storage/' . $media->path) }}', '{{ $media->type }}')">
+
+                                    @if(Str::startsWith($media->type, 'image'))
+                                        <img src="{{ asset('storage/' . $media->path) }}" alt="{{ $media->name }}" class="media-preview"
                                             id="media-{{ $media->id }}">
-                                    @elseif(Str::startsWith($media->type, 'audio/'))
+
+                                    @elseif(Str::startsWith($media->type, 'audio'))
                                         <div class="audio-container">
                                             <span class="material-icons audio-icon">play_arrow</span>
-                                            <audio id="audio-{{ $media->id }}" preload="none" class="audio-player">
-                                                <source src="{{ Storage::url($media->path) }}" type="{{ $media->type }}">
+                                            <audio id="audio-{{ $media->id }}" preload="none" class="audio-player" controls>
+                                                <source src="{{ asset('storage/' . $media->path) }}" type="{{ $media->type }}">
+                                                Your browser does not support the audio tag.
                                             </audio>
                                         </div>
-                                    @elseif(Str::startsWith($media->type, 'video/'))
+
+                                    @elseif(Str::startsWith($media->type, 'video'))
                                         <video class="media-preview video-player" id="video-{{ $media->id }}" preload="none" controls>
-                                            <source src="{{ Storage::url($media->path) }}" type="{{ $media->type }}">
-                                            Your browser does not support the vi deo tag.
+                                            <source src="{{ asset('storage/' . $media->path) }}" type="{{ $media->type }}">
+                                            Your browser does not support the video tag.
                                         </video>
                                     @endif
                                 </div>
