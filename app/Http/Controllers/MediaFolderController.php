@@ -39,11 +39,11 @@ class MediaFolderController extends Controller
 
         // Jika $parentId null, maka folder ini adalah folder utama
         MediaFolder::create([
-            'name'          => $request->name,
+            'name' => $request->name,
             'accessibility' => $request->accessibility,
-            'description'   => $request->description,
-            'parent_id'     => $parentId,
-            'owner_id'      => $request->owner_id ?? auth()->user()->id_user
+            'description' => $request->description,
+            'parent_id' => $parentId,
+            'owner_id' => $request->owner_id ?? auth()->user()->id_user
         ]);
 
         return back()->with('success', 'Folder created successfully!');
@@ -81,6 +81,11 @@ class MediaFolderController extends Controller
     {
         $folder = MediaFolder::findOrFail($id);
 
+        // Cek aksesibilitas folder
+        if ($folder->accessibility === 'private' && auth()->user()->id_user !== $folder->owner_id && auth()->user()->role !== 'super_admin') {
+            return redirect()->route('media.index')->with('error', 'Folder ini bersifat private dan tidak dapat diakses.');
+        }
+
         // Ambil query pencarian
         $search = $request->input('search');
 
@@ -92,7 +97,11 @@ class MediaFolderController extends Controller
                     ->orWhere('description', 'like', '%' . $search . '%');
             });
         }
-        $subfolders = $subfolderQuery->get();
+
+        // Ambil subfolder yang dapat diakses
+        $subfolders = $subfolderQuery->get()->filter(function ($subfolder) {
+            return $subfolder->accessibility === 'public' || auth()->user()->id_user === $subfolder->owner_id || auth()->user()->role === 'super_admin';
+        });
 
         // Filter media berdasarkan pencarian
         $mediaQuery = $folder->mediaItems();
@@ -102,7 +111,11 @@ class MediaFolderController extends Controller
                     ->orWhere('type', 'like', '%' . $search . '%');
             });
         }
-        $mediaItems = $mediaQuery->get();
+
+        // Ambil media yang dapat diakses
+        $mediaItems = $mediaQuery->get()->filter(function ($media) {
+            return $media->accessibility === 'public' || auth()->user()->id_user === $media->owner_id || auth()->user()->role === 'super_admin';
+        });
 
         // Ambil semua admin
         $employees = Employee::where('role', 'admin')->get();
@@ -118,7 +131,6 @@ class MediaFolderController extends Controller
 
         return view('media.folder.show', compact('folder', 'subfolders', 'mediaItems', 'employees', 'breadcrumbs'));
     }
-
 
     public function rename(Request $request, $id)
     {
@@ -214,7 +226,7 @@ class MediaFolderController extends Controller
     public function download(MediaFolder $mediaFolder)
     {
         $files = Media::where('folder_id', $mediaFolder->id)->get();
-   
+
         if ($files->count() == 0) {
             return back()->with('error', 'Tidak ada file didalam folder.');
         }
@@ -222,14 +234,14 @@ class MediaFolderController extends Controller
         $zipFileName = $mediaFolder->name . '.zip';
 
         $zipPath = storage_path("app/temp/{$zipFileName}");
-        
+
         if (!file_exists(storage_path('app/temp'))) {
             mkdir(storage_path('app/temp'), 0755, true);
         }
         $zip = new ZipArchive;
         if ($zip->open($zipPath, ZipArchive::CREATE | ZipArchive::OVERWRITE)) {
             foreach ($files as $file) {
-          
+
                 $filePath = storage_path("app/public/{$file->path}");
                 if (file_exists($filePath)) {
                     $zip->addFile($filePath, basename($filePath));

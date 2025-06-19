@@ -96,7 +96,7 @@
                 @if($subfolders->isEmpty())
                     <p>No subfolders found.</p>
                 @else
-                    @foreach($folder->subfolders as $subfolder)
+                    @foreach($subfolders as $subfolder)
 
                         <div class="folder-card">
                             <form id="downloadForm-{{ $subfolder->id }}"
@@ -248,30 +248,23 @@
             </div>
 
             <!-- Modal untuk Konfirmasi Delete Folder -->
-            <div class="modal" id="deleteFolderModal" tabindex="-1" aria-labelledby="deleteFolderModalLabel"
+            <div class="modal fade" id="deleteFolderModal" tabindex="-1" aria-labelledby="deleteFolderModalLabel"
                 aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="deleteFolderModalLabel">Delete Folder</h5>
+                            <h5 class="modal-title" id="deleteFolderModalLabel">Delete?</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        <div class="modal-body text-center">
-                            <i class="fas fa-exclamation-triangle fa-3x text-warning mb-3"></i>
-                            <h5 class="mb-3">Konfirmasi Penghapusan</h5>
-                            <p class="text-muted">Apakah kamu yakin ingin menghapus folder ini? Tindakan ini tidak bisa
-                                dibatalkan.</p>
-
-                            <form id="deleteFolderForm" action="" method="POST"
-                                class="d-flex justify-content-center gap-2 mt-4">
+                        <div class="modal-body">
+                            <p>Anda yakin ingin menghapus folder tersebut?</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            <form id="deleteFolderForm" action="" method="POST" style="display: inline;">
                                 @csrf
                                 @method('DELETE')
-                                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
-                                    <i class="fas fa-times me-1"></i> Batal
-                                </button>
-                                <button type="submit" class="btn btn-danger">
-                                    <i class="fas fa-trash-alt me-1"></i> Hapus
-                                </button>
+                                <button type="submit" class="btn btn-danger">Delete</button>
                             </form>
                         </div>
                     </div>
@@ -378,36 +371,31 @@
                                     @csrf
                                 </form>
                                 <div class="file-info text-center">
-                                    @if(Str::startsWith($media->type, 'image'))
+                                    @if(Str::startsWith($media->type, 'image/'))
                                         <span class="material-icons media-icon">image</span>
-                                    @elseif(Str::startsWith($media->type, 'audio'))
+                                    @elseif(Str::startsWith($media->type, 'audio/'))
                                         <span class="material-icons media-icon">music_note</span>
-                                    @elseif(Str::startsWith($media->type, 'video'))
+                                    @elseif(Str::startsWith($media->type, 'video/'))
                                         <span class="material-icons media-icon">videocam</span>
                                     @endif
                                     <p>{{ $media->name }}</p>
                                 </div>
-
                                 <div class="media-container"
-                                    onclick="handleMediaClick('{{ $media->id }}', '{{ asset('storage/' . $media->path) }}', '{{ $media->type }}')">
-
-                                    @if(Str::startsWith($media->type, 'image'))
-                                        <img src="{{ asset('storage/' . $media->path) }}" alt="{{ $media->name }}" class="media-preview"
+                                    onclick="handleMediaClick('{{ $media->id }}', '{{ Storage::url($media->path) }}', '{{ $media->type }}')">
+                                    @if(Str::startsWith($media->type, 'image/'))
+                                        <img src="{{ Storage::url($media->path) }}" alt="{{ $media->name }}" class="media-preview"
                                             id="media-{{ $media->id }}">
-
-                                    @elseif(Str::startsWith($media->type, 'audio'))
+                                    @elseif(Str::startsWith($media->type, 'audio/'))
                                         <div class="audio-container">
                                             <span class="material-icons audio-icon">play_arrow</span>
-                                            <audio id="audio-{{ $media->id }}" preload="none" class="audio-player" controls>
-                                                <source src="{{ asset('storage/' . $media->path) }}" type="{{ $media->type }}">
-                                                Your browser does not support the audio tag.
+                                            <audio id="audio-{{ $media->id }}" preload="none" class="audio-player">
+                                                <source src="{{ Storage::url($media->path) }}" type="{{ $media->type }}">
                                             </audio>
                                         </div>
-
-                                    @elseif(Str::startsWith($media->type, 'video'))
+                                    @elseif(Str::startsWith($media->type, 'video/'))
                                         <video class="media-preview video-player" id="video-{{ $media->id }}" preload="none" controls>
-                                            <source src="{{ asset('storage/' . $media->path) }}" type="{{ $media->type }}">
-                                            Your browser does not support the video tag.
+                                            <source src="{{ Storage::url($media->path) }}" type="{{ $media->type }}">
+                                            Your browser does not support the vi deo tag.
                                         </video>
                                     @endif
                                 </div>
@@ -418,13 +406,14 @@
                                     </button>
                                     <div class="dropdown-menu">
                                         <button onclick="submitDownloadForm(event, {{ $media->id }}, 'file')">Download</button>
-                                        @if(auth()->user()->id_user == $folder->owner_id or auth()->user()->role == 'super_admin')
+                                        @if(auth()->user()->id_user == $subfolder->owner_id or auth()->user()->role == 'super_admin')
                                             <button
                                                 onclick="openEditMediaModal({{ $media->id }}, '{{ $media->name }}', '{{ $media->type }}', '{{ $media->folder_id }}')"
                                                 class="dropdown-item">Edit</button>
                                             <button onclick="deleteMedia({{ $media->id }})"
                                                 class="dropdown-item text-danger">Delete</button>
                                         @endif
+
                                     </div>
                                 </div>
                             </div>
@@ -487,15 +476,10 @@
     </div>
     <script>
         function openEditMediaModal(id, name, type, folderId) {
-            // Set nilai inputan form dengan data media yang ingin diedit
             document.getElementById('mediaName').value = name;
             document.getElementById('mediaType').value = type;
             document.getElementById('editFolderId').value = folderId;
-
-            // Set URL action form edit media secara dinamis
-            document.getElementById('editMediaForm').action = "{{ url('media') }}/" + id;
-
-            // Tampilkan modal edit media
+            document.getElementById('editMediaForm').action = `/media/${id}`;
             new bootstrap.Modal(document.getElementById('editMediaModal')).show();
         }
 
