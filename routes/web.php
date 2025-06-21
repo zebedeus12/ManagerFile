@@ -64,7 +64,6 @@ Route::get('/file/share/{fileId}', [FileController::class, 'share'])->name('file
 Route::post('/file/download/{file}', [FileController::class, 'download'])->name('files.download');
 Route::post('/files/bulk-delete', [FileController::class, 'bulkDelete'])->name('files.bulkDelete');
 
-
 // Mengelola folder
 Route::get('/folder/create/{parentId?}', [FolderController::class, 'showForm'])->name('folder.create'); // Form tambah folder
 Route::post('/folder/store/{parentId?}', [FolderController::class, 'store'])->name('folder.store'); // Simpan folder baru
@@ -75,11 +74,10 @@ Route::delete('/folder/{id}', [FolderController::class, 'destroy'])->name('folde
 Route::delete('/folder/delete/{id}', [FolderController::class, 'destroy'])->name('folder.delete');
 Route::get('/folder/check/{id}', [FolderController::class, 'checkFolder']);
 Route::get('/folders', [FolderController::class, 'index'])->name('folder.index');
-
+Route::patch('/folder/{id}/toall', [FolderController::class, 'setToAll'])->name('folders.set-toall');
 Route::post('/folders/bulk-delete', [FolderController::class, 'bulkDelete'])->name('folders.bulkDelete');
 Route::post('/folders/download/{folder}', [FolderController::class, 'download'])->name('folders.download');
 Route::patch('/folders/{id}/toggle-accessibility', [FolderController::class, 'toggleAccessibility'])->name('folders.toggle-accessibility');
-
 
 //mediacontroller
 Route::get('/media', [MediaController::class, 'index'])->name('media.index');
@@ -105,7 +103,7 @@ Route::patch('/media/{id}/toggle-accessibility', [MediaFolderController::class, 
 Route::post('/media/download/{media}', [MediaController::class, 'download'])->name('media.download');
 Route::post('/media-folder/bulk-delete', [MediaFolderController::class, 'bulkDelete'])->name('media.folder.bulkDelete');
 Route::post('/media/bulk-delete', [MediaController::class, 'bulkDelete'])->name('media.bulkDelete');
-
+Route::patch('/media-folder/{id}/set-toall', [MediaFolderController::class, 'setToAll'])->name('media.set-toall');
 
 //mediafoldercontroller
 Route::get('/media/folder/create/{parentId?}', [MediaFolderController::class, 'create'])->name('media.folder.create');

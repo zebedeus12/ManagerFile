@@ -94,6 +94,14 @@ class FolderController extends Controller
 
             // Filter file berdasarkan pencarian
             $fileQuery->where('name', 'like', '%' . $search . '%');
+
+            $subFolderQuery->where(function ($q) use ($user) {
+                $q->where('accessibility', 'public')
+                    ->orWhere('owner_id', $user->id_user)
+                    ->orWhere(function ($q2) use ($user) {
+                        $q2->where('accessibility', 'only_me')->where('owner_id', $user->id_user);
+                    });
+            });
         }
 
         $subFolders = $subFolderQuery->get();
@@ -244,4 +252,22 @@ class FolderController extends Controller
         return redirect()->back()->with('success', 'Akses folder berhasil diubah.');
     }
 
+    public function setToAll($id)
+    {
+        $folder = Folder::findOrFail($id);
+
+        if (auth()->user()->id_user !== $folder->owner_id && auth()->user()->role !== 'super_admin') {
+            abort(403, 'Tidak diizinkan');
+        }
+
+        // Toggle antara ALL dan ONLY ME
+        $folder->accessibility_subfolder = $folder->accessibility_subfolder == 1 ? 0 : 1;
+        $folder->save();
+
+        $message = $folder->accessibility_subfolder == 1
+            ? 'Akses folder berhasil diubah menjadi All.'
+            : 'Akses folder berhasil diubah menjadi Only Me.';
+
+        return redirect()->back()->with('success', $message);
+    }
 }

@@ -37,9 +37,15 @@
                     </form>
                     @if(in_array(auth()->user()->role, ['super_admin', 'admin']))
                         @if(auth()->user()->id_user == $folder->owner_id || auth()->user()->role == 'super_admin')
+                            {{-- PEMILIK atau SUPER ADMIN - tombol selalu tampil --}}
                             <button class="btn btn-custom" data-bs-toggle="modal" data-bs-target="#addSubfolderModal">
                                 <i class="material-icons">create_new_folder</i>
                             </button>
+                            <button class="btn btn-custom" data-bs-toggle="modal" data-bs-target="#addMediaModal">
+                                <i class="material-icons">add_photo_alternate</i>
+                            </button>
+                        @elseif($folder->parent_id !== null && $folder->accessibility_subfolder == 1)
+                            {{-- Hanya untuk subfolder yang diatur ALL --}}
                             <button class="btn btn-custom" data-bs-toggle="modal" data-bs-target="#addMediaModal">
                                 <i class="material-icons">add_photo_alternate</i>
                             </button>
@@ -49,49 +55,9 @@
                         <i class="material-icons">grid_view</i>
                     </button>
                 </div>
-
             </div>
 
-            <!-- Add Subfolder Modal -->
-            <div class="modal fade" id="addSubfolderModal" tabindex="-1" aria-labelledby="addSubfolderModalLabel"
-                aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="addSubfolderModalLabel">Add Folder</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <form action="{{ route('media.folder.store', ['parentId' => $folder->id]) }}" method="POST">
-                                @csrf
-                                <div class="form-group">
-                                    <label for="folderName">Folder Name</label>
-                                    <input type="text" class="form-control" name="name" id="folderName" required>
-                                </div>
-                                <div class="form-group mt-3">
-                                    <label for="folderAccessibility">Accessibility</label>
-                                    <select class="form-select" name="accessibility" id="folderAccessibility" required>
-                                        <option value="public">Public</option>
-                                        <option value="private">Private</option>
-                                    </select>
-                                </div>
-                                <div class="form-group mt-3">
-                                    <label for="folderDescription">Keterangan</label>
-                                    <textarea class="form-control" name="description" id="folderDescription"
-                                        rows="3"></textarea>
-                                </div>
-                                <div class="form-group mt-3">
-                                    <button type="submit" class="btn btn-primary">Create Folder</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            @include('layouts.index')
-
-            <!-- Subfolder List -->
+            <!-- Subfolder grid -->
             <div id="gridViewFolders" class="folder-grid mt-4">
                 @if($subfolders->isEmpty())
                     <p>No subfolders found.</p>
@@ -138,8 +104,15 @@
                                                 {{ $subfolder->accessibility === 'private' ? 'Ubah ke Public' : 'Ubah ke Private' }}
                                             </button>
                                         </form>
+                                        <form action="{{ route('media.set-toall', $subfolder->id) }}" method="POST"
+                                            onsubmit="return confirm('Ubah akses folder ini?')">
+                                            @csrf
+                                            @method('PATCH')
+                                            <button type="submit">
+                                                {{ $subfolder->accessibility_subfolder == 1 ? 'Ubah ke Only Me' : 'Ubah ke All' }}
+                                            </button>
+                                        </form>
                                         <button onclick="deleteFolder({{ $subfolder->id }})">Delete</button>
-                                        <!--<button onclick="copyFolder({{ $subfolder->id }})">Copy</button>-->
                                     @endif
                                 </div>
                             </div>
@@ -147,6 +120,45 @@
                     @endforeach
                 @endif
             </div>
+
+            <!-- Add Subfolder Modal -->
+            <div class="modal fade" id="addSubfolderModal" tabindex="-1" aria-labelledby="addSubfolderModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="addSubfolderModalLabel">Add Folder</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form action="{{ route('media.folder.store', ['parentId' => $folder->id]) }}" method="POST">
+                                @csrf
+                                <div class="form-group">
+                                    <label for="folderName">Folder Name</label>
+                                    <input type="text" class="form-control" name="name" id="folderName" required>
+                                </div>
+                                <div class="form-group mt-3">
+                                    <label for="folderAccessibility">Accessibility</label>
+                                    <select class="form-select" name="accessibility" id="folderAccessibility" required>
+                                        <option value="public">Public</option>
+                                        <option value="private">Private</option>
+                                    </select>
+                                </div>
+                                <div class="form-group mt-3">
+                                    <label for="folderDescription">Keterangan</label>
+                                    <textarea class="form-control" name="description" id="folderDescription"
+                                        rows="3"></textarea>
+                                </div>
+                                <div class="form-group mt-3">
+                                    <button type="submit" class="btn btn-primary">Create Folder</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            @include('layouts.index')
 
             <!-- List View for Folders -->
             <div id="listViewFolders" class="folder-list mt-4" style="display: none;">

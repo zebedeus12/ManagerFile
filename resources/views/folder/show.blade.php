@@ -47,15 +47,22 @@
                     </div>
                 </form>
                 @if(in_array(auth()->user()->role, ['super_admin', 'admin']))
-                    @if(auth()->user()->id_user == $folder->owner_id OR auth()->user()->role == 'super_admin')
-                    <button class="btn rounded-circle ms-2" data-bs-toggle="modal" data-bs-target="#addSubfolderModal"
-                        style="background-color: #b3e6b1; border: none;">
-                        <span class="material-icons">create_new_folder</span>
-                    </button>
-                    <button class="btn rounded-circle ms-2" data-bs-toggle="modal" data-bs-target="#uploadFileModal"
-                        style="background-color: #b3e6b1; border: none;">
-                        <span class="material-icons">upload_file</span>
-                    </button>
+                    @if(auth()->user()->id_user == $folder->owner_id || auth()->user()->role == 'super_admin')
+                        {{-- PEMILIK atau SUPER ADMIN - tombol selalu tampil --}}
+                        <button class="btn rounded-circle ms-2" data-bs-toggle="modal" data-bs-target="#addSubfolderModal"
+                            style="background-color: #b3e6b1; border: none;">
+                            <span class="material-icons">create_new_folder</span>
+                        </button>
+                        <button class="btn rounded-circle ms-2" data-bs-toggle="modal" data-bs-target="#uploadFileModal"
+                            style="background-color: #b3e6b1; border: none;">
+                            <span class="material-icons">upload_file</span>
+                        </button>
+                    @elseif($folder->accessibility_subfolder == 1)
+                        {{-- ADMIN tapi bukan pemilik dan folder diakses ALL --}}
+                        <button class="btn rounded-circle ms-2" data-bs-toggle="modal" data-bs-target="#uploadFileModal"
+                            style="background-color: #b3e6b1; border: none;">
+                            <span class="material-icons">upload_file</span>
+                        </button>
                     @endif
                 @endif
                 <button class="btn rounded-circle ms-2" onclick="toggleView()" style="background-color: #b3e6b1; border: none;">
@@ -103,9 +110,14 @@
                                                     {{ $subFolder->accessibility === 'private' ? 'Ubah ke Public' : 'Ubah ke Private' }}
                                                 </button>
                                             </form>   
-                                            
+                                           <form action="{{ route('folders.set-toall', $subFolder->id) }}" method="POST" onsubmit="return confirm('Ubah akses folder ini?')">
+                                                @csrf
+                                                @method('PATCH')
+                                                <button type="submit">
+                                                    {{ $subFolder->accessibility_subfolder == 1 ? 'Ubah ke Only Me' : 'Ubah ke All' }}
+                                                </button>
+                                            </form>
                                             <button onclick="openDeleteModal({{ $subFolder->id }})">Delete</button>
-                                            
                                         @endif
                                     </div>
                                 </div>
@@ -116,8 +128,6 @@
                             </p>
                         </a>
                     </div>
-
-                    
                 @endforeach
             @endif
         </div>
