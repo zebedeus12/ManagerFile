@@ -117,14 +117,6 @@ class MediaFolderController extends Controller
             return $media->accessibility === 'public' || auth()->user()->id_user === $media->owner_id || auth()->user()->role === 'super_admin';
         });
 
-        $user = auth()->user();
-        $subfolders = $subfolderQuery->get()->filter(function ($subfolder) use ($user) {
-            return $subfolder->accessibility === 'public'
-                || $subfolder->owner_id === $user->id_user
-                || ($subfolder->accessibility === 'only_me' && $subfolder->owner_id === $user->id_user)
-                || $user->role === 'super_admin';
-        });
-
         // Ambil semua admin
         $employees = Employee::where('role', 'admin')->get();
 
@@ -320,14 +312,24 @@ class MediaFolderController extends Controller
             abort(403, 'Tidak diizinkan');
         }
 
-        // Toggle antara ALL (1) dan ONLY ME (0)
-        $mediaFolder->accessibility_subfolder = $mediaFolder->accessibility_subfolder == 1 ? 0 : 1;
-        $mediaFolder->save();
+        // Logika akses:
+        if ($mediaFolder->accessibility_subfolder == 0) {
+            // Jika awalnya Only Me, ubah ke All
+            $mediaFolder->accessibility_subfolder = 1;
+            $message = 'Akses folder berhasil diubah menjadi All.';
+        } elseif ($mediaFolder->accessibility_subfolder == 1) {
+            // Jika awalnya All, hanya pemilik atau super_admin yang boleh ubah ke Only Me
+            if (auth()->user()->id_user == $mediaFolder->owner_id || auth()->user()->role == 'super_admin') {
+                $mediaFolder->accessibility_subfolder = 0;
+                $message = 'Akses folder berhasil diubah menjadi Only Me.';
+            } else {
+                return redirect()->back()->with('error', 'Hanya pemilik atau super admin yang bisa mengubah akses menjadi Only Me.');
+            }
+        }
 
-        $message = $mediaFolder->accessibility_subfolder == 1
-            ? 'Akses folder berhasil diubah menjadi All.'
-            : 'Akses folder berhasil diubah menjadi Only Me.';
+        $mediaFolder->save();
 
         return redirect()->back()->with('success', $message);
     }
+
 }
