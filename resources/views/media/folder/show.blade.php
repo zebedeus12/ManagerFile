@@ -26,6 +26,7 @@
 
 
                 <div class="d-flex align-items-center gap-2 justify-content-end">
+                    {{-- Search Form (tetap sama) --}}
                     <form method="GET" action="{{ route('media.folder.show', $folder->id) }}" class="d-flex mb-3">
                         <div class="search-container">
                             <input type="text" name="search" value="{{ request('search') }}" class="search-input"
@@ -35,22 +36,27 @@
                             <i class="material-icons">search</i>
                         </button>
                     </form>
-                    @if(in_array(auth()->user()->role, ['super_admin', 'admin']))
-                        @if(auth()->user()->id_user == $folder->owner_id || auth()->user()->role == 'super_admin')
-                            {{-- PEMILIK atau SUPER ADMIN - tombol selalu tampil --}}
-                            <button class="btn btn-custom" data-bs-toggle="modal" data-bs-target="#addSubfolderModal">
-                                <i class="material-icons">create_new_folder</i>
-                            </button>
-                            <button class="btn btn-custom" data-bs-toggle="modal" data-bs-target="#addMediaModal">
-                                <i class="material-icons">add_photo_alternate</i>
-                            </button>
-                        @elseif($folder->parent_id !== null && $folder->accessibility_subfolder == 1)
-                            {{-- Hanya untuk subfolder yang diatur ALL --}}
-                            <button class="btn btn-custom" data-bs-toggle="modal" data-bs-target="#addMediaModal">
-                                <i class="material-icons">add_photo_alternate</i>
-                            </button>
-                        @endif
+
+                    {{-- Tombol Tambah Subfolder: Hanya terlihat oleh Super Admin atau Pemilik Folder --}}
+                    @if(auth()->user()->role === 'super_admin' || auth()->user()->id_user == $folder->owner_id)
+                        <button class="btn btn-custom" data-bs-toggle="modal" data-bs-target="#addSubfolderModal">
+                            <i class="material-icons">create_new_folder</i>
+                        </button>
                     @endif
+
+                    {{-- Tombol Tambah Media: Terlihat jika Super Admin, Pemilik Folder, ATAU subfolder adalah 'All' dan
+                    pengguna adalah admin/user --}}
+                    @if(
+                            auth()->user()->role === 'super_admin' || // Super Admin selalu bisa menambahkan media
+                            auth()->user()->id_user == $folder->owner_id || // Pemilik Folder selalu bisa menambahkan media
+                            ($folder->parent_id !== null && $folder->accessibility_subfolder == 1 && in_array(auth()->user()->role, ['admin', 'user'])) // Untuk subfolder yang disetel ke 'All', izinkan admin dan pengguna biasa
+                        )
+                        <button class="btn btn-custom" data-bs-toggle="modal" data-bs-target="#addMediaModal">
+                            <i class="material-icons">add_photo_alternate</i>
+                        </button>
+                    @endif
+
+                    {{-- Tombol Toggle View (tetap sama) --}}
                     <button class="btn btn-custom" onclick="toggleView()">
                         <i class="material-icons">grid_view</i>
                     </button>

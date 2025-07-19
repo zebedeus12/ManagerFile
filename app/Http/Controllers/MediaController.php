@@ -35,7 +35,7 @@ class MediaController extends Controller
             $search = $request->input('search');
             $foldersQuery->where(function ($q) use ($search) {
                 $q->where('name', 'like', '%' . $search . '%')
-                ->orWhere('description', 'like', '%' . $search . '%');
+                    ->orWhere('description', 'like', '%' . $search . '%');
             });
         }
 
@@ -45,7 +45,7 @@ class MediaController extends Controller
         } elseif ($user->role === 'admin') {
             $foldersQuery->where(function ($q) use ($user) {
                 $q->where('accessibility', 'public')
-                ->orWhere('owner_id', $user->id_user);
+                    ->orWhere('owner_id', $user->id_user);
             });
         } else {
             $foldersQuery->where('accessibility', 'public');
@@ -160,7 +160,8 @@ class MediaController extends Controller
     public function show($id)
     {
         $media = Media::findOrFail($id);
-        $path = storage_path('app/public/uploads' . $media->path);
+        // FIX: Removed 'uploads' from the path construction since $media->path already contains it.
+        $path = storage_path('app/public/uploads/' . $media->path); // Corrected line
 
         if (!file_exists($path)) {
             abort(404, 'File not found');

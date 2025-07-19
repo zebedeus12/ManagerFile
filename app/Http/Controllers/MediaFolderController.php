@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Models\Media;
@@ -112,10 +113,9 @@ class MediaFolderController extends Controller
             });
         }
 
-        // Ambil media yang dapat diakses
-        $mediaItems = $mediaQuery->get()->filter(function ($media) {
-            return $media->accessibility === 'public' || auth()->user()->id_user === $media->owner_id || auth()->user()->role === 'super_admin';
-        });
+        // Ambil media. FIX: Removed the incorrect ->filter(...) call.
+        // Since the parent folder's accessibility is already checked, all media within it should be visible.
+        $mediaItems = $mediaQuery->get(); // This line was changed
 
         // Ambil semua admin
         $employees = Employee::where('role', 'admin')->get();
