@@ -94,7 +94,8 @@
                                 <div class="dropdown-menu">
                                     <button onclick="shareFolder({{ $subfolder->id }})">Share</button>
                                     <button onclick="submitDownloadForm(event, {{ $subfolder->id }})">Download</button>
-                                    @if(auth()->user()->id_user == $subfolder->owner_id or auth()->user()->role == 'super_admin')
+                                    @if(auth()->user()->id_user == $folder->owner_id || auth()->user()->role == 'super_admin')
+
                                         <button onclick="renameFolder({{ $subfolder->id }})">Rename</button>
                                         <form action="{{ route('media.toggle-accessibility', $subfolder->id) }}" method="POST"
                                             onsubmit="return confirm('Ubah akses folder ini?')">
@@ -184,7 +185,8 @@
                         @foreach($folder->subfolders as $subfolder)
                             <tr>
                                 @if(in_array(auth()->user()->role, ['super_admin', 'admin']))
-                                    @if(auth()->user()->id_user == $subfolder->owner_id or auth()->user()->role == 'super_admin')
+                                    @if(auth()->user()->id_user == $folder->owner_id || auth()->user()->role == 'super_admin')
+
                                         <td><input type="checkbox" class="folder-checkbox form-check-input"
                                                 value="{{ $subfolder->id }}"></td>
                                     @else
@@ -195,7 +197,8 @@
                                 <td>{{ $subfolder->created_at->format('d M Y') }}</td>
                                 <td>{{ $subfolder->keterangan ?? 'Tidak ada keterangan' }}</td>
                                 <td>
-                                    @if(auth()->user()->id_user == $subfolder->owner_id or auth()->user()->role == 'super_admin')
+                                    @if(auth()->user()->id_user == $folder->owner_id || auth()->user()->role == 'super_admin')
+
                                         <button class="button" onclick="renameFolder({{ $subfolder->id }})"><span
                                                 class="material-icons">edit</span></button>
                                     @endif
@@ -418,7 +421,7 @@
                                     </button>
                                     <div class="dropdown-menu">
                                         <button onclick="submitDownloadForm(event, {{ $media->id }}, 'file')">Download</button>
-                                        @if(auth()->user()->id_user == $subfolder->owner_id or auth()->user()->role == 'super_admin')
+                                        @if(auth()->user()->id_user == $folder->owner_id || auth()->user()->role == 'super_admin')
                                             <button
                                                 onclick="openEditMediaModal({{ $media->id }}, '{{ $media->name }}', '{{ $media->type }}', '{{ $media->folder_id }}')"
                                                 class="dropdown-item">Edit</button>
