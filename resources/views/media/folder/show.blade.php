@@ -428,7 +428,6 @@
                                             <button onclick="deleteMedia({{ $media->id }})"
                                                 class="dropdown-item text-danger">Delete</button>
                                         @endif
-
                                     </div>
                                 </div>
                             </div>
