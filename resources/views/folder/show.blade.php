@@ -47,24 +47,30 @@
                     </div>
                 </form>
                 @if(in_array(auth()->user()->role, ['super_admin', 'admin']))
-                    @if(auth()->user()->id_user == $folder->owner_id || auth()->user()->role == 'super_admin')
-                        {{-- PEMILIK atau SUPER ADMIN - tombol selalu tampil --}}
-                        <button class="btn rounded-circle ms-2" data-bs-toggle="modal" data-bs-target="#addSubfolderModal"
-                            style="background-color: #b3e6b1; border: none;">
-                            <span class="material-icons">create_new_folder</span>
-                        </button>
-                        <button class="btn rounded-circle ms-2" data-bs-toggle="modal" data-bs-target="#uploadFileModal"
-                            style="background-color: #b3e6b1; border: none;">
-                            <span class="material-icons">upload_file</span>
-                        </button>
-                    @elseif($folder->accessibility_subfolder == 1)
-                        {{-- ADMIN tapi bukan pemilik dan folder diakses ALL --}}
+                        @if(auth()->user()->id_user == $folder->owner_id || auth()->user()->role == 'super_admin')
+                            {{-- SUPER_ADMIN atau PEMILIK folder --}}
+                            <button class="btn rounded-circle ms-2" data-bs-toggle="modal" data-bs-target="#addSubfolderModal"
+                                style="background-color: #b3e6b1; border: none;">
+                                <span class="material-icons">create_new_folder</span>
+                            </button>
+                            <button class="btn rounded-circle ms-2" data-bs-toggle="modal" data-bs-target="#uploadFileModal"
+                                style="background-color: #b3e6b1; border: none;">
+                                <span class="material-icons">upload_file</span>
+                            </button>
+                        @elseif($folder->accessibility_subfolder == 1)
+                            {{-- ADMIN tapi folder bisa diakses semua --}}
+                            <button class="btn rounded-circle ms-2" data-bs-toggle="modal" data-bs-target="#uploadFileModal"
+                                style="background-color: #b3e6b1; border: none;">
+                                <span class="material-icons">upload_file</span>
+                            </button>
+                        @endif
+                    @elseif(auth()->user()->role == 'user' && $folder->accessibility_subfolder == 1)
+                        {{-- USER biasa, tapi folder bisa diakses semua --}}
                         <button class="btn rounded-circle ms-2" data-bs-toggle="modal" data-bs-target="#uploadFileModal"
                             style="background-color: #b3e6b1; border: none;">
                             <span class="material-icons">upload_file</span>
                         </button>
                     @endif
-                @endif
                 <button class="btn rounded-circle ms-2" onclick="toggleView()" style="background-color: #b3e6b1; border: none;">
                     <span class="material-icons">grid_view</span>
                 </button>
