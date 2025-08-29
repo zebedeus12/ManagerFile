@@ -32,6 +32,11 @@ class MediaFolderController extends Controller
 
     public function store(Request $request, $parentId = null)
     {
+        // Hanya super admin yang bisa membuat folder
+        if (auth()->user()->role !== 'super_admin') {
+            return back()->with('error', 'Anda tidak memiliki izin untuk membuat folder.');
+        }
+
         $request->validate([
             'name' => 'required|string|max:255',
             'accessibility' => 'required|in:public,private',

@@ -23,7 +23,7 @@
                         <button type="submit" class="search-btn">
                             <i class="material-icons">search</i>
                         </button>
-                        @if(in_array(auth()->user()->role, ['super_admin']))
+                        @if(auth()->user()->role === 'super_admin')
                             <!-- BUTTON ADD FOLDER -->
                             <button type="button" class="btn btn-custom" data-bs-toggle="modal"
                                 data-bs-target="#addFolderModal">
@@ -143,7 +143,7 @@
                     <p>No folders found.</p>
                 @else
                 
-                    @if(in_array(auth()->user()->role, ['super_admin', 'admin']))
+                    @if(auth()->user()->role === 'super_admin')
                     <button id="bulkDeleteBtn" class="btn btn-danger" onclick="bulkDelete()" style="margin: 10px;">
                         <i class="fas fa-trash-alt"></i> &nbsp; Hapus yang Dipilih
                     </button>
@@ -152,7 +152,7 @@
                     <table class="table table-striped">
                         <thead>
                             <tr>
-                                @if(in_array(auth()->user()->role, ['super_admin', 'admin']))
+                                @if(auth()->user()->role === 'super_admin')
                                 <th><input class="form-check-input" type="checkbox" id="selectAll"></th>
                                 @endif
                                 <th>Name</th>
@@ -164,7 +164,7 @@
                         <tbody>
                             @foreach ($folders as $folder)
                                 <tr>
-                                    @if(in_array(auth()->user()->role, ['super_admin', 'admin']))
+                                    @if(auth()->user()->role === 'super_admin')
                                     @if(auth()->user()->id_user == $folder->owner_id || auth()->user()->role == 'super_admin')
                                     <td><input type="checkbox" class="folder-checkbox form-check-input" value="{{ $folder->id }}"></td>
                                     @else

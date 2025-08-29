@@ -43,10 +43,8 @@ class MediaController extends Controller
         if ($user->role === 'super_admin') {
             // Semua folder
         } elseif ($user->role === 'admin') {
-            $foldersQuery->where(function ($q) use ($user) {
-                $q->where('accessibility', 'public')
-                    ->orWhere('owner_id', $user->id_user);
-            });
+            // Admin bisa lihat semua folder seperti file manager
+            // Tidak perlu filter apapun
         } else {
             $foldersQuery->where('accessibility', 'public');
         }
@@ -74,6 +72,22 @@ class MediaController extends Controller
             'folder_id' => 'nullable|exists:mysql_second.media_folders,id',
             'description' => 'nullable|string|max:255',
         ]);
+
+        // Validasi akses upload berdasarkan folder dan role user
+        if ($request->folder_id) {
+            $folder = \App\Models\MediaFolder::find($request->folder_id);
+            $user = auth()->user();
+            
+            // User biasa hanya bisa upload jika:
+            // 1. Super admin (selalu bisa)
+            // 2. Pemilik folder 
+            // 3. User biasa (bukan admin) dengan folder accessibility_subfolder = 1
+            if ($user->role !== 'super_admin' && 
+                $user->id_user !== $folder->owner_id && 
+                !($folder->accessibility_subfolder == 1 && $user->role !== 'admin')) {
+                return back()->with('error', 'Anda tidak memiliki izin untuk upload ke folder ini.');
+            }
+        }
 
         $fileNameOriginalName = $request->file('file')->getClientOriginalName();
         $fileName = time() . '-' . $request->file('file')->getClientOriginalName();
