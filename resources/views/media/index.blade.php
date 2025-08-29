@@ -23,7 +23,7 @@
                         <button type="submit" class="search-btn">
                             <i class="material-icons">search</i>
                         </button>
-                        @if(auth()->user()->role === 'super_admin')
+                        @if(in_array(auth()->user()->role, ['super_admin']))
                             <!-- BUTTON ADD FOLDER -->
                             <button type="button" class="btn btn-custom" data-bs-toggle="modal"
                                 data-bs-target="#addFolderModal">
@@ -143,7 +143,7 @@
                     <p>No folders found.</p>
                 @else
                 
-                    @if(auth()->user()->role === 'super_admin')
+                    @if(in_array(auth()->user()->role, ['super_admin', 'admin']))
                     <button id="bulkDeleteBtn" class="btn btn-danger" onclick="bulkDelete()" style="margin: 10px;">
                         <i class="fas fa-trash-alt"></i> &nbsp; Hapus yang Dipilih
                     </button>
@@ -152,7 +152,7 @@
                     <table class="table table-striped">
                         <thead>
                             <tr>
-                                @if(auth()->user()->role === 'super_admin')
+                                @if(in_array(auth()->user()->role, ['super_admin', 'admin']))
                                 <th><input class="form-check-input" type="checkbox" id="selectAll"></th>
                                 @endif
                                 <th>Name</th>
@@ -164,7 +164,7 @@
                         <tbody>
                             @foreach ($folders as $folder)
                                 <tr>
-                                    @if(auth()->user()->role === 'super_admin')
+                                    @if(in_array(auth()->user()->role, ['super_admin', 'admin']))
                                     @if(auth()->user()->id_user == $folder->owner_id || auth()->user()->role == 'super_admin')
                                     <td><input type="checkbox" class="folder-checkbox form-check-input" value="{{ $folder->id }}"></td>
                                     @else
@@ -325,6 +325,10 @@
         });
 
         function toggleMenu(button) {
+            // Cegah event bubbling
+            event.stopPropagation();
+            event.preventDefault();
+            
             // Tutup semua dropdown lainnya
             document.querySelectorAll('.dropdown-menu').forEach(menu => {
                 if (menu !== button.nextElementSibling) {
@@ -334,7 +338,29 @@
 
             // Toggle dropdown saat ini
             const menu = button.nextElementSibling;
+            const dropdown = button.parentElement;
+            
             menu.classList.toggle('show');
+            
+            // Pastikan dropdown terlihat dengan mengatur z-index yang tinggi
+            if (menu.classList.contains('show')) {
+                menu.style.zIndex = '10000';
+                menu.style.position = 'absolute';
+                
+                // Cek posisi dropdown di layar
+                const rect = dropdown.getBoundingClientRect();
+                const menuWidth = 150; // lebar minimum dropdown
+                const windowWidth = window.innerWidth;
+                
+                // Jika dropdown akan keluar dari batas kanan layar
+                if (rect.right + menuWidth > windowWidth) {
+                    menu.style.right = '0';
+                    menu.style.left = 'auto';
+                } else {
+                    menu.style.left = '0';
+                    menu.style.right = 'auto';
+                }
+            }
         }
 
         // Tutup dropdown saat klik di luar

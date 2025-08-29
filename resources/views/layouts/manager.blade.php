@@ -71,7 +71,7 @@
             background-color: #ffffff;
             min-height: 100vh;
             overflow-y: auto;
-            overflow-x: hidden;
+            overflow-x: visible;
             background-image: url('{{ asset('img/dashboard.jpeg') }}');
             background-size: cover;
             background-position: center;
@@ -163,7 +163,7 @@
 
         /* Dropdown Container */
         .dropdown {
-            z-index: 10;
+            z-index: 9999;
             position: relative;
         }
 
@@ -176,39 +176,58 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            z-index: 9999;
+            padding: 5px;
+            border-radius: 50%;
+            transition: background-color 0.2s ease;
+        }
+
+        .custom-toggle:hover {
+            background-color: rgba(0, 0, 0, 0.1);
         }
 
         .dropdown-menu {
             display: none;
-            position: absolute;
-            top: 100%;
-            right: 0;
+            position: fixed !important;
             background-color: white;
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-            border-radius: 4px;
-            padding: 10px 0;
-            z-index: 20;
-            min-width: 150px;
+            box-shadow: 0px 12px 24px rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            padding: 8px 0;
+            z-index: 999999 !important;
+            min-width: 160px;
             pointer-events: auto;
+            border: 1px solid #e0e0e0;
+            transform: translateX(0);
+            max-height: 300px;
+            overflow-y: auto;
         }
 
-        .dropdown-menu button {
+        .dropdown-menu.show {
+            display: block !important;
+            position: fixed !important;
+            z-index: 99999 !important;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15) !important;
+        }
+
+        .dropdown-menu button,
+        .dropdown-menu form,
+        .dropdown-menu form button {
             background: none;
             border: none;
             width: 100%;
             text-align: left;
-            padding: 8px 15px;
+            padding: 10px 15px;
             font-size: 14px;
             cursor: pointer;
             color: #333;
-        }
-
-        .dropdown-menu button:hover {
-            background-color: #f5f5f5;
-        }
-
-        .dropdown-menu.show {
+            transition: background-color 0.2s ease;
             display: block;
+            line-height: 1.4;
+        }
+
+        .dropdown-menu button:hover,
+        .dropdown-menu form button:hover {
+            background-color: #f8f9fa !important;
         }
 
         .folder-card .dropdown {
@@ -216,6 +235,22 @@
             top: 5px;
             right: 5px;
             z-index: 10;
+        }
+
+        .folder-card {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Pastikan grid container tidak clip dropdown */
+        .folder-grid, .file-grid {
+            overflow: visible !important;
+        }
+
+        .content-container {
+            overflow-x: visible !important;
+            position: relative;
+            z-index: 1;
         }
 
         /* Modal pop up*/
@@ -249,6 +284,7 @@
             grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
             gap: 20px;
             margin-top: 20px;
+            overflow: visible;
         }
 
         .folder-card {
@@ -262,6 +298,8 @@
             position: relative;
             transition: box-shadow 0.3s ease, transform 0.3s ease;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: visible;
+            z-index: 1;
         }
 
         .folder-card:hover {
@@ -471,19 +509,53 @@
     function toggleMenu(button, event) {
         event.preventDefault();
         event.stopPropagation();
+        
+        // Tutup semua dropdown lainnya
         document.querySelectorAll('.dropdown-menu').forEach(menu => {
             if (menu !== button.nextElementSibling) {
                 menu.classList.remove('show');
             }
         });
+        
+        // Toggle dropdown saat ini
         const menu = button.nextElementSibling;
         menu.classList.toggle('show');
+        
+        // Jika dropdown ditampilkan, atur posisi fixed dengan smart positioning
+        if (menu.classList.contains('show')) {
+            const buttonRect = button.getBoundingClientRect();
+            const menuWidth = 150; // estimated width
+            const windowWidth = window.innerWidth;
+            const windowHeight = window.innerHeight;
+            
+            let left = buttonRect.left;
+            let top = buttonRect.bottom + 5;
+            
+            // Cek jika dropdown akan keluar dari sisi kanan layar
+            if (left + menuWidth > windowWidth) {
+                left = buttonRect.right - menuWidth;
+            }
+            
+            // Cek jika dropdown akan keluar dari bawah layar
+            if (top + 200 > windowHeight) { // estimated menu height
+                top = buttonRect.top - 200 - 5; // tampilkan di atas
+            }
+            
+            // Set posisi dropdown
+            menu.style.position = 'fixed';
+            menu.style.left = left + 'px';
+            menu.style.top = top + 'px';
+            menu.style.zIndex = '99999';
+        }
     }
 
-    document.addEventListener('click', function () {
-        document.querySelectorAll('.dropdown-menu').forEach(menu => {
-            menu.classList.remove('show');
-        });
+    // Tutup dropdown saat klik di luar
+    document.addEventListener('click', function (event) {
+        if (!event.target.closest('.dropdown')) {
+            document.querySelectorAll('.dropdown-menu').forEach(menu => {
+                menu.classList.remove('show');
+            });
+        }
     });
 
     //MODAL ADD FOLDER

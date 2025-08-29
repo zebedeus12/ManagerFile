@@ -93,6 +93,7 @@
             /* Transisi saat sidebar berubah */
             max-height: calc(100vh - 80px);
             overflow-y: auto;
+            overflow-x: visible;
         }
 
         .content-container {
@@ -255,7 +256,7 @@
 
         /* Dropdown Container */
         .dropdown {
-            z-index: 10;
+            z-index: 9999;
             position: relative;
         }
 
@@ -268,6 +269,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            z-index: 9999;
         }
 
         .dropdown-menu {
@@ -276,11 +278,27 @@
             top: 100%;
             right: 0;
             background-color: white;
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-            border-radius: 4px;
+            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
             padding: 10px 0;
-            z-index: 20;
+            z-index: 10000;
             min-width: 150px;
+            border: 1px solid #e0e0e0;
+            pointer-events: auto;
+            transform: translateX(0);
+        }
+
+        /* Jika dropdown mendekati batas kanan layar, posisikan ke kiri */
+        .dropdown:last-child .dropdown-menu,
+        .dropdown.edge-right .dropdown-menu {
+            right: 0;
+            left: auto;
+        }
+
+        .dropdown:first-child .dropdown-menu,
+        .dropdown.edge-left .dropdown-menu {
+            left: 0;
+            right: auto;
         }
 
         .dropdown-menu button {
@@ -288,10 +306,11 @@
             border: none;
             width: 100%;
             text-align: left;
-            padding: 8px 15px;
+            padding: 10px 15px;
             font-size: 14px;
             cursor: pointer;
             color: #333;
+            transition: background-color 0.2s ease;
         }
 
         .dropdown-menu button:hover {
@@ -306,7 +325,12 @@
             position: absolute;
             top: 5px;
             right: 5px;
-            z-index: 10;
+            z-index: 9999;
+        }
+
+        .folder-card {
+            z-index: 1;
+            overflow: visible;
         }
 
 
@@ -401,6 +425,7 @@
             gap: 20px;
             margin-top: 20px;
             padding: 0 20px;
+            overflow: visible;
         }
 
         .folder-card {
@@ -414,6 +439,8 @@
             position: relative;
             transition: box-shadow 0.3s ease, transform 0.3s ease;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: visible;
+            z-index: 1;
         }
 
         .folder-header {
@@ -687,7 +714,9 @@
         // Periksa jenis media yang diklik
         if (mediaType.startsWith('audio/')) {
             const audioElement = document.getElementById(`audio-${mediaId}`);
-            audioElement.play();
+            if (audioElement) {
+                audioElement.play();
+            }
         } else if (mediaType.startsWith('video/')) {
             // Buka video dalam modal dan tampilkan preview
             openVideoModal(mediaUrl, mediaId);
@@ -699,42 +728,121 @@
 
     function openImageModal(imageUrl) {
         const modal = document.createElement('div');
-        modal.innerHTML = `
-            <div style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); display:flex; justify-content:center; align-items:center; z-index:1000;">
-                <img src="${imageUrl}" style="max-width:90%; max-height:90%;">
-                <button onclick="this.parentNode.remove()" style="position:absolute; top:20px; right:20px; background:red; color:white; border:none; font-size:20px; cursor:pointer;">&times;</button>
-            </div>
+        modal.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
         `;
+        
+        modal.innerHTML = `
+            <img src="${imageUrl}" style="max-width: 90%; max-height: 90%; object-fit: contain;" 
+                 onerror="this.onerror=null; this.src='${imageUrl.replace('/storage/', '/media/')}';">
+            <button onclick="this.parentNode.remove()" style="
+                position: absolute;
+                top: 20px;
+                right: 20px;
+                background: red;
+                color: white;
+                border: none;
+                font-size: 24px;
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            ">&times;</button>
+        `;
+        
         document.body.appendChild(modal);
     }
 
     function openAudioModal(audioUrl) {
         const modal = document.createElement('div');
+        modal.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+        `;
+        
         modal.innerHTML = `
-        <div style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); display:flex; justify-content:center; align-items:center; z-index:1000;">
-            <audio controls autoplay style="max-width:90%; max-height:90%;">
-                <source src="${audioUrl}" type="audio/mpeg">
-                Your browser does not support the audio element.
-            </audio>
-            <button onclick="this.parentNode.remove()" style="position:absolute; top:20px; right:20px; background:red; color:white; border:none; font-size:20px; cursor:pointer;">&times;</button>
-        </div>
-    `;
+            <div style="background: white; padding: 20px; border-radius: 10px; max-width: 90%; text-align: center;">
+                <audio controls autoplay style="width: 100%; margin-bottom: 10px;">
+                    <source src="${audioUrl}" type="audio/mpeg">
+                    <source src="${audioUrl.replace('/storage/', '/media/')}" type="audio/mpeg">
+                    Your browser does not support the audio element.
+                </audio>
+                <button onclick="this.parentNode.parentNode.remove()" style="
+                    background: #dc3545;
+                    color: white;
+                    border: none;
+                    padding: 8px 16px;
+                    border-radius: 4px;
+                    cursor: pointer;
+                    margin-top: 10px;
+                ">Close</button>
+            </div>
+        `;
+        
         document.body.appendChild(modal);
     }
 
     function openVideoModal(videoUrl, mediaId) {
         const modal = document.createElement('div');
+        modal.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+        `;
+        
         modal.innerHTML = `
-        <div style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); display:flex; justify-content:center; align-items:center; z-index:1000;">
-            <div style="position:relative; max-width:90%; max-height:90%; display:flex; flex-direction:column; justify-content:center; align-items:center;">
-                <video id="video-${mediaId}" controls poster="${videoUrl}" style="max-width:100%; max-height:100%; cursor: pointer;">
+            <div style="position: relative; max-width: 90%; max-height: 90%; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                <video id="video-modal-${mediaId}" controls style="max-width: 100%; max-height: 100%; cursor: pointer;">
                     <source src="${videoUrl}" type="video/mp4">
+                    <source src="${videoUrl.replace('/storage/', '/media/')}" type="video/mp4">
                     Your browser does not support the video element.
                 </video>
-                <button onclick="this.parentNode.parentNode.remove()" style="position:absolute; top:20px; right:20px; background:red; color:white; border:none; font-size:20px; cursor:pointer;">&times;</button>
-                            </div>
-        </div>
-    `;
+                <button onclick="this.parentNode.parentNode.remove()" style="
+                    position: absolute;
+                    top: -10px;
+                    right: -10px;
+                    background: red;
+                    color: white;
+                    border: none;
+                    font-size: 24px;
+                    width: 40px;
+                    height: 40px;
+                    border-radius: 50%;
+                    cursor: pointer;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                ">&times;</button>
+            </div>
+        `;
+        
         document.body.appendChild(modal);
     }
 

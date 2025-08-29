@@ -15,7 +15,10 @@ use Illuminate\Support\Facades\Auth;
 
 
 Route::get('/', function () {
-    return view('/auth.login');
+    if (Auth::check()) {
+        return redirect('/dashboard');
+    }
+    return redirect('/login');
 });
 
 // Menampilkan form login
@@ -84,7 +87,6 @@ Route::get('/media', [MediaController::class, 'index'])->name('media.index');
 Route::get('/media/create', [MediaController::class, 'create'])->name('media.create');
 Route::post('media/store', [MediaController::class, 'store'])->name('media.store');
 Route::get('media/folder/{id}', [MediaController::class, 'index'])->name('media.folder.show');
-Route::get('/media/{media}', [MediaController::class, 'show'])->name('media.show');
 Route::get('/media/{media}/edit', [MediaController::class, 'edit'])->name('media.edit');
 Route::put('/media/{media}', [MediaController::class, 'update'])->name('media.update');
 Route::delete('/media/folder/{id}', [MediaFolderController::class, 'destroy'])->name('media.folder.destroy');
@@ -96,7 +98,8 @@ Route::post('/media/folder/delete-multiple', [MediaFolderController::class, 'des
 Route::delete('media/{media}', [MediaController::class, 'destroy'])->name('media.destroy');
 // Route::delete('/media/delete/{media}', [MediaController::class, 'destroy'])->name('media.destroy');
 
-Route::get('media/{id}', [MediaController::class, 'show']);
+// Route untuk menampilkan file media
+Route::get('media/file/{id}', [MediaController::class, 'show'])->name('media.show');
 
 Route::post('/media-folder/download/{mediaFolder}', [MediaFolderController::class, 'download'])->name('mediaFolder.download');
 Route::patch('/media/{id}/toggle-accessibility', [MediaFolderController::class, 'toggleAccessibility'])->name('media.toggle-accessibility');
@@ -113,3 +116,11 @@ Route::put('/media/folder/{id}/rename', [MediaFolderController::class, 'rename']
 Route::get('/folder/{id}/share', [MediaFolderController::class, 'share'])->name('media.folder.share');
 Route::delete('/media/folder/{id}/delete', [MediaFolderController::class, 'destroy'])->name('media.folder.destroy');
 Route::post('/media/folder/copy/{id}', [MediaFolderController::class, 'copy'])->name('media.folder.copy');
+
+// Fallback route - harus ditempatkan di akhir file
+Route::fallback(function () {
+    if (Auth::check()) {
+        return redirect('/dashboard');
+    }
+    return redirect('/login');
+});

@@ -43,8 +43,10 @@ class MediaController extends Controller
         if ($user->role === 'super_admin') {
             // Semua folder
         } elseif ($user->role === 'admin') {
-            // Admin bisa lihat semua folder seperti file manager
-            // Tidak perlu filter apapun
+            $foldersQuery->where(function ($q) use ($user) {
+                $q->where('accessibility', 'public')
+                    ->orWhere('owner_id', $user->id_user);
+            });
         } else {
             $foldersQuery->where('accessibility', 'public');
         }
@@ -72,22 +74,6 @@ class MediaController extends Controller
             'folder_id' => 'nullable|exists:mysql_second.media_folders,id',
             'description' => 'nullable|string|max:255',
         ]);
-
-        // Validasi akses upload berdasarkan folder dan role user
-        if ($request->folder_id) {
-            $folder = \App\Models\MediaFolder::find($request->folder_id);
-            $user = auth()->user();
-            
-            // User biasa hanya bisa upload jika:
-            // 1. Super admin (selalu bisa)
-            // 2. Pemilik folder 
-            // 3. User biasa (bukan admin) dengan folder accessibility_subfolder = 1
-            if ($user->role !== 'super_admin' && 
-                $user->id_user !== $folder->owner_id && 
-                !($folder->accessibility_subfolder == 1 && $user->role !== 'admin')) {
-                return back()->with('error', 'Anda tidak memiliki izin untuk upload ke folder ini.');
-            }
-        }
 
         $fileNameOriginalName = $request->file('file')->getClientOriginalName();
         $fileName = time() . '-' . $request->file('file')->getClientOriginalName();
@@ -190,28 +176,39 @@ class MediaController extends Controller
     public function show($id)
     {
         $media = Media::findOrFail($id);
-        // FIX: Removed 'uploads' from the path construction since $media->path already contains it.
-        $path = storage_path('app/public/uploads/' . $media->path); // Corrected line
 
-        if (!file_exists($path)) {
-            abort(404, 'File not found');
+        // Path sudah berupa filename saja, tambahkan folder uploads/
+        $filePath = 'uploads/' . $media->path;
+
+        // Cek apakah file ada di storage public
+        if (!Storage::disk('public')->exists($filePath)) {
+            // Coba juga path langsung tanpa uploads/ untuk backward compatibility
+            if (!Storage::disk('public')->exists($media->path)) {
+                abort(404, 'File not found: ' . $filePath);
+            }
+            $filePath = $media->path;
         }
 
-        return response()->file($path);
+        $fullPath = storage_path('app/public/' . $filePath);
+
+        // Return file response
+        return response()->file($fullPath);
     }
 
     public function download(Media $media)
     {
-        $filePath = $media->path;
+        $filePath = 'uploads/' . $media->path;
 
         // Mengecek apakah file ada di storage public
         if (!Storage::disk('public')->exists($filePath)) {
             abort(404, 'File not found');
         }
 
+        $fullPath = storage_path('app/public/' . $filePath);
+
         // Tentukan MIME type file
-        $mimeType = Storage::disk('public')->mimeType($filePath);
-        // dd($mimeType);
+        $mimeType = mime_content_type($fullPath);
+
         // Ambil isi file
         $fileContent = Storage::disk('public')->get($filePath);
 
@@ -241,4 +238,3 @@ class MediaController extends Controller
         return redirect()->back()->with('error', 'Tidak ada media yang dipilih.');
     }
 }
-

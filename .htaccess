@@ -1,0 +1,51 @@
+# Disable directory browsing/listing
+Options -Indexes
+
+# Set DirectoryIndex to prioritize index.html
+DirectoryIndex index.html index.php
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    
+    # Redirect semua request ke folder public kecuali yang sudah ada di public
+    RewriteCond %{REQUEST_URI} !^/public/
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.*)$ public/$1 [L]
+    
+    # Redirect dari /ManagerFile/public/ ke /ManagerFile/
+    RewriteCond %{THE_REQUEST} \s/+ManagerFile/public/([^\s?]*) [NC]
+    RewriteRule ^ /ManagerFile/%1 [R=301,L]
+    
+    # Handle Authorization Header untuk API
+    RewriteCond %{HTTP:Authorization} .
+    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+</IfModule>
+
+# Security headers
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options nosniff
+    Header always set X-Frame-Options SAMEORIGIN
+    Header always set X-XSS-Protection "1; mode=block"
+</IfModule>
+
+# Prevent access to sensitive files
+<FilesMatch "\.(env|git|gitignore|gitattributes)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+<Files "composer.json">
+    Order allow,deny
+    Deny from all
+</Files>
+
+<Files "composer.lock">
+    Order allow,deny
+    Deny from all
+</Files>
+
+<Files "artisan">
+    Order allow,deny
+    Deny from all
+</Files>

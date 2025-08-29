@@ -37,18 +37,22 @@
                         </button>
                     </form>
 
-                    {{-- Tombol Tambah Subfolder: Hanya Super Admin yang bisa --}}
-                    @if (auth()->user()->role === 'super_admin')
+                    {{-- Tombol Tambah Subfolder: Terlihat oleh Super Admin, Pemilik, atau jika folder diatur ke 'All' --}}
+                    @if (
+                            auth()->user()->role === 'super_admin' ||
+                            auth()->user()->id_user == $folder->owner_id ||
+                            $folder->accessibility_subfolder == 1
+                        )
                         <button class="btn btn-custom" data-bs-toggle="modal" data-bs-target="#addSubfolderModal">
                             <i class="material-icons">create_new_folder</i>
                         </button>
                     @endif
 
-                    {{-- Tombol Tambah Media: Super Admin, Pemilik Folder, ATAU user biasa jika folder disetel ke 'All' --}}
+                    {{-- Tombol Tambah Media: Terlihat jika Super Admin, Pemilik Folder, ATAU folder disetel ke 'All' --}}
                     @if (
                             auth()->user()->role === 'super_admin' || // 1. Super Admin selalu bisa
                             auth()->user()->id_user == $folder->owner_id || // 2. Pemilik folder selalu bisa
-                            ($folder->accessibility_subfolder == 1 && auth()->user()->role !== 'admin') // 3. User biasa (bukan admin) di folder 'All'
+                            $folder->accessibility_subfolder == 1 // 3. Siapapun bisa jika folder diatur ke 'All'
                         )
                         <button class="btn btn-custom" data-bs-toggle="modal" data-bs-target="#addMediaModal">
                             <i class="material-icons">add_photo_alternate</i>
@@ -120,6 +124,10 @@
                                             </button>
                                         </form>
                                         <button onclick="deleteFolder({{ $subfolder->id }})">Delete</button>
+                                    @elseif($folder->accessibility_subfolder == 1)
+                                        {{-- Pengguna biasa di folder 'All' hanya bisa Rename & Delete --}}
+                                        <button onclick="renameFolder({{ $subfolder->id }})">Rename</button>
+                                        <button onclick="deleteFolder({{ $subfolder->id }})">Delete</button>
                                     @endif
                                 </div>
                             </div>
@@ -169,7 +177,7 @@
 
             <!-- List View for Folders -->
             <div id="listViewFolders" class="folder-list mt-4" style="display: none;">
-                @if(auth()->user()->role === 'super_admin')
+                @if(in_array(auth()->user()->role, ['super_admin', 'admin']))
                     <button id="bulkDeleteBtn" class="btn btn-danger" onclick="bulkDelete()">
                         <i class="fas fa-trash-alt"></i> &nbsp; Hapus yang Dipilih
                     </button>
@@ -178,7 +186,7 @@
                 <table class="table table-striped">
                     <thead>
                         <tr>
-                            @if(auth()->user()->role === 'super_admin')
+                            @if(in_array(auth()->user()->role, ['super_admin', 'admin']))
                                 <th><input class="form-check-input" type="checkbox" id="selectAll"></th>
                             @endif
                             <th>Name</th>
@@ -190,7 +198,7 @@
                     <tbody>
                         @foreach($folder->subfolders as $subfolder)
                             <tr>
-                                @if(auth()->user()->role === 'super_admin')
+                                @if(in_array(auth()->user()->role, ['super_admin', 'admin']))
                                     @if(auth()->user()->id_user == $folder->owner_id || auth()->user()->role == 'super_admin')
 
                                         <td><input type="checkbox" class="folder-checkbox form-check-input"
@@ -405,18 +413,21 @@
                                     onclick="handleMediaClick('{{ $media->id }}', '{{ asset('storage/uploads/' . $media->path) }}', '{{ $media->type }}')">
                                     @if(Str::startsWith($media->type, 'image/'))
                                         <img src="{{ asset('storage/uploads/' . $media->path) }}" alt="{{ $media->name }}"
-                                            class="media-preview" id="media-{{ $media->id }}">
+                                            class="media-preview" id="media-{{ $media->id }}" 
+                                            onerror="this.onerror=null; this.src='{{ route('media.show', $media->id) }}';">
                                     @elseif(Str::startsWith($media->type, 'audio/'))
                                         <div class="audio-container">
                                             <span class="material-icons audio-icon">play_arrow</span>
                                             <audio id="audio-{{ $media->id }}" preload="none" class="audio-player">
                                                 <source src="{{ asset('storage/uploads/' . $media->path) }}" type="{{ $media->type }}">
+                                                <source src="{{ route('media.show', $media->id) }}" type="{{ $media->type }}">
                                             </audio>
                                         </div>
                                     @elseif(Str::startsWith($media->type, 'video/'))
                                         <video class="media-preview video-player" id="video-{{ $media->id }}" preload="none" controls>
                                             <source src="{{ asset('storage/uploads/' . $media->path) }}" type="{{ $media->type }}">
-                                            Your browser does not support the vi deo tag.
+                                            <source src="{{ route('media.show', $media->id) }}" type="{{ $media->type }}">
+                                            Your browser does not support the video tag.
                                         </video>
                                     @endif
                                 </div>
@@ -427,9 +438,9 @@
                                     </button>
                                     <div class="dropdown-menu">
                                         <button onclick="submitDownloadForm(event, {{ $media->id }}, 'file')">Download</button>
-                                        {{-- Tampilkan tombol Edit/Delete jika user adalah pemilik/super_admin ATAU (user biasa + folder 'All' + hanya untuk media) --}}
-                                        @if(auth()->user()->id_user == $folder->owner_id || auth()->user()->role == 'super_admin' || 
-                                            ($folder->accessibility_subfolder == 1 && auth()->user()->role !== 'admin'))
+                                        {{-- Tampilkan tombol Edit/Delete jika user adalah pemilik/super_admin ATAU folder diatur ke
+                                        'All' --}}
+                                        @if(auth()->user()->id_user == $folder->owner_id || auth()->user()->role == 'super_admin' || $folder->accessibility_subfolder == 1)
                                             <button
                                                 onclick="openEditMediaModal({{ $media->id }}, '{{ $media->name }}', '{{ $media->type }}', '{{ $media->folder_id }}')"
                                                 class="dropdown-item">Edit</button>
@@ -446,7 +457,7 @@
 
             <!-- List View for Files -->
             <div id="listViewFiles" class="file-list mt-4" style="display: none;">
-                @if(auth()->user()->role === 'super_admin')
+                @if(in_array(auth()->user()->role, ['super_admin', 'admin']))
                     @if(auth()->user()->id_user == $folder->owner_id || auth()->user()->role == 'super_admin')
                         <button id="bulkDeleteBtnFile" class="btn btn-danger" onclick="bulkDeleteFile()">
                             <i class="fas fa-trash-alt"></i> &nbsp; Hapus yang Dipilih
@@ -456,7 +467,7 @@
                 <table class="table table-striped">
                     <thead>
                         <tr>
-                            @if(auth()->user()->role === 'super_admin')
+                            @if(in_array(auth()->user()->role, ['super_admin', 'admin']))
                                 @if(auth()->user()->id_user == $folder->owner_id || auth()->user()->role == 'super_admin')
                                     <th><input class="form-check-input" type="checkbox" id="selectAllFile"></th>
                                 @endif
@@ -470,7 +481,7 @@
                     <tbody>
                         @foreach($folder->mediaItems as $media)
                             <tr>
-                                @if(auth()->user()->role === 'super_admin')
+                                @if(in_array(auth()->user()->role, ['super_admin', 'admin']))
                                     @if(auth()->user()->id_user == $folder->owner_id || auth()->user()->role == 'super_admin')
                                         <td><input type="checkbox" class="file-checkbox form-check-input" value="{{ $media->id }}"></td>
                                     @endif
