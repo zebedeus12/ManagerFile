@@ -47,8 +47,8 @@
                     </div>
                 </form>
                 @if(in_array(auth()->user()->role, ['super_admin', 'admin']))
-                        @if(auth()->user()->id_user == $folder->owner_id || auth()->user()->role == 'super_admin')
-                            {{-- SUPER_ADMIN atau PEMILIK folder --}}
+                        @if(auth()->user()->id_user == $folder->owner_id || in_array(auth()->user()->role, ['super_admin', 'admin']))
+                            {{-- SUPER_ADMIN atau ADMIN atau PEMILIK folder --}}
                             <button class="btn rounded-circle ms-2" data-bs-toggle="modal" data-bs-target="#addSubfolderModal"
                                 style="background-color: #b3e6b1; border: none;">
                                 <span class="material-icons">create_new_folder</span>
@@ -58,7 +58,7 @@
                                 <span class="material-icons">upload_file</span>
                             </button>
                         @elseif($folder->accessibility_subfolder == 1)
-                            {{-- ADMIN tapi folder bisa diakses semua --}}
+                            {{-- Folder bisa diakses semua --}}
                             <button class="btn rounded-circle ms-2" data-bs-toggle="modal" data-bs-target="#uploadFileModal"
                                 style="background-color: #b3e6b1; border: none;">
                                 <span class="material-icons">upload_file</span>
@@ -107,7 +107,7 @@
                                     <div class="dropdown-menu">
                                         <button onclick="openShareModal({{ $subFolder->id }}, '{{ url('/folder/' . $subFolder->id . '/share') }}')">Share</button>
                                         <button onclick="submitDownloadForm(event, {{ $subFolder->id }}, 'folder')">Download</button>
-                                        @if(auth()->user()->id_user == $subFolder->owner_id || auth()->user()->role == 'super_admin')
+                                        @if(auth()->user()->id_user == $subFolder->owner_id || in_array(auth()->user()->role, ['super_admin', 'admin']))
                                         <button onclick="openRenameModal({{ $subFolder->id }}, '{{ $subFolder->name }}')">Rename</button>
                                             <form action="{{ route('folders.toggle-accessibility', $subFolder->id) }}" method="POST" onsubmit="return confirm('Ubah akses folder ini?')">
                                                 @csrf
@@ -145,8 +145,8 @@
             @if($subFolders->isEmpty())
                 <p>No subfolders found.</p>
             @else
-                @if(in_array(auth()->user()->role, ['super_admin', 'admin']))
-                @if(auth()->user()->id_user == $folder->owner_id || auth()->user()->role == 'super_admin')
+                                @if(in_array(auth()->user()->role, ['super_admin', 'admin']))
+                @if(auth()->user()->id_user == $folder->owner_id || in_array(auth()->user()->role, ['super_admin', 'admin']))
                 <button id="bulkDeleteBtn" class="btn btn-danger" onclick="bulkDelete()" >
                     <i class="fas fa-trash-alt"></i> &nbsp; Hapus yang Dipilih
                 </button>
@@ -168,7 +168,7 @@
                         @foreach ($subFolders as $subFolder)
                             <tr>
                                 @if(in_array(auth()->user()->role, ['super_admin', 'admin']))
-                                    @if(auth()->user()->id_user == $subFolder->owner_id OR auth()->user()->role == 'super_admin')
+                                    @if(auth()->user()->id_user == $subFolder->owner_id OR in_array(auth()->user()->role, ['super_admin', 'admin']))
                                     <td><input type="checkbox" class="folder-checkbox form-check-input" value="{{ $subFolder->id }}"></td>
                                     @else
                                     <td></td>
@@ -178,7 +178,7 @@
                                 <td>{{ $subFolder->created_at->format('d M Y') }}</td>
                                 <td>{{ $subFolder->keterangan ?? 'Tidak ada keterangan' }}</td>
                                     <td>
-                                        @if(auth()->user()->id_user == $subFolder->owner_id OR auth()->user()->role == 'super_admin')
+                                        @if(auth()->user()->id_user == $subFolder->owner_id OR in_array(auth()->user()->role, ['super_admin', 'admin']))
                                         <button class="button" onclick="openRenameModal({{ $subFolder->id }}, '{{ $subFolder->name }}')" title="Rename">
                                             <i class="fas fa-edit"></i>
                                         </button>
@@ -339,7 +339,7 @@
                                 <div class="dropdown-menu">
                                     <button onclick="openShareFileModal('{{ route('file.share', $file->id) }}')">Share</button>
                                     <button onclick="submitDownloadForm(event, {{ $file->id }}, 'file')">Download</button>
-                                    @if(auth()->user()->id_user == $folder->owner_id || auth()->user()->role == 'super_admin')
+                                    @if(auth()->user()->id_user == $folder->owner_id || in_array(auth()->user()->role, ['super_admin', 'admin']))
                                     <button onclick="openRenameFileModal({{ $file->id }}, '{{ $file->name }}')">Rename</button>
                                     <button class="delete-file-btn" data-file-id="{{ $file->id }}" onclick="openDeleteFileModal({{ $file->id }})">Delete</button>
                                     @endif
@@ -362,7 +362,7 @@
                 <p>No files found.</p>
             @else 
                 @if(in_array(auth()->user()->role, ['super_admin', 'admin']))
-                @if(auth()->user()->id_user == $folder->owner_id || auth()->user()->role == 'super_admin')
+                @if(auth()->user()->id_user == $folder->owner_id || in_array(auth()->user()->role, ['super_admin', 'admin']))
                 <button id="bulkDeleteBtnFile" class="btn btn-danger" onclick="bulkDeleteFile()">
                     <i class="fas fa-trash-alt"></i> &nbsp; Hapus yang Dipilih
                 </button>
@@ -384,7 +384,7 @@
                         @foreach ($files as $file)
                             <tr>
                                 @if(in_array(auth()->user()->role, ['super_admin', 'admin']))
-                                    @if(auth()->user()->id_user == $folder->owner_id || auth()->user()->role == 'super_admin')
+                                    @if(auth()->user()->id_user == $folder->owner_id || in_array(auth()->user()->role, ['super_admin', 'admin']))
                                     <td><input type="checkbox" class="file-checkbox form-check-input" value="{{ $file->id }}"></td>
                                     @else
                                     <td></td>

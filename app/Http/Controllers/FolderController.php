@@ -71,12 +71,8 @@ class FolderController extends Controller
         if ($user->role === 'super_admin') {
             // Super admin bisa lihat semua (tidak ada filter)
         } elseif ($user->role === 'admin') {
-            // Admin bisa lihat public dan private milik sendiri
-            $subFolderQuery->where(function ($q) use ($user) {
-                $q->where('accessibility', 'public')
-                    ->orWhere('owner_id', $user->id_user);
-            });
-
+            // Admin bisa lihat semua folder seperti super admin
+            // Tidak perlu filter apapun
         } else {
             // User biasa hanya bisa lihat public
             $subFolderQuery->where('accessibility', 'public');
@@ -95,13 +91,16 @@ class FolderController extends Controller
             // Filter file berdasarkan pencarian
             $fileQuery->where('name', 'like', '%' . $search . '%');
 
-            $subFolderQuery->where(function ($q) use ($user) {
-                $q->where('accessibility', 'public')
-                    ->orWhere('owner_id', $user->id_user)
-                    ->orWhere(function ($q2) use ($user) {
-                        $q2->where('accessibility', 'only_me')->where('owner_id', $user->id_user);
-                    });
-            });
+            // Terapkan filter akses yang sama seperti di atas
+            if ($user->role === 'super_admin') {
+                // Super admin bisa lihat semua (tidak ada filter)
+            } elseif ($user->role === 'admin') {
+                // Admin bisa lihat semua folder seperti super admin
+                // Tidak perlu filter apapun
+            } else {
+                // User biasa hanya bisa lihat public
+                $subFolderQuery->where('accessibility', 'public');
+            }
         }
 
         $subFolders = $subFolderQuery->get();
@@ -242,7 +241,7 @@ class FolderController extends Controller
     {
         $folder = Folder::findOrFail($id);
 
-        if (auth()->user()->id_user !== $folder->owner_id && auth()->user()->role !== 'super_admin') {
+        if (auth()->user()->id_user !== $folder->owner_id && !in_array(auth()->user()->role, ['super_admin', 'admin'])) {
             abort(403, 'Tidak diizinkan');
         }
 
@@ -256,7 +255,7 @@ class FolderController extends Controller
     {
         $folder = Folder::findOrFail($id);
 
-        if (auth()->user()->id_user !== $folder->owner_id && auth()->user()->role !== 'super_admin') {
+        if (auth()->user()->id_user !== $folder->owner_id && !in_array(auth()->user()->role, ['super_admin', 'admin'])) {
             abort(403, 'Tidak diizinkan');
         }
 

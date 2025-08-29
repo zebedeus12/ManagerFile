@@ -23,7 +23,7 @@
                             </button>
                         </div>
                     </form>
-                    @if(auth()->user()->role === 'super_admin')
+                    @if(in_array(auth()->user()->role, ['super_admin', 'admin']))
                         <button class="btn rounded-circle ms-2" data-bs-toggle="modal" id="openAddFolderModal"
                             style="background-color: #b3e6b1; border: none;">
                             <span class="material-icons">create_new_folder</span>
@@ -71,7 +71,7 @@
                                     <div class="dropdown-menu">
                                         <button onclick="submitDownloadForm(event, {{ $folder->id }})">Download</button>
                                         <button onclick=" openShareModal({{ $folder->id }}, '{{ url('/folder/' . $folder->id . '/share') }}')">Share</button>
-                                        @if(auth()->user()->id_user == $folder->owner_id || auth()->user()->role == 'super_admin')
+                                        @if(auth()->user()->id_user == $folder->owner_id || in_array(auth()->user()->role, ['super_admin', 'admin']))
 
                                            <button onclick="openRenameModal({{ $folder->id }}, '{{ $folder->name }}')">Rename</button>
                                             <form action="{{ route('folders.toggle-accessibility', $folder->id) }}" method="POST" onsubmit="return confirm('Ubah akses folder ini?')">
@@ -121,7 +121,7 @@
                                 <th>Name</th>
                                 <th>Created At</th>
                                 <th>Description</th>
-                                @if(auth()->user()->role === 'super_admin')
+                                @if(in_array(auth()->user()->role, ['super_admin', 'admin']))
                                     <th>Actions</th>
                                 @endif
                             </tr>
@@ -130,7 +130,7 @@
                             @foreach ($folders as $folder)
                                 <tr>
                                     @if(in_array(auth()->user()->role, ['super_admin', 'admin']))
-                                    @if(auth()->user()->id_user == $folder->owner_id || auth()->user()->role == 'super_admin')
+                                    @if(auth()->user()->id_user == $folder->owner_id || in_array(auth()->user()->role, ['super_admin', 'admin']))
                                     <td><input type="checkbox" class="folder-checkbox form-check-input" value="{{ $folder->id }}"></td>
                                     @else
                                     <td></td>
@@ -139,7 +139,7 @@
                                     <td>{{ $folder->name }}</td>
                                     <td>{{ $folder->created_at->format('d M Y') }}</td>
                                     <td>{{ $folder->keterangan ?? 'Tidak ada keterangan' }}</td>
-                                    @if(auth()->user()->role === 'super_admin')
+                                    @if(in_array(auth()->user()->role, ['super_admin', 'admin']))
                                         <td>
                                             <button class="button" onclick="openRenameModal({{ $folder->id }}, '{{ $folder->name }}')" title="Rename">
                                                 <i class="fas fa-edit"></i>

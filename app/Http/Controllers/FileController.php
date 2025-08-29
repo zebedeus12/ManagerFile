@@ -26,11 +26,8 @@ class FileController extends Controller
         if ($user->role === 'super_admin') {
             // Tidak perlu filter, bisa lihat semua
         } elseif ($user->role === 'admin') {
-            // Bisa lihat public + milik sendiri (private/public)
-            $query->where(function ($q) use ($user) {
-                $q->where('accessibility', 'public')
-                  ->orWhere('owner_id', $user->id_user);
-            });
+            // Admin bisa lihat semua folder seperti super admin
+            // Tidak perlu filter apapun
         } else {
             // User biasa: hanya bisa lihat yang public
             $query->where('accessibility', 'public');
