@@ -15,11 +15,11 @@ class FileController extends Controller
     {
         $query = Folder::query();
         $user = Auth()->user();
-        
+
         if ($request->has('search')) {
-            $query->where(function($q) use ($request) {
+            $query->where(function ($q) use ($request) {
                 $q->where('name', 'like', '%' . $request->search . '%')
-                  ->orWhere('keterangan', 'like', '%' . $request->search . '%');
+                    ->orWhere('keterangan', 'like', '%' . $request->search . '%');
             });
         }
 
