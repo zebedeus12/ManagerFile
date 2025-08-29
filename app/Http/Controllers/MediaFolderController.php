@@ -64,14 +64,21 @@ class MediaFolderController extends Controller
             'name' => 'required|string|max:255',
         ]);
 
-        // Proses upload file
-        $path = $request->file('file')->store('media', 'public');
+        $fileNameOriginalName = $request->file('file')->getClientOriginalName();
+        $fileName = time() . '-' . $request->file('file')->getClientOriginalName();
+
+        // Simpan file ke disk 'media'
+        $request->file('file')->storeAs('uploads', $fileName, 'public');
+        $type = $request->file('file')->getClientMimeType();
 
         // Simpan media ke folder yang dipilih
         Media::create([
-            'name' => $request->name,
-            'path' => $path,
+            'name' => $fileNameOriginalName,
+            'path' => $fileName,
+            'type' => $type,
             'folder_id' => $folderId,
+            'description' => $request->description,
+            'original_name' => $fileName
         ]);
 
         return redirect()->route('media.folder.show', $folderId)
@@ -138,8 +145,14 @@ class MediaFolderController extends Controller
             'name' => 'required|string|max:255',
         ]);
 
-        // Cari folder berdasarkan ID
         $folder = MediaFolder::findOrFail($id);
+        $parentFolder = $folder->parent; // Dapatkan folder induk
+        $user = auth()->user();
+
+        // Otorisasi: Izinkan jika user adalah super_admin, pemilik folder induk, atau folder induk diatur ke 'All'
+        if ($parentFolder && $user->role !== 'super_admin' && $user->id_user != $parentFolder->owner_id && $parentFolder->accessibility_subfolder != 1) {
+            return redirect()->route('media.index')->with('error', 'Anda tidak memiliki izin untuk mengubah nama folder ini.');
+        }
 
         // Update nama folder
         $folder->name = $request->name;
@@ -164,6 +177,13 @@ class MediaFolderController extends Controller
     public function destroy($id)
     {
         $folder = MediaFolder::findOrFail($id);
+        $parentFolder = $folder->parent; // Dapatkan folder induk
+        $user = auth()->user();
+
+        // Otorisasi: Izinkan jika user adalah super_admin, pemilik folder induk, atau folder induk diatur ke 'All'
+        if ($parentFolder && $user->role !== 'super_admin' && $user->id_user != $parentFolder->owner_id && $parentFolder->accessibility_subfolder != 1) {
+            return redirect()->route('media.index')->with('error', 'Anda tidak memiliki izin untuk menghapus folder ini.');
+        }
 
         // Logika tambahan (opsional): Hapus semua media dan subfolder jika ada
         $folder->mediaItems()->delete(); // Jika folder memiliki media
@@ -312,22 +332,13 @@ class MediaFolderController extends Controller
             abort(403, 'Tidak diizinkan');
         }
 
-        // Logika akses:
-        if ($mediaFolder->accessibility_subfolder == 0) {
-            // Jika awalnya Only Me, ubah ke All
-            $mediaFolder->accessibility_subfolder = 1;
-            $message = 'Akses folder berhasil diubah menjadi All.';
-        } elseif ($mediaFolder->accessibility_subfolder == 1) {
-            // Jika awalnya All, hanya pemilik atau super_admin yang boleh ubah ke Only Me
-            if (auth()->user()->id_user == $mediaFolder->owner_id || auth()->user()->role == 'super_admin') {
-                $mediaFolder->accessibility_subfolder = 0;
-                $message = 'Akses folder berhasil diubah menjadi Only Me.';
-            } else {
-                return redirect()->back()->with('error', 'Hanya pemilik atau super admin yang bisa mengubah akses menjadi Only Me.');
-            }
-        }
-
+        // Toggle antara ALL dan ONLY ME
+        $mediaFolder->accessibility_subfolder = $mediaFolder->accessibility_subfolder == 1 ? 0 : 1;
         $mediaFolder->save();
+
+        $message = $mediaFolder->accessibility_subfolder == 1
+            ? 'Akses folder berhasil diubah menjadi All.'
+            : 'Akses folder berhasil diubah menjadi Only Me.';
 
         return redirect()->back()->with('success', $message);
     }

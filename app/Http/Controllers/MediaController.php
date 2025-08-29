@@ -85,7 +85,7 @@ class MediaController extends Controller
         // Simpan informasi media ke database
         Media::create([
             'name' => $fileNameOriginalName,
-            'path' => $filePath,
+            'path' => $fileName,
             'type' => $type,
             'folder_id' => $request->folder_id,
             'description' => $request->description,
@@ -111,6 +111,14 @@ class MediaController extends Controller
      */
     public function update(Request $request, Media $media)
     {
+        $folder = $media->folder; // Dapatkan folder induk dari media
+        $user = auth()->user();
+
+        // Otorisasi: Izinkan jika user adalah super_admin, pemilik folder, atau folder diatur ke 'All'
+        if ($user->role !== 'super_admin' && $user->id_user != $folder->owner_id && $folder->accessibility_subfolder != 1) {
+            return redirect()->route('media.index')->with('error', 'Anda tidak memiliki izin untuk mengedit media ini.');
+        }
+
         // dd($request);
         // Validasi input
         $request->validate([
@@ -146,6 +154,14 @@ class MediaController extends Controller
 
     public function destroy(Media $media)
     {
+        $folder = $media->folder; // Dapatkan folder induk dari media
+        $user = auth()->user();
+
+        // Otorisasi: Izinkan jika user adalah super_admin, pemilik folder, atau folder diatur ke 'All'
+        if ($user->role !== 'super_admin' && $user->id_user != $folder->owner_id && $folder->accessibility_subfolder != 1) {
+            return redirect()->route('media.index')->with('error', 'Anda tidak memiliki izin untuk menghapus media ini.');
+        }
+
         // Hapus file dari storage jika ada
         if ($media->path && Storage::exists($media->path)) {
             Storage::delete($media->path);

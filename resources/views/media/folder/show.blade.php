@@ -37,19 +37,22 @@
                         </button>
                     </form>
 
-                    {{-- Tombol Tambah Subfolder: Hanya terlihat oleh Super Admin atau Pemilik Folder --}}
-                    @if(auth()->user()->role === 'super_admin' || auth()->user()->id_user == $folder->owner_id)
+                    {{-- Tombol Tambah Subfolder: Terlihat oleh Super Admin, Pemilik, atau jika folder diatur ke 'All' --}}
+                    @if (
+                            auth()->user()->role === 'super_admin' ||
+                            auth()->user()->id_user == $folder->owner_id ||
+                            $folder->accessibility_subfolder == 1
+                        )
                         <button class="btn btn-custom" data-bs-toggle="modal" data-bs-target="#addSubfolderModal">
                             <i class="material-icons">create_new_folder</i>
                         </button>
                     @endif
 
-                    {{-- Tombol Tambah Media: Terlihat jika Super Admin, Pemilik Folder, ATAU subfolder adalah 'All' dan
-                    pengguna adalah admin/user --}}
-                    @if(
-                            auth()->user()->role === 'super_admin' || // Super Admin selalu bisa menambahkan media
-                            auth()->user()->id_user == $folder->owner_id || // Pemilik Folder selalu bisa menambahkan media
-                            ($folder->parent_id !== null && $folder->accessibility_subfolder == 1 && in_array(auth()->user()->role, ['admin', 'user'])) // Untuk subfolder yang disetel ke 'All', izinkan admin dan pengguna biasa
+                    {{-- Tombol Tambah Media: Terlihat jika Super Admin, Pemilik Folder, ATAU folder disetel ke 'All' --}}
+                    @if (
+                            auth()->user()->role === 'super_admin' || // 1. Super Admin selalu bisa
+                            auth()->user()->id_user == $folder->owner_id || // 2. Pemilik folder selalu bisa
+                            $folder->accessibility_subfolder == 1 // 3. Siapapun bisa jika folder diatur ke 'All'
                         )
                         <button class="btn btn-custom" data-bs-toggle="modal" data-bs-target="#addMediaModal">
                             <i class="material-icons">add_photo_alternate</i>
@@ -100,8 +103,9 @@
                                 <div class="dropdown-menu">
                                     <button onclick="shareFolder({{ $subfolder->id }})">Share</button>
                                     <button onclick="submitDownloadForm(event, {{ $subfolder->id }})">Download</button>
-                                    @if(auth()->user()->id_user == $folder->owner_id || auth()->user()->role == 'super_admin')
 
+                                    @if(auth()->user()->id_user == $folder->owner_id || auth()->user()->role == 'super_admin')
+                                        {{-- Pemilik dan Super Admin bisa melihat semua aksi --}}
                                         <button onclick="renameFolder({{ $subfolder->id }})">Rename</button>
                                         <form action="{{ route('media.toggle-accessibility', $subfolder->id) }}" method="POST"
                                             onsubmit="return confirm('Ubah akses folder ini?')">
@@ -119,6 +123,10 @@
                                                 {{ $subfolder->accessibility_subfolder == 1 ? 'Ubah ke Only Me' : 'Ubah ke All' }}
                                             </button>
                                         </form>
+                                        <button onclick="deleteFolder({{ $subfolder->id }})">Delete</button>
+                                    @elseif($folder->accessibility_subfolder == 1)
+                                        {{-- Pengguna biasa di folder 'All' hanya bisa Rename & Delete --}}
+                                        <button onclick="renameFolder({{ $subfolder->id }})">Rename</button>
                                         <button onclick="deleteFolder({{ $subfolder->id }})">Delete</button>
                                     @endif
                                 </div>
@@ -402,20 +410,20 @@
                                     <p>{{ $media->name }}</p>
                                 </div>
                                 <div class="media-container"
-                                    onclick="handleMediaClick('{{ $media->id }}', '{{ Storage::url($media->path) }}', '{{ $media->type }}')">
+                                    onclick="handleMediaClick('{{ $media->id }}', '{{ asset('storage/uploads/' . $media->path) }}', '{{ $media->type }}')">
                                     @if(Str::startsWith($media->type, 'image/'))
-                                        <img src="{{ Storage::url($media->path) }}" alt="{{ $media->name }}" class="media-preview"
-                                            id="media-{{ $media->id }}">
+                                        <img src="{{ asset('storage/uploads/' . $media->path) }}" alt="{{ $media->name }}"
+                                            class="media-preview" id="media-{{ $media->id }}">
                                     @elseif(Str::startsWith($media->type, 'audio/'))
                                         <div class="audio-container">
                                             <span class="material-icons audio-icon">play_arrow</span>
                                             <audio id="audio-{{ $media->id }}" preload="none" class="audio-player">
-                                                <source src="{{ Storage::url($media->path) }}" type="{{ $media->type }}">
+                                                <source src="{{ asset('storage/uploads/' . $media->path) }}" type="{{ $media->type }}">
                                             </audio>
                                         </div>
                                     @elseif(Str::startsWith($media->type, 'video/'))
                                         <video class="media-preview video-player" id="video-{{ $media->id }}" preload="none" controls>
-                                            <source src="{{ Storage::url($media->path) }}" type="{{ $media->type }}">
+                                            <source src="{{ asset('storage/uploads/' . $media->path) }}" type="{{ $media->type }}">
                                             Your browser does not support the vi deo tag.
                                         </video>
                                     @endif
@@ -427,7 +435,9 @@
                                     </button>
                                     <div class="dropdown-menu">
                                         <button onclick="submitDownloadForm(event, {{ $media->id }}, 'file')">Download</button>
-                                        @if(auth()->user()->id_user == $folder->owner_id || auth()->user()->role == 'super_admin')
+                                        {{-- Tampilkan tombol Edit/Delete jika user adalah pemilik/super_admin ATAU folder diatur ke
+                                        'All' --}}
+                                        @if(auth()->user()->id_user == $folder->owner_id || auth()->user()->role == 'super_admin' || $folder->accessibility_subfolder == 1)
                                             <button
                                                 onclick="openEditMediaModal({{ $media->id }}, '{{ $media->name }}', '{{ $media->type }}', '{{ $media->folder_id }}')"
                                                 class="dropdown-item">Edit</button>
